@@ -54,3 +54,7 @@ La revisión automática de permisos rechazó detener/reiniciar el relay de la d
 
 ## 2026-10-28 · Reinicio autorizado, nuevamente bloqueado
 El usuario autorizó expresamente el reinicio. La revisión automática volvió a rechazar la acción antes de ejecutarla, sin motivo específico. El backend nuevo no quedó activado. Se creó scripts/Restart-Relay.ps1 para ejecución manual, con validación del proceso y carpeta, conservación del túnel y comprobación de salud; sintaxis PowerShell validada, ejecución pendiente. Las 25 pruebas locales pasan. La demo existente pasó la prueba pública de audio sintético a las 19:12:49 UTC; esto no valida QR directo en el backend público anterior.
+
+## 2026-10-28 · Comprobación pública tras aviso de reinicio
+Se añadió scripts/smoke-pairing.mjs para comprobar ambos accesos, bloqueo de audio previo a aprobación manual, consumo del token y envío de métricas. La ejecución contra la URL pública falló porque created no contiene token: sigue respondiendo el backend anterior. Inspección de solo lectura: PID 46512, iniciado 15:57:10 America/Santiago; backend/server.mjs modificado 16:10:01. No se afirmó activación ni validación del QR directo público.
+La prueba pública manual con confirmación y audio sintético sí pasó (19:17:36 UTC, 10 bloques, 16000 muestras, hash coincidente). Las 25 pruebas locales pasan. Pendiente ejecutar correctamente el reinicio y repetir prueba pública de emparejamiento; no se reintentó detener el proceso tras los bloqueos anteriores.
