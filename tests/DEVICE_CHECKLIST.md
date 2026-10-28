@@ -17,3 +17,5 @@ No marcar filas como aprobadas sin ejecutarlas. Registrar fecha America/Santiago
 | Ergonomía | Dictar con ambos controles, una mano, frases y pausas reales sintéticas | El responsable elige preferencia y registra molestias/errores | Pendiente |
 
 La fase 1 y la fase 2 quedan implementadas como prototipo, pero su aceptación en dispositivo requiere estas pruebas. No inferir calidad médica del tono sintético.
+
+Al ejecutar cada condición de red, abrir **Mediciones y diagnóstico** y exportar JSON de cada toma. Registrar P50/P95, bloques sin estimación, resolución del reloj, cola máxima y parada → entrega. Probar interrupción: conservar evidencia de toma incompleta. Revisar compactación en el viewport real del S25 Ultra. Estos casos siguen pendientes.

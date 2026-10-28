@@ -37,3 +37,10 @@ Trazabilidad: primer commit local `e19577ff75718129b753974c925f33d86c01d9a8`, ra
 ## Formato para próximas entradas
 
 Fecha y zona; objetivo; archivos y commit real; pruebas ejecutadas y resultados; contribución nueva; dependencias usadas; fallos y limitaciones; siguiente tarea. Anexar enlaces a ejecuciones o artefactos cuando existan. Distinguir métricas de desarrollo y de prueba final. No registrar una tarea como terminada por haberla descrito.
+
+## 2026-10-28 · Interfaz compacta e instrumentación
+Por solicitud del responsable se retiró la casilla de uso sintético de ambas vistas, se redujo el espacio de cabecera y controles, y se dio prioridad visual al área de transcripción. Es una revisión provisional; no se registra aprobación del diseño final. El área de texto informa que ASR aún no está integrado.
+
+Se implementaron calibración temporal celular/PC contra relay, telemetría por bloque, resúmenes P50/P95, tiempos de preparación/inicio/parada/hash/entrega y exportación JSON. Campos futuros ASR/Meta reservados como null. Ver METRICS.md para límites de precisión.
+
+Verificación realizada: 22 pruebas automatizadas aprobadas; sintaxis aprobada; smoke público sintético aprobado el 28-10-2026 a las 18:57:38 UTC; prueba de navegador con tono 440 Hz, modos mantener (19 bloques) e inicio/parada (30 bloques), ambas con integridad verificada y métricas visibles. No se usó teléfono físico, micrófono real ni red celular. Se reinició únicamente el relay de la demo, conservando el túnel y su URL.

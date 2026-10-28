@@ -1,10 +1,11 @@
+import { ClockCalibration, epochNow } from './metrics.js';
 export const $ = id => document.getElementById(id);
 export function status(text, kind = '') {
   $('status').textContent = text;
   $('status').className = `status ${kind}`;
 }
 export class RelayClient {
-  constructor(onMessage, onClose) { this.onMessage = onMessage; this.onClose = onClose; }
+  constructor(onMessage, onClose) { this.onMessage = onMessage; this.onClose = onClose; this.clock = new ClockCalibration(); this.syncTimers = []; }
   connect(first) {
     this.socket = new WebSocket(`${location.protocol === 'https:' ? 'wss:' : 'ws:'}//${location.host}/ws`);
     this.connectTimer = setTimeout(() => { if (this.socket.readyState === WebSocket.CONNECTING) this.socket.close(); }, 10_000);
@@ -12,9 +13,11 @@ export class RelayClient {
     this.socket.onopen = () => {
       clearTimeout(this.connectTimer);
       this.lastPong = performance.now(); this.send(first);
+      const ping = () => this.send({ type: 'ping', echo: epochNow() });
+      for (const delay of [0, 200, 600]) this.syncTimers.push(setTimeout(ping, delay));
       this.timer = setInterval(() => {
         if (performance.now() - this.lastPong > 20_000) { this.socket.close(); return; }
-        this.send({ type: 'ping', echo: performance.now() });
+        ping();
       }, 5000);
     };
     this.socket.onmessage = event => {
@@ -23,19 +26,22 @@ export class RelayClient {
         const m = JSON.parse(event.data);
         if (m.type === 'pong') {
           this.lastPong = performance.now();
-          if ($('rtt')) $('rtt').textContent = `${Math.round(this.lastPong - m.echo)} ms`;
+          const now = epochNow();
+          this.clock.observe(m.echo, m.serverReceive, m.serverSend, now);
+          if ($('rtt')) $('rtt').textContent = `${Math.round(now - m.echo)} ms`;
         } else this.onMessage(m);
       } catch { status('Respuesta no válida. Cierra y vuelve a emparejar.', 'error'); this.close(); }
     };
     this.socket.onerror = () => status('No se pudo conectar con el servidor.', 'error');
-    this.socket.onclose = () => { clearTimeout(this.connectTimer); clearInterval(this.timer); this.onClose(); };
+    this.socket.onclose = () => { this.clearTimers(); this.onClose(); };
   }
   send(m) {
     if (this.socket?.readyState !== WebSocket.OPEN) return false;
     this.socket.send(m instanceof ArrayBuffer ? m : JSON.stringify(m)); return true;
   }
   get buffered() { return this.socket?.bufferedAmount ?? Infinity; }
-  close() { clearTimeout(this.connectTimer); clearInterval(this.timer); this.socket?.close(); }
+  clearTimers() { clearTimeout(this.connectTimer); clearInterval(this.timer); this.syncTimers.forEach(clearTimeout); }
+  close() { this.clearTimers(); this.socket?.close(); }
 }
 export function clock(samples, rate) {
   const seconds = Math.floor(samples / rate);

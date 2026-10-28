@@ -12,12 +12,14 @@ const paths = new Map([
   ['/desktop.js', 'apps/desktop/desktop.js'], ['/mobile.js', 'apps/mobile/mobile.js'],
   ['/capture-worklet.js', 'apps/mobile/capture-worklet.js'],
   ['/shared/protocol.js', 'apps/shared/protocol.js'], ['/shared/client.js', 'apps/shared/client.js'],
+  ['/shared/metrics.js', 'apps/shared/metrics.js'],
   ['/style.css', 'apps/shared/style.css'], ['/qr.js', 'node_modules/qrcode-generator/dist/qrcode.js'],
 ]);
 const MIME = { html: 'text/html; charset=utf-8', js: 'text/javascript; charset=utf-8', css: 'text/css; charset=utf-8' };
 const ready = ws => ws?.readyState === WebSocket.OPEN;
 const send = (ws, data) => { if (ready(ws)) ws.send(JSON.stringify(data)); };
 const fingerprint = data => createHash('sha256').update(data).digest('hex');
+const nowMs = () => performance.timeOrigin + performance.now();
 
 export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL = 120_000,
   sessionTTL = 30 * 60_000, maxSessions = 30 } = {}) {
@@ -60,9 +62,9 @@ export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL 
   }
   function abort(session, reason) {
     if (!session.recording) return;
-    const id = session.recording.id;
+    const { id, duplicates, sequenceErrors } = session.recording;
     session.recording = null;
-    for (const ws of [session.desktop, session.mobile]) send(ws, { type: 'aborted', id, reason });
+    for (const ws of [session.desktop, session.mobile]) send(ws, { type: 'aborted', id, reason, counters: { duplicates, sequenceErrors } });
   }
   function relay(session, target, payload, binary = false) {
     if (!ready(target) || target.bufferedAmount > 1_048_576) {
@@ -80,6 +82,7 @@ export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL 
     ws.on('pong', () => { ws.alive = true; });
     ws.on('error', () => {});
     ws.on('message', (data, isBinary) => {
+      const receivedAt = nowMs();
       const session = ws.session;
       try {
         if (isBinary) {
@@ -89,12 +92,18 @@ export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL 
           const hash = fingerprint(data);
           if (frame.sequence < r.next) {
             if (r.hashes.get(frame.sequence) !== hash) throw new Error('Bloque duplicado con contenido diferente.');
+            r.duplicates++;
             send(ws, { type: 'ack', id: r.id, sequence: frame.sequence, duplicate: true }); return;
           }
-          if (frame.sequence !== r.next) throw new Error('Falta un bloque o llegó fuera de orden.');
+          if (frame.sequence !== r.next) { r.sequenceErrors++; throw new Error('Falta un bloque o llegó fuera de orden.'); }
+          if (r.next >= 6000) throw new Error('Se excedió el límite de bloques por toma.');
           if (r.samples + frame.samples > r.rate * MAX_SECONDS) throw new Error('Límite de tres minutos alcanzado.');
           if (r.samples + frame.samples > r.rate * (2 + (Date.now() - r.started) / 1000 * 1.5)) throw new Error('Flujo de audio demasiado rápido.');
           r.hashes.set(r.next, hash); r.next++; r.samples += frame.samples; r.digest.update(frame.pcm); r.last = Date.now();
+          const timing = r.pendingTiming?.sequence === frame.sequence ? r.pendingTiming : null;
+          r.pendingTiming = null;
+          relay(session, session.desktop, { type: 'block_timing', id: r.id, sequence: frame.sequence,
+            sent: timing?.sent ?? null, queueBytes: timing?.queueBytes ?? null, relayMs: nowMs() - receivedAt });
           if (relay(session, session.desktop, data, true)) send(ws, { type: 'ack', id: r.id, sequence: frame.sequence });
           return;
         }
@@ -102,7 +111,7 @@ export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL 
         if (++ws.messages > 80 || data.byteLength > 4096) throw new Error('Demasiados mensajes.');
         const m = JSON.parse(data.toString());
         if (!m || typeof m.type !== 'string') throw new Error('Mensaje inválido.');
-        if (m.type === 'ping') { send(ws, { type: 'pong', echo: m.echo }); return; }
+        if (m.type === 'ping') { send(ws, { type: 'pong', echo: m.echo, serverReceive: receivedAt, serverSend: nowMs() }); return; }
         if (!session) {
           if (!limit(req.socket.remoteAddress)) throw new Error('Demasiados intentos. Espera un minuto.');
           if (m.type === 'create') {
@@ -140,11 +149,27 @@ export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL 
           if (session.usedIds.size >= 100) throw new Error('Crea una sesión nueva para continuar.');
           session.usedIds.add(m.id);
           session.recording = { id: m.id, rate: m.rate, samples: 0, next: 0, hashes: new Map(),
-            digest: createHash('sha256'), started: Date.now(), last: Date.now(), ended: false };
+            digest: createHash('sha256'), started: Date.now(), last: Date.now(), ended: false, duplicates: 0, sequenceErrors: 0 };
+          session.lastRecordingId = m.id;
           relay(session, session.desktop, { type: 'start', id: m.id, rate: m.rate, mode: m.mode === 'hold' ? 'hold' : 'toggle', source: m.source === 'tone' ? 'tone' : 'microphone' });
           return;
         }
         const r = session.recording;
+        if (m.type === 'block_timing' && ws.role === 'mobile' && r && !r.ended && m.id === r.id) {
+          if (m.sequence !== r.next || r.pendingTiming || !Number.isFinite(m.queueBytes) || m.queueBytes < 0 || m.queueBytes > 1_048_576) throw new Error('Telemetría de bloque inválida.');
+          const sent = m.sent;
+          if (sent !== null && (!sent || !Number.isFinite(sent.serverMs) || !Number.isFinite(sent.uncertaintyMs) || sent.uncertaintyMs < 0 || sent.uncertaintyMs > 10_000 || !Number.isFinite(sent.ageMs) || sent.ageMs < 0 || sent.ageMs >= 30_000)) throw new Error('Calibración de reloj inválida.');
+          r.pendingTiming = { sequence: m.sequence, sent: sent ? { serverMs: sent.serverMs, uncertaintyMs: sent.uncertaintyMs } : null, queueBytes: m.queueBytes }; return;
+        }
+        if (m.type === 'sender_metrics' && ws.role === 'mobile' && m.id === session.lastRecordingId) {
+          const stages = {};
+          for (const key of ['prepareMs','startControlMs','stopFlushMs','senderHashMs','stopToVerifiedMs']) {
+            const value = m.stages?.[key]; if (typeof value === 'number' && Number.isFinite(value) && value >= 0 && value < 600_000) stages[key] = value;
+          }
+          const ack = Number.isInteger(m.sequence) && m.sequence >= 0 && m.sequence < 6000 &&
+            typeof m.ackRoundTripMs === 'number' && Number.isFinite(m.ackRoundTripMs) && m.ackRoundTripMs >= 0 && m.ackRoundTripMs < 60_000;
+          send(session.desktop, { type: 'sender_metrics', id: m.id, stages, ...(ack ? { sequence: m.sequence, ackRoundTripMs: m.ackRoundTripMs } : {}) }); return;
+        }
         if (m.type === 'receipt' && ws.role === 'desktop' && r && m.id === r.id) {
           if (!Number.isInteger(m.sequence) || m.sequence < 0 || m.sequence >= r.next) throw new Error('Confirmación de bloque inválida.');
           send(session.mobile, { type: 'receipt', id: r.id, sequence: m.sequence }); return;
@@ -153,7 +178,7 @@ export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL 
           r.hash = r.digest.digest('hex');
           if (m.frames !== r.next || m.samples !== r.samples || m.hash !== r.hash) throw new Error('No coincide la integridad del audio enviado.');
           r.ended = true; r.last = Date.now();
-          relay(session, session.desktop, { type: 'end', id: r.id, rate: r.rate, frames: r.next, samples: r.samples, hash: r.hash }); return;
+          relay(session, session.desktop, { type: 'end', id: r.id, rate: r.rate, frames: r.next, samples: r.samples, hash: r.hash, counters: { duplicates: r.duplicates, sequenceErrors: r.sequenceErrors } }); return;
         }
         if (m.type === 'verified' && ws.role === 'desktop' && r?.ended && m.id === r.id) {
           if (m.hash !== r.hash) throw new Error('El audio del PC no coincide con el del teléfono.');

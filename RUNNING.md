@@ -27,9 +27,9 @@ En PowerShell, desde la raíz del proyecto:
 
 El script descarga `cloudflared` oficial 2026.10.5 en `.tools/` si falta, verifica SHA-256 y abre procesos ocultos para el relay y el túnel. No lo instala como servicio. Imprime la URL HTTPS temporal que debes abrir **también en el PC**. Si PowerShell bloquea scripts por una política local, no cambiarla automáticamente: ejecutar desde un entorno autorizado o usar los comandos de despliegue manual siguientes.
 
-1. En el PC, abrir la URL HTTPS, marcar uso de datos sintéticos y pulsar **Crear sesión**.
+1. En el PC, abrir la URL HTTPS, pulsar **Conectar teléfono**.
 2. En el S25 Ultra, escanear el QR. Alternativa: abrir la misma URL con `/mobile` e introducir el código de diez caracteres. El código vence a los dos minutos y es de un solo uso.
-3. Marcar uso sintético y conectar. Comparar el número de cuatro cifras de ambos dispositivos y confirmar en el PC.
+3. Pulsar **Conectar con el PC**. Comparar el número de cuatro cifras de ambos dispositivos y confirmar en el PC.
 4. En el teléfono, pulsar **Preparar micrófono** y aceptar el permiso para ese sitio. Esperar a que indique que está preparado. Para revisar solo transporte, usar **Probar con tono sintético, sin micrófono**.
 5. Probar **Mantener pulsado** con una frase; soltar. Luego probar **Inicio / parada**. No cambiar de modo durante una toma.
 6. En el PC, esperar **Integridad verificada**, escuchar y, opcionalmente, descargar el WAV. Se conservan las últimas tres tomas en memoria del navegador.
@@ -82,3 +82,9 @@ La última prueba crea dos clientes sintéticos, genera un segundo de tono PCM, 
 - Una caída no se disimula: la toma se marca incompleta. No hay recuperación automática del audio perdido ni reconexión silenciosa.
 - El indicador en milisegundos mide ida y vuelta de cada navegador al relay; **no** es una medición de latencia de extremo a extremo ni p95.
 - Las pruebas de muestras detectan errores del protocolo y archivo. No demuestran por sí solas ausencia de cortes del micrófono o del sistema operativo: se debe escuchar el dictado real de prueba.
+
+
+## Mediciones y vista compacta
+El receptor prioriza el área de transcripción, todavía sin ASR. Audio y diagnóstico son desplegables; la conexión, el estado y tres mediciones principales permanecen visibles. No se solicita marcar una casilla de uso sintético. El alcance de pruebas documentado sigue vigente.
+
+En **Mediciones y diagnóstico**, exportar el JSON de la última toma antes de iniciar otra. Definiciones, precisión y campos futuros: [METRICS.md](METRICS.md). Las mediciones se borran al recargar; no se suben a un servicio de analítica.

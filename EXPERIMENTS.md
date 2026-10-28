@@ -78,3 +78,15 @@ F2 añadirá el comando real de evaluación; no existe aún. Reportar diferencia
 | Integridad de captura/transporte | Pruebas técnicas ejecutadas | Ver sección de infraestructura; teléfono pendiente |
 | Seguridad de correcciones clínicas | No ejecutado | N/D |
 | Latencia y recursos | No ejecutado | N/D |
+
+## Prueba de instrumentación · 2026-10-28
+22 pruebas automatizadas aprobadas, incluidas calibración/desfase/caducidad, estimaciones negativas, percentiles sin valores ficticios, fusión de confirmaciones, transmisión de métricas finales y rechazo de telemetría fuera de secuencia. Smoke público adicional: 10 bloques / 16000 muestras / 16 kHz, SHA-256 coincidente.
+
+Navegadores del mismo PC por túnel HTTPS público, tono de 440 Hz a 48 kHz. Observaciones de desarrollo, no benchmark del S25 Ultra:
+
+| Control | Bloques | Llegada estimada P50/P95 | Resolución orientativa P50 | Confirmación ida/vuelta P50/P95 | Parada → entrega verificada |
+| --- | --- | --- | --- | --- | --- |
+| Mantener | 19 | 87,4 / 157,6 ms | 85,4 ms | 170,7 / 240,7 ms | 184,7 ms |
+| Inicio/parada | 30 | 86,5 / 152 ms | 92,5 ms | 171,2 / 239,7 ms | 176,4 ms |
+
+Ambas tomas verificadas, cero errores de secuencia y duplicados registrados. La resolución es del mismo orden que la estimación: no inferir latencia unidireccional precisa. No se validaron aún red 4G/5G, captura física, exactitud médica ni rendimiento ASR. Procedimiento y semántica en [METRICS.md](METRICS.md).

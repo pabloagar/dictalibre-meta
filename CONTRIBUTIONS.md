@@ -36,3 +36,6 @@ Modelos candidatos y bibliotecas efectivamente usadas se separan en `THIRD_PARTY
 ## Evidencia para entrega
 
 Pendiente: commits progresivos, repositorio público comprobado, versiones fijadas, resultados asociados al commit evaluado, tag de demo y relación entre funcionalidades mostradas y pruebas. Conservar comprobante de envío. La demo solo presentará funcionalidades efectivamente construidas en esta implementación y señalará cualquier limitación.
+
+## Revisión de interfaz y telemetría · 2026-10-28
+Contribución implementada: interfaz compacta, área principal reservada para transcripción sin simular resultados, diagnóstico desplegable, calibración temporal y mediciones por toma exportables. No se agregaron dependencias externas. Los puntos de medición ASR/Meta son futuros, no funcionales. Metodología en METRICS.md.

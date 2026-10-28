@@ -1,9 +1,39 @@
 import { $, RelayClient, status, clock } from '/shared/client.js';
 import { decodeChunk, sha256, wavBlob } from '/shared/protocol.js';
+import { RecordingMetrics, arrivalEstimate, round } from '/shared/metrics.js';
 
 let client, current, sessionEpoch = 0, pairingTimer, clipCount = 0;
 const clipURLs = [];
-$('consent').onchange = () => { $('create').disabled = !$('consent').checked || !!client; };
+const traces = new Map();
+let latestTrace, pendingTiming, previousArrival;
+const ms = value => value == null ? '—' : `${round(value)} ms`;
+function renderMetrics() {
+  if (!latestTrace) return;
+  const s = latestTrace.summary();
+  $('arrival').textContent = s.sendToPcEstimateMs.n ? `≈ ${ms(s.sendToPcEstimateMs.p50)}` : 'Sin calibración';
+  $('ack').textContent = ms(s.ackRoundTripMs.p50);
+  $('buffer').textContent = ms(s.bufferMs.p50);
+  $('metrics-export').disabled = false;
+  const rows = [
+    ['Envío → PC estimado', s.sendToPcEstimateMs], ['Resolución orientativa del reloj', s.uncertaintyMs],
+    ['Envío → confirmación PC → celular', s.ackRoundTripMs], ['Audio por bloque', s.bufferMs],
+    ['Procesado del bloque en servidor', s.relayMs], ['Intervalo entre llegadas', s.interarrivalMs]
+  ];
+  $('timing-rows').replaceChildren();
+  for (const [label, stat] of rows) {
+    const tr = document.createElement('tr');
+    for (const value of [label, ms(stat.p50), ms(stat.p95), stat.n]) { const td = document.createElement('td'); td.textContent = value; tr.append(td); }
+    $('timing-rows').append(tr);
+  }
+  const labels = { prepareMs:'Preparar micrófono (incluye permiso)', startControlMs:'Orden de inicio → captura', stopFlushMs:'Detener → último bloque capturado', senderHashMs:'Verificar hash en celular', pcHashMs:'Verificar hash en PC', stopToVerifiedMs:'Detener → entrega confirmada' };
+  $('stage-times').textContent = Object.entries(labels).map(([key,label]) => `${label}: ${ms(latestTrace.stages[key])}`).join(' · ');
+  $('transport-counts').textContent = `${s.blocks} bloques · ${s.bytes} bytes de audio y cabecera · cola máxima ${s.queueBytes.max ?? '—'} bytes · duplicados ${latestTrace.counters.duplicates} · errores de secuencia ${latestTrace.counters.sequenceErrors} · sin estimación ${s.unestimatedBlocks}`;
+}
+$('metrics-export').onclick = () => {
+  if (!latestTrace) return;
+  const url = URL.createObjectURL(new Blob([JSON.stringify(latestTrace.export(), null, 2)], { type: 'application/json' }));
+  const a = document.createElement('a'); a.href = url; a.download = `dicta-metricas-${latestTrace.id}.json`; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+};
 function displayIdle() {
   document.body.classList.remove('receiving'); $('record-state').textContent = 'EN ESPERA';
   $('record-state').classList.remove('active'); $('level').value = 0;
@@ -27,7 +57,7 @@ function addClip(record, complete, hash = '') {
   while (clipURLs.length > 3) { const old = clipURLs.shift(); old.article.remove(); URL.revokeObjectURL(old.url); }
 }
 function interrupted(reason) {
-  if (current) { addClip(current, false); current = null; }
+  if (current) { latestTrace.status = 'incomplete'; latestTrace.reason = reason; renderMetrics(); addClip(current, false); current = null; }
   displayIdle(); status(reason, 'error'); $('record-help').textContent = 'La toma se interrumpió. Inicia otra desde el teléfono.';
 }
 async function complete(m) {
@@ -35,9 +65,11 @@ async function complete(m) {
   if (!recording || recording.id !== m.id) return;
   $('record-state').textContent = 'VERIFICANDO';
   try {
+    const hashStart = performance.now();
     const hash = await sha256(recording.parts);
     if (epoch !== sessionEpoch || current !== recording) return;
     if (recording.frames !== m.frames || recording.samples !== m.samples || hash !== m.hash) throw new Error('El audio recibido no coincide con el original.');
+    latestTrace.stage('pcHashMs', performance.now() - hashStart); latestTrace.status = 'verified'; Object.assign(latestTrace.counters, m.counters); renderMetrics();
     client.send({ type: 'verified', id: recording.id, hash });
     addClip(recording, true, hash); current = null; displayIdle();
     status(m.samples ? 'Audio recibido completo. Escucha la toma y comprueba el inicio y el final.' : 'La toma quedó vacía. Mantén pulsado mientras hablas.', m.samples ? 'success' : '');
@@ -46,10 +78,18 @@ async function complete(m) {
 }
 function onMessage(m) {
   if (m instanceof ArrayBuffer) {
+    const arrivedAt = performance.now(), receivedStamp = client.clock.stamp();
     if (!current) throw new Error('Audio inesperado.');
     const frame = decodeChunk(m);
     if (frame.recordingId !== current.id || frame.sequence !== current.frames) throw new Error('Secuencia incorrecta.');
     const bytes = frame.pcm.slice(); current.parts.push(bytes); current.frames++; current.samples += frame.samples;
+    const timing = pendingTiming?.sequence === frame.sequence ? pendingTiming : null; pendingTiming = null;
+    const estimate = arrivalEstimate(timing?.sent, receivedStamp);
+    latestTrace.block(frame.sequence, { bytes: m.byteLength, bufferMs: frame.samples / current.rate * 1000,
+      relayMs: timing?.relayMs, queueBytes: timing?.queueBytes, rawEstimateMs: estimate?.ms ?? null,
+      sendToPcEstimateMs: estimate?.usable ? estimate.ms : null, uncertaintyMs: estimate?.uncertaintyMs ?? null,
+      interarrivalMs: previousArrival == null ? null : arrivedAt - previousArrival });
+    previousArrival = arrivedAt; renderMetrics();
     const view = new DataView(bytes.buffer); let power = 0;
     for (let i = 0; i < frame.samples; i++) power += (view.getInt16(i * 2, true) / 32768) ** 2;
     $('level').value = Math.min(1, Math.sqrt(power / frame.samples) * 4);
@@ -57,6 +97,13 @@ function onMessage(m) {
     client.send({ type: 'receipt', id: current.id, sequence: frame.sequence }); return;
   }
   switch (m.type) {
+    case 'block_timing': if (current?.id === m.id) pendingTiming = m; break;
+    case 'sender_metrics': {
+      const trace = traces.get(m.id); if (!trace) break;
+      for (const [key, value] of Object.entries(m.stages)) trace.stage(key, value);
+      if (m.sequence != null) trace.block(m.sequence, { ackRoundTripMs: m.ackRoundTripMs });
+      renderMetrics(); break;
+    }
     case 'created': {
       $('pairing').hidden = false; $('close').hidden = false; $('code').textContent = m.code;
       const link = `${location.origin}/mobile#${m.code}`;
@@ -73,26 +120,29 @@ function onMessage(m) {
     case 'pending': clearInterval(pairingTimer); $('pairing').hidden = true; $('confirm-panel').hidden = false; $('confirm-code').textContent = m.confirm; status('Un teléfono solicita conexión. Comprueba el número antes de confirmar.'); break;
     case 'paired': $('confirm-panel').hidden = true; $('paired').hidden = false; status('Conectados. Prepara el micrófono en el teléfono.', 'success'); break;
     case 'start':
+      latestTrace = new RecordingMetrics(m.id, m.rate, m.source, m.mode); traces.set(m.id, latestTrace);
+      while (traces.size > 3) traces.delete(traces.keys().next().value);
+      previousArrival = null; pendingTiming = null; renderMetrics();
       current = { id: m.id, rate: m.rate, mode: m.mode, source: m.source, parts: [], samples: 0, frames: 0 };
       document.body.classList.add('receiving'); $('record-state').textContent = 'RECIBIENDO'; $('record-state').classList.add('active');
       $('duration').textContent = '00:00'; $('frames').textContent = '0'; $('format').textContent = `${m.rate / 1000} kHz · mono`;
       $('record-help').textContent = 'Recibiendo audio mientras dictas. Reproducción disponible al detener.'; status('Grabación en curso.'); break;
     case 'end': void complete(m); break;
-    case 'aborted': interrupted(m.reason); break;
+    case 'aborted': if (latestTrace && m.id === latestTrace.id) Object.assign(latestTrace.counters, m.counters); interrupted(m.reason); break;
     case 'error': status(m.message, 'error'); break;
     case 'closed': interrupted(m.reason); break;
   }
 }
 $('create').onclick = () => {
-  if (client || !$('consent').checked) return;
+  if (client) return;
   for (const clip of clipURLs.splice(0)) { clip.article.remove(); URL.revokeObjectURL(clip.url); }
-  clipCount = 0;
+  clipCount = 0; traces.clear();
   sessionEpoch++; $('create').disabled = true; status('Creando sesión…');
   client = new RelayClient(onMessage, () => {
     sessionEpoch++; clearInterval(pairingTimer);
     if (current) interrupted('Conexión cerrada. La grabación quedó incompleta.');
     else status('Sesión cerrada. Puedes crear una nueva.');
-    client = null; $('create').disabled = !$('consent').checked;
+    client = null; $('create').disabled = false;
     for (const id of ['pairing', 'confirm-panel', 'paired', 'close']) $(id).hidden = true;
   });
   client.connect({ type: 'create' });

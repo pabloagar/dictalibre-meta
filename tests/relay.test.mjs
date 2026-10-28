@@ -41,6 +41,24 @@ async function environment(t, options) {
 const pcm = Int16Array.from({ length: 480 }, (_, i) => Math.round(Math.sin(i / 10) * 5000));
 const frame = (seq = 0, id = 1, samples = pcm) => encodeChunk(id, seq, samples);
 const hashOf = data => createHash('sha256').update(decodeChunk(data).pcm).digest('hex');
+test('transporta mediciones asociadas al bloque y métricas finales tras verificación', async t => {
+  const { pair } = await environment(t); const { pc, phone } = await pair(); await start(pc, phone);
+  phone.send({ type: 'ping', echo: 100 }); const pong = await phone.next('pong');
+  assert.ok(pong.serverSend >= pong.serverReceive);
+  phone.send({ type: 'block_timing', id: 1, sequence: 0, sent: { serverMs: 123, uncertaintyMs: 5, ageMs: 0 }, queueBytes: 0 });
+  phone.send(frame()); const timing = await pc.next('block_timing');
+  assert.equal(timing.sent.serverMs, 123); assert.ok(timing.relayMs >= 0); await pc.next('binary');
+  phone.send({ type: 'end', id: 1, frames: 1, samples: pcm.length, hash: hashOf(frame()) });
+  const end = await pc.next('end'); pc.send({ type: 'verified', id: 1, hash: end.hash }); await phone.next('verified');
+  phone.send({ type: 'sender_metrics', id: 1, stages: { stopToVerifiedMs: 40, asrRunMs: 10 }, sequence: 0, ackRoundTripMs: 20 });
+  const metrics = await pc.next('sender_metrics');
+  assert.deepEqual(metrics.stages, { stopToVerifiedMs: 40 }); assert.equal(metrics.ackRoundTripMs, 20);
+});
+test('rechaza telemetría de un bloque fuera de secuencia', async t => {
+  const { pair } = await environment(t); const { pc, phone } = await pair(); await start(pc, phone);
+  phone.send({ type: 'block_timing', id: 1, sequence: 9, sent: null, queueBytes: 0 });
+  assert.match((await pc.next('aborted')).reason, /Telemetría/);
+});
 async function start(pc, phone) { phone.send({ type: 'start', id: 1, rate: 48000, mode: 'hold' }); await pc.next('start'); }
 
 test('audio de extremo a extremo, ACK del PC y hash idéntico; no se retiene PCM en servidor', async t => {

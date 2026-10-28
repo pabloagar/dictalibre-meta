@@ -5,11 +5,13 @@ let client, stream, context, source, worklet, silent, wakeLock;
 let paired = false, prepared = false, preparing = false, epoch = 0, recording = null, counter = 0, heldPointer = null;
 let mode = 'hold';
 let synthetic = false;
+let prepareMs = null;
+function report(r, stages = {}, extra = {}) { client?.send({ type: 'sender_metrics', id: r.id, stages, ...extra }); }
 const initialCode = location.hash.slice(1);
 if (/^[a-f0-9]{10}$/i.test(initialCode)) $('join-code').value = initialCode;
 history.replaceState(null, '', location.pathname);
 function refresh() {
-  $('join').disabled = !$('consent').checked || !!client;
+  $('join').disabled = !!client;
   $('record').disabled = !prepared || !paired || (recording && !['starting', 'recording'].includes(recording.state));
   $('prepare').hidden = prepared; $('prepare').disabled = preparing;
   $('test-signal').hidden = prepared; $('test-signal').disabled = preparing;
@@ -34,9 +36,13 @@ async function stopped(m) {
   const r = recording;
   if (!r || r.id !== m.id) return;
   r.state = 'finishing'; refresh(); $('level').value = 0;
+  const flushedAt = performance.now();
+  const stopFlushMs = r.stopAt == null ? null : flushedAt - r.stopAt;
+  r.stopAt ??= flushedAt;
   if (m.limit) status('Límite de 3 minutos alcanzado. Comprobando el audio capturado.');
   try {
     const hash = await sha256(r.parts);
+    report(r, { stopFlushMs, senderHashMs: performance.now() - flushedAt });
     if (recording !== r) return;
     if (m.samples !== r.samples) throw new Error('Faltan muestras antes del envío.');
     if (!client.send({ type: 'end', id: r.id, samples: r.samples, frames: r.sequence, hash })) throw new Error('Se perdió la conexión.');
@@ -44,6 +50,7 @@ async function stopped(m) {
   } catch (error) { abort(error.message); }
 }
 async function prepare(useSynthetic = false) {
+  const prepareStart = performance.now();
   if (preparing || prepared || !paired) return;
   if (!window.isSecureContext || !navigator.mediaDevices?.getUserMedia) { status('Abre el enlace HTTPS del servidor para usar el micrófono.', 'error'); return; }
   preparing = true; synthetic = useSynthetic; const generation = ++epoch; refresh(); status(synthetic ? 'Preparando tono sintético…' : 'Solicitando acceso al micrófono…');
@@ -64,11 +71,14 @@ async function prepare(useSynthetic = false) {
     worklet.port.onmessage = ({ data: m }) => {
       const r = recording;
       if (!r || m.id !== r.id) return;
-      if (m.type === 'started') { if (r.state === 'starting') r.state = 'recording'; refresh(); return; }
+      if (m.type === 'started') { report(r, { prepareMs, startControlMs: performance.now() - r.startAt }); if (r.state === 'starting') r.state = 'recording'; refresh(); return; }
       if (m.type === 'stopped') { void stopped(m); return; }
       if (m.type !== 'chunk') return;
       if (client.buffered > 524288) { abort('La conexión está saturada. La toma se detuvo.'); return; }
-      const encoded = encodeChunk(r.id, r.sequence++, m.pcm);
+      const sequence = r.sequence++;
+      const encoded = encodeChunk(r.id, sequence, m.pcm);
+      client.send({ type: 'block_timing', id: r.id, sequence, sent: client.clock.stamp(), queueBytes: client.buffered });
+      r.sentTimes.set(sequence, performance.now());
       r.parts.push(new Uint8Array(encoded, 16).slice()); r.samples += m.pcm.length;
       let sum = 0; for (const sample of m.pcm) sum += (sample / 32768) ** 2;
       $('level').value = Math.min(1, Math.sqrt(sum / m.pcm.length) * 4);
@@ -80,6 +90,7 @@ async function prepare(useSynthetic = false) {
       if (prepared && context && context.state !== 'running') { abort('La captura se suspendió. Prepara de nuevo el micrófono.'); releaseMicrophone(); }
     };
     prepared = true; preparing = false;
+    prepareMs = performance.now() - prepareStart;
     const settings = stream?.getAudioTracks()[0].getSettings() ?? {};
     const flag = value => value === undefined ? 'no informado' : value ? 'sí' : 'no';
     $('capture-info').textContent = synthetic ? `TONO SINTÉTICO 440 Hz · sin micrófono · ${context.sampleRate / 1000} kHz` : `${context.sampleRate / 1000} kHz · PCM 16 bits · mono · máx. 3 min. Procesado del navegador: eco ${flag(settings.echoCancellation)}, ruido ${flag(settings.noiseSuppression)}, ganancia automática ${flag(settings.autoGainControl)}.`;
@@ -94,22 +105,29 @@ async function prepare(useSynthetic = false) {
 function start() {
   if (!prepared || !paired || recording || context?.state !== 'running') return;
   $('verified').textContent = ''; $('received').textContent = '0'; $('duration').textContent = '00:00';
-  recording = { id: ++counter, sequence: 0, samples: 0, parts: [], state: 'starting' };
+  recording = { id: ++counter, sequence: 0, samples: 0, parts: [], state: 'starting', startAt: performance.now(), sentTimes: new Map() };
   if (!client.send({ type: 'start', id: recording.id, rate: context.sampleRate, mode, source: synthetic ? 'tone' : 'microphone' })) { abort('No hay conexión con el PC.'); return; }
   worklet.port.postMessage({ type: 'start', id: recording.id }); status('Grabando y enviando al computador.'); refresh();
 }
 function stop() {
   if (!recording || !['starting', 'recording'].includes(recording.state)) return;
-  recording.state = 'finishing'; worklet?.port.postMessage({ type: 'stop' });
+  recording.stopAt = performance.now(); recording.state = 'finishing'; worklet?.port.postMessage({ type: 'stop' });
   status('Captura detenida. Entregando el último bloque…'); refresh();
 }
 function onMessage(m) {
   switch (m.type) {
     case 'pending': $('join-panel').hidden = true; $('confirm-panel').hidden = false; $('confirm-code').textContent = m.confirm; status('Espera la confirmación en el computador.'); break;
     case 'paired': paired = true; $('confirm-panel').hidden = true; $('controls').hidden = false; status('Conectado. Prepara el micrófono para empezar.', 'success'); refresh(); break;
-    case 'receipt': if (recording?.id === m.id) $('received').textContent = m.sequence + 1; break;
+    case 'receipt':
+      if (recording?.id === m.id) {
+        $('received').textContent = m.sequence + 1;
+        const sentAt = recording.sentTimes.get(m.sequence);
+        if (sentAt != null) report(recording, {}, { sequence: m.sequence, ackRoundTripMs: performance.now() - sentAt });
+        recording.sentTimes.delete(m.sequence);
+      } break;
     case 'verified':
       if (recording?.id !== m.id) return;
+      if (recording.stopAt != null) report(recording, { stopToVerifiedMs: performance.now() - recording.stopAt });
       recording = null; $('level').value = 0; refresh();
       $('verified').textContent = m.samples ? '✓ El PC recibió exactamente el mismo audio. Puedes escucharlo allí.' : 'La toma quedó vacía. Prueba de nuevo.';
       status(synthetic ? 'Tono sintético preparado para otra toma.' : 'Micrófono preparado para otra toma.', 'success'); break;
@@ -118,9 +136,8 @@ function onMessage(m) {
     case 'closed': abort(m.reason, false); releaseMicrophone(); break;
   }
 }
-$('consent').onchange = refresh;
 $('join').onclick = () => {
-  if (client || !$('consent').checked) return;
+  if (client) return;
   if (!/^[a-f0-9]{10}$/i.test($('join-code').value.replace(/[\s-]/g, ''))) { status('Introduce los 10 caracteres del código.', 'error'); return; }
   client = new RelayClient(onMessage, () => {
     paired = false; abort('Conexión cerrada. Crea una sesión nueva en el PC.', false); releaseMicrophone();
