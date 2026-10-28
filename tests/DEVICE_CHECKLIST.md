@@ -19,3 +19,5 @@ No marcar filas como aprobadas sin ejecutarlas. Registrar fecha America/Santiago
 La fase 1 y la fase 2 quedan implementadas como prototipo, pero su aceptación en dispositivo requiere estas pruebas. No inferir calidad médica del tono sintético.
 
 Al ejecutar cada condición de red, abrir **Mediciones y diagnóstico** y exportar JSON de cada toma. Registrar P50/P95, bloques sin estimación, resolución del reloj, cola máxima y parada → entrega. Probar interrupción: conservar evidencia de toma incompleta. Revisar compactación en el viewport real del S25 Ultra. Estos casos siguen pendientes.
+
+Evidencia parcial 4G/Wi-Fi: toma del usuario de 8,504 s, modo mantener, QR emparejado e integridad verificada. Originales en experiments/results/2026-10-28-4g-phone-wifi-pc. La fila 4G/5G sigue pendiente de completar: requiere 30 s en ambos controles y verificación auditiva; no equivale a validar 5G.

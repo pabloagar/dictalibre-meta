@@ -1,0 +1,15 @@
+{
+  "condition": {
+    "phoneNetwork": "4G",
+    "pcNetwork": "Wi-Fi",
+    "source": "Declarado por el usuario"
+  },
+  "deviceModel": "S25 Ultra (dispositivo de referencia declarado previamente)",
+  "browserVersions": null,
+  "buildId": null,
+  "checks": "Secuencias 0..85, bytes, percentiles recalculados y coincidencia de emparejamiento: PASS",
+  "sha256": {
+    "audioMetrics": "17d13748bfeef7e20a3a7dba57f22473da593f83d20e61eab39ce34c1e11e5b8",
+    "pairingMetrics": "8d93044dffd159d36875d10a9cba820f5d986b3f0ec4d39b426ee87776f66eef"
+  }
+}

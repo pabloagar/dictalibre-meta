@@ -1,0 +1,10 @@
+{
+  "schema": "dicta-libre.pairing.v1",
+  "exportedAt": "2026-10-28T19:22:49.771Z",
+  "method": "qr",
+  "status": "paired",
+  "createdToPairedMs": 8427.479499999987,
+  "requestToPairedMs": 0.010799999989103526,
+  "confirmationWaitMs": null,
+  "mobileConnectToPairedMs": 939.1000000238419
+}
