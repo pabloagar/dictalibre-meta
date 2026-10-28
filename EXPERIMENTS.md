@@ -90,3 +90,6 @@ Navegadores del mismo PC por túnel HTTPS público, tono de 440 Hz a 48 kHz. Obs
 | Inicio/parada | 30 | 86,5 / 152 ms | 92,5 ms | 171,2 / 239,7 ms | 176,4 ms |
 
 Ambas tomas verificadas, cero errores de secuencia y duplicados registrados. La resolución es del mismo orden que la estimación: no inferir latencia unidireccional precisa. No se validaron aún red 4G/5G, captura física, exactitud médica ni rendimiento ASR. Procedimiento y semántica en [METRICS.md](METRICS.md).
+
+## Evidencia aportada por el responsable · toma 4
+Se conservó el JSON original y una ficha en [experiments/results/2026-10-28-user-take-4](experiments/results/2026-10-28-user-take-4/README.md). El usuario informa conexión correcta, QR sencillo y audio audible correctamente. El JSON registra 182 bloques de micrófono, 18,1387 s, integridad verificada y ningún error de secuencia registrado. No documenta red, versiones ni build; no se atribuye esta observación a Wi-Fi o 4G/5G ni se declara cerrada la aceptación completa en dispositivo.
