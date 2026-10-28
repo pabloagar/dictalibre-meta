@@ -5,7 +5,18 @@ import { RecordingMetrics, arrivalEstimate, round } from '/shared/metrics.js';
 let client, current, sessionEpoch = 0, pairingTimer, clipCount = 0;
 const clipURLs = [];
 const traces = new Map();
-let latestTrace, pendingTiming, previousArrival;
+let latestTrace, pendingTiming, previousArrival, pairingMetrics = null;
+function showPairing(metrics) {
+  if (!metrics) return;
+  pairingMetrics = metrics;
+  $('pairing-times').textContent = `Emparejamiento ${metrics.method === 'qr' ? 'QR directo' : 'código manual'} · crear → conectado: ${ms(metrics.createdToPairedMs)} · solicitud → autorización: ${ms(metrics.requestToPairedMs)} · conexión desde celular: ${ms(metrics.mobileConnectToPairedMs)}`;
+  $('pairing-export').disabled = false;
+}
+$('pairing-export').onclick = () => {
+  if (!pairingMetrics) return;
+  const url = URL.createObjectURL(new Blob([JSON.stringify({schema:'dicta-libre.pairing.v1', exportedAt:new Date().toISOString(), ...pairingMetrics},null,2)],{type:'application/json'}));
+  const a = document.createElement('a'); a.href=url; a.download='dicta-emparejamiento.json'; a.click(); setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
 const ms = value => value == null ? '—' : `${round(value)} ms`;
 function renderMetrics() {
   if (!latestTrace) return;
@@ -31,7 +42,7 @@ function renderMetrics() {
 }
 $('metrics-export').onclick = () => {
   if (!latestTrace) return;
-  const url = URL.createObjectURL(new Blob([JSON.stringify(latestTrace.export(), null, 2)], { type: 'application/json' }));
+  const url = URL.createObjectURL(new Blob([JSON.stringify({ ...latestTrace.export(), pairing: pairingMetrics }, null, 2)], { type: 'application/json' }));
   const a = document.createElement('a'); a.href = url; a.download = `dicta-metricas-${latestTrace.id}.json`; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
 };
 function displayIdle() {
@@ -106,7 +117,7 @@ function onMessage(m) {
     }
     case 'created': {
       $('pairing').hidden = false; $('close').hidden = false; $('code').textContent = m.code;
-      const link = `${location.origin}/mobile#${m.code}`;
+      const link = m.token ? `${location.origin}/mobile#qr=${m.token}` : `${location.origin}/mobile#${m.code}`;
       const qr = window.qrcode(0, 'M'); qr.addData(link); qr.make(); $('qr').innerHTML = qr.createSvgTag({ scalable: true, margin: 2 });
       $('phone-link').href = link;
       $('copy-link').onclick = async () => {
@@ -115,10 +126,11 @@ function onMessage(m) {
       };
       const update = () => { $('expiry').textContent = `Vence en ${Math.max(0, Math.ceil((m.expires - Date.now()) / 1000))} s`; };
       update(); pairingTimer = setInterval(update, 1000);
-      status('Escanea el QR con tu teléfono o abre el enlace e introduce el código.'); break;
+      status(m.token ? 'Escanea el QR para conectar directamente. Con el código manual confirmarás el número.' : 'Servidor anterior: el QR aún requiere confirmación hasta reiniciar la demo.'); break;
     }
     case 'pending': clearInterval(pairingTimer); $('pairing').hidden = true; $('confirm-panel').hidden = false; $('confirm-code').textContent = m.confirm; status('Un teléfono solicita conexión. Comprueba el número antes de confirmar.'); break;
-    case 'paired': $('confirm-panel').hidden = true; $('paired').hidden = false; status('Conectados. Prepara el micrófono en el teléfono.', 'success'); break;
+    case 'pairing_metrics': showPairing(m.pairing); break;
+    case 'paired': showPairing(m.pairing); clearInterval(pairingTimer); $('pairing').hidden = true; $('confirm-panel').hidden = true; $('paired').hidden = false; status('Conectados. Prepara el micrófono en el teléfono.', 'success'); break;
     case 'start':
       latestTrace = new RecordingMetrics(m.id, m.rate, m.source, m.mode); traces.set(m.id, latestTrace);
       while (traces.size > 3) traces.delete(traces.keys().next().value);
@@ -136,7 +148,7 @@ function onMessage(m) {
 $('create').onclick = () => {
   if (client) return;
   for (const clip of clipURLs.splice(0)) { clip.article.remove(); URL.revokeObjectURL(clip.url); }
-  clipCount = 0; traces.clear();
+  clipCount = 0; traces.clear(); pairingMetrics = null; $('pairing-export').disabled = true; $('pairing-times').textContent = 'Emparejamiento pendiente.';
   sessionEpoch++; $('create').disabled = true; status('Creando sesión…');
   client = new RelayClient(onMessage, () => {
     sessionEpoch++; clearInterval(pairingTimer);

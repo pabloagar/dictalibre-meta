@@ -47,3 +47,7 @@ Verificación realizada: 22 pruebas automatizadas aprobadas; sintaxis aprobada; 
 
 ## 2026-10-28 · Criterio transversal de medición y primera evidencia del usuario
 Se añadió AGENTS.md para mantener el requisito de instrumentación/comparación en cambios futuros y se amplió METRICS.md con metodología y metadatos pendientes. Se revisó y conservó dicta-metricas-4.json, con ficha de resultados y límites en experiments/results/2026-10-28-user-take-4. La audición satisfactoria y facilidad de conexión/QR son observaciones del usuario, no pruebas auditivas del agente. Se revisó el emparejamiento en backend/server.mjs para explicar la confirmación adicional; no se modificó ese flujo. Solo documentación y evidencia: no se ejecutaron nuevas pruebas de aplicación.
+
+## 2026-10-28 · QR directo y tiempos de emparejamiento
+Implementados token QR de 256 bits, caducidad/consumo conjunto con código manual, conexión automática al abrir enlace, confirmación exclusiva para código manual y exportación de tiempos de emparejamiento. 25 pruebas automatizadas aprobadas. Sin validación física de QR/S25 Ultra en esta revisión.
+La revisión automática de permisos rechazó detener/reiniciar el relay de la demo, sin motivo específico adicional. No se reintentó la acción bloqueada. Activación del nuevo backend pendiente; interfaz compatible con backend previo para mantener el flujo manual existente.

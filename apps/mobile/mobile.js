@@ -5,9 +5,10 @@ let client, stream, context, source, worklet, silent, wakeLock;
 let paired = false, prepared = false, preparing = false, epoch = 0, recording = null, counter = 0, heldPointer = null;
 let mode = 'hold';
 let synthetic = false;
-let prepareMs = null;
+let prepareMs = null, connectStarted = null;
 function report(r, stages = {}, extra = {}) { client?.send({ type: 'sender_metrics', id: r.id, stages, ...extra }); }
 const initialCode = location.hash.slice(1);
+let qrToken = /^qr=[a-f0-9]{64}$/.test(initialCode) ? initialCode.slice(3) : null;
 if (/^[a-f0-9]{10}$/i.test(initialCode)) $('join-code').value = initialCode;
 history.replaceState(null, '', location.pathname);
 function refresh() {
@@ -117,7 +118,7 @@ function stop() {
 function onMessage(m) {
   switch (m.type) {
     case 'pending': $('join-panel').hidden = true; $('confirm-panel').hidden = false; $('confirm-code').textContent = m.confirm; status('Espera la confirmación en el computador.'); break;
-    case 'paired': paired = true; $('confirm-panel').hidden = true; $('controls').hidden = false; status('Conectado. Prepara el micrófono para empezar.', 'success'); refresh(); break;
+    case 'paired': client.send({ type: 'pairing_metrics', connectToPairedMs: performance.now() - connectStarted }); $('join-panel').hidden = true; paired = true; $('confirm-panel').hidden = true; $('controls').hidden = false; status('Conectado. Prepara el micrófono para empezar.', 'success'); refresh(); break;
     case 'receipt':
       if (recording?.id === m.id) {
         $('received').textContent = m.sequence + 1;
@@ -138,12 +139,14 @@ function onMessage(m) {
 }
 $('join').onclick = () => {
   if (client) return;
-  if (!/^[a-f0-9]{10}$/i.test($('join-code').value.replace(/[\s-]/g, ''))) { status('Introduce los 10 caracteres del código.', 'error'); return; }
+  if (!qrToken && !/^[a-f0-9]{10}$/i.test($('join-code').value.replace(/[\s-]/g, ''))) { status('Introduce los 10 caracteres del código.', 'error'); return; }
+  connectStarted = performance.now();
   client = new RelayClient(onMessage, () => {
     paired = false; abort('Conexión cerrada. Crea una sesión nueva en el PC.', false); releaseMicrophone();
     client = null; $('join-panel').hidden = false; $('confirm-panel').hidden = true; $('controls').hidden = true; refresh();
   });
-  client.connect({ type: 'join', code: $('join-code').value }); refresh(); status('Conectando…');
+  const request = qrToken ? { type: 'join_qr', token: qrToken } : { type: 'join', code: $('join-code').value };
+  qrToken = null; client.connect(request); refresh(); status('Conectando…');
 };
 $('prepare').onclick = () => prepare(false);
 $('test-signal').onclick = () => prepare(true);
@@ -165,3 +168,5 @@ $('close').onclick = () => { if (recording) abort('Sesión finalizada.'); releas
 document.addEventListener('visibilitychange', () => { if (document.hidden) { if (recording) abort('La interfaz dejó de estar visible. Toma interrumpida.'); releaseMicrophone(); } });
 window.addEventListener('pagehide', () => { if (recording) client?.send({ type: 'abort' }); releaseMicrophone(); client?.close(); });
 refresh();
+
+if (qrToken) $('join').click();

@@ -88,3 +88,8 @@ La última prueba crea dos clientes sintéticos, genera un segundo de tono PCM, 
 El receptor prioriza el área de transcripción, todavía sin ASR. Audio y diagnóstico son desplegables; la conexión, el estado y tres mediciones principales permanecen visibles. No se solicita marcar una casilla de uso sintético. El alcance de pruebas documentado sigue vigente.
 
 En **Mediciones y diagnóstico**, exportar el JSON de la última toma antes de iniciar otra. Definiciones, precisión y campos futuros: [METRICS.md](METRICS.md). Las mediciones se borran al recargar; no se suben a un servicio de analítica.
+
+## Actualización QR directo
+Con el backend actualizado, escanear el QR o abrir el enlace copiado conecta automáticamente, sin comparar números. Para entrada manual abrir /mobile, escribir el código y confirmar el número en el PC. El micrófono sigue requiriendo preparación explícita. Exportación independiente en Mediciones y diagnóstico → Exportar emparejamiento.
+
+Es necesario reiniciar el relay para activar este cambio; mientras se sirve desde el backend anterior, la interfaz conserva el flujo con confirmación y muestra el aviso correspondiente.

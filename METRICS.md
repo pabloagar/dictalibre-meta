@@ -37,3 +37,15 @@ El esquema reserva asrQueueMs, asrRunMs, firstTextMs, finalTextMs y suggestionMs
 ## Prueba reproducible
 Ejecutar node --test tests/*.test.mjs. Después emparejar dos navegadores, preparar tono de diagnóstico y completar una toma con cada control. Abrir diagnóstico y exportar JSON antes de la siguiente toma. Repetir en S25 Ultra, Wi-Fi y 4G/5G, diez tomas de treinta segundos por condición, anotando versiones y red fuera del archivo automático. Comparar P50/P95, integridad, errores y estimaciones no disponibles; separar tono y micrófono real.
 
+
+## Emparejamiento QR/manual
+Implementado: token aleatorio de 256 bits para QR/enlace, temporal (120 s) y de un solo uso; almacenado como hash en el índice del relay. Viaja en el fragmento URL y se retira de la barra antes de conectar. No activa el micrófono automáticamente. Consumir QR o código invalida ambos accesos; el código manual conserva confirmación del PC. El enlace copiado tiene la misma capacidad de conexión directa que el QR.
+
+Mediciones exportables por separado antes de grabar y anexadas al JSON de audio:
+- createdToPairedMs: creación en servidor → autorización, incluye tiempo humano para escanear/escribir.
+- requestToPairedMs: solicitud recibida en servidor → autorización.
+- confirmationWaitMs: espera manual en servidor; null para QR.
+- mobileConnectToPairedMs: inicio de conexión WebSocket en celular → recepción de paired, incluye apertura/red y espera manual.
+Todos usan un solo reloj monotónico por intervalo. No miden el inicio del escaneo ni la carga inicial de la página. No incluyen tokens/códigos en exportación. Pendiente: registro persistente de intentos fallidos y tiempo de apertura/escaneo. No interpretar una conexión exitosa como ausencia de intentos previos.
+
+Hipótesis para comparar: QR reduce tiempo humano y pasos frente al código manual. Ejecutar diez emparejamientos alternados por método en el mismo dispositivo/red; exportar cada resultado, registrar fallos aparte y comparar medianas/P95 por sesión. No comparar requestToPairedMs de QR con latencia de red: es solo autorización interna del servidor.

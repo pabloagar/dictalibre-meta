@@ -123,3 +123,36 @@ test('PCM y WAV preservan muestras, frecuencia, canales y longitud', async () =>
   assert.equal(wav.getUint32(24, true), 48000); assert.equal(wav.getUint16(22, true), 1); assert.equal(wav.getUint32(40, true), 10);
   for (let i = 0; i < input.length; i++) assert.equal(wav.getInt16(44 + i * 2, true), input[i]);
 });
+
+test('QR conecta sin aprobar, consume ambos accesos y exporta tiempos sin token', async t => {
+  const { peer } = await environment(t);
+  const pc = await peer(); pc.send({type:'create'}); const created = await pc.next('created');
+  assert.match(created.token, /^[a-f0-9]{64}$/);
+  const phone = await peer(); phone.send({type:'join_qr',token:created.token});
+  const result = await pc.next('paired'); await phone.next('paired');
+  assert.equal(result.pairing.method,'qr'); assert.equal(result.pairing.confirmationWaitMs,null);
+  assert.ok(result.pairing.requestToPairedMs >= 0);
+  assert.equal(JSON.stringify(result).includes(created.token),false);
+  phone.send({type:'pairing_metrics',connectToPairedMs:45});
+  assert.equal((await pc.next('pairing_metrics')).pairing.mobileConnectToPairedMs,45);
+  const other = await peer(); other.send({type:'join_qr',token:created.token});
+  assert.match((await other.next('error')).message,/inválido/);
+  other.send({type:'join',code:created.code}); assert.match((await other.next('error')).message,/inválido/);
+  await start(pc,phone); phone.send(frame()); await pc.next('binary');
+});
+test('QR vencido o alterado no conecta', async t => {
+  const { peer } = await environment(t,{pairTTL:-1});
+  const pc = await peer(); pc.send({type:'create'}); const c = await pc.next('created');
+  const phone = await peer();
+  phone.send({type:'join_qr',token:c.token}); assert.match((await phone.next('error')).message,/vencido/);
+  phone.send({type:'join_qr',token:'abc'}); assert.match((await phone.next('error')).message,/inválido/);
+});
+test('manual conserva confirmación y anula el QR incluso antes de aprobar', async t => {
+  const { peer } = await environment(t);
+  const pc=await peer(); pc.send({type:'create'}); const c=await pc.next('created');
+  const phone=await peer(); phone.send({type:'join',code:c.code}); await phone.next('pending'); await pc.next('pending');
+  const other=await peer(); other.send({type:'join_qr',token:c.token}); await other.next('error');
+  phone.send({type:'approve'}); assert.match((await phone.next('error')).message,/confirmación/);
+  pc.send({type:'approve'}); const paired=await pc.next('paired');
+  assert.equal(paired.pairing.method,'manual'); assert.ok(paired.pairing.confirmationWaitMs>=0);
+});

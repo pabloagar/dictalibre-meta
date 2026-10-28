@@ -23,7 +23,7 @@ const nowMs = () => performance.timeOrigin + performance.now();
 
 export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL = 120_000,
   sessionTTL = 30 * 60_000, maxSessions = 30 } = {}) {
-  const sessions = new Map(), codes = new Map(), attempts = new Map();
+  const sessions = new Map(), codes = new Map(), tokens = new Map(), attempts = new Map();
   const headers = {
     'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer',
     'Permissions-Policy': 'microphone=(self), camera=()',
@@ -54,11 +54,20 @@ export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL 
 
   function finishSession(session, reason = 'Sesión cerrada.') {
     if (!session || !sessions.has(session.id)) return;
-    sessions.delete(session.id); codes.delete(session.code);
+    sessions.delete(session.id); codes.delete(session.code); tokens.delete(session.tokenHash);
     for (const ws of [session.desktop, session.mobile]) {
       send(ws, { type: 'closed', reason });
       if (ready(ws)) ws.close(1000, 'session-ended');
     }
+  }
+  function paired(session) {
+    session.approved = true;
+    const now = performance.now();
+    session.pairing = { method: session.method, status: 'paired',
+      createdToPairedMs: now - session.createdMono,
+      requestToPairedMs: now - session.joinMono,
+      confirmationWaitMs: session.method === 'manual' ? now - session.joinMono : null };
+    for (const target of [session.desktop, session.mobile]) send(target, { type: 'paired', maxSeconds: MAX_SECONDS, pairing: session.pairing });
   }
   function abort(session, reason) {
     if (!session.recording) return;
@@ -118,15 +127,18 @@ export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL 
             if (sessions.size >= maxSessions) throw new Error('Servidor ocupado.');
             let code;
             do { code = randomBytes(5).toString('hex').toUpperCase(); } while (codes.has(code));
-            const s = { id: randomUUID(), code, desktop: ws, mobile: null, approved: false, recording: null,
+            const token = randomBytes(32).toString('hex');
+            const s = { tokenHash: fingerprint(token), createdMono: performance.now(), id: randomUUID(), code, desktop: ws, mobile: null, approved: false, recording: null,
               pairExpires: Date.now() + pairTTL, expires: Date.now() + sessionTTL, usedIds: new Set() };
-            ws.session = s; ws.role = 'desktop'; sessions.set(s.id, s); codes.set(code, s);
-            send(ws, { type: 'created', code, expires: s.pairExpires, maxSeconds: MAX_SECONDS }); return;
+            ws.session = s; ws.role = 'desktop'; sessions.set(s.id, s); codes.set(code, s); tokens.set(s.tokenHash, s);
+            send(ws, { type: 'created', code, token, expires: s.pairExpires, maxSeconds: MAX_SECONDS }); return;
           }
-          if (m.type === 'join') {
-            const s = codes.get(String(m.code).replace(/[\s-]/g, '').toUpperCase());
+          if (m.type === 'join' || m.type === 'join_qr') {
+            const qr = m.type === 'join_qr';
+            const s = qr ? (typeof m.token === 'string' && /^[a-f0-9]{64}$/.test(m.token) ? tokens.get(fingerprint(m.token)) : null) : codes.get(String(m.code).replace(/[\s-]/g, '').toUpperCase());
             if (!s || Date.now() > s.pairExpires || s.mobile) throw new Error('Código inválido, vencido o ya utilizado.');
-            codes.delete(s.code); s.mobile = ws; ws.session = s; ws.role = 'mobile';
+            codes.delete(s.code); tokens.delete(s.tokenHash); s.method = qr ? 'qr' : 'manual'; s.joinMono = performance.now(); s.mobile = ws; ws.session = s; ws.role = 'mobile';
+            if (qr) { paired(s); return; }
             s.confirm = String(randomInt(1000, 10000));
             send(ws, { type: 'pending', confirm: s.confirm });
             send(s.desktop, { type: 'pending', confirm: s.confirm }); return;
@@ -136,9 +148,14 @@ export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL 
         if (m.type === 'close') { finishSession(session); return; }
         if (m.type === 'approve' && ws.role === 'desktop' && session.mobile && !session.approved) {
           if (Date.now() > session.pairExpires) throw new Error('Emparejamiento vencido.');
-          session.approved = true;
-          for (const target of [session.desktop, session.mobile]) send(target, { type: 'paired', maxSeconds: MAX_SECONDS });
+          paired(session);
           return;
+        }
+        if (m.type === 'pairing_metrics' && ws.role === 'mobile' && session.approved) {
+          const v = m.connectToPairedMs;
+          if (!Number.isFinite(v) || v < 0 || v > 180000) throw new Error('Medición de conexión inválida.');
+          session.pairing.mobileConnectToPairedMs = v;
+          send(session.desktop, { type: 'pairing_metrics', pairing: session.pairing }); return;
         }
         if (!session.approved) throw new Error('Falta confirmación en el computador.');
         if (m.type === 'abort') { abort(session, 'Grabación interrumpida. Inicia otra explícitamente.'); return; }
