@@ -77,3 +77,6 @@ El túnel publica exclusivamente el servicio en loopback; su binario se verifica
 Segmentación inteligente, ASR y sus adaptadores, consolidación de parciales/finales, comparación de motores, contexto terminológico, sugerencias de Meta y revisión humana se discutirán en las fases 3–8. La fase 9 incorporará texto/editor; los reproductores actuales solo sirven para comprobar el audio.
 
 Conservar original y versionado; propuestas de spans con revisión base; abstención; ninguna sustitución clínica silenciosa; incertidumbre acústica distinguida de una hipótesis lingüística. Estos requisitos orientan el diseño futuro, pero no hay aún interfaces de corrección ni modelos ejecutados.
+
+## Propuesta de transcripción modular · 2026-10-28
+Investigación y contratos pendientes de aprobación en [TRANSCRIPTION_PLAN.md](TRANSCRIPTION_PLAN.md). Propone fuente intercambiable, preparación, delimitación, adaptadores ASR, consolidación, propuestas Meta opcionales y revisión. No se implementó ningún módulo ASR ni se seleccionó un ganador. La nueva propuesta de evaluación prioriza Muse Voice frente a Whisper y un contraste médico, condicionada a acceso y mediciones.

@@ -52,3 +52,6 @@ Nombre; función; versión/commit/hash; fuente oficial; licencia y copia de avis
 ## Pendientes de publicación
 
 Elegir licencia del código propio, mantener el lockfile y revisar avisos de distribución de los componentes realmente usados. Revalidar compatibilidad con las reglas completas del concurso. No se atribuye al proyecto autoría de modelos o bibliotecas externos.
+
+## Actualización de candidatos de transcripción
+La investigación del 28-10-2026 en TRANSCRIPTION_PLAN.md confirma en documentación oficial español y modo de dictado de Muse Voice Transcribe; el acceso de cuenta aún no se ha probado. La propuesta de prueba ASR y contratos allí descritos sustituye la prioridad preliminar de corrector en «F1» de este documento: fases 1/2 son captura/transporte y no se integra corrector aún. Muse, Whisper, Speechmatics y Scribe son candidatos, no nuevas dependencias instaladas. Términos efectivos de APIs, cuotas y coste del piloto siguen pendientes de confirmar.
