@@ -46,7 +46,8 @@ async function stopped(m) {
     report(r, { stopFlushMs, senderHashMs: performance.now() - flushedAt });
     if (recording !== r) return;
     if (m.samples !== r.samples) throw new Error('Faltan muestras antes del envío.');
-    if (!client.send({ type: 'end', id: r.id, samples: r.samples, frames: r.sequence, hash })) throw new Error('Se perdió la conexión.');
+    const stopStamp=client.clock.stamp(performance.timeOrigin+r.stopAt);
+    if (!client.send({ type: 'end', id: r.id, samples: r.samples, frames: r.sequence, hash, stopStamp })) throw new Error('Se perdió la conexión.');
     r.parts = [];
   } catch (error) { abort(error.message); }
 }

@@ -48,8 +48,8 @@ test('transporta mediciones asociadas al bloque y métricas finales tras verific
   phone.send({ type: 'block_timing', id: 1, sequence: 0, sent: { serverMs: 123, uncertaintyMs: 5, ageMs: 0 }, queueBytes: 0 });
   phone.send(frame()); const timing = await pc.next('block_timing');
   assert.equal(timing.sent.serverMs, 123); assert.ok(timing.relayMs >= 0); await pc.next('binary');
-  phone.send({ type: 'end', id: 1, frames: 1, samples: pcm.length, hash: hashOf(frame()) });
-  const end = await pc.next('end'); pc.send({ type: 'verified', id: 1, hash: end.hash }); await phone.next('verified');
+  phone.send({ type: 'end', id: 1, frames: 1, samples: pcm.length, hash: hashOf(frame()), stopStamp:{serverMs:999,uncertaintyMs:8,ageMs:0} });
+  const end = await pc.next('end');assert.deepEqual(end.stopStamp,{serverMs:999,uncertaintyMs:8}); pc.send({ type: 'verified', id: 1, hash: end.hash }); await phone.next('verified');
   phone.send({ type: 'sender_metrics', id: 1, stages: { stopToVerifiedMs: 40, asrRunMs: 10 }, sequence: 0, ackRoundTripMs: 20 });
   const metrics = await pc.next('sender_metrics');
   assert.deepEqual(metrics.stages, { stopToVerifiedMs: 40 }); assert.equal(metrics.ackRoundTripMs, 20);

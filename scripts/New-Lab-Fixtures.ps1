@@ -1,4 +1,4 @@
-# Synthetic controls only. Requires the installed Spanish Windows voice.
+﻿# Synthetic controls only. Requires the installed Spanish Windows voice.
 $ErrorActionPreference = 'Stop'
 $labRoot = Split-Path -Parent $PSScriptRoot
 $labOutput = Join-Path $labRoot '.runtime'

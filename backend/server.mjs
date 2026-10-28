@@ -14,6 +14,7 @@ const paths = new Map([
   ['/shared/protocol.js', 'apps/shared/protocol.js'], ['/shared/client.js', 'apps/shared/client.js'],
   ['/shared/metrics.js', 'apps/shared/metrics.js'],
   ['/style.css', 'apps/shared/style.css'], ['/qr.js', 'node_modules/qrcode-generator/dist/qrcode.js'],
+  ['/receiver.css','apps/shared/style.css'],
 ]);
 const MIME = { html: 'text/html; charset=utf-8', js: 'text/javascript; charset=utf-8', css: 'text/css; charset=utf-8' };
 const ready = ws => ws?.readyState === WebSocket.OPEN;
@@ -195,7 +196,9 @@ export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL 
           r.hash = r.digest.digest('hex');
           if (m.frames !== r.next || m.samples !== r.samples || m.hash !== r.hash) throw new Error('No coincide la integridad del audio enviado.');
           r.ended = true; r.last = Date.now();
-          relay(session, session.desktop, { type: 'end', id: r.id, rate: r.rate, frames: r.next, samples: r.samples, hash: r.hash, counters: { duplicates: r.duplicates, sequenceErrors: r.sequenceErrors } }); return;
+          const stamp=m.stopStamp;
+          const stopStamp=stamp&&Number.isFinite(stamp.serverMs)&&Number.isFinite(stamp.uncertaintyMs)&&stamp.uncertaintyMs>=0&&stamp.uncertaintyMs<=10000&&Number.isFinite(stamp.ageMs)&&stamp.ageMs>=0&&stamp.ageMs<30000?{serverMs:stamp.serverMs,uncertaintyMs:stamp.uncertaintyMs}:null;
+          relay(session, session.desktop, { type: 'end', id: r.id, rate: r.rate, frames: r.next, samples: r.samples, hash: r.hash, stopStamp, counters: { duplicates: r.duplicates, sequenceErrors: r.sequenceErrors } }); return;
         }
         if (m.type === 'verified' && ws.role === 'desktop' && r?.ended && m.id === r.id) {
           if (m.hash !== r.hash) throw new Error('El audio del PC no coincide con el del teléfono.');

@@ -49,3 +49,5 @@ footer { margin-top:20px; padding:14px 0; font-size:10px; color:var(--muted); bo
 .record-button.recording { background:var(--red) } .phone-metrics { grid-template-columns:1fr 1fr } .verification { font-size:12px; color:#37704d; line-height:1.5 }
 @media(max-width:700px) { .shell { padding:0 14px } .workspace { grid-template-columns:1fr } .pairing { padding:12px } .pairing>h2,.pairing>.muted { display:inline; margin-right:8px } .pairing>.primary { margin-top:8px } .transcript-paper { min-height:180px; padding:18px } .metrics { gap:8px } .metrics strong { font-size:15px } .section-head { flex-wrap:wrap } header>.tag { max-width:115px; font-size:9px; text-align:right } }
 @media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none!important; transition:none!important } }
+.transcript-paper p.live-notice,.transcript-paper p.tiny{font-size:13px;letter-spacing:0;line-height:1.5}.transcript-paper .clip{margin-top:18px}.transcript-paper .clip>p:not(.tiny){white-space:pre-wrap}
+.transcript-paper .clip p.live-transcript{font-size:23px;line-height:1.5;color:var(--ink)}

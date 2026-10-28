@@ -7,7 +7,7 @@ Actualización: 28-10-2026, America/Santiago. Las diez fases reemplazan la agrup
 | 1. Captura | S25 Ultra, interfaz abierta, micrófono preparado y dos controles táctiles | Prototipo implementado; validado con tono y pruebas de worklet. Voz real e integridad aportadas por el usuario; faltan series cortas, límites audibles e interrupciones |
 | 2. Transporte | Emparejamiento y envío durante la toma, Wi-Fi y 4G/5G desde el inicio | Relay y URL temporal implementados; WSS sintético público comprobado. Evidencia del usuario con celular 4G y PC Wi-Fi; faltan series repetidas y recuperación explícita tras interrupción |
 | 3. Segmentación inteligente | Decidir qué audio procesar sin perder palabras en límites | Pendiente de discutir; contrastar segmentación externa con el contrato real del ASR |
-| 4. Reconocimiento de voz | Audio a texto y tiempos medidos | Pendiente; Muse Voice Transcribe es candidato del esquema discutido, no motor integrado ni acceso confirmado |
+| 4. Reconocimiento de voz | Audio a texto y tiempos medidos | Whisper GPU implementado en laboratorio y receptor local al terminar cada toma; prueba sintética de extremo a extremo. Pendiente experiencia física del S25 Ultra en este flujo y acceso real a Muse |
 | 5. Reconstrucción del texto | Ordenar y consolidar parciales/finales sin duplicar ni perder texto | Pendiente; verificar primero la semántica real de eventos del proveedor |
 | 6. Transcripción híbrida | Comparar motores sobre el mismo audio y evaluar una combinación | Experimento pendiente, sin promesa de mejora ni decisión final sobre motores |
 | 7. Contexto y terminología | Medir ASR con y sin vocabulario radiológico | Pendiente; términos/corpus congelados y controles de sobrecorrección |

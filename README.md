@@ -1,6 +1,6 @@
 # Dicta Libre
 
-**Estado al 28 de octubre de 2026:** captura/transporte con pruebas automáticas y lotes del usuario en redes móvil y Wi-Fi; Wi-Fi es la opción principal de demo. Nuevo [laboratorio local](LABORATORY.md) para archivos: Whisper large-v3/OpenVINO ejecutado en GPU Intel Arc y adaptador Muse pendiente de validar con clave real. ASR aún separado de captura; correcciones de IA sin implementar.
+**Estado al 28 de octubre de 2026:** captura/transporte con pruebas automáticas y lotes del usuario en redes móvil y Wi-Fi; Wi-Fi es la opción principal de demo. Nuevo [laboratorio local](LABORATORY.md) para archivos: Whisper large-v3/OpenVINO ejecutado en GPU Intel Arc y adaptador Muse pendiente de validar con clave real. Whisper conectado a las tomas completas en receptor local; correcciones de IA sin implementar.
 
 Dicta Libre es un proyecto de dictado médico cuya idea y exploración conceptual precedieron al Meta AI Developer Hackathon 2026. La implementación presentada para el concurso comenzó desde cero el 28 de octubre de 2026, dentro del período oficial del evento.
 
@@ -11,6 +11,8 @@ La investigación y las exploraciones técnicas previas informan el problema; no
 Permitir que un profesional sanitario use su celular como micrófono de un computador y revise una transcripción asistida por IA, con especial atención a vocabulario médico y radiológico en español. Es investigación para profesionales, no diagnóstico ni recomendaciones para pacientes. No se afirma novedad absoluta, superioridad ni validación clínica.
 
 ## Lo implementado ahora
+
+- Dictado al terminar cada toma: abrir [receptor local con Whisper](http://127.0.0.1:8789/live) en el PC, conectar el S25 Ultra mediante su QR y grabar. Muestra texto por toma y latencia, preserva el audio en el laboratorio. Muse todavía no conectado al flujo en vivo.
 
 - Dos vistas web: emisor móvil y receptor de escritorio.
 - S25 Ultra como dispositivo de referencia acordado, con pantalla encendida e interfaz abierta.

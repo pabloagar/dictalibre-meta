@@ -58,7 +58,7 @@ export class RecordingMetrics {
     this.createdAt = new Date().toISOString(); this.blocks = new Map(); this.status = 'recording';
     this.counters = { duplicates: 0, sequenceErrors: 0, telemetryOmitted: 0 };
     this.stages = Object.fromEntries(['prepareMs','startControlMs','stopFlushMs','senderHashMs','pcHashMs','stopToVerifiedMs',
-      'asrQueueMs','asrRunMs','firstTextMs','finalTextMs','suggestionMs'].map(k => [k, null]));
+      'asrQueueMs','asrRunMs','firstTextMs','finalTextMs','suggestionMs','receiveEndToTextMs','stopToTextEstimateMs','clockUncertaintyMs'].map(k => [k, null]));
     this.reason = null;
   }
   block(sequence, values) {
@@ -77,8 +77,8 @@ export class RecordingMetrics {
   }
   export() {
     return { schema: 'dicta-libre.metrics.v1', recordingId: this.id, createdAt: this.createdAt, source: this.source, mode: this.mode,
-      sampleRate: this.rate, status: this.status, reason: this.reason, counters: this.counters, stages: this.stages,
+      sampleRate: this.rate, status: this.status, reason: this.reason, counters: this.counters, stages: this.stages, asr: this.asr??null,
       summary: this.summary(), blocks: [...this.blocks.values()],
-      timingNotes: 'sendToPcEstimateMs is clock-calibrated and excludes capture/hardware latency. uncertaintyMs is indicative, not a confidence interval. ackRoundTripMs uses one sender clock. ASR fields remain null until integrated.' };
+        timingNotes: 'sendToPcEstimateMs and stopToTextEstimateMs use clock calibration; uncertainty is indicative, not a confidence interval. receiveEndToTextMs uses one PC clock through DOM text update, including polling. ackRoundTripMs uses one sender clock. Missing ASR metrics stay null.' };
   }
 }

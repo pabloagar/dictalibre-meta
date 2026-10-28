@@ -1,6 +1,12 @@
 import { $, RelayClient, status, clock } from '/shared/client.js';
 import { decodeChunk, sha256, wavBlob } from '/shared/protocol.js';
 import { RecordingMetrics, arrivalEstimate, round, exportBatch } from '/shared/metrics.js';
+let mobileOrigin=location.origin;
+if(location.pathname==='/live'){
+  $('create').disabled=true;
+  try{const response=await fetch('/api/live-info');if(!response.ok)throw Error();mobileOrigin=(await response.json()).mobileOrigin;await import('/live.js');$('create').disabled=false;}
+  catch{status('No se pudo preparar dictado local. Inicia la demo y el laboratorio.','error');}
+}
 
 let client, current, sessionEpoch = 0, pairingTimer, clipCount = 0;
 const clipURLs = [];
@@ -37,7 +43,7 @@ function renderMetrics() {
     for (const value of [label, ms(stat.p50), ms(stat.p95), stat.n]) { const td = document.createElement('td'); td.textContent = value; tr.append(td); }
     $('timing-rows').append(tr);
   }
-  const labels = { prepareMs:'Preparar micrófono (incluye permiso)', startControlMs:'Orden de inicio → captura', stopFlushMs:'Detener → último bloque capturado', senderHashMs:'Verificar hash en celular', pcHashMs:'Verificar hash en PC', stopToVerifiedMs:'Detener → entrega confirmada' };
+  const labels = { prepareMs:'Preparar micrófono (incluye permiso)', startControlMs:'Orden de inicio → captura', stopFlushMs:'Detener → último bloque capturado', senderHashMs:'Verificar hash en celular', pcHashMs:'Verificar hash en PC', stopToVerifiedMs:'Detener → entrega confirmada',asrQueueMs:'Cola ASR',asrRunMs:'Petición ASR',receiveEndToTextMs:'Fin recibido en PC → texto',stopToTextEstimateMs:'Detener → texto estimado',clockUncertaintyMs:'Resolución orientativa parada → texto' };
   $('stage-times').textContent = Object.entries(labels).map(([key,label]) => `${label}: ${ms(latestTrace.stages[key])}`).join(' · ');
   $('transport-counts').textContent = `${s.blocks} bloques · ${s.bytes} bytes de audio y cabecera · cola máxima ${s.queueBytes.max ?? '—'} bytes · duplicados ${latestTrace.counters.duplicates} · errores de secuencia ${latestTrace.counters.sequenceErrors} · sin estimación ${s.unestimatedBlocks}`;
 }
@@ -73,6 +79,7 @@ function interrupted(reason) {
   displayIdle(); status(reason, 'error'); $('record-help').textContent = 'La toma se interrumpió. Inicia otra desde el teléfono.';
 }
 async function complete(m) {
+  const receivedEnd=performance.now();
   const recording = current, epoch = sessionEpoch;
   if (!recording || recording.id !== m.id) return;
   $('record-state').textContent = 'VERIFICANDO';
@@ -84,6 +91,7 @@ async function complete(m) {
     latestTrace.stage('pcHashMs', performance.now() - hashStart); latestTrace.status = 'verified'; Object.assign(latestTrace.counters, m.counters); renderMetrics();
     client.send({ type: 'verified', id: recording.id, hash });
     addClip(recording, true, hash); current = null; displayIdle();
+    if(recording.samples&&location.pathname==='/live')window.dispatchEvent(new CustomEvent('dicta-take',{detail:{recordingId:recording.id,blob:wavBlob(recording.parts,recording.rate),stopStamp:m.stopStamp,receivedEnd,trace:latestTrace,stamp:()=>client?.clock.stamp(),renderMetrics}}));
     status(m.samples ? 'Audio recibido completo. Escucha la toma y comprueba el inicio y el final.' : 'La toma quedó vacía. Mantén pulsado mientras hablas.', m.samples ? 'success' : '');
     $('record-help').textContent = 'Listo para recibir la siguiente toma.';
   } catch (error) { client?.send({ type: 'abort' }); interrupted(error.message); }
@@ -118,7 +126,7 @@ function onMessage(m) {
     }
     case 'created': {
       $('pairing').hidden = false; $('close').hidden = false; $('code').textContent = m.code;
-      const link = m.token ? `${location.origin}/mobile#qr=${m.token}` : `${location.origin}/mobile#${m.code}`;
+      const link = m.token ? `${mobileOrigin}/mobile#qr=${m.token}` : `${mobileOrigin}/mobile#${m.code}`;
       const qr = window.qrcode(0, 'M'); qr.addData(link); qr.make(); $('qr').innerHTML = qr.createSvgTag({ scalable: true, margin: 2 });
       $('phone-link').href = link;
       $('copy-link').onclick = async () => {
@@ -148,6 +156,7 @@ function onMessage(m) {
 }
 $('create').onclick = () => {
   if (client) return;
+  window.dispatchEvent(new Event('dicta-new-session'));
   for (const clip of clipURLs.splice(0)) { clip.article.remove(); URL.revokeObjectURL(clip.url); }
   clipCount = 0; traces.clear(); latestTrace = null; $('metrics-export').disabled = true; pairingMetrics = null; $('pairing-export').disabled = true; $('pairing-times').textContent = 'Emparejamiento pendiente.';
   sessionEpoch++; $('create').disabled = true; status('Creando sesión…');

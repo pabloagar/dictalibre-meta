@@ -1,5 +1,9 @@
 # Laboratorio local de transcripción
 
+Actualización: también disponible [dictado desde celular](http://127.0.0.1:8789/live). El receptor local crea una sesión del relay público mediante puente WebSocket; el QR abre el emisor HTTPS en el S25 Ultra. Solo las tomas completas verificadas se importan y encolan automáticamente en Whisper base. Audio y resultados se guardan localmente en este laboratorio, sin envío a Muse. Requiere demo/túnel y laboratorio activos en el mismo PC. La página pública anterior sigue siendo receptor de transporte; para transcribir usar `/live` en este PC.
+
+Cada tarjeta pertenece a una toma, sin sobrescribir resultados con la siguiente. Se muestran últimas cinco tarjetas terminadas; una activa puede mantenerse hasta acabar. Nueva sesión cancela trabajos iniciados desde esa página; cerrar la pestaña no garantiza cancelación de trabajos ya encolados, visibles en el laboratorio. Mediciones del navegador se guardan en `run.live` y en la exportación de transporte (sin texto); si se cierra antes de recibir el resultado, pueden faltar.
+
 Primera implementación: 28-10-2026. Independiente de captura/transporte. Wi-Fi sigue siendo la conexión principal de la demo; aquí se comparan archivos completos sin medir la red celular–PC.
 
 ## Uso

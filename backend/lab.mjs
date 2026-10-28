@@ -6,6 +6,7 @@ import { randomUUID } from 'node:crypto';
 import { spawn, execFileSync } from 'node:child_process';
 import { createInterface } from 'node:readline';
 import os from 'node:os';
+import {attachLiveBridge,demoConnection} from './live-bridge.mjs';
 import { wavInfo, hash, configuration, score, csv } from './lab-core.mjs';
 const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 export const MODEL_REVISION='220761e60602a5ca694c409d5f424563b75d6820';
@@ -56,7 +57,7 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),worker=n
   for(const r of db.runs) if(['queued','running'].includes(r.status)){r.status='interrupted';r.error='Servidor reiniciado antes de terminar.';}
   save();
   let build='unknown';try{build=execFileSync('git',['rev-parse','HEAD'],{cwd:ROOT,encoding:'utf8'}).trim();}catch{}
-  const sourceHash=hash(Buffer.concat(['backend/lab.mjs','backend/lab-core.mjs','backend/lab-worker.py'].map(f=>fs.readFileSync(path.join(ROOT,f)))));
+  const sourceHash=hash(Buffer.concat(['backend/lab.mjs','backend/lab-core.mjs','backend/lab-worker.py','backend/live-bridge.mjs','apps/desktop/live.js','apps/desktop/desktop.js','apps/mobile/mobile.js','apps/shared/metrics.js'].map(f=>fs.readFileSync(path.join(ROOT,f)))));
   let apiKey=process.env.META_API_KEY||process.env.MODEL_API_KEY||'',active=null,closed=false;
   const queuedAt=new Map();
   const viewRun=r=>{const a=db.audios.find(a=>a.id===r.audioId),ref=a?.references.at(-1);return {...r,evaluation:r.status==='completed'?score(ref?.text??null,r.text):null,evaluationReferenceVersion:ref?.version??null};};
@@ -94,11 +95,12 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),worker=n
       if(req.method==='POST'&&req.headers.origin!==origin)return json({error:'Origen no permitido.'},403);
       const url=new URL(req.url,origin),p=url.pathname;
       if(req.method==='GET'){
+        if(p==='/api/live-info')return json({mobileOrigin:demoConnection(ROOT).origin});
         if(p==='/api/state')return json({audios:db.audios,configs:db.configs,runs:db.runs.map(viewRun),metaConfigured:!!apiKey,modelPresent:modelReady(),build,sourceHash});
         if(p==='/api/export'){const out={...db,schema:'dicta-libre.lab.v1',exportedAt:new Date().toISOString(),build,sourceHash,runs:db.runs.map(viewRun)};if(url.searchParams.get('format')==='csv'){res.writeHead(200,{...headers,'Content-Type':'text/csv; charset=utf-8','Content-Disposition':'attachment; filename="dicta-lab.csv"'});return res.end('\uFEFF'+csv(out.runs));}res.setHeader('Content-Disposition','attachment; filename="dicta-lab.json"');return json(out);}
         const audio=db.audios.find(a=>p===`/api/audio/${a.id}`);
         if(audio){res.writeHead(200,{...headers,'Content-Type':'audio/wav'});return res.end(fs.readFileSync(path.join(dataDir,'audio',audio.id+'.wav')));}
-        const file={'/':'apps/lab/index.html','/lab.js':'apps/lab/lab.js','/style.css':'apps/lab/style.css'}[p];
+        const file={'/':'apps/lab/index.html','/lab.js':'apps/lab/lab.js','/style.css':'apps/lab/style.css','/live':'apps/desktop/index.html','/desktop.js':'apps/desktop/desktop.js','/live.js':'apps/desktop/live.js','/receiver.css':'apps/shared/style.css','/qr.js':'node_modules/qrcode-generator/dist/qrcode.js','/shared/client.js':'apps/shared/client.js','/shared/protocol.js':'apps/shared/protocol.js','/shared/metrics.js':'apps/shared/metrics.js'}[p];
         if(file){res.writeHead(200,{...headers,'Content-Type':p.endsWith('.js')?'text/javascript':p.endsWith('.css')?'text/css':'text/html; charset=utf-8'});return res.end(fs.readFileSync(path.join(ROOT,file)));}
         return json({error:'No encontrado.'},404);
       }
@@ -111,6 +113,12 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),worker=n
       }
       if(raw.length>100000)throw new Error('Petición JSON demasiado grande.');
       const m=JSON.parse(raw.toString()||'{}');
+      if(p==='/api/live-measurements'){
+        const r=db.runs.find(r=>r.id===m.runId);if(!r||r.status!=='completed')throw Error('Resultado no disponible.');
+        const timing={};for(const key of ['receiveEndToTextMs','stopToTextEstimateMs','clockUncertaintyMs']){const v=m[key];timing[key]=typeof v==='number'&&Number.isFinite(v)&&v>=0&&v<600000?v:null;}
+        r.live={...timing,recordingId:Number.isInteger(m.recordingId)?m.recordingId:null,source:['tone','microphone'].includes(m.source)?m.source:null,measuredBy:'receiver-browser',savedAt:new Date().toISOString()};
+        r.environment.source='live-receiver';save();return json({saved:true});
+      }
       if(p==='/api/key'){if(typeof m.key!=='string'||m.key.length>4096)throw new Error('Clave inválida.');apiKey=m.key.trim();return json({configured:!!apiKey});}
       if(p==='/api/references'){
         const a=db.audios.find(a=>a.id===m.audioId);if(!a)throw new Error('Audio desconocido.');
@@ -140,7 +148,8 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),worker=n
       return json({error:'No encontrado.'},404);
     }catch(e){if(!res.headersSent)json({error:e.message},400);else res.end();}
   });
-  return {server,db,close:()=>{closed=true;active?.controller.abort();worker.close();server.close();}};
+  const closeBridge=attachLiveBridge(server,()=>demoConnection(ROOT));
+  return {server,db,close:()=>{closed=true;active?.controller.abort();worker.close();closeBridge();server.close();}};
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   const lab=createLab();lab.server.listen(Number(process.env.LAB_PORT||8789),'127.0.0.1',()=>console.log(`Dicta Libre Lab: http://127.0.0.1:${lab.server.address().port}`));

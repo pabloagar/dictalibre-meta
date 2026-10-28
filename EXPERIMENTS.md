@@ -101,5 +101,7 @@ Resultados y originales: [prueba 4G/Wi-Fi](experiments/results/2026-10-28-4g-pho
 [Resultados y originales](experiments/results/2026-10-28-mobile-vs-wifi/README.md): cinco tomas mantener por condición, diez íntegras. Parada → confirmación mediana 1309,3 ms móvil frente a 281,3 ms Wi-Fi; máximo 4726 frente a 290,6 ms. Wi-Fi más estable en estos lotes. Se recalcularon resúmenes y validaron secuencias/bytes. Sin ranking universal de redes ni prueba en Wi-Fi hospitalario.
 # Laboratorio ASR · prueba de integración 2026-10-28
 
+Extensión posterior: [captura/transporte conectados con Whisper](experiments/results/2026-10-28-live-whisper/README.md). Entrada sintética enviada por túnel público, receptor web real, inferencia GPU y texto por toma. Control de 5,54 s con modelo cargado: fin recibido PC→texto 2,473 s; parada→texto estimada 2,519 s. Se conserva un control previo con defecto de codificación en la fuente, sin usarlo para evaluar precisión. No sustituye la aceptación del dictado físico del S25 Ultra.
+
 [Evidencia y procedimiento](experiments/results/2026-10-28-lab-smoke/README.md): Whisper large-v3 FP16 ejecutado en GPU Intel Arc mediante OpenVINO, frase sintética de 5,54 s y silencio de 2 s. Repetición de frase con modelo cargado: total 2,250 s, generación 2,220 s. WER literal 1/13 por tres/3, no error clínico adjudicado. Silencio generó «Gracias.»; resultado adverso conservado. Variante beams=3 falló en GPU. Muse aún sin credencial real; no hay comparación de motores completada. Los tests de su adaptador usan fixtures identificadas.
 
