@@ -23,3 +23,5 @@ Al ejecutar cada condición de red, abrir **Mediciones y diagnóstico** y export
 Evidencia parcial 4G/Wi-Fi: toma del usuario de 8,504 s, modo mantener, QR emparejado e integridad verificada. Originales en experiments/results/2026-10-28-4g-phone-wifi-pc. La fila 4G/5G sigue pendiente de completar: requiere completar series de 2–10 s en ambos controles y verificación auditiva; no equivale a validar 5G.
 
 Criterio actualizado: las series de 2–10 s son el caso principal. La prueba de tres minutos es complementaria y no bloquea ASR. El mínimo práctico para cierre y los preparativos de transcripción están en ROADMAP.md, sección «Cierre de fases 1 y 2». Los resultados históricos se conservan con las condiciones originales.
+
+Evidencia adicional: cinco tomas mantener por condición móvil 4G/5G y Wi-Fi, todas con integridad verificada; ver experiments/results/2026-10-28-mobile-vs-wifi. Repetibilidad de transporte de mantener observada; falta evaluación auditiva explícita, inicio/parada e interrupciones. No convertir «4G/5G» declarado en prueba independiente de ambas generaciones.

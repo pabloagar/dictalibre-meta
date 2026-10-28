@@ -74,3 +74,6 @@ Verificación: 26 pruebas automatizadas aprobadas, incluida retención de cinco,
 
 ## 2026-10-28 · Investigación de transcripción, sin implementación
 Se consultaron fuentes oficiales de Meta, Groq/Whisper, Speechmatics y ElevenLabs y referencias metodológicas de evaluación clínica en español. Se creó TRANSCRIPTION_PLAN.md con candidatos, límites de evidencia, módulos intercambiables, contratos, integración Meta y experimento pareado de dictados 2–10 s. Se enlazó desde arquitectura y actualizó estado de candidatos. No se instaló software, descargaron modelos/corpus, enviaron audios a proveedores ni ejecutaron inferencias. No hay ranking experimental propio ni aprobación final del motor.
+
+## 2026-10-28 · Comparación de dos lotes del usuario
+Conservados y analizados lotes móvil 4G/5G y Wi-Fi según orden declarado. Consistencia de métricas, secuencias y bytes aprobada. Diez tomas íntegras, Wi-Fi estable en confirmación final (280–290,6 ms), móvil con aumento hasta 4726 ms. Se documentó apoyo a Wi-Fi para demo, sin generalizar a hospitales ni modificar capacidades/configuración. No se ejecutaron nuevas grabaciones o inferencias.

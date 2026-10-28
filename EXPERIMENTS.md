@@ -96,3 +96,6 @@ Se conservó el JSON original y una ficha en [experiments/results/2026-10-28-use
 
 ## 4G en celular y Wi-Fi en PC · evidencia del usuario
 Resultados y originales: [prueba 4G/Wi-Fi](experiments/results/2026-10-28-4g-phone-wifi-pc/README.md). Una toma de micrófono de 8,504 s, 86 bloques, integridad verificada y QR directo emparejado. Percentiles, bytes, secuencias y coincidencia entre exports comprobados. Redes según declaración del usuario. Confirmación ida/vuelta P50 426,4 ms / P95 579,3 ms; parada → entrega 446,6 ms. No cierra aún el protocolo de aceptación de ambos controles, 30 s, interrupciones o fidelidad auditiva.
+
+## Comparación móvil / Wi-Fi · dos lotes del usuario
+[Resultados y originales](experiments/results/2026-10-28-mobile-vs-wifi/README.md): cinco tomas mantener por condición, diez íntegras. Parada → confirmación mediana 1309,3 ms móvil frente a 281,3 ms Wi-Fi; máximo 4726 frente a 290,6 ms. Wi-Fi más estable en estos lotes. Se recalcularon resúmenes y validaron secuencias/bytes. Sin ranking universal de redes ni prueba en Wi-Fi hospitalario.

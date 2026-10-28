@@ -1,0 +1,96 @@
+{
+  "result": "PASS",
+  "conditionsSource": "User: first mobile 4G/5G, second Wi-Fi. Radio generation not distinguished. Browser/build/network signal not recorded.",
+  "rows": [
+    {
+      "condition": "mobile",
+      "sha256": "31c81459768933f307b79bb5a9e85bf382f4c62d03a0f839e8b57540b9fe381f",
+      "takes": 5,
+      "totalAudioSeconds": 36.22933333333333,
+      "totalBlocks": 365,
+      "stopTimesMs": [
+        343.9,
+        382.6,
+        1309.3,
+        3145.1,
+        4726
+      ],
+      "verified": 5,
+      "summary": {
+        "takes": 5,
+        "verified": 5,
+        "incomplete": 0,
+        "active": 0,
+        "verifiedDurationMs": {
+          "n": 5,
+          "p50": 6165.3,
+          "p95": 10018.7,
+          "max": 10018.7
+        },
+        "stopToVerifiedMs": {
+          "n": 5,
+          "p50": 1309.3,
+          "p95": 4726,
+          "max": 4726
+        },
+        "perTakeAckMedianMs": {
+          "n": 5,
+          "p50": 482.8,
+          "p95": 2843.6,
+          "max": 2843.6
+        },
+        "perTakeArrivalEstimateMedianMs": {
+          "n": 5,
+          "p50": 337.7,
+          "p95": 2688.2,
+          "max": 2688.2
+        }
+      }
+    },
+    {
+      "condition": "wifi",
+      "sha256": "90a9f4ccdfba28b19391b49313d750d13dde1c878c4fe084c1e976885c6ca818",
+      "takes": 5,
+      "totalAudioSeconds": 32.36533333333334,
+      "totalBlocks": 326,
+      "stopTimesMs": [
+        290.6,
+        280.4,
+        281.3,
+        284.6,
+        280
+      ],
+      "verified": 5,
+      "summary": {
+        "takes": 5,
+        "verified": 5,
+        "incomplete": 0,
+        "active": 0,
+        "verifiedDurationMs": {
+          "n": 5,
+          "p50": 6720,
+          "p95": 9837.3,
+          "max": 9837.3
+        },
+        "stopToVerifiedMs": {
+          "n": 5,
+          "p50": 281.3,
+          "p95": 290.6,
+          "max": 290.6
+        },
+        "perTakeAckMedianMs": {
+          "n": 5,
+          "p50": 282.4,
+          "p95": 284.2,
+          "max": 284.2
+        },
+        "perTakeArrivalEstimateMedianMs": {
+          "n": 5,
+          "p50": 145.6,
+          "p95": 147,
+          "max": 147
+        }
+      }
+    }
+  ]
+}
