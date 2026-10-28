@@ -36,6 +36,22 @@ export function statistics(values) {
   return { n: sorted.length, p50: percentile(.5), p95: percentile(.95), max: round(sorted.at(-1)) };
 }
 
+export function exportBatch(traces, pairing = null) {
+  const recordings = [...traces].slice(-5).map(trace => trace.export());
+  const verified = recordings.filter(r => r.status === 'verified');
+  return { schema: 'dicta-libre.metrics-batch.v1', exportedAt: new Date().toISOString(), pairing,
+    scope: 'Last five started takes in this browser session; incomplete and active takes retained. Reload or new session clears history.',
+    recordings,
+    summary: { takes: recordings.length, verified: verified.length,
+      incomplete: recordings.filter(r => r.status === 'incomplete').length,
+      active: recordings.filter(r => r.status === 'recording').length,
+      verifiedDurationMs: statistics(verified.map(r => r.blocks.reduce((sum, b) => sum + (b.bufferMs ?? 0), 0))),
+      stopToVerifiedMs: statistics(verified.map(r => r.stages.stopToVerifiedMs)),
+      perTakeAckMedianMs: statistics(verified.map(r => r.summary.ackRoundTripMs.p50)),
+      perTakeArrivalEstimateMedianMs: statistics(verified.map(r => r.summary.sendToPcEstimateMs.p50)) },
+    aggregationNotes: 'Timing summaries use verified takes, one value per take, not pooled blocks. Per-take medians are not overall block percentiles. Missing values excluded; n reports measured takes. Five takes are exploratory, not a robust benchmark.' };
+}
+
 export class RecordingMetrics {
   constructor(id, rate, source, mode) {
     this.id = id; this.rate = rate; this.source = source; this.mode = mode;

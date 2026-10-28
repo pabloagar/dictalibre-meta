@@ -66,3 +66,8 @@ Prueba pública de transporte PASS a las 19:19:18 UTC: 10 bloques, 16000 muestra
 
 ## 2026-10-28 · Evidencia del usuario con celular 4G y PC Wi-Fi
 Se revisaron y conservaron los dos JSON aportados en experiments/results/2026-10-28-4g-phone-wifi-pc, con hashes y condiciones declaradas. Validación de consistencia aprobada: 86 secuencias continuas, bytes, percentiles y emparejamiento coincidentes. Se registró éxito de QR/transporte en una toma; no se asumió aceptación completa ni red conocida para la toma anterior. Sin cambios de funcionalidad.
+
+## 2026-10-28 · Dictados cortos y exportación de series
+Por indicación del responsable se ajustó el caso principal a dictados de 2–10 s. Treinta segundos deja de ser requisito; tomas largas/5G son complementarias. Se actualizaron ROADMAP, METRICS, RUNNING y DEVICE_CHECKLIST sin reescribir la evidencia histórica. Se documentaron comprobaciones restantes y propuesta de primer ASR por toma, pendiente de discutir motor/contrato.
+Implementado exportador metrics-batch.v1 con últimas cinco tomas iniciadas de la sesión, incluidos estados incompletos/activos; resumen por toma verificada con n explícito. Retención de audio ampliada a cinco. La nueva sesión deshabilita exportación previa. Historial no persistente.
+Verificación: 26 pruebas automatizadas aprobadas, incluida retención de cinco, fallos, toma activa, agregación por toma y valores vacíos; sintaxis aprobada. HTML, desktop.js y metrics.js públicos comprobados con las nuevas versiones. No se ejecutó una nueva serie física ni descarga desde interfaz en esta revisión. No requiere reinicio de backend, sí recarga de vistas.

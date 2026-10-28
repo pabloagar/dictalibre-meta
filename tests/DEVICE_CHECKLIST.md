@@ -4,7 +4,7 @@ No marcar filas como aprobadas sin ejecutarlas. Registrar fecha America/Santiago
 
 | Caso | Procedimiento | Aceptación | Resultado |
 | --- | --- | --- | --- |
-| Wi-Fi | Emparejar por URL pública; grabar 30 s en ambos modos | Confirmación coincidente y audio reproducible verificado | Pendiente |
+| Wi-Fi | Emparejar por URL pública; cinco tomas de 2–10 s por control | QR directo o confirmación manual correcta; audio íntegro y audible | Pendiente |
 | 4G/5G | Apagar Wi-Fi del teléfono antes de crear sesión; PC en otra red | Misma prueba que Wi-Fi | Pendiente |
 | Inicio/final | Repetir diez frases sintéticas con palabras claras al inicio y final | No se pierden sílabas al presionar/soltar | Pendiente |
 | Fuera de toma | Decir «FUERA» antes y después y «DENTRO» durante | El WAV contiene solo el intervalo activado | Pendiente |
@@ -20,4 +20,6 @@ La fase 1 y la fase 2 quedan implementadas como prototipo, pero su aceptación e
 
 Al ejecutar cada condición de red, abrir **Mediciones y diagnóstico** y exportar JSON de cada toma. Registrar P50/P95, bloques sin estimación, resolución del reloj, cola máxima y parada → entrega. Probar interrupción: conservar evidencia de toma incompleta. Revisar compactación en el viewport real del S25 Ultra. Estos casos siguen pendientes.
 
-Evidencia parcial 4G/Wi-Fi: toma del usuario de 8,504 s, modo mantener, QR emparejado e integridad verificada. Originales en experiments/results/2026-10-28-4g-phone-wifi-pc. La fila 4G/5G sigue pendiente de completar: requiere 30 s en ambos controles y verificación auditiva; no equivale a validar 5G.
+Evidencia parcial 4G/Wi-Fi: toma del usuario de 8,504 s, modo mantener, QR emparejado e integridad verificada. Originales en experiments/results/2026-10-28-4g-phone-wifi-pc. La fila 4G/5G sigue pendiente de completar: requiere completar series de 2–10 s en ambos controles y verificación auditiva; no equivale a validar 5G.
+
+Criterio actualizado: las series de 2–10 s son el caso principal. La prueba de tres minutos es complementaria y no bloquea ASR. El mínimo práctico para cierre y los preparativos de transcripción están en ROADMAP.md, sección «Cierre de fases 1 y 2». Los resultados históricos se conservan con las condiciones originales.

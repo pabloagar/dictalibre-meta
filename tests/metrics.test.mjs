@@ -35,3 +35,21 @@ test('fusiona confirmación tardía sin duplicar bloque y mantiene ASR sin medir
   assert.equal(result.summary.unestimatedBlocks,1);
 });
 
+
+test('lote limita a cinco, conserva fallos y pondera por toma sin mezclar bloques', async () => {
+  const { exportBatch } = await import('../apps/shared/metrics.js');
+  const traces = Array.from({length:7},(_,i) => {
+    const r = new RecordingMetrics(i+1,48000,'microphone','hold');
+    r.status='verified'; r.block(0,{bufferMs:100,ackRoundTripMs:(i+1)*10});
+    r.stage('stopToVerifiedMs',(i+1)*100); return r;
+  });
+  traces[5].status='incomplete'; traces[6].status='recording';
+  const batch=exportBatch(traces,{method:'qr'});
+  assert.deepEqual(batch.recordings.map(r=>r.recordingId),[3,4,5,6,7]);
+  assert.equal(batch.summary.verified,3);
+  assert.equal(batch.summary.incomplete,1);
+  assert.equal(batch.summary.active,1);
+  assert.equal(batch.summary.stopToVerifiedMs.p50,400);
+  assert.equal(batch.summary.perTakeAckMedianMs.p50,40);
+  assert.equal(exportBatch([]).summary.stopToVerifiedMs.p50,null);
+});

@@ -1,6 +1,6 @@
 import { $, RelayClient, status, clock } from '/shared/client.js';
 import { decodeChunk, sha256, wavBlob } from '/shared/protocol.js';
-import { RecordingMetrics, arrivalEstimate, round } from '/shared/metrics.js';
+import { RecordingMetrics, arrivalEstimate, round, exportBatch } from '/shared/metrics.js';
 
 let client, current, sessionEpoch = 0, pairingTimer, clipCount = 0;
 const clipURLs = [];
@@ -25,6 +25,7 @@ function renderMetrics() {
   $('ack').textContent = ms(s.ackRoundTripMs.p50);
   $('buffer').textContent = ms(s.bufferMs.p50);
   $('metrics-export').disabled = false;
+  $('metrics-export').textContent = `Exportar métricas · ${traces.size} toma(s), hasta 5 · JSON`;
   const rows = [
     ['Envío → PC estimado', s.sendToPcEstimateMs], ['Resolución orientativa del reloj', s.uncertaintyMs],
     ['Envío → confirmación PC → celular', s.ackRoundTripMs], ['Audio por bloque', s.bufferMs],
@@ -42,8 +43,8 @@ function renderMetrics() {
 }
 $('metrics-export').onclick = () => {
   if (!latestTrace) return;
-  const url = URL.createObjectURL(new Blob([JSON.stringify({ ...latestTrace.export(), pairing: pairingMetrics }, null, 2)], { type: 'application/json' }));
-  const a = document.createElement('a'); a.href = url; a.download = `dicta-metricas-${latestTrace.id}.json`; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+  const url = URL.createObjectURL(new Blob([JSON.stringify(exportBatch(traces.values(), pairingMetrics), null, 2)], { type: 'application/json' }));
+  const a = document.createElement('a'); a.href = url; a.download = `dicta-metricas-ultimas-5.json`; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
 };
 function displayIdle() {
   document.body.classList.remove('receiving'); $('record-state').textContent = 'EN ESPERA';
@@ -65,7 +66,7 @@ function addClip(record, complete, hash = '') {
     const download = document.createElement('a'); download.href = url; download.download = `dicta-libre-toma-${clipCount}.wav`; download.textContent = 'Descargar WAV sintético'; article.append(download);
   }
   $('recordings').prepend(article); clipURLs.push({ url, article });
-  while (clipURLs.length > 3) { const old = clipURLs.shift(); old.article.remove(); URL.revokeObjectURL(old.url); }
+  while (clipURLs.length > 5) { const old = clipURLs.shift(); old.article.remove(); URL.revokeObjectURL(old.url); }
 }
 function interrupted(reason) {
   if (current) { latestTrace.status = 'incomplete'; latestTrace.reason = reason; renderMetrics(); addClip(current, false); current = null; }
@@ -133,7 +134,7 @@ function onMessage(m) {
     case 'paired': showPairing(m.pairing); clearInterval(pairingTimer); $('pairing').hidden = true; $('confirm-panel').hidden = true; $('paired').hidden = false; status('Conectados. Prepara el micrófono en el teléfono.', 'success'); break;
     case 'start':
       latestTrace = new RecordingMetrics(m.id, m.rate, m.source, m.mode); traces.set(m.id, latestTrace);
-      while (traces.size > 3) traces.delete(traces.keys().next().value);
+      while (traces.size > 5) traces.delete(traces.keys().next().value);
       previousArrival = null; pendingTiming = null; renderMetrics();
       current = { id: m.id, rate: m.rate, mode: m.mode, source: m.source, parts: [], samples: 0, frames: 0 };
       document.body.classList.add('receiving'); $('record-state').textContent = 'RECIBIENDO'; $('record-state').classList.add('active');
@@ -148,7 +149,7 @@ function onMessage(m) {
 $('create').onclick = () => {
   if (client) return;
   for (const clip of clipURLs.splice(0)) { clip.article.remove(); URL.revokeObjectURL(clip.url); }
-  clipCount = 0; traces.clear(); pairingMetrics = null; $('pairing-export').disabled = true; $('pairing-times').textContent = 'Emparejamiento pendiente.';
+  clipCount = 0; traces.clear(); latestTrace = null; $('metrics-export').disabled = true; pairingMetrics = null; $('pairing-export').disabled = true; $('pairing-times').textContent = 'Emparejamiento pendiente.';
   sessionEpoch++; $('create').disabled = true; status('Creando sesión…');
   client = new RelayClient(onMessage, () => {
     sessionEpoch++; clearInterval(pairingTimer);
