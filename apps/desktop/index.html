@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Dicta Libre · Receptor</title><link rel="stylesheet" href="/style.css"><script src="/qr.js" defer></script><script type="module" src="/desktop.js"></script></head>
+<body>
+<div class="shell">
+  <header><a class="brand" href="/"><span class="brand-mark">d.</span> dicta libre<span class="brand-dot"></span></a><span class="tag">LAB / FASES 01 + 02</span></header>
+  <main>
+    <div class="intro"><div><p class="eyebrow">TELÉFONO → COMPUTADOR</p><h1>Tu voz.<br><em>En conexión.</em></h1><p class="lede">Convierte tu teléfono en un micrófono conectado.<br>Prueba de captura y transporte, antes de incorporar IA.</p></div><div class="intro-note"><span class="live-dot"></span> RECEPTOR WEB<br><span>Audio sintético · hasta 3 min por toma</span></div></div>
+    <div id="status" class="status" role="status" aria-live="polite">Comienza creando una sesión de prueba.</div>
+    <div class="workspace">
+      <section class="card pairing"><div class="section-head"><span class="step">01</span><h2>Conecta tu teléfono</h2></div>
+        <p class="muted">Abre el enlace en tu S25 Ultra. Puede usar Wi-Fi o datos móviles cuando accedas por la URL HTTPS del servidor.</p>
+        <label class="consent"><input id="consent" type="checkbox"> Usaré solo dictados sintéticos, sin datos de pacientes.</label>
+        <button id="create" class="primary" disabled>Crear sesión <span>↗</span></button>
+        <div id="pairing" hidden>
+          <div class="qr-wrap"><div id="qr" aria-label="Código QR para conectar el teléfono"></div></div>
+          <p class="tiny center">CÓDIGO DE UN SOLO USO</p><div id="code" class="pair-code"></div><p id="expiry" class="tiny center"></p>
+          <button id="copy-link" class="secondary">Copiar enlace para el celular</button><a id="phone-link" class="text-link" target="_blank" rel="noopener">Abrir vista del teléfono ↗</a>
+        </div>
+        <div id="confirm-panel" class="confirm" hidden><p>Comprueba que el teléfono muestra:</p><strong id="confirm-code"></strong><button id="approve" class="primary">Confirmar teléfono</button></div>
+        <div id="paired" class="connected-box" hidden><span class="live-dot"></span><div><strong>Teléfono conectado</strong><p>El control de grabación está en tu celular.</p></div></div>
+        <button id="close" class="quiet" hidden>Cerrar sesión</button>
+      </section>
+      <section class="card receiver"><div class="section-head"><span class="step">02</span><h2>Recibe y comprueba</h2><span id="record-state" class="pill">EN ESPERA</span></div>
+        <div class="record-display"><div class="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div id="duration" class="timer">00:00</div><p id="record-help" class="muted">El audio aparecerá cuando grabes desde el teléfono.</p><meter id="level" min="0" max="1" value="0" aria-label="Nivel de audio recibido"></meter></div>
+        <div class="metrics"><div><span>BLOQUES RECIBIDOS</span><strong id="frames">0</strong></div><div><span>FORMATO</span><strong id="format">—</strong></div><div><span>IDA/VUELTA AL SERVIDOR</span><strong id="rtt">—</strong></div></div>
+        <div class="recordings-head"><h3>Tomas de esta sesión</h3><span>Solo en este navegador</span></div>
+        <div id="recordings"><div id="empty" class="empty">Graba una frase, detén y escúchala aquí.<br><span>Comprobaremos que el audio del PC coincide con el enviado.</span></div></div>
+      </section>
+    </div>
+    <div class="bottom-note"><span>↳</span><p>El micrófono se prepara en el celular. Solo se envía audio durante cada toma; el último bloque termina de entregarse al detener. Esta prueba no transcribe ni corrige texto.</p></div>
+  </main><footer><span>DICTA LIBRE · DESARROLLO EXPERIMENTAL</span><span>Capturar. Conectar. Verificar.</span></footer>
+</div></body></html>

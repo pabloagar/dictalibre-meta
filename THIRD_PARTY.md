@@ -1,0 +1,54 @@
+# Modelos, dependencias y licencias
+
+Actualización: 28-10-2026. Se separan componentes usados y candidatos. Ningún modelo ha sido descargado, llamado o evaluado en esta implementación. Una ficha pública no demuestra acceso de esta cuenta.
+
+## Componentes usados en fases 1 y 2
+
+| Componente | Versión efectiva | Uso / licencia / fuente |
+| --- | --- | --- |
+| Node.js | 24.19.0 en el entorno de prueba | Runtime; distribución oficial y sus avisos. Proyecto compatible objetivo >=22 |
+| pnpm | 11.25.0 | Instalación y lockfile; MIT, [repositorio](https://github.com/pnpm/pnpm) |
+| ws | 8.22.0 | Relay WebSocket; MIT, [repositorio](https://github.com/websockets/ws) |
+| qrcode-generator | 2.0.4 | QR generado localmente, sin servicio externo; MIT, [repositorio](https://github.com/kazuhikoarase/qrcode-generator) |
+| cloudflared | 2026.10.5, Windows amd64 | Binario de demo en carpeta ignorada; Apache-2.0 y avisos de su distribución, [release oficial](https://github.com/cloudflare/cloudflared/releases/tag/2026.10.5) |
+| Cloudflare Quick Tunnel | Servicio temporal | HTTPS/WSS de desarrollo; [documentación](https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/). Sin garantía de servicio permanente; el audio pasa por su infraestructura |
+
+Los paquetes npm conservan sus avisos originales en `node_modules`; sus integridades están fijadas en `pnpm-lock.yaml`. QR se sirve desde el paquete instalado y mantiene el encabezado de licencia. No se vendieron ni atribuyeron como propios. Hash SHA-256 del ejecutable cloudflared verificado antes de ejecutar: `db4e4c413612a0916f3e1679d3caaf376f94911952d163028fb726fb2e0516a9`. No se distribuye ese ejecutable en Git.
+
+No hay frameworks de interfaz, SDK de modelos, bases de datos ni pesos instalados. El contenedor Docker está preparado pero no validado. La selección de Node reemplaza la propuesta inicial de FastAPI para el relay; Python sigue siendo una posibilidad futura para ASR.
+
+## Evaluación preliminar de Meta
+
+| Candidato | Evidencia de disponibilidad / licencia | Encaje y decisión provisional |
+| --- | --- | --- |
+| Muse Spark 1.3, API | [Ficha oficial](https://dev.meta.ai/models/muse-spark); acceso de cuenta, cuotas y condiciones del servicio pendientes | Primera prueba de sugerencias estructuradas; evitar administrar GPU. No se presupone precisión radiológica ni latencia adecuada |
+| Llama 3.1 8B Instruct | [Ficha de Meta](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct): texto, español soportado, Llama 3.1 Community License | Alternativa de pesos accesibles bajo condiciones; evaluar local si hardware lo permite. Menor tamaño no garantiza velocidad ni precisión suficientes |
+| Llama 3.3 70B Instruct | [Ficha de Meta](https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct): texto, español soportado, Llama 3.3 Community License | Comparador opcional vía proveedor; coste y recursos pueden exceder el MVP. No asumir que mayor tamaño mejora seguridad clínica |
+| Muse Voice Transcribe 1.0 | [Ficha oficial](https://dev.meta.ai/models/muse-voice-transcribe): ofrece transcripción incremental y sesgo contextual | Evaluación opcional como ASR de Meta. Verificar español, API, privacidad y cuenta; no desplaza el baseline local antes de medir |
+
+Las licencias de Llama son propias, no MIT ni Apache. Revisar las condiciones de atribución, redistribución y política de uso de la revisión elegida. El código propio y los pesos no comparten automáticamente licencia. Las modalidades alojadas añaden términos del proveedor.
+
+**Selección propuesta:** probar Muse Spark 1.3 con texto sintético como corrector acotado en F1. Si el acceso o términos no permiten el experimento, evaluar Llama 3.1 8B; solo elegir Llama 3.3 si existe un endpoint viable. Mantener el ASR independiente para medir el aporte de Meta. No incorporar modelos de imagen/segmentación sin una necesidad del dictado.
+
+**Puerta de decisión F1:** 10 casos de desarrollo, salida válida o abstención segura en todos, tiempos por solicitud, fallos, costes y revisión de condiciones. Comparar sobrecorrección antes que fluidez. Una latencia estimada a partir del tamaño no sustituye una medición. Documentar modelo exacto, endpoint, región, límites, retención/uso de datos y presupuesto; ninguna credencial se almacena en Git.
+
+La ficha de Muse Spark distingue variantes con diferente uso de datos para mejora de productos. La selección no debe hacerse solo por precio: comprobar modalidad y términos efectivos del endpoint. No se ha verificado idoneidad para datos clínicos y este MVP usará material sintético.
+
+## Infraestructura candidata
+
+| Componente | Papel previsto | Fuente y estado de licencia |
+| --- | --- | --- |
+| faster-whisper | Ejecutar ASR local | [Repositorio oficial](https://github.com/SYSTRAN/faster-whisper), MIT; versión no elegida |
+| Whisper | Pesos ASR multilingües de referencia | [Licencia oficial](https://github.com/openai/whisper/blob/main/LICENSE), MIT; variante y revisión pendientes |
+| FastAPI | Backend HTTP/WebSocket | [Licencia oficial](https://github.com/fastapi/fastapi/blob/master/LICENSE), MIT; versión no elegida |
+| Web Audio / getUserMedia / WebSocket | APIs de navegador | [Referencia de captura](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia); no se incorpora código de MDN |
+
+Dependencias transitivas, servidor ASGI, validación, pruebas, inferencia y procesamiento de audio se inventariarán al fijar el entorno. Verificar licencias de distribuciones binarias y códecs efectivamente instalados. No se añade un archivo de dependencias vacío que sugiera un entorno reproducible ya resuelto.
+
+## Registro a completar por componente incorporado
+
+Nombre; función; versión/commit/hash; fuente oficial; licencia y copia de avisos necesarios; fecha de incorporación; modificaciones; obligaciones de distribución; términos de API; datos enviados; retención; responsable de revisión. Registrar licencias de datasets/glosarios de manera independiente a las del modelo.
+
+## Pendientes de publicación
+
+Elegir licencia del código propio, mantener el lockfile y revisar avisos de distribución de los componentes realmente usados. Revalidar compatibilidad con las reglas completas del concurso. No se atribuye al proyecto autoría de modelos o bibliotecas externos.
