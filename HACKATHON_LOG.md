@@ -32,6 +32,8 @@ Verificación: 17 pruebas automatizadas aprobadas; sintaxis aprobada; smoke test
 
 Limitaciones: no se usó el micrófono del S25 Ultra ni se probó una red 4G/5G física; no se ejecutó ASR/Meta ni evaluación clínica; alojamiento permanente y repositorio público pendientes. La demo depende de que el equipo de desarrollo y el túnel sigan funcionando. No se declara terminada la aceptación en dispositivo.
 
+Trazabilidad: primer commit local `e19577ff75718129b753974c925f33d86c01d9a8`, rama `codex/capture-transport`, creado efectivamente el 28-10-2026. Incluye código, pruebas, lockfile y documentación. `pnpm audit --prod --json` informó cero vulnerabilidades conocidas en las dos dependencias a la fecha de consulta; esto no equivale a una auditoría de seguridad del producto. La carpeta de trabajo quedó limpia tras ese commit; este registro y el resumen experimental se agregan en un commit documental posterior.
+
 ## Formato para próximas entradas
 
 Fecha y zona; objetivo; archivos y commit real; pruebas ejecutadas y resultados; contribución nueva; dependencias usadas; fallos y limitaciones; siguiente tarea. Anexar enlaces a ejecuciones o artefactos cuando existan. Distinguir métricas de desarrollo y de prueba final. No registrar una tarea como terminada por haberla descrito.

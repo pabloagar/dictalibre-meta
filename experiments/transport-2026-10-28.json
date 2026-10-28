@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-28",
+  "timezone": "America/Santiago",
+  "implementation_commit": "e19577ff75718129b753974c925f33d86c01d9a8",
+  "node": "24.19.0",
+  "pnpm": "11.25.0",
+  "automated_tests": { "command": "node --test tests/*.test.mjs", "passed": 17, "failed": 0 },
+  "syntax_check": "passed",
+  "dependency_audit": { "known_vulnerabilities": 0, "dependencies": 2 },
+  "public_wss_probe": {
+    "utc": "2026-10-28T18:32:13.867Z",
+    "result": "passed",
+    "source": "generated 440 Hz PCM sine wave; two Node WebSocket clients",
+    "frames": 10,
+    "samples": 16000,
+    "sample_rate": 16000,
+    "sha256": "995184ad5270b6d1c05c52633e4f2a753d575d6c7ad29ca63cdc34e5f307cf69"
+  },
+  "browser_ui_probes": [
+    {
+      "control": "toggle",
+      "source": "browser oscillator, no microphone",
+      "frames": 57,
+      "samples": 271616,
+      "sample_rate": 48000,
+      "sha256": "3a7be996f2ae8300e30af1734fee8ae9656466a9aa3261d25461114ad1d8e255",
+      "result": "verified on receiver"
+    },
+    {
+      "control": "hold",
+      "source": "browser oscillator, no microphone",
+      "frames": 19,
+      "samples": 87424,
+      "sample_rate": 48000,
+      "sha256": "2ab0ed3535254da375677f873353b58a8d1f7473ba8eace1b29f113efd83582b",
+      "result": "verified on receiver"
+    }
+  ],
+  "not_validated": ["physical S25 Ultra microphone", "physical 4G/5G network", "ergonomics", "clinical accuracy", "ASR", "Meta integration", "Docker image"]
+}
