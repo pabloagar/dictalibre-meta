@@ -12,7 +12,7 @@ Permitir que un profesional sanitario use su celular como micrófono de un compu
 
 ## Lo implementado ahora
 
-- Dictado al terminar cada toma: abrir [receptor local con Whisper](http://127.0.0.1:8789/live) en el PC, conectar el S25 Ultra mediante su QR y grabar. Muestra texto por toma y latencia, preserva el audio en el laboratorio. Muse todavía no conectado al flujo en vivo.
+- Dictado al terminar cada toma: abrir [receptor local con Whisper](http://127.0.0.1:8789/live) en el PC, conectar el S25 Ultra mediante su QR y grabar. Muestra texto por toma y latencia, preserva el audio en el laboratorio. Muse también seleccionable en vivo; primera prueba devolvió 401, pendiente resolver autenticación.
 
 - Dos vistas web: emisor móvil y receptor de escritorio.
 - S25 Ultra como dispositivo de referencia acordado, con pantalla encendida e interfaz abierta.

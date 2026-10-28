@@ -98,6 +98,8 @@ Es necesario reiniciar el relay para activar este cambio; mientras se sirve desd
 Usar powershell.exe -NoProfile -File seguido de la ruta absoluta entre comillas a scripts/Restart-Relay.ps1. El prefijo & solo corresponde a PowerShell y no funciona en CMD. Tras el reinicio, recargar ambas vistas y crear una sesión nueva. Activación pública del QR directo verificada mediante smoke-pairing.mjs el 28-10-2026 a las 19:19 UTC.
 # Dictado en vivo con Whisper local
 
+También se puede elegir **Muse · Meta API** en «Motor para la próxima toma». Usa la clave introducida en Acceso a Meta del laboratorio; la selección se bloquea durante la captura y vuelve a habilitarse al terminar. Muse envía esa toma a Meta; Whisper permanece local. Si aparece 401, reemplazar la clave con una activa de Meta Model API desde el laboratorio, sin reiniciar el servidor. No cambiará retroactivamente el motor de una toma en procesamiento.
+
 Con demo y laboratorio iniciados, abrir **http://127.0.0.1:8789/live en el PC que ejecuta Whisper**. Pulsar Conectar teléfono, escanear el nuevo QR con S25 Ultra y preparar micrófono. Grabar 2–10 s y detener: cada toma íntegra genera una tarjeta de texto y tiempos. La primera transcripción puede tardar mientras carga el modelo; las siguientes reutilizan el pipeline. Audio/transcripciones quedan en laboratorio local. Para compararlas después, abrir http://127.0.0.1:8789.
 
 No abrir localhost en el celular: su enlace HTTPS lo entrega el QR. El enlace público anterior sirve solo para captura/transporte y puede caducar. Si se renueva el túnel, recargar receptor local antes de crear sesión. Inferencia GPU disponible únicamente con laboratorio y PC encendidos. No necesita clave Meta para Whisper.

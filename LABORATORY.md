@@ -1,5 +1,9 @@
 # Laboratorio local de transcripción
 
+Dictado actualizado: `/live` permite elegir **Muse · Meta API** o **Whisper · GPU local** antes de cada toma. La elección se fija cuando llega el inicio de captura y no cambia para trabajos en curso. Si hay clave configurada, la vista propone Muse al abrir; el aviso identifica envío a Meta. Se utiliza la configuración base sin glosario de Muse o base GPU beams=1 de Whisper. Cada tarjeta y ejecución identifica el motor efectivo. No se reinicia el servidor al cambiar de motor o reemplazar la clave.
+
+Validación Muse en vivo del 28-10-2026: el recorrido sintético llegó a la API, que respondió HTTP 401. Se registró fallo de autenticación, no transcripción ni comparación exitosa. Clave configurada no equivale a acceso validado; reemplazarla desde el formulario local y repetir prueba. La clave no se leyó ni exportó durante la verificación.
+
 Actualización: también disponible [dictado desde celular](http://127.0.0.1:8789/live). El receptor local crea una sesión del relay público mediante puente WebSocket; el QR abre el emisor HTTPS en el S25 Ultra. Solo las tomas completas verificadas se importan y encolan automáticamente en Whisper base. Audio y resultados se guardan localmente en este laboratorio, sin envío a Muse. Requiere demo/túnel y laboratorio activos en el mismo PC. La página pública anterior sigue siendo receptor de transporte; para transcribir usar `/live` en este PC.
 
 Cada tarjeta pertenece a una toma, sin sobrescribir resultados con la siguiente. Se muestran últimas cinco tarjetas terminadas; una activa puede mantenerse hasta acabar. Nueva sesión cancela trabajos iniciados desde esa página; cerrar la pestaña no garantiza cancelación de trabajos ya encolados, visibles en el laboratorio. Mediciones del navegador se guardan en `run.live` y en la exportación de transporte (sin texto); si se cierra antes de recibir el resultado, pueden faltar.

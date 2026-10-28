@@ -75,6 +75,7 @@ function addClip(record, complete, hash = '') {
   while (clipURLs.length > 5) { const old = clipURLs.shift(); old.article.remove(); URL.revokeObjectURL(old.url); }
 }
 function interrupted(reason) {
+  window.dispatchEvent(new Event('dicta-recording-stop'));
   if (current) { latestTrace.status = 'incomplete'; latestTrace.reason = reason; renderMetrics(); addClip(current, false); current = null; }
   displayIdle(); status(reason, 'error'); $('record-help').textContent = 'La toma se interrumpió. Inicia otra desde el teléfono.';
 }
@@ -92,6 +93,7 @@ async function complete(m) {
     client.send({ type: 'verified', id: recording.id, hash });
     addClip(recording, true, hash); current = null; displayIdle();
     if(recording.samples&&location.pathname==='/live')window.dispatchEvent(new CustomEvent('dicta-take',{detail:{recordingId:recording.id,blob:wavBlob(recording.parts,recording.rate),stopStamp:m.stopStamp,receivedEnd,trace:latestTrace,stamp:()=>client?.clock.stamp(),renderMetrics}}));
+    window.dispatchEvent(new Event('dicta-recording-stop'));
     status(m.samples ? 'Audio recibido completo. Escucha la toma y comprueba el inicio y el final.' : 'La toma quedó vacía. Mantén pulsado mientras hablas.', m.samples ? 'success' : '');
     $('record-help').textContent = 'Listo para recibir la siguiente toma.';
   } catch (error) { client?.send({ type: 'abort' }); interrupted(error.message); }
@@ -141,6 +143,7 @@ function onMessage(m) {
     case 'pairing_metrics': showPairing(m.pairing); break;
     case 'paired': showPairing(m.pairing); clearInterval(pairingTimer); $('pairing').hidden = true; $('confirm-panel').hidden = true; $('paired').hidden = false; status('Conectados. Prepara el micrófono en el teléfono.', 'success'); break;
     case 'start':
+      window.dispatchEvent(new Event('dicta-recording-start'));
       latestTrace = new RecordingMetrics(m.id, m.rate, m.source, m.mode); traces.set(m.id, latestTrace);
       while (traces.size > 5) traces.delete(traces.keys().next().value);
       previousArrival = null; pendingTiming = null; renderMetrics();

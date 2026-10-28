@@ -1,0 +1,67 @@
+{
+  "uiRevision": "muse-live-v1",
+  "test": "Synthetic speech via public relay, Muse selected in live receiver",
+  "run": {
+    "id": "e1d5644b-380f-40f0-ac71-2dd5f93c9923",
+    "batchId": "4586907c-095d-4d14-b53e-188b40b635af",
+    "audioId": "1e164a66-6f8c-4047-99e6-72188966b978",
+    "audioHash": "614a4c89006fc986e329d2511441640413470aa45c01aa73c1408a6609de3825",
+    "configId": "80048dff-51fd-414f-a079-656b247336e4",
+    "configuration": {
+      "name": "Muse · base",
+      "engine": "muse",
+      "version": 1,
+      "parentId": null,
+      "model": "muse-voice-transcribe-1.0",
+      "language": "es",
+      "device": null,
+      "precision": null,
+      "beams": null,
+      "keywords": [],
+      "preparation": "scipy-resample-poly-mono-16k-v1",
+      "mode": "file",
+      "correction": false,
+      "id": "80048dff-51fd-414f-a079-656b247336e4",
+      "createdAt": "2026-10-28T19:57:28.887Z"
+    },
+    "referenceAtRun": null,
+    "repeat": 1,
+    "build": "7bbd0e95896ec0ca3df127053dcdf6ac8d7dbc6c",
+    "sourceHash": "3f351b7432d4133f5b1355357b5af4b001374e3dc3db23276d2c3147dca10d80",
+    "modelRevision": null,
+    "createdAt": "2026-10-28T23:50:03.591Z",
+    "status": "error",
+    "text": null,
+    "error": "Muse HTTP 401. Revisa acceso, cuota y configuración; no se guardó la respuesta de error.",
+    "timings": {
+      "queueMs": 5.322599999955855,
+      "prepareMs": 9.139299999922514,
+      "loadMs": null,
+      "generateMs": null,
+      "requestMs": null,
+      "totalMs": 1106.608700000099,
+      "firstTextMs": null
+    },
+    "environment": {
+      "os": "win32",
+      "osRelease": "10.0.26200",
+      "cpu": "Intel(R) Core(TM) Ultra 7 155H",
+      "totalRamBytes": 33752997888,
+      "node": "v24.19.0",
+      "network": null,
+      "source": "uploaded-file"
+    },
+    "audioDurationMs": 5542.494331065759,
+    "startedAt": "2026-10-28T23:50:03.597Z",
+    "derived": {
+      "sha256": "083c03ec5b37a2030dcbd63654ba46d2148ca401551986b5a9c1188368ed2d04",
+      "sampleRate": 16000,
+      "channels": 1,
+      "format": "PCM16",
+      "originalSha256": "614a4c89006fc986e329d2511441640413470aa45c01aa73c1408a6609de3825"
+    },
+    "finishedAt": "2026-10-28T23:50:04.704Z",
+    "evaluation": null,
+    "evaluationReferenceVersion": null
+  }
+}
