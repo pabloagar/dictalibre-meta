@@ -90,3 +90,6 @@ Implementado receptor local `/live`, puente al relay, importación de tomas ínt
 
 ## 2026-10-28 · Muse elegible para dictado
 Por solicitud del responsable, selector Muse/Whisper en receptor local, motor congelado al inicio de cada toma y etiqueta por resultado. Se reutiliza clave en memoria y endpoints existentes sin reiniciar servicios. Comprobación con frase sintética de 5,54 s por relay público: 56 bloques e integridad verificada, tarea Muse creada, proveedor respondió HTTP 401. No hubo texto de Muse. UI explica autenticación y cómo reemplazar la clave localmente. Acceso real pendiente de resolver credencial; no se publica ni inspecciona su valor. Selección de Whisper sigue disponible.
+
+## 2026-10-28 · Retorno desde laboratorio
+Se hizo visible Volver al dictado en la cabecera del laboratorio y junto al formulario de Meta. Navegación por enlace local /live, sin reinicio del servidor ni cambios de credencial. Sustituye el enlace menos visible junto a exportaciones.
