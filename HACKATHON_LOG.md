@@ -51,3 +51,6 @@ Se añadió AGENTS.md para mantener el requisito de instrumentación/comparació
 ## 2026-10-28 · QR directo y tiempos de emparejamiento
 Implementados token QR de 256 bits, caducidad/consumo conjunto con código manual, conexión automática al abrir enlace, confirmación exclusiva para código manual y exportación de tiempos de emparejamiento. 25 pruebas automatizadas aprobadas. Sin validación física de QR/S25 Ultra en esta revisión.
 La revisión automática de permisos rechazó detener/reiniciar el relay de la demo, sin motivo específico adicional. No se reintentó la acción bloqueada. Activación del nuevo backend pendiente; interfaz compatible con backend previo para mantener el flujo manual existente.
+
+## 2026-10-28 · Reinicio autorizado, nuevamente bloqueado
+El usuario autorizó expresamente el reinicio. La revisión automática volvió a rechazar la acción antes de ejecutarla, sin motivo específico. El backend nuevo no quedó activado. Se creó scripts/Restart-Relay.ps1 para ejecución manual, con validación del proceso y carpeta, conservación del túnel y comprobación de salud; sintaxis PowerShell validada, ejecución pendiente. Las 25 pruebas locales pasan. La demo existente pasó la prueba pública de audio sintético a las 19:12:49 UTC; esto no valida QR directo en el backend público anterior.
