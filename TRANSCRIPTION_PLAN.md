@@ -1,5 +1,5 @@
 # Transcripción intercambiable: propuesta para discutir
-Fecha de investigación: 2026-10-28. Estado: diseño, no aprobado como selección final; ningún motor instalado, invocado ni comparado con audios del proyecto. Solo documentación. No se cambiaron captura, transporte ni interfaz.
+Fecha de investigación: 2026-10-28. Este documento conserva la propuesta inicial. Actualización posterior: el responsable aprobó construir el laboratorio Muse frente a Whisper large-v3/OpenVINO local en GPU; primera implementación y estado verificado en [LABORATORY.md](LABORATORY.md). Whisper ya ejecutado; Muse pendiente de credencial y contraste real. Los otros motores siguen siendo candidatos futuros, no parte de esta entrega.
 
 ## Decisión provisional
 Evaluar Muse Voice Transcribe 1.0 como candidato principal por encaje con el hackathon y modo de dictado; Whisper large-v3 como referencia independiente; Speechmatics Enhanced Medical en español como contraste especializado. Scribe v2 es reserva si el contraste médico no es accesible. Ningún resultado público revisado establece un ganador para dictados radiológicos chilenos de 2–10 s desde este S25 Ultra.

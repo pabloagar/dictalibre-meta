@@ -77,3 +77,10 @@ Se consultaron fuentes oficiales de Meta, Groq/Whisper, Speechmatics y ElevenLab
 
 ## 2026-10-28 · Comparación de dos lotes del usuario
 Conservados y analizados lotes móvil 4G/5G y Wi-Fi según orden declarado. Consistencia de métricas, secuencias y bytes aprobada. Diez tomas íntegras, Wi-Fi estable en confirmación final (280–290,6 ms), móvil con aumento hasta 4726 ms. Se documentó apoyo a Wi-Fi para demo, sin generalizar a hospitales ni modificar capacidades/configuración. No se ejecutaron nuevas grabaciones o inferencias.
+
+## 2026-10-28 · Primer laboratorio de ASR, autorizado
+Implementados carga WAV, reproducción, referencias y configuraciones versionadas, cola secuencial con cancelación, historial persistente, originales/diferencias, WER y exportación JSON/CSV. Servidor local 8789 independiente; relay público sin cambios. Instalados en .venv OpenVINO/GenAI y dependencias fijadas; descargada revisión pública FP16 de Whisper large-v3. GPU Intel Arc detectada y usada para inferencia real. Adaptador Muse según API oficial; no se dispone de credencial y no se afirma validación real.
+
+Verificados desde navegador: carga de frase sintética y silencio, referencia, ejecución Whisper, persistencia tras reinicio del laboratorio y repetición. Frase reconocida con diferencia tres/3; silencio produjo «Gracias.», conservado como resultado adverso. 30 pruebas automáticas aprobadas al incorporar el laboratorio. Evidencia, fuentes y límites en LABORATORY.md y EXPERIMENTS.md. No se declara precisión radiológica ni ganador del contraste.
+
+Verificación adicional: beams=3 reprodujo fallo remote_tensor de OpenVINO GPU; desactivar optimización SDPA no lo resolvió. Se bloquearon variantes >1 y preservó el fallo, sin fallback a CPU. Suite final: 31 pruebas aprobadas. Configuración local base continúa siendo la única validada; Muse permite versionar términos orientativos pero requiere acceso real para completar el contraste.

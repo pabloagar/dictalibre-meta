@@ -1,6 +1,6 @@
 # Dicta Libre
 
-**Estado al 28 de octubre de 2026:** prototipo implementado de captura y transporte (fases 1 y 2), con pruebas automáticas y prueba sintética por HTTPS/WSS. Validación en el S25 Ultra y redes Wi-Fi/4G/5G pendiente. No hay ASR ni correcciones de IA integrados.
+**Estado al 28 de octubre de 2026:** captura/transporte con pruebas automáticas y lotes del usuario en redes móvil y Wi-Fi; Wi-Fi es la opción principal de demo. Nuevo [laboratorio local](LABORATORY.md) para archivos: Whisper large-v3/OpenVINO ejecutado en GPU Intel Arc y adaptador Muse pendiente de validar con clave real. ASR aún separado de captura; correcciones de IA sin implementar.
 
 Dicta Libre es un proyecto de dictado médico cuya idea y exploración conceptual precedieron al Meta AI Developer Hackathon 2026. La implementación presentada para el concurso comenzó desde cero el 28 de octubre de 2026, dentro del período oficial del evento.
 
@@ -14,7 +14,7 @@ Permitir que un profesional sanitario use su celular como micrófono de un compu
 
 - Dos vistas web: emisor móvil y receptor de escritorio.
 - S25 Ultra como dispositivo de referencia acordado, con pantalla encendida e interfaz abierta.
-- Emparejamiento por QR o código temporal de un uso, con confirmación del número en el PC.
+- Emparejamiento directo por QR con token temporal de un uso; el código manual conserva la confirmación del número en el PC.
 - Controles comparables de mantener pulsado y pulsar para iniciar/parar.
 - Micrófono preparado durante la sesión: fuera de cada toma, el audio se descarta sin guardarlo ni transmitirlo.
 - Captura AudioWorklet, PCM mono de 16 bits a la frecuencia efectiva del contexto de audio; bloques de aproximadamente 100 ms y vaciado del último bloque.
@@ -50,7 +50,7 @@ La contribución principal prevista de IA es comparar hipótesis terminológicas
 - Pruebas automatizadas de captura, protocolo, integridad, roles, códigos y fallos: ejecutadas.
 - Prueba sintética a través del enlace público HTTPS/WSS: ejecutada, bytes idénticos.
 - Prueba en navegador con tono sintético y ambos controles: ejecutada.
-- Micrófono real del S25 Ultra, ergonomía y conexión por 4G/5G: pendientes.
+- Lotes reales aportados por el responsable en móvil y Wi-Fi: analizados; aceptación completa de ambos controles/interrupciones aún pendiente.
 - Precisión médica, WER, latencia clínica y aporte de Meta: sin evaluar.
 
 Ver [EXPERIMENTS.md](EXPERIMENTS.md) para resultados y límites, y [pruebas en dispositivo](tests/DEVICE_CHECKLIST.md) para aceptación. La identidad de los bytes no demuestra que el micrófono haya capturado toda la voz sin cortes.

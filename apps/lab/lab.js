@@ -1,0 +1,45 @@
+const $=id=>document.getElementById(id);
+let state={audios:[],configs:[],runs:[]},lastRuns='',busy=false;
+const ms=v=>v==null?'—':`${Math.round(v)} ms`;
+const tell=(t,error=false)=>{$('status').textContent=t;$('status').className=error?'error':'';};
+async function api(p,data){const response=await fetch(p,data===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});const result=await response.json();if(!response.ok)throw Error(result.error);return result;}
+function node(tag,text,cls){const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;}
+const selected=kind=>[...document.querySelectorAll(`input[name="${kind}"]:checked`)].map(x=>x.value);
+function item(parent,id,title,detail,kind,checked){const label=node('label',undefined,'item'),input=node('input');input.type='checkbox';input.name=kind;input.value=id;input.checked=checked;input.onchange=()=>{estimate();renderResults();};const text=node('span',title);text.append(node('small',detail));label.append(input,text);parent.append(label);}
+function lists(){
+  const aids=selected('audio'),cids=selected('config'),inspect=$('inspect').value,parent=$('parent').value;
+  $('audios').replaceChildren();$('configs').replaceChildren();$('inspect').replaceChildren(new Option('Selecciona un audio',''));$('parent').replaceChildren(new Option('Nueva configuración',''));
+  for(const a of state.audios){item($('audios'),a.id,a.name,`${(a.durationMs/1000).toFixed(2)} s · ${a.sampleRate/1000} kHz · ${a.channels} canal(es)`,'audio',aids.includes(a.id));$('inspect').add(new Option(a.name,a.id));}
+  for(const c of state.configs){item($('configs'),c.id,`${c.name} · v${c.version}`,`${c.engine==='muse'?'Meta API':'GPU · FP16'} · ${c.keywords.length?c.keywords.length+' términos':'sin glosario'}`,'config',cids.includes(c.id));$('parent').add(new Option(`${c.name} · v${c.version}`,c.id));}
+  $('inspect').value=inspect||state.audios[0]?.id||'';$('parent').value=parent;reference();estimate();
+}
+function reference(){const a=state.audios.find(a=>a.id===$('inspect').value),r=a?.references.at(-1);$('reference').value=r?.text??'';$('reference-version').textContent=r?`Referencia v${r.version} · puntuación recalculada al guardar`:'Sin referencia: no se calcula WER.';$('save-reference').disabled=!a;if(a)$('player').src=`/api/audio/${a.id}`;else $('player').removeAttribute('src');renderResults();}
+function estimate(){const a=state.audios.filter(a=>selected('audio').includes(a.id)),c=state.configs.filter(c=>selected('config').includes(c.id)),repeats=Number($('repeats').value);const cost=a.reduce((n,a)=>n+Math.floor(a.durationMs/1000)*.18/3600,0)*c.filter(c=>c.engine==='muse').length*repeats;$('estimate').textContent=`${a.length*c.length*repeats} ejecuciones · Muse estimado USD ${cost.toFixed(5)}. Coste local no medido; estimación, no factura.`;}
+function renderResults(){
+  const audioId=$('inspect').value, configs=selected('config');
+  $('comparison').replaceChildren();
+  for(const c of state.configs.filter(c=>!configs.length||configs.includes(c.id))){const runs=state.runs.filter(r=>r.audioId===audioId&&r.configId===c.id),r=runs.at(-1);if(!r)continue;
+    const card=node('article',undefined,'result');card.append(node('h3',`${c.name} · v${c.version}`),node('p',`${r.status} · repetición ${r.repeat}`,'small'),node('p',r.text??r.error??'En espera…','transcript'));
+    card.append(node('p',`Petición: ${ms(r.timings.requestMs)} · carga: ${ms(r.timings.loadMs)} · generación local: ${ms(r.timings.generateMs)} · total: ${ms(r.timings.totalMs)}`,'small'));
+    if(r.result?.deviceName)card.append(node('p',r.result.deviceName,'small'));
+    card.append(node('p',`Preparación: ${ms(r.timings.prepareMs)} · cola: ${ms(r.timings.queueMs)} · ${r.result?.cold===true?'carga en frío':r.result?.cold===false?'modelo ya cargado':'carga interna no observable'}`,'small'));
+    if(r.evaluation?.silenceInsertions>0)card.append(node('p',`Atención: ${r.evaluation.silenceInsertions} palabra(s) generadas frente a una referencia de silencio.`,'error'));
+    if(r.evaluation){card.append(node('p',r.evaluation.wer==null?'WER no definido para referencia vacía.':`WER ${(r.evaluation.wer*100).toFixed(1)}% · referencia v${r.evaluationReferenceVersion}`,'small'));const diff=node('div',undefined,'diff');for(const x of r.evaluation.alignment??[]){if(x.kind==='equal')diff.append(document.createTextNode(x.hypothesis+' '));else {if(x.reference)diff.append(node('del',x.reference+' '));if(x.hypothesis)diff.append(node('ins',x.hypothesis+' '));}}card.append(diff);}
+    $('comparison').append(card);
+  }
+  if(!$('comparison').children.length)$('comparison').append(node('p','Selecciona un audio y ejecuta una configuración para comparar.','empty'));
+  $('history').replaceChildren();for(const r of [...state.runs].reverse()){const tr=node('tr'),a=state.audios.find(a=>a.id===r.audioId);const name=node('td',a?.name);name.append(node('small',`${r.configuration.name} · v${r.configuration.version} · ${r.id.slice(0,8)}`));tr.append(name,node('td',r.status),node('td',ms(r.timings.requestMs)),node('td',ms(r.timings.totalMs)),node('td',r.evaluation?.wer==null?'—':`${(r.evaluation.wer*100).toFixed(1)}%`));const action=node('td');if(['queued','running'].includes(r.status)){const b=node('button','Cancelar');b.onclick=()=>safe(async()=>{await api('/api/cancel',{id:r.id});await refresh();});action.append(b);}else if(r.error)action.append(node('span',r.error));tr.append(action);$('history').append(tr);}
+  const percentile=(v,p)=>v.length?ms([...v].sort((a,b)=>a-b)[Math.ceil(v.length*p)-1]):'—';
+  $('summary').replaceChildren();const aids=selected('audio');for(const c of state.configs.filter(c=>!configs.length||configs.includes(c.id))){const rows=state.runs.filter(r=>r.configId===c.id&&(!aids.length||aids.includes(r.audioId))),ok=rows.filter(r=>r.status==='completed'),values=ok.map(r=>r.timings.totalMs).filter(Number.isFinite);if(!rows.length)continue;$('summary').append(node('p',`${c.name} v${c.version}: ${ok.length}/${rows.length} completadas · ${new Set(ok.map(r=>r.audioId)).size} audios · total P50 ${percentile(values,.5)} / P95 ${percentile(values,.95)}`));}
+}
+async function refresh(full=false){const next=await api('/api/state');const changed=JSON.stringify(next.runs)!==lastRuns;state=next;lastRuns=JSON.stringify(next.runs);$('readiness').textContent=`Muse: ${state.metaConfigured?'clave configurada':'sin clave'} · Whisper: ${state.modelPresent?'modelo en disco':'modelo pendiente'}`;if(full)lists();if(changed||full)renderResults();}
+async function safe(fn){try{await fn();}catch(e){tell(e.message,true);}}
+$('files').onchange=()=>safe(async()=>{busy=true;try{for(const file of $('files').files){tell(`Importando ${file.name}…`);const r=await fetch('/api/audio',{method:'POST',headers:{'Content-Type':'audio/wav','X-File-Name':encodeURIComponent(file.name)},body:file});const result=await r.json();if(!r.ok)throw Error(result.error);}await refresh(true);tell('Audios guardados localmente. Selecciona los que quieras comparar.');$('files').value='';}finally{busy=false;}});
+$('inspect').onchange=reference;$('repeats').onchange=estimate;
+$('engine').onchange=()=>{$('keywords-label').hidden=$('engine').value!=='muse';$('beams-label').hidden=$('engine').value!=='whisper';};
+$('parent').onchange=()=>{const c=state.configs.find(c=>c.id===$('parent').value);if(c){$('config-name').value=c.name;$('engine').value=c.engine;$('keywords').value=c.keywords.join('\n');$('beams').value=c.beams??1;$('engine').onchange();}};
+$('config-form').onsubmit=e=>{e.preventDefault();safe(async()=>{await api('/api/configs',{parentId:$('parent').value||null,name:$('config-name').value,engine:$('engine').value,keywords:$('engine').value==='muse'?$('keywords').value.split('\n'):[],beams:Number($('beams').value)});await refresh(true);tell('Nueva configuración guardada. Las anteriores no cambiaron.');});};
+$('reference-form').onsubmit=e=>{e.preventDefault();safe(async()=>{await api('/api/references',{audioId:$('inspect').value,text:$('reference').value});await refresh(true);tell('Referencia versionada y puntuaciones recalculadas.');});};
+$('key-form').onsubmit=e=>{e.preventDefault();safe(async()=>{await api('/api/key',{key:$('key').value});$('key').value='';await refresh();tell('Clave de Meta configurada en memoria del servidor.');});};
+$('run').onclick=()=>safe(async()=>{$('run').disabled=true;try{const r=await api('/api/runs',{audioIds:selected('audio'),configIds:selected('config'),repeats:Number($('repeats').value)});tell(`${r.runIds.length} ejecuciones añadidas. Puedes cerrar esta página; el servidor sigue trabajando.`);await refresh();}finally{$('run').disabled=false;}});
+safe(()=>refresh(true));setInterval(()=>{if(!busy)safe(()=>refresh());},1500);

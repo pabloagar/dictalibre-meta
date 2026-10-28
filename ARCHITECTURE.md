@@ -80,3 +80,6 @@ Conservar original y versionado; propuestas de spans con revisión base; abstenc
 
 ## Propuesta de transcripción modular · 2026-10-28
 Investigación y contratos pendientes de aprobación en [TRANSCRIPTION_PLAN.md](TRANSCRIPTION_PLAN.md). Propone fuente intercambiable, preparación, delimitación, adaptadores ASR, consolidación, propuestas Meta opcionales y revisión. No se implementó ningún módulo ASR ni se seleccionó un ganador. La nueva propuesta de evaluación prioriza Muse Voice frente a Whisper y un contraste médico, condicionada a acceso y mediciones.
+
+## Implementación posterior: laboratorio aprobado
+El laboratorio de [LABORATORY.md](LABORATORY.md) concreta fuente WAV → preparación compartida → adaptador Whisper GPU o Muse → original inmutable → evaluación versionada. API en loopback 8789, almacenamiento local y worker Python separado. No modifica el relay 8788 ni conecta automáticamente sus tomas. La afirmación anterior de ausencia de ASR describe el estado de investigación previo; ahora Whisper está ejecutado, Muse implementado y aún no verificado contra el servicio real. Corrección, segmentación inteligente y streaming permanecen futuros.

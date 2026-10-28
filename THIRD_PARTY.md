@@ -55,3 +55,18 @@ Elegir licencia del código propio, mantener el lockfile y revisar avisos de dis
 
 ## Actualización de candidatos de transcripción
 La investigación del 28-10-2026 en TRANSCRIPTION_PLAN.md confirma en documentación oficial español y modo de dictado de Muse Voice Transcribe; el acceso de cuenta aún no se ha probado. La propuesta de prueba ASR y contratos allí descritos sustituye la prioridad preliminar de corrector en «F1» de este documento: fases 1/2 son captura/transporte y no se integra corrector aún. Muse, Whisper, Speechmatics y Scribe son candidatos, no nuevas dependencias instaladas. Términos efectivos de APIs, cuotas y coste del piloto siguen pendientes de confirmar.
+# Componentes efectivamente incorporados al laboratorio · 2026-10-28
+
+Esta actualización sustituye el estado «no instalado» de los candidatos Whisper/OpenVINO. Muse es adaptador implementado, acceso real aún pendiente.
+
+| Componente | Versión y atribución |
+| --- | --- |
+| OpenVINO / GenAI / Tokenizers | 2026.4.1 / 2026.4.1.0 / 2026.4.1.0; proyectos Intel, Apache-2.0; [fuente](https://github.com/openvinotoolkit/openvino.genai) |
+| Whisper large-v3 | Modelo original OpenAI, MIT; conversión [OpenVINO FP16](https://huggingface.co/OpenVINO/whisper-large-v3-fp16-ov) con ficha Apache-2.0; revisión 220761e60602a5ca694c409d5f424563b75d6820. Conservar atribución original y de conversión |
+| NumPy / SciPy | 2.5.4 / 1.18.1; BSD-3-Clause, incluidos avisos de bibliotecas numéricas empaquetadas |
+| huggingface_hub | 2.3.0, Apache-2.0; descarga de pesos fijados, no código remoto |
+| Muse Voice Transcribe | muse-voice-transcribe-1.0 vía Meta Model API; servicio propietario, términos/retención/cuota efectivos pendientes de verificar para la cuenta; [contrato](https://dev.meta.ai/docs/speech-to-text) |
+| Voz Windows Helena Desktop | Control sintético generado localmente con voz instalada; no redistribuida como dependencia ni corpus |
+
+Lock completo: requirements-lab.lock.txt. Inventario extraído de metadatos instalados, incluidos avisos declarados: experiments/lab-dependencies.json. No sustituye una revisión jurídica ni todos los avisos de redistribución de binarios. Pesos, entorno y WAV no incluidos en Git. DO_NOT_TRACK y HF_HUB_DISABLE_TELEMETRY activados en el worker/descargador; no se añade analítica de uso. La dependencia openvino-telemetry viene con el runtime; no se incorpora un servicio propio de telemetría externa.
+

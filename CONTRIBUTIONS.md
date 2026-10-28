@@ -39,3 +39,7 @@ Pendiente: commits progresivos, repositorio público comprobado, versiones fijad
 
 ## Revisión de interfaz y telemetría · 2026-10-28
 Contribución implementada: interfaz compacta, área principal reservada para transcripción sin simular resultados, diagnóstico desplegable, calibración temporal y mediciones por toma exportables. No se agregaron dependencias externas. Los puntos de medición ASR/Meta son futuros, no funcionales. Metodología en METRICS.md.
+# Laboratorio incorporado el 28-10-2026
+
+Nueva contribución: interfaz local de experimentos, validación de audio, adaptación a entrada común, cola, referencias/configuraciones inmutables por versión, comparación WER, conservación de fallos, métricas y exportación. Código en apps/lab, backend/lab* y scripts de laboratorio. Whisper, Muse, OpenVINO, NumPy y SciPy son dependencias externas, no modelos entrenados por Dicta Libre. Se probó Whisper en GPU; integración Muse pendiente de credencial. El laboratorio no acredita por sí solo novedad científica ni contribución Meta validada en la demo.
+

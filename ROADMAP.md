@@ -52,3 +52,7 @@ Este criterio sustituye el requisito previo de 30 s; las tomas largas son prueba
 La toma de 8,504 s ya es evidencia válida del caso principal. No hace falta repetirla por no llegar a 30 s. 5G y grabación de tres minutos son complementarios; los tests automáticos del límite se conservan.
 
 Antes de programar transcripción: discutir el motor y comprobar acceso, licencia, español médico, formatos/frecuencia y si acepta toma completa o streaming. Para el primer recorrido propuesto, una toma corta terminada puede ser una unidad de entrada, si el motor lo admite; no imponer segmentación inteligente ni streaming antes de conocer ese contrato. Medir cola, inferencia, primer/final texto y error de palabras/términos, conservando el original. Esta propuesta no selecciona ni integra un motor.
+# Actualización: laboratorio de transcripción aprobado e iniciado
+
+28-10-2026: el responsable autorizó implementar el alcance de [LABORATORY.md](LABORATORY.md). Primera entrega local operativa con Whisper large-v3/OpenVINO/GPU. Próxima puerta de aceptación: credencial Muse, prueba del contrato real, 3–5 dictados sintéticos del S25 Ultra de 2–10 s con referencia revisada y ejecución de ambos motores sobre los mismos archivos. Después: piloto reservado y revisión de errores clínicos. No avanzar a corrección ni integración automática en captura antes de revisar esta evidencia. Wi-Fi principal para demo; no depende de que el laboratorio se publique.
+
