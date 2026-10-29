@@ -20,7 +20,7 @@ test('API: origen, deduplicación, versiones, cola, exportación, cancelación y
  const worker={call:async m=>{fs.copyFileSync(m.input,m.output);return {};},close(){}};
  let fail=false,slow=false;
  const muse=async(w,c,k,signal)=>{assert.equal(k,'test-secret');if(fail)throw Error('fixture failure');if(slow)await new Promise((resolve,reject)=>{const timer=setTimeout(resolve,1000);signal.addEventListener('abort',()=>{clearTimeout(timer);reject(Error('cancel'));},{once:true});});return {text:'no hay lesión'};};
- async function start(){lab=createLab({dataDir:dir,worker,muse});lab.server.listen(0,'127.0.0.1');await once(lab.server,'listening');return `http://127.0.0.1:${lab.server.address().port}`;}
+ async function start(){lab=createLab({dataDir:dir,keyFile:path.join(dir,'.env.local'),worker,muse});lab.server.listen(0,'127.0.0.1');await once(lab.server,'listening');return `http://127.0.0.1:${lab.server.address().port}`;}
  let base=await start();const post=async(p,data,headers={})=>fetch(base+p,{method:'POST',headers:{Origin:base,'Content-Type':'application/json',...headers},body:Buffer.isBuffer(data)?data:JSON.stringify(data)});const state=async()=> (await fetch(base+'/api/state')).json();
  async function finished(){for(let i=0;i<100;i++){const s=await state();if(s.runs.every(r=>!['queued','running'].includes(r.status)))return s;await new Promise(r=>setTimeout(r,10));}throw Error('timeout');}
  try{
@@ -38,6 +38,7 @@ test('API: origen, deduplicación, versiones, cola, exportación, cancelación y
   assert.ok(!(await (await fetch(base+'/api/export')).text()).includes('test-secret'));assert.ok(!fs.readFileSync(path.join(dir,'catalog.json'),'utf8').includes('test-secret'));
   fail=true;await post('/api/runs',{...selection,configIds:[c.id],repeats:1});s=await finished();assert.equal(s.runs.at(-1).status,'error');
   fail=false;slow=true;const queued=await (await post('/api/runs',{...selection,configIds:[c.id],repeats:2})).json();for(const id of queued.runIds)await post('/api/cancel',{id});s=await finished();assert.ok(s.runs.slice(-2).every(r=>r.status==='cancelled'));
-  const closing=once(lab.server,'close');lab.close();await closing;base=await start();s=await state();assert.equal(s.runs.length,7);assert.equal(s.audios[0].references.length,2);assert.equal(s.metaConfigured,false);
+  assert.equal((await fetch(base+'/.env.local')).status,404);
+  const closing=once(lab.server,'close');lab.close();await closing;base=await start();s=await state();assert.equal(s.runs.length,7);assert.equal(s.audios[0].references.length,2);assert.equal(s.metaConfigured,true);
  }finally{const closing=once(lab.server,'close');lab.close();await closing;fs.rmSync(dir,{recursive:true,force:true});}
 });

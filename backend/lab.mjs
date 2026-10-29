@@ -7,6 +7,7 @@ import { spawn, execFileSync } from 'node:child_process';
 import { createInterface } from 'node:readline';
 import os from 'node:os';
 import {attachLiveBridge,demoConnection} from './live-bridge.mjs';
+import {loadMetaKey,saveMetaKey,checkMetaKey} from './meta-key.mjs';
 import { wavInfo, hash, configuration, score, csv } from './lab-core.mjs';
 const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 export const MODEL_REVISION='220761e60602a5ca694c409d5f424563b75d6820';
@@ -48,7 +49,7 @@ export async function museTranscribe(wav,config,key,signal) {
   if(typeof data.transcript!=='string') throw new Error('Muse no devolvió transcript válido.');
   return {text:data.transcript,providerAudioDurationMs:data.audioDurationMs??null,device:'Meta API',modelRevision:null,memoryBytes:null};
 }
-export function createLab({dataDir=path.join(ROOT,'data','local','lab'),worker=new LocalWorker(),muse=museTranscribe}={}) {
+export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=path.join(ROOT,'.env.local'),worker=new LocalWorker(),muse=museTranscribe}={}) {
   fs.mkdirSync(dataDir,{recursive:true});fs.mkdirSync(path.join(dataDir,'audio'),{recursive:true});fs.mkdirSync(path.join(dataDir,'derived'),{recursive:true});
   const dbPath=path.join(dataDir,'catalog.json');
   const db=fs.existsSync(dbPath)?JSON.parse(fs.readFileSync(dbPath,'utf8')):{schema:1,audios:[],configs:[],runs:[]};
@@ -58,7 +59,7 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),worker=n
   save();
   let build='unknown';try{build=execFileSync('git',['rev-parse','HEAD'],{cwd:ROOT,encoding:'utf8'}).trim();}catch{}
   const sourceHash=hash(Buffer.concat(['backend/lab.mjs','backend/lab-core.mjs','backend/lab-worker.py','backend/live-bridge.mjs','apps/desktop/live.js','apps/desktop/desktop.js','apps/mobile/mobile.js','apps/shared/metrics.js'].map(f=>fs.readFileSync(path.join(ROOT,f)))));
-  let apiKey=process.env.META_API_KEY||process.env.MODEL_API_KEY||'',active=null,closed=false;
+  let apiKey=loadMetaKey(keyFile),active=null,closed=false;
   const queuedAt=new Map();
   const viewRun=r=>{const a=db.audios.find(a=>a.id===r.audioId),ref=a?.references.at(-1);return {...r,evaluation:r.status==='completed'?score(ref?.text??null,r.text):null,evaluationReferenceVersion:ref?.version??null};};
   async function pump(){
@@ -119,7 +120,8 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),worker=n
         r.live={...timing,recordingId:Number.isInteger(m.recordingId)?m.recordingId:null,source:['tone','microphone'].includes(m.source)?m.source:null,measuredBy:'receiver-browser',savedAt:new Date().toISOString()};
         r.environment.source='live-receiver';save();return json({saved:true});
       }
-      if(p==='/api/key'){if(typeof m.key!=='string'||m.key.length>4096)throw new Error('Clave inválida.');apiKey=m.key.trim();return json({configured:!!apiKey});}
+      if(p==='/api/key'){apiKey=saveMetaKey(keyFile,m.key);return json({configured:!!apiKey,persisted:true});}
+      if(p==='/api/meta/check')return json(await checkMetaKey(apiKey));
       if(p==='/api/references'){
         const a=db.audios.find(a=>a.id===m.audioId);if(!a)throw new Error('Audio desconocido.');
         if(typeof m.text!=='string'||m.text.length>8000)throw new Error('Referencia inválida.');
