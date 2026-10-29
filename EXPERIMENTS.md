@@ -107,3 +107,32 @@ Extensión posterior: [captura/transporte conectados con Whisper](experiments/re
 
 [Evidencia y procedimiento](experiments/results/2026-10-28-lab-smoke/README.md): Whisper large-v3 FP16 ejecutado en GPU Intel Arc mediante OpenVINO, frase sintética de 5,54 s y silencio de 2 s. Repetición de frase con modelo cargado: total 2,250 s, generación 2,220 s. WER literal 1/13 por tres/3, no error clínico adjudicado. Silencio generó «Gracias.»; resultado adverso conservado. Variante beams=3 falló en GPU. Muse aún sin credencial real; no hay comparación de motores completada. Los tests de su adaptador usan fixtures identificadas.
 
+# Comprobación Muse: 28 de octubre de 2026
+
+Objetivo: verificar autenticación y una transcripción de archivo sintético, con resultado textual y tiempos observados. Criterio: GET /v1/models exitoso y ejecución finalizada con transcript; comparar con referencia existente, sin umbral de rendimiento prefijado. Una repetición de lab-frase-sintetica.wav, 5,542 s; Muse base v1, español, sin keywords, WAV derivado mono PCM16 16 kHz. Red no identificada en esta ejecución; no atribuirla al teléfono ni a Wi-Fi.
+
+Resultado: models HTTP 200 en 1008 ms; transcripción completada y coincidente con la referencia de 13 palabras (WER 0). Cola 5,70 ms; preparación 968,25 ms; petición HTTP completa 2213,52 ms; ejecución total 3187,73 ms, sin cola ni captura del audio. La petición incluye transporte y servicio remoto, no mide inferencia aislada. Preparación puede incluir inicio del proceso Python. No se midió primer texto ni streaming. Evidencia: `experiments/results/2026-10-28-meta-auth/muse-synthetic-success.json`, con configuración, hashes, tiempos y versión reportada al iniciar servidor. No demuestra superioridad sobre Whisper ni precisión clínica general.
+
+
+## 28-10-2026 · Mismo audio: Muse frente a Whisper local
+
+Pregunta exploratoria: comparar texto y demora, separando carga inicial de Whisper del uso con modelo cargado. Criterio operativo: ejecución completa sobre el mismo audio y métricas conservadas; sin umbral de velocidad ni ganador prefijado. Audio sintético de 5,542 s, referencia de 13 palabras. Muse base anterior; dos ejecuciones nuevas de Whisper large-v3 FP16, OpenVINO GPU Intel Arc iGPU, español, beams=1. Segunda toma motivada por la carga inicial observada.
+
+| Condición | Preparación ms | Petición al motor ms | Carga ms | Generación ms | Total ms | WER literal |
+|---|---:|---:|---:|---:|---:|---:|
+| Muse anterior | 968,25 | 2213,52 | no medido | no medido | 3187,73 | 0 % |
+| Whisper primera | 4,67 | 13718,20 | 11218,05 | 2290,15 | 13730,08 | 7,69 % |
+| Whisper ya cargado | 11,51 | 1921,02 | 0 | 1915,69 | 1941,12 | 7,69 % |
+
+Carga y generación están incluidas en petición Whisper; no sumarlas nuevamente. Total excluye cola y captura. Petición Muse incluye transporte remoto, no mide inferencia aislada. Preparación Muse puede incluir inicio del worker, a diferencia de las siguientes tomas. Los intervalos son mediciones directas del servidor/worker; precisión y sobrecosto de instrumentación no calibrados en esta prueba.
+
+La única sustitución léxica fue «tres» por «3», con cantidad equivalente en esta frase; WER literal penaliza formato numérico. Whisper también devolvió un espacio inicial conservado en el resultado. Negación, medida y lateralidad se mantuvieron. Hashes originales y derivados idénticos en las tres ejecuciones, verificadas como completed. Evidencia completa: experiments/results/2026-10-28-meta-auth/muse-whisper-comparison.json. IDs Whisper: 3f5b6b02-1776-4117-bd40-26ef630476c8 (cold=true), 1298102e-116b-4626-89d4-1379e0b5f5fb (cold=false). Resultados también persistidos en el catálogo del laboratorio.
+
+No se determinó red ni navegador: ejecución por API local sobre archivo, no celular-PC. Se conserva build reportado al arrancar servidor, sin reasignarlo al HEAD posterior. Una frase y una muestra por condición no prueban superioridad general ni representan un benchmark equilibrado.
+
+## Comandos · control de integración del 28-10-2026
+Protocolo y criterios en DICTATION_COMMANDS.md. Hipótesis operativa: un módulo común puede aplicar comandos explícitos reconocidos sin sustituir texto clínico; precisión del ASR se mide separadamente. Métricas: texto original/formateado, eventos con offsets, dudas, tiempo de formato (ms) y etapas existentes. Criterio: conservación del original, salida esperada en controles, modo desactivado y persistencia/exportación. No se fija un umbral clínico.
+
+Control sintético de 7,08 s generado con Windows Helena, frase y resultados completos en experiments/results/2026-10-28-dictation-commands/control.json. Muse en vivo: seis eventos, salida esperada y 1,61 ms de formato; 3868 ms total servidor, ~4080 ms parada→DOM estimados. Repetición en laboratorio: duplicación de «conclusión» conservada. Whisper inicialmente dejó «2 puntos» literal; tras ampliar el reconocimiento de esa variante, salida con saltos y dos puntos esperados; 2110 ms total en caliente, 0,21 ms de formato. Cantidad representada como 3, no tres. No se confunde WER literal frente a comandos hablados con precisión de formato. No son repeticiones equilibradas para elegir ganador. Versiones/sourceHash originales preservadas; diferentes revisiones durante desarrollo, sin reescribir ejecuciones históricas.
+
+Pendiente: 6–10 tomas propias de 2–10 s, referencias revisadas, mismos WAV por motor, Whisper caliente, alternar orden y registrar fallos. Revisión manual de comandos esperados, negaciones, medidas y lateralidad; sin inferir corrección clínica a partir de WER. La vista muestra cantidad de reglas aplicadas, no tasa de acierto de comandos. Una regla literal no detecta comandos que el ASR haya omitido o convertido en signos.

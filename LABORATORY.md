@@ -80,3 +80,6 @@ El resumen P50/P95 incluye todas las ejecuciones completadas seleccionadas, incl
 Pruebas automatizadas: WAV inválido, WER, configuraciones/versiones, origen HTTP, deduplicación, cola, fallos/cancelación, persistencia y exportación sin clave. Las pruebas de servicio usan un adaptador fixture explícito; no acreditan acceso real a Muse.
 
 Se ejecutó Whisper real en Intel Arc integrada, tanto con una frase sintética de Microsoft Helena Desktop como con silencio. Se verificaron carga, referencia y resultados en navegador. Ver EXPERIMENTS.md para evidencia y límites. Muse está implementado según [contrato oficial](https://dev.meta.ai/docs/speech-to-text), **pendiente de validación con credencial real**.
+
+## Dictado con comandos
+Desde /live se aplican comandos básicos al terminar la toma y se conserva el original. El enlace de cada toma abre el mismo audio con Muse/Whisper base seleccionados para ejecutar la comparación después. Formato y auditoría se guardan por ejecución, sin modificar resultados históricos. Instrucciones y referencias: DICTATION_COMMANDS.md.

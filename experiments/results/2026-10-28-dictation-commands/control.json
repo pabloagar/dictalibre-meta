@@ -1,0 +1,1189 @@
+{
+  "purpose": "Synthetic integration control, not a clinical benchmark",
+  "source": "Windows Microsoft Helena Desktop TTS",
+  "audioId": "378576f7-7978-43f8-b431-f77ad837cf99",
+  "expectedSpoken": "No hay derrame punto nueva línea nódulo derecho de tres milímetros punto nuevo párrafo conclusión dos puntos sin cambios punto",
+  "expectedFormatted": "No hay derrame.\nNódulo derecho de tres milímetros.\n\nConclusión: sin cambios.",
+  "runs": [
+    {
+      "id": "a3efe836-d3a0-4d6a-846e-81a416aab547",
+      "batchId": "89d17ff7-1086-4b8c-a69d-bf35fd534a07",
+      "audioId": "378576f7-7978-43f8-b431-f77ad837cf99",
+      "audioHash": "0b635a155c77e258656dbe373bef3fc1e4733cbed012e66f9e1f4d1729cbfbb2",
+      "configId": "80048dff-51fd-414f-a079-656b247336e4",
+      "configuration": {
+        "name": "Muse · base",
+        "engine": "muse",
+        "version": 1,
+        "parentId": null,
+        "model": "muse-voice-transcribe-1.0",
+        "language": "es",
+        "device": null,
+        "precision": null,
+        "beams": null,
+        "keywords": [],
+        "preparation": "scipy-resample-poly-mono-16k-v1",
+        "mode": "file",
+        "correction": false,
+        "id": "80048dff-51fd-414f-a079-656b247336e4",
+        "createdAt": "2026-10-28T19:57:28.887Z"
+      },
+      "referenceAtRun": null,
+      "repeat": 1,
+      "commandsEnabled": true,
+      "commandVersion": "es-basic-v1",
+      "build": "095eb960e479c0711a2e6ca19f4fa7435171230e",
+      "sourceHash": "b611b4bc19786da5d0b797609632ee5052fcb58ec19a11b884b414f4e4e1961f",
+      "modelRevision": null,
+      "createdAt": "2026-10-29T00:24:55.087Z",
+      "status": "completed",
+      "text": "No hay derrame punto nueva línea nódulo derecho de tres milímetros punto nuevo párrafo conclusión dos puntos sin cambios punto",
+      "error": null,
+      "timings": {
+        "queueMs": 6.422600000001694,
+        "prepareMs": 1052.162400000001,
+        "loadMs": null,
+        "generateMs": null,
+        "requestMs": 2808.416100000002,
+        "totalMs": 3868.272799999995,
+        "firstTextMs": null,
+        "requestRtf": 0.39662066958938885,
+        "commandMs": 1.6119000000035157
+      },
+      "environment": {
+        "os": "win32",
+        "osRelease": "10.0.26200",
+        "cpu": "Intel(R) Core(TM) Ultra 7 155H",
+        "totalRamBytes": 33752997888,
+        "node": "v24.19.0",
+        "network": null,
+        "source": "live-receiver"
+      },
+      "audioDurationMs": 7080.861678004535,
+      "startedAt": "2026-10-29T00:24:55.094Z",
+      "derived": {
+        "sha256": "3bc1b15a43e11f44a7faa791e7a5ca522c6bd4046438382be6ce6ed9783f89f7",
+        "sampleRate": 16000,
+        "channels": 1,
+        "format": "PCM16",
+        "originalSha256": "0b635a155c77e258656dbe373bef3fc1e4733cbed012e66f9e1f4d1729cbfbb2"
+      },
+      "result": {
+        "text": "No hay derrame punto nueva línea nódulo derecho de tres milímetros punto nuevo párrafo conclusión dos puntos sin cambios punto",
+        "providerAudioDurationMs": 7120,
+        "device": "Meta API",
+        "modelRevision": null,
+        "memoryBytes": null
+      },
+      "formatting": {
+        "version": "es-basic-v1",
+        "text": "No hay derrame.\nNódulo derecho de tres milímetros.\n\nConclusión: sin cambios.",
+        "events": [
+          {
+            "start": 15,
+            "end": 20,
+            "spoken": "punto",
+            "command": "punto",
+            "replacement": "."
+          },
+          {
+            "start": 21,
+            "end": 32,
+            "spoken": "nueva línea",
+            "command": "nueva línea",
+            "replacement": "\n"
+          },
+          {
+            "start": 67,
+            "end": 72,
+            "spoken": "punto",
+            "command": "punto",
+            "replacement": "."
+          },
+          {
+            "start": 73,
+            "end": 86,
+            "spoken": "nuevo párrafo",
+            "command": "nuevo párrafo",
+            "replacement": "\n\n"
+          },
+          {
+            "start": 98,
+            "end": 108,
+            "spoken": "dos puntos",
+            "command": "dos puntos",
+            "replacement": ":"
+          },
+          {
+            "start": 121,
+            "end": 126,
+            "spoken": "punto",
+            "command": "punto",
+            "replacement": "."
+          }
+        ],
+        "warnings": [],
+        "elapsedMs": 1.6119000000035157
+      },
+      "cost": {
+        "currency": "USD",
+        "estimated": 0.00035,
+        "actual": null,
+        "rateDate": "2026-10-28",
+        "note": "Estimación del audio original; no factura. Coste local no medido."
+      },
+      "finishedAt": "2026-10-29T00:24:58.962Z",
+      "live": {
+        "receiveEndToTextMs": 4037,
+        "stopToTextEstimateMs": 4080.77197265625,
+        "clockUncertaintyMs": 44.36786254882812,
+        "recordingId": 1,
+        "source": "tone",
+        "measuredBy": "receiver-browser",
+        "savedAt": "2026-10-29T00:24:59.099Z"
+      },
+      "evaluation": {
+        "normalizer": "es-literal-v1",
+        "referenceWords": 20,
+        "substitutions": 0,
+        "deletions": 0,
+        "insertions": 0,
+        "wer": 0,
+        "silenceInsertions": null,
+        "alignment": [
+          {
+            "kind": "equal",
+            "reference": "no",
+            "hypothesis": "no"
+          },
+          {
+            "kind": "equal",
+            "reference": "hay",
+            "hypothesis": "hay"
+          },
+          {
+            "kind": "equal",
+            "reference": "derrame",
+            "hypothesis": "derrame"
+          },
+          {
+            "kind": "equal",
+            "reference": "punto",
+            "hypothesis": "punto"
+          },
+          {
+            "kind": "equal",
+            "reference": "nueva",
+            "hypothesis": "nueva"
+          },
+          {
+            "kind": "equal",
+            "reference": "línea",
+            "hypothesis": "línea"
+          },
+          {
+            "kind": "equal",
+            "reference": "nódulo",
+            "hypothesis": "nódulo"
+          },
+          {
+            "kind": "equal",
+            "reference": "derecho",
+            "hypothesis": "derecho"
+          },
+          {
+            "kind": "equal",
+            "reference": "de",
+            "hypothesis": "de"
+          },
+          {
+            "kind": "equal",
+            "reference": "tres",
+            "hypothesis": "tres"
+          },
+          {
+            "kind": "equal",
+            "reference": "milímetros",
+            "hypothesis": "milímetros"
+          },
+          {
+            "kind": "equal",
+            "reference": "punto",
+            "hypothesis": "punto"
+          },
+          {
+            "kind": "equal",
+            "reference": "nuevo",
+            "hypothesis": "nuevo"
+          },
+          {
+            "kind": "equal",
+            "reference": "párrafo",
+            "hypothesis": "párrafo"
+          },
+          {
+            "kind": "equal",
+            "reference": "conclusión",
+            "hypothesis": "conclusión"
+          },
+          {
+            "kind": "equal",
+            "reference": "dos",
+            "hypothesis": "dos"
+          },
+          {
+            "kind": "equal",
+            "reference": "puntos",
+            "hypothesis": "puntos"
+          },
+          {
+            "kind": "equal",
+            "reference": "sin",
+            "hypothesis": "sin"
+          },
+          {
+            "kind": "equal",
+            "reference": "cambios",
+            "hypothesis": "cambios"
+          },
+          {
+            "kind": "equal",
+            "reference": "punto",
+            "hypothesis": "punto"
+          }
+        ]
+      },
+      "evaluationReferenceVersion": 1
+    },
+    {
+      "id": "271344ed-653d-4532-9e26-e100b54338f9",
+      "batchId": "1bafcbce-6cfe-4814-bf28-9fa99d3516e6",
+      "audioId": "378576f7-7978-43f8-b431-f77ad837cf99",
+      "audioHash": "0b635a155c77e258656dbe373bef3fc1e4733cbed012e66f9e1f4d1729cbfbb2",
+      "configId": "80048dff-51fd-414f-a079-656b247336e4",
+      "configuration": {
+        "name": "Muse · base",
+        "engine": "muse",
+        "version": 1,
+        "parentId": null,
+        "model": "muse-voice-transcribe-1.0",
+        "language": "es",
+        "device": null,
+        "precision": null,
+        "beams": null,
+        "keywords": [],
+        "preparation": "scipy-resample-poly-mono-16k-v1",
+        "mode": "file",
+        "correction": false,
+        "id": "80048dff-51fd-414f-a079-656b247336e4",
+        "createdAt": "2026-10-28T19:57:28.887Z"
+      },
+      "referenceAtRun": {
+        "version": 1,
+        "text": "No hay derrame punto nueva línea nódulo derecho de tres milímetros punto nuevo párrafo conclusión dos puntos sin cambios punto",
+        "createdAt": "2026-10-29T00:25:49.589Z"
+      },
+      "repeat": 1,
+      "commandsEnabled": true,
+      "commandVersion": "es-basic-v1",
+      "build": "095eb960e479c0711a2e6ca19f4fa7435171230e",
+      "sourceHash": "b611b4bc19786da5d0b797609632ee5052fcb58ec19a11b884b414f4e4e1961f",
+      "modelRevision": null,
+      "createdAt": "2026-10-29T00:26:04.01Z",
+      "status": "completed",
+      "text": "No hay derrame punto nueva línea nódulo derecho de tres milímetros punto nuevo párrafo conclusión conclusión dos puntos sin cambios punto.",
+      "error": null,
+      "timings": {
+        "queueMs": 9.999300000010408,
+        "prepareMs": 10.161200000002282,
+        "loadMs": null,
+        "generateMs": null,
+        "requestMs": 2336.6475000000064,
+        "totalMs": 2355.2957999999926,
+        "firstTextMs": null,
+        "requestRtf": 0.3299947953027236,
+        "commandMs": 0.24069999999483116
+      },
+      "environment": {
+        "os": "win32",
+        "osRelease": "10.0.26200",
+        "cpu": "Intel(R) Core(TM) Ultra 7 155H",
+        "totalRamBytes": 33752997888,
+        "node": "v24.19.0",
+        "network": null,
+        "source": "uploaded-file"
+      },
+      "audioDurationMs": 7080.861678004535,
+      "startedAt": "2026-10-29T00:26:04.02Z",
+      "derived": {
+        "sha256": "3bc1b15a43e11f44a7faa791e7a5ca522c6bd4046438382be6ce6ed9783f89f7",
+        "sampleRate": 16000,
+        "channels": 1,
+        "format": "PCM16",
+        "originalSha256": "0b635a155c77e258656dbe373bef3fc1e4733cbed012e66f9e1f4d1729cbfbb2"
+      },
+      "result": {
+        "text": "No hay derrame punto nueva línea nódulo derecho de tres milímetros punto nuevo párrafo conclusión conclusión dos puntos sin cambios punto.",
+        "providerAudioDurationMs": 7120,
+        "device": "Meta API",
+        "modelRevision": null,
+        "memoryBytes": null
+      },
+      "formatting": {
+        "version": "es-basic-v1",
+        "text": "No hay derrame.\nNódulo derecho de tres milímetros.\n\nConclusión conclusión: sin cambios.",
+        "events": [
+          {
+            "start": 15,
+            "end": 20,
+            "spoken": "punto",
+            "command": "punto",
+            "replacement": "."
+          },
+          {
+            "start": 21,
+            "end": 32,
+            "spoken": "nueva línea",
+            "command": "nueva línea",
+            "replacement": "\n"
+          },
+          {
+            "start": 67,
+            "end": 72,
+            "spoken": "punto",
+            "command": "punto",
+            "replacement": "."
+          },
+          {
+            "start": 73,
+            "end": 86,
+            "spoken": "nuevo párrafo",
+            "command": "nuevo párrafo",
+            "replacement": "\n\n"
+          },
+          {
+            "start": 109,
+            "end": 119,
+            "spoken": "dos puntos",
+            "command": "dos puntos",
+            "replacement": ":"
+          },
+          {
+            "start": 132,
+            "end": 137,
+            "spoken": "punto",
+            "command": "punto",
+            "replacement": "."
+          }
+        ],
+        "warnings": [],
+        "elapsedMs": 0.24069999999483116
+      },
+      "cost": {
+        "currency": "USD",
+        "estimated": 0.00035,
+        "actual": null,
+        "rateDate": "2026-10-28",
+        "note": "Estimación del audio original; no factura. Coste local no medido."
+      },
+      "finishedAt": "2026-10-29T00:26:06.376Z",
+      "evaluation": {
+        "normalizer": "es-literal-v1",
+        "referenceWords": 20,
+        "substitutions": 0,
+        "deletions": 0,
+        "insertions": 1,
+        "wer": 0.05,
+        "silenceInsertions": null,
+        "alignment": [
+          {
+            "kind": "equal",
+            "reference": "no",
+            "hypothesis": "no"
+          },
+          {
+            "kind": "equal",
+            "reference": "hay",
+            "hypothesis": "hay"
+          },
+          {
+            "kind": "equal",
+            "reference": "derrame",
+            "hypothesis": "derrame"
+          },
+          {
+            "kind": "equal",
+            "reference": "punto",
+            "hypothesis": "punto"
+          },
+          {
+            "kind": "equal",
+            "reference": "nueva",
+            "hypothesis": "nueva"
+          },
+          {
+            "kind": "equal",
+            "reference": "línea",
+            "hypothesis": "línea"
+          },
+          {
+            "kind": "equal",
+            "reference": "nódulo",
+            "hypothesis": "nódulo"
+          },
+          {
+            "kind": "equal",
+            "reference": "derecho",
+            "hypothesis": "derecho"
+          },
+          {
+            "kind": "equal",
+            "reference": "de",
+            "hypothesis": "de"
+          },
+          {
+            "kind": "equal",
+            "reference": "tres",
+            "hypothesis": "tres"
+          },
+          {
+            "kind": "equal",
+            "reference": "milímetros",
+            "hypothesis": "milímetros"
+          },
+          {
+            "kind": "equal",
+            "reference": "punto",
+            "hypothesis": "punto"
+          },
+          {
+            "kind": "equal",
+            "reference": "nuevo",
+            "hypothesis": "nuevo"
+          },
+          {
+            "kind": "equal",
+            "reference": "párrafo",
+            "hypothesis": "párrafo"
+          },
+          {
+            "kind": "insertion",
+            "reference": "",
+            "hypothesis": "conclusión"
+          },
+          {
+            "kind": "equal",
+            "reference": "conclusión",
+            "hypothesis": "conclusión"
+          },
+          {
+            "kind": "equal",
+            "reference": "dos",
+            "hypothesis": "dos"
+          },
+          {
+            "kind": "equal",
+            "reference": "puntos",
+            "hypothesis": "puntos"
+          },
+          {
+            "kind": "equal",
+            "reference": "sin",
+            "hypothesis": "sin"
+          },
+          {
+            "kind": "equal",
+            "reference": "cambios",
+            "hypothesis": "cambios"
+          },
+          {
+            "kind": "equal",
+            "reference": "punto",
+            "hypothesis": "punto"
+          }
+        ]
+      },
+      "evaluationReferenceVersion": 1
+    },
+    {
+      "id": "cbba879b-eadb-46cf-a5ba-91c1873ed8a2",
+      "batchId": "1bafcbce-6cfe-4814-bf28-9fa99d3516e6",
+      "audioId": "378576f7-7978-43f8-b431-f77ad837cf99",
+      "audioHash": "0b635a155c77e258656dbe373bef3fc1e4733cbed012e66f9e1f4d1729cbfbb2",
+      "configId": "3fd5aaf0-8ef8-4b16-9d97-3b0911810e79",
+      "configuration": {
+        "name": "Whisper large-v3 · GPU · base",
+        "engine": "whisper",
+        "version": 1,
+        "parentId": null,
+        "model": "whisper-large-v3",
+        "language": "es",
+        "device": "GPU",
+        "precision": "FP16 weights",
+        "beams": 1,
+        "keywords": [],
+        "preparation": "scipy-resample-poly-mono-16k-v1",
+        "mode": "file",
+        "correction": false,
+        "id": "3fd5aaf0-8ef8-4b16-9d97-3b0911810e79",
+        "createdAt": "2026-10-28T19:57:28.888Z"
+      },
+      "referenceAtRun": {
+        "version": 1,
+        "text": "No hay derrame punto nueva línea nódulo derecho de tres milímetros punto nuevo párrafo conclusión dos puntos sin cambios punto",
+        "createdAt": "2026-10-29T00:25:49.589Z"
+      },
+      "repeat": 1,
+      "commandsEnabled": true,
+      "commandVersion": "es-basic-v1",
+      "build": "095eb960e479c0711a2e6ca19f4fa7435171230e",
+      "sourceHash": "b611b4bc19786da5d0b797609632ee5052fcb58ec19a11b884b414f4e4e1961f",
+      "modelRevision": "220761e60602a5ca694c409d5f424563b75d6820",
+      "createdAt": "2026-10-29T00:26:04.01Z",
+      "status": "completed",
+      "text": " No hay derrame.Nueva línea nódulo derecho de 3 milímetros.Nuevo párrafo conclusión 2 puntos sin cambios.",
+      "error": null,
+      "timings": {
+        "queueMs": 2373.631800000003,
+        "prepareMs": 6.332599999994272,
+        "loadMs": 14639.686400012579,
+        "generateMs": 3314.228200004436,
+        "requestMs": 18181.6477,
+        "totalMs": 18196.006999999998,
+        "firstTextMs": null,
+        "requestRtf": 2.567716829786144,
+        "commandMs": 0.11359999999694992
+      },
+      "environment": {
+        "os": "win32",
+        "osRelease": "10.0.26200",
+        "cpu": "Intel(R) Core(TM) Ultra 7 155H",
+        "totalRamBytes": 33752997888,
+        "node": "v24.19.0",
+        "network": null,
+        "source": "uploaded-file"
+      },
+      "audioDurationMs": 7080.861678004535,
+      "startedAt": "2026-10-29T00:26:06.384Z",
+      "derived": {
+        "sha256": "3bc1b15a43e11f44a7faa791e7a5ca522c6bd4046438382be6ce6ed9783f89f7",
+        "sampleRate": 16000,
+        "channels": 1,
+        "format": "PCM16",
+        "originalSha256": "0b635a155c77e258656dbe373bef3fc1e4733cbed012e66f9e1f4d1729cbfbb2"
+      },
+      "result": {
+        "text": " No hay derrame.Nueva línea nódulo derecho de 3 milímetros.Nuevo párrafo conclusión 2 puntos sin cambios.",
+        "loadMs": 14639.686400012579,
+        "generateMs": 3314.228200004436,
+        "cold": true,
+        "device": "GPU",
+        "deviceName": "Intel(R) Arc(TM) Graphics (iGPU)",
+        "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+        "genai": "2026.4.1.0-3408-ab01d1771e4",
+        "memoryBytes": null,
+        "precision": "FP16 weights; f16 inference hint"
+      },
+      "formatting": {
+        "version": "es-basic-v1",
+        "text": " No hay derrame.\nNódulo derecho de 3 milímetros.\n\nConclusión 2 puntos sin cambios.",
+        "events": [
+          {
+            "start": 16,
+            "end": 27,
+            "spoken": "Nueva línea",
+            "command": "nueva línea",
+            "replacement": "\n"
+          },
+          {
+            "start": 59,
+            "end": 72,
+            "spoken": "Nuevo párrafo",
+            "command": "nuevo párrafo",
+            "replacement": "\n\n"
+          }
+        ],
+        "warnings": [],
+        "elapsedMs": 0.11359999999694992
+      },
+      "cost": {
+        "currency": "USD",
+        "estimated": null,
+        "actual": null,
+        "rateDate": "2026-10-28",
+        "note": "Estimación del audio original; no factura. Coste local no medido."
+      },
+      "finishedAt": "2026-10-29T00:26:24.582Z",
+      "evaluation": {
+        "normalizer": "es-literal-v1",
+        "referenceWords": 20,
+        "substitutions": 2,
+        "deletions": 3,
+        "insertions": 0,
+        "wer": 0.25,
+        "silenceInsertions": null,
+        "alignment": [
+          {
+            "kind": "equal",
+            "reference": "no",
+            "hypothesis": "no"
+          },
+          {
+            "kind": "equal",
+            "reference": "hay",
+            "hypothesis": "hay"
+          },
+          {
+            "kind": "equal",
+            "reference": "derrame",
+            "hypothesis": "derrame"
+          },
+          {
+            "kind": "deletion",
+            "reference": "punto",
+            "hypothesis": ""
+          },
+          {
+            "kind": "equal",
+            "reference": "nueva",
+            "hypothesis": "nueva"
+          },
+          {
+            "kind": "equal",
+            "reference": "línea",
+            "hypothesis": "línea"
+          },
+          {
+            "kind": "equal",
+            "reference": "nódulo",
+            "hypothesis": "nódulo"
+          },
+          {
+            "kind": "equal",
+            "reference": "derecho",
+            "hypothesis": "derecho"
+          },
+          {
+            "kind": "equal",
+            "reference": "de",
+            "hypothesis": "de"
+          },
+          {
+            "kind": "substitution",
+            "reference": "tres",
+            "hypothesis": "3"
+          },
+          {
+            "kind": "equal",
+            "reference": "milímetros",
+            "hypothesis": "milímetros"
+          },
+          {
+            "kind": "deletion",
+            "reference": "punto",
+            "hypothesis": ""
+          },
+          {
+            "kind": "equal",
+            "reference": "nuevo",
+            "hypothesis": "nuevo"
+          },
+          {
+            "kind": "equal",
+            "reference": "párrafo",
+            "hypothesis": "párrafo"
+          },
+          {
+            "kind": "equal",
+            "reference": "conclusión",
+            "hypothesis": "conclusión"
+          },
+          {
+            "kind": "substitution",
+            "reference": "dos",
+            "hypothesis": "2"
+          },
+          {
+            "kind": "equal",
+            "reference": "puntos",
+            "hypothesis": "puntos"
+          },
+          {
+            "kind": "equal",
+            "reference": "sin",
+            "hypothesis": "sin"
+          },
+          {
+            "kind": "equal",
+            "reference": "cambios",
+            "hypothesis": "cambios"
+          },
+          {
+            "kind": "deletion",
+            "reference": "punto",
+            "hypothesis": ""
+          }
+        ]
+      },
+      "evaluationReferenceVersion": 1
+    },
+    {
+      "id": "4584b61d-aaab-4acf-81cf-3bf43a22aa75",
+      "batchId": "ee85a453-1752-430e-841b-1723f96ef6d2",
+      "audioId": "378576f7-7978-43f8-b431-f77ad837cf99",
+      "audioHash": "0b635a155c77e258656dbe373bef3fc1e4733cbed012e66f9e1f4d1729cbfbb2",
+      "configId": "3fd5aaf0-8ef8-4b16-9d97-3b0911810e79",
+      "configuration": {
+        "name": "Whisper large-v3 · GPU · base",
+        "engine": "whisper",
+        "version": 1,
+        "parentId": null,
+        "model": "whisper-large-v3",
+        "language": "es",
+        "device": "GPU",
+        "precision": "FP16 weights",
+        "beams": 1,
+        "keywords": [],
+        "preparation": "scipy-resample-poly-mono-16k-v1",
+        "mode": "file",
+        "correction": false,
+        "id": "3fd5aaf0-8ef8-4b16-9d97-3b0911810e79",
+        "createdAt": "2026-10-28T19:57:28.888Z"
+      },
+      "referenceAtRun": {
+        "version": 1,
+        "text": "No hay derrame punto nueva línea nódulo derecho de tres milímetros punto nuevo párrafo conclusión dos puntos sin cambios punto",
+        "createdAt": "2026-10-29T00:25:49.589Z"
+      },
+      "repeat": 1,
+      "commandsEnabled": true,
+      "commandVersion": "es-basic-v1",
+      "build": "095eb960e479c0711a2e6ca19f4fa7435171230e",
+      "sourceHash": "e3dbf1100ac25288bffd072e8beaa9c268a01d1c65a752c4b536adf30d68edf4",
+      "modelRevision": "220761e60602a5ca694c409d5f424563b75d6820",
+      "createdAt": "2026-10-29T00:28:07.079Z",
+      "status": "completed",
+      "text": " No hay derrame.Nueva línea nódulo derecho de 3 milímetros.Nuevo párrafo conclusión 2 puntos sin cambios.",
+      "error": null,
+      "timings": {
+        "queueMs": 7.487300000000687,
+        "prepareMs": 1001.9000000000015,
+        "loadMs": 10227.295499993488,
+        "generateMs": 2564.454499981366,
+        "requestMs": 13033.984300000004,
+        "totalMs": 14045.880799999999,
+        "firstTextMs": null,
+        "requestRtf": 1.8407342061895953,
+        "commandMs": 1.4600000000064028
+      },
+      "environment": {
+        "os": "win32",
+        "osRelease": "10.0.26200",
+        "cpu": "Intel(R) Core(TM) Ultra 7 155H",
+        "totalRamBytes": 33752997888,
+        "node": "v24.19.0",
+        "network": null,
+        "source": "uploaded-file"
+      },
+      "audioDurationMs": 7080.861678004535,
+      "startedAt": "2026-10-29T00:28:07.087Z",
+      "derived": {
+        "sha256": "3bc1b15a43e11f44a7faa791e7a5ca522c6bd4046438382be6ce6ed9783f89f7",
+        "sampleRate": 16000,
+        "channels": 1,
+        "format": "PCM16",
+        "originalSha256": "0b635a155c77e258656dbe373bef3fc1e4733cbed012e66f9e1f4d1729cbfbb2"
+      },
+      "result": {
+        "text": " No hay derrame.Nueva línea nódulo derecho de 3 milímetros.Nuevo párrafo conclusión 2 puntos sin cambios.",
+        "loadMs": 10227.295499993488,
+        "generateMs": 2564.454499981366,
+        "cold": true,
+        "device": "GPU",
+        "deviceName": "Intel(R) Arc(TM) Graphics (iGPU)",
+        "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+        "genai": "2026.4.1.0-3408-ab01d1771e4",
+        "memoryBytes": null,
+        "precision": "FP16 weights; f16 inference hint"
+      },
+      "formatting": {
+        "version": "es-basic-v1",
+        "text": " No hay derrame.\nNódulo derecho de 3 milímetros.\n\nConclusión: sin cambios.",
+        "events": [
+          {
+            "start": 16,
+            "end": 27,
+            "spoken": "Nueva línea",
+            "command": "nueva línea",
+            "replacement": "\n"
+          },
+          {
+            "start": 59,
+            "end": 72,
+            "spoken": "Nuevo párrafo",
+            "command": "nuevo párrafo",
+            "replacement": "\n\n"
+          },
+          {
+            "start": 84,
+            "end": 92,
+            "spoken": "2 puntos",
+            "command": "dos puntos",
+            "replacement": ":"
+          }
+        ],
+        "warnings": [],
+        "elapsedMs": 1.4600000000064028
+      },
+      "cost": {
+        "currency": "USD",
+        "estimated": null,
+        "actual": null,
+        "rateDate": "2026-10-28",
+        "note": "Estimación del audio original; no factura. Coste local no medido."
+      },
+      "finishedAt": "2026-10-29T00:28:21.133Z",
+      "evaluation": {
+        "normalizer": "es-literal-v1",
+        "referenceWords": 20,
+        "substitutions": 2,
+        "deletions": 3,
+        "insertions": 0,
+        "wer": 0.25,
+        "silenceInsertions": null,
+        "alignment": [
+          {
+            "kind": "equal",
+            "reference": "no",
+            "hypothesis": "no"
+          },
+          {
+            "kind": "equal",
+            "reference": "hay",
+            "hypothesis": "hay"
+          },
+          {
+            "kind": "equal",
+            "reference": "derrame",
+            "hypothesis": "derrame"
+          },
+          {
+            "kind": "deletion",
+            "reference": "punto",
+            "hypothesis": ""
+          },
+          {
+            "kind": "equal",
+            "reference": "nueva",
+            "hypothesis": "nueva"
+          },
+          {
+            "kind": "equal",
+            "reference": "línea",
+            "hypothesis": "línea"
+          },
+          {
+            "kind": "equal",
+            "reference": "nódulo",
+            "hypothesis": "nódulo"
+          },
+          {
+            "kind": "equal",
+            "reference": "derecho",
+            "hypothesis": "derecho"
+          },
+          {
+            "kind": "equal",
+            "reference": "de",
+            "hypothesis": "de"
+          },
+          {
+            "kind": "substitution",
+            "reference": "tres",
+            "hypothesis": "3"
+          },
+          {
+            "kind": "equal",
+            "reference": "milímetros",
+            "hypothesis": "milímetros"
+          },
+          {
+            "kind": "deletion",
+            "reference": "punto",
+            "hypothesis": ""
+          },
+          {
+            "kind": "equal",
+            "reference": "nuevo",
+            "hypothesis": "nuevo"
+          },
+          {
+            "kind": "equal",
+            "reference": "párrafo",
+            "hypothesis": "párrafo"
+          },
+          {
+            "kind": "equal",
+            "reference": "conclusión",
+            "hypothesis": "conclusión"
+          },
+          {
+            "kind": "substitution",
+            "reference": "dos",
+            "hypothesis": "2"
+          },
+          {
+            "kind": "equal",
+            "reference": "puntos",
+            "hypothesis": "puntos"
+          },
+          {
+            "kind": "equal",
+            "reference": "sin",
+            "hypothesis": "sin"
+          },
+          {
+            "kind": "equal",
+            "reference": "cambios",
+            "hypothesis": "cambios"
+          },
+          {
+            "kind": "deletion",
+            "reference": "punto",
+            "hypothesis": ""
+          }
+        ]
+      },
+      "evaluationReferenceVersion": 1
+    },
+    {
+      "id": "342a4daf-2f84-42e8-97f0-c52f23010375",
+      "batchId": "ee85a453-1752-430e-841b-1723f96ef6d2",
+      "audioId": "378576f7-7978-43f8-b431-f77ad837cf99",
+      "audioHash": "0b635a155c77e258656dbe373bef3fc1e4733cbed012e66f9e1f4d1729cbfbb2",
+      "configId": "3fd5aaf0-8ef8-4b16-9d97-3b0911810e79",
+      "configuration": {
+        "name": "Whisper large-v3 · GPU · base",
+        "engine": "whisper",
+        "version": 1,
+        "parentId": null,
+        "model": "whisper-large-v3",
+        "language": "es",
+        "device": "GPU",
+        "precision": "FP16 weights",
+        "beams": 1,
+        "keywords": [],
+        "preparation": "scipy-resample-poly-mono-16k-v1",
+        "mode": "file",
+        "correction": false,
+        "id": "3fd5aaf0-8ef8-4b16-9d97-3b0911810e79",
+        "createdAt": "2026-10-28T19:57:28.888Z"
+      },
+      "referenceAtRun": {
+        "version": 1,
+        "text": "No hay derrame punto nueva línea nódulo derecho de tres milímetros punto nuevo párrafo conclusión dos puntos sin cambios punto",
+        "createdAt": "2026-10-29T00:25:49.589Z"
+      },
+      "repeat": 2,
+      "commandsEnabled": true,
+      "commandVersion": "es-basic-v1",
+      "build": "095eb960e479c0711a2e6ca19f4fa7435171230e",
+      "sourceHash": "e3dbf1100ac25288bffd072e8beaa9c268a01d1c65a752c4b536adf30d68edf4",
+      "modelRevision": "220761e60602a5ca694c409d5f424563b75d6820",
+      "createdAt": "2026-10-29T00:28:07.08Z",
+      "status": "completed",
+      "text": " No hay derrame.Nueva línea nódulo derecho de 3 milímetros.Nuevo párrafo conclusión 2 puntos sin cambios.",
+      "error": null,
+      "timings": {
+        "queueMs": 14059.170899999997,
+        "prepareMs": 10.83129999999801,
+        "loadMs": 0,
+        "generateMs": 2089.354399999138,
+        "requestMs": 2092.186800000003,
+        "totalMs": 2110.292500000003,
+        "firstTextMs": null,
+        "requestRtf": 0.2954706496384497,
+        "commandMs": 0.21210000000428408
+      },
+      "environment": {
+        "os": "win32",
+        "osRelease": "10.0.26200",
+        "cpu": "Intel(R) Core(TM) Ultra 7 155H",
+        "totalRamBytes": 33752997888,
+        "node": "v24.19.0",
+        "network": null,
+        "source": "uploaded-file"
+      },
+      "audioDurationMs": 7080.861678004535,
+      "startedAt": "2026-10-29T00:28:21.139Z",
+      "derived": {
+        "sha256": "3bc1b15a43e11f44a7faa791e7a5ca522c6bd4046438382be6ce6ed9783f89f7",
+        "sampleRate": 16000,
+        "channels": 1,
+        "format": "PCM16",
+        "originalSha256": "0b635a155c77e258656dbe373bef3fc1e4733cbed012e66f9e1f4d1729cbfbb2"
+      },
+      "result": {
+        "text": " No hay derrame.Nueva línea nódulo derecho de 3 milímetros.Nuevo párrafo conclusión 2 puntos sin cambios.",
+        "loadMs": 0,
+        "generateMs": 2089.354399999138,
+        "cold": false,
+        "device": "GPU",
+        "deviceName": "Intel(R) Arc(TM) Graphics (iGPU)",
+        "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+        "genai": "2026.4.1.0-3408-ab01d1771e4",
+        "memoryBytes": null,
+        "precision": "FP16 weights; f16 inference hint"
+      },
+      "formatting": {
+        "version": "es-basic-v1",
+        "text": " No hay derrame.\nNódulo derecho de 3 milímetros.\n\nConclusión: sin cambios.",
+        "events": [
+          {
+            "start": 16,
+            "end": 27,
+            "spoken": "Nueva línea",
+            "command": "nueva línea",
+            "replacement": "\n"
+          },
+          {
+            "start": 59,
+            "end": 72,
+            "spoken": "Nuevo párrafo",
+            "command": "nuevo párrafo",
+            "replacement": "\n\n"
+          },
+          {
+            "start": 84,
+            "end": 92,
+            "spoken": "2 puntos",
+            "command": "dos puntos",
+            "replacement": ":"
+          }
+        ],
+        "warnings": [],
+        "elapsedMs": 0.21210000000428408
+      },
+      "cost": {
+        "currency": "USD",
+        "estimated": null,
+        "actual": null,
+        "rateDate": "2026-10-28",
+        "note": "Estimación del audio original; no factura. Coste local no medido."
+      },
+      "finishedAt": "2026-10-29T00:28:23.25Z",
+      "evaluation": {
+        "normalizer": "es-literal-v1",
+        "referenceWords": 20,
+        "substitutions": 2,
+        "deletions": 3,
+        "insertions": 0,
+        "wer": 0.25,
+        "silenceInsertions": null,
+        "alignment": [
+          {
+            "kind": "equal",
+            "reference": "no",
+            "hypothesis": "no"
+          },
+          {
+            "kind": "equal",
+            "reference": "hay",
+            "hypothesis": "hay"
+          },
+          {
+            "kind": "equal",
+            "reference": "derrame",
+            "hypothesis": "derrame"
+          },
+          {
+            "kind": "deletion",
+            "reference": "punto",
+            "hypothesis": ""
+          },
+          {
+            "kind": "equal",
+            "reference": "nueva",
+            "hypothesis": "nueva"
+          },
+          {
+            "kind": "equal",
+            "reference": "línea",
+            "hypothesis": "línea"
+          },
+          {
+            "kind": "equal",
+            "reference": "nódulo",
+            "hypothesis": "nódulo"
+          },
+          {
+            "kind": "equal",
+            "reference": "derecho",
+            "hypothesis": "derecho"
+          },
+          {
+            "kind": "equal",
+            "reference": "de",
+            "hypothesis": "de"
+          },
+          {
+            "kind": "substitution",
+            "reference": "tres",
+            "hypothesis": "3"
+          },
+          {
+            "kind": "equal",
+            "reference": "milímetros",
+            "hypothesis": "milímetros"
+          },
+          {
+            "kind": "deletion",
+            "reference": "punto",
+            "hypothesis": ""
+          },
+          {
+            "kind": "equal",
+            "reference": "nuevo",
+            "hypothesis": "nuevo"
+          },
+          {
+            "kind": "equal",
+            "reference": "párrafo",
+            "hypothesis": "párrafo"
+          },
+          {
+            "kind": "equal",
+            "reference": "conclusión",
+            "hypothesis": "conclusión"
+          },
+          {
+            "kind": "substitution",
+            "reference": "dos",
+            "hypothesis": "2"
+          },
+          {
+            "kind": "equal",
+            "reference": "puntos",
+            "hypothesis": "puntos"
+          },
+          {
+            "kind": "equal",
+            "reference": "sin",
+            "hypothesis": "sin"
+          },
+          {
+            "kind": "equal",
+            "reference": "cambios",
+            "hypothesis": "cambios"
+          },
+          {
+            "kind": "deletion",
+            "reference": "punto",
+            "hypothesis": ""
+          }
+        ]
+      },
+      "evaluationReferenceVersion": 1
+    }
+  ]
+}

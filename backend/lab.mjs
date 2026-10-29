@@ -8,6 +8,7 @@ import { createInterface } from 'node:readline';
 import os from 'node:os';
 import {attachLiveBridge,demoConnection} from './live-bridge.mjs';
 import {loadMetaKey,saveMetaKey,checkMetaKey} from './meta-key.mjs';
+import {formatDictation,COMMAND_VERSION} from './dictation-commands.mjs';
 import { wavInfo, hash, configuration, score, csv } from './lab-core.mjs';
 const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 export const MODEL_REVISION='220761e60602a5ca694c409d5f424563b75d6820';
@@ -58,7 +59,7 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
   for(const r of db.runs) if(['queued','running'].includes(r.status)){r.status='interrupted';r.error='Servidor reiniciado antes de terminar.';}
   save();
   let build='unknown';try{build=execFileSync('git',['rev-parse','HEAD'],{cwd:ROOT,encoding:'utf8'}).trim();}catch{}
-  const sourceHash=hash(Buffer.concat(['backend/lab.mjs','backend/lab-core.mjs','backend/lab-worker.py','backend/live-bridge.mjs','apps/desktop/live.js','apps/desktop/desktop.js','apps/mobile/mobile.js','apps/shared/metrics.js'].map(f=>fs.readFileSync(path.join(ROOT,f)))));
+  const sourceHash=hash(Buffer.concat(['backend/lab.mjs','backend/meta-key.mjs','backend/dictation-commands.mjs','backend/lab-core.mjs','backend/lab-worker.py','backend/live-bridge.mjs','apps/desktop/live.js','apps/desktop/desktop.js','apps/mobile/mobile.js','apps/shared/metrics.js'].map(f=>fs.readFileSync(path.join(ROOT,f)))));
   let apiKey=loadMetaKey(keyFile),active=null,closed=false;
   const queuedAt=new Map();
   const viewRun=r=>{const a=db.audios.find(a=>a.id===r.audioId),ref=a?.references.at(-1);return {...r,evaluation:r.status==='completed'?score(ref?.text??null,r.text):null,evaluationReferenceVersion:ref?.version??null};};
@@ -81,7 +82,9 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
       if(controller.signal.aborted||r.status==='cancelled')throw new Error('Cancelado.');
       r.timings.requestMs=performance.now()-requestStart;r.timings.loadMs=result.loadMs??null;r.timings.generateMs=result.generateMs??null;
       r.timings.requestRtf=r.timings.requestMs/audio.durationMs;
-      r.result=result;r.text=result.text;r.status='completed';
+      r.result=result;r.text=result.text;
+      r.formatting=r.commandsEnabled?formatDictation(r.text):null;
+      r.timings.commandMs=r.formatting?.elapsedMs??0;r.status='completed';
       r.cost={currency:'USD',estimated:config.engine==='muse'?Math.floor(audio.durationMs/1000)*.18/3600:null,actual:null,rateDate:'2026-10-28',note:'Estimación del audio original; no factura. Coste local no medido.'};
     } catch(e){if(r.status!=='cancelled'){r.status=controller.signal.aborted?'timeout':'error';r.error=String(e.message).slice(0,1000);}}
     finally{clearTimeout(timeout);r.timings.totalMs=performance.now()-start;r.finishedAt=new Date().toISOString();save();active=null;setImmediate(pump);}
@@ -140,7 +143,7 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
         if(db.runs.filter(r=>['queued','running'].includes(r.status)).length+aids.length*cids.length*repeats>100)throw new Error('Cola llena.');
         const batchId=randomUUID(),created=[];
         for(let rep=0;rep<repeats;rep++)for(let ai=0;ai<audios.length;ai++)for(const c of ((rep+ai)%2?[...configs].reverse():configs)){
-          const a=audios[ai],r={id:randomUUID(),batchId,audioId:a.id,audioHash:a.sha256,configId:c.id,configuration:structuredClone(c),referenceAtRun:structuredClone(a.references.at(-1)??null),repeat:rep+1,build,sourceHash,modelRevision:c.engine==='whisper'?MODEL_REVISION:null,createdAt:new Date().toISOString(),status:'queued',text:null,error:null,timings:{queueMs:null,prepareMs:null,loadMs:null,generateMs:null,requestMs:null,totalMs:null,firstTextMs:null}};
+          const a=audios[ai],r={id:randomUUID(),batchId,audioId:a.id,audioHash:a.sha256,configId:c.id,configuration:structuredClone(c),referenceAtRun:structuredClone(a.references.at(-1)??null),repeat:rep+1,commandsEnabled:m.commandsEnabled!==false,commandVersion:COMMAND_VERSION,build,sourceHash,modelRevision:c.engine==='whisper'?MODEL_REVISION:null,createdAt:new Date().toISOString(),status:'queued',text:null,error:null,timings:{queueMs:null,prepareMs:null,loadMs:null,generateMs:null,requestMs:null,totalMs:null,firstTextMs:null}};
           r.environment={os:os.platform(),osRelease:os.release(),cpu:os.cpus()[0]?.model??null,totalRamBytes:os.totalmem(),node:process.version,network:null,source:'uploaded-file'};
           r.audioDurationMs=a.durationMs;
           db.runs.push(r);queuedAt.set(r.id,performance.now());created.push(r.id);

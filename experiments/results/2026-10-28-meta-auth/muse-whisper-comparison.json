@@ -1,0 +1,483 @@
+[
+  {
+    "id": "ea370dfb-03d8-4f15-8a8e-33b179c0bc0f",
+    "batchId": "50370160-86b8-49cc-b7e3-df376319e943",
+    "audioId": "a8c4e61c-efcb-42e3-a16c-de13a7decada",
+    "audioHash": "c34ee1f268b746296881fcaf441565195c8d80ae78035c1b39965379441bf130",
+    "configId": "80048dff-51fd-414f-a079-656b247336e4",
+    "configuration": {
+      "name": "Muse · base",
+      "engine": "muse",
+      "version": 1,
+      "parentId": null,
+      "model": "muse-voice-transcribe-1.0",
+      "language": "es",
+      "device": null,
+      "precision": null,
+      "beams": null,
+      "keywords": [],
+      "preparation": "scipy-resample-poly-mono-16k-v1",
+      "mode": "file",
+      "correction": false,
+      "id": "80048dff-51fd-414f-a079-656b247336e4",
+      "createdAt": "2026-10-28T19:57:28.887Z"
+    },
+    "referenceAtRun": {
+      "version": 3,
+      "text": "No se observa derrame pleural. Nódulo de tres milímetros en el pulmón derecho.",
+      "createdAt": "2026-10-28T23:47:48.71Z"
+    },
+    "repeat": 1,
+    "build": "4aa71d7c86e2cd8b61943beab8a14ac90547d14d",
+    "sourceHash": "b7b2764fc69880afb1b951a777625e1eddb66207e477fada5822cd05412c480c",
+    "modelRevision": null,
+    "createdAt": "2026-10-29T00:13:13.529Z",
+    "status": "completed",
+    "text": "No se observa derrame pleural. Nódulo de tres milímetros en el pulmón derecho.",
+    "error": null,
+    "timings": {
+      "queueMs": 5.701200000010431,
+      "prepareMs": 968.2509999999311,
+      "loadMs": null,
+      "generateMs": null,
+      "requestMs": 2213.515800000052,
+      "totalMs": 3187.7277000000468,
+      "firstTextMs": null,
+      "requestRtf": 0.39937177519393474
+    },
+    "environment": {
+      "os": "win32",
+      "osRelease": "10.0.26200",
+      "cpu": "Intel(R) Core(TM) Ultra 7 155H",
+      "totalRamBytes": 33752997888,
+      "node": "v24.19.0",
+      "network": null,
+      "source": "uploaded-file"
+    },
+    "audioDurationMs": 5542.494331065759,
+    "startedAt": "2026-10-29T00:13:13.536Z",
+    "derived": {
+      "sha256": "083c03ec5b37a2030dcbd63654ba46d2148ca401551986b5a9c1188368ed2d04",
+      "sampleRate": 16000,
+      "channels": 1,
+      "format": "PCM16",
+      "originalSha256": "c34ee1f268b746296881fcaf441565195c8d80ae78035c1b39965379441bf130"
+    },
+    "result": {
+      "text": "No se observa derrame pleural. Nódulo de tres milímetros en el pulmón derecho.",
+      "providerAudioDurationMs": 5600,
+      "device": "Meta API",
+      "modelRevision": null,
+      "memoryBytes": null
+    },
+    "cost": {
+      "currency": "USD",
+      "estimated": 0.00024999999999999995,
+      "actual": null,
+      "rateDate": "2026-10-28",
+      "note": "Estimación del audio original; no factura. Coste local no medido."
+    },
+    "finishedAt": "2026-10-29T00:13:16.723Z",
+    "evaluation": {
+      "normalizer": "es-literal-v1",
+      "referenceWords": 13,
+      "substitutions": 0,
+      "deletions": 0,
+      "insertions": 0,
+      "wer": 0,
+      "silenceInsertions": null,
+      "alignment": [
+        {
+          "kind": "equal",
+          "reference": "no",
+          "hypothesis": "no"
+        },
+        {
+          "kind": "equal",
+          "reference": "se",
+          "hypothesis": "se"
+        },
+        {
+          "kind": "equal",
+          "reference": "observa",
+          "hypothesis": "observa"
+        },
+        {
+          "kind": "equal",
+          "reference": "derrame",
+          "hypothesis": "derrame"
+        },
+        {
+          "kind": "equal",
+          "reference": "pleural",
+          "hypothesis": "pleural"
+        },
+        {
+          "kind": "equal",
+          "reference": "nódulo",
+          "hypothesis": "nódulo"
+        },
+        {
+          "kind": "equal",
+          "reference": "de",
+          "hypothesis": "de"
+        },
+        {
+          "kind": "equal",
+          "reference": "tres",
+          "hypothesis": "tres"
+        },
+        {
+          "kind": "equal",
+          "reference": "milímetros",
+          "hypothesis": "milímetros"
+        },
+        {
+          "kind": "equal",
+          "reference": "en",
+          "hypothesis": "en"
+        },
+        {
+          "kind": "equal",
+          "reference": "el",
+          "hypothesis": "el"
+        },
+        {
+          "kind": "equal",
+          "reference": "pulmón",
+          "hypothesis": "pulmón"
+        },
+        {
+          "kind": "equal",
+          "reference": "derecho",
+          "hypothesis": "derecho"
+        }
+      ]
+    },
+    "evaluationReferenceVersion": 3
+  },
+  {
+    "id": "3f5b6b02-1776-4117-bd40-26ef630476c8",
+    "batchId": "f0f8caea-c159-422e-bfac-4f6068040ca2",
+    "audioId": "a8c4e61c-efcb-42e3-a16c-de13a7decada",
+    "audioHash": "c34ee1f268b746296881fcaf441565195c8d80ae78035c1b39965379441bf130",
+    "configId": "3fd5aaf0-8ef8-4b16-9d97-3b0911810e79",
+    "configuration": {
+      "name": "Whisper large-v3 · GPU · base",
+      "engine": "whisper",
+      "version": 1,
+      "parentId": null,
+      "model": "whisper-large-v3",
+      "language": "es",
+      "device": "GPU",
+      "precision": "FP16 weights",
+      "beams": 1,
+      "keywords": [],
+      "preparation": "scipy-resample-poly-mono-16k-v1",
+      "mode": "file",
+      "correction": false,
+      "id": "3fd5aaf0-8ef8-4b16-9d97-3b0911810e79",
+      "createdAt": "2026-10-28T19:57:28.888Z"
+    },
+    "referenceAtRun": {
+      "version": 3,
+      "text": "No se observa derrame pleural. Nódulo de tres milímetros en el pulmón derecho.",
+      "createdAt": "2026-10-28T23:47:48.71Z"
+    },
+    "repeat": 1,
+    "build": "4aa71d7c86e2cd8b61943beab8a14ac90547d14d",
+    "sourceHash": "b7b2764fc69880afb1b951a777625e1eddb66207e477fada5822cd05412c480c",
+    "modelRevision": "220761e60602a5ca694c409d5f424563b75d6820",
+    "createdAt": "2026-10-29T00:14:21.147Z",
+    "status": "completed",
+    "text": " No se observa derrame pleural. Nódulo de 3 milímetros en el pulmón derecho.",
+    "error": null,
+    "timings": {
+      "queueMs": 5.431100000045262,
+      "prepareMs": 4.674200000008568,
+      "loadMs": 11218.051499978174,
+      "generateMs": 2290.153599984478,
+      "requestMs": 13718.197600000072,
+      "totalMs": 13730.079700000002,
+      "firstTextMs": null,
+      "requestRtf": 2.4750945658364287
+    },
+    "environment": {
+      "os": "win32",
+      "osRelease": "10.0.26200",
+      "cpu": "Intel(R) Core(TM) Ultra 7 155H",
+      "totalRamBytes": 33752997888,
+      "node": "v24.19.0",
+      "network": null,
+      "source": "uploaded-file"
+    },
+    "audioDurationMs": 5542.494331065759,
+    "startedAt": "2026-10-29T00:14:21.153Z",
+    "derived": {
+      "sha256": "083c03ec5b37a2030dcbd63654ba46d2148ca401551986b5a9c1188368ed2d04",
+      "sampleRate": 16000,
+      "channels": 1,
+      "format": "PCM16",
+      "originalSha256": "c34ee1f268b746296881fcaf441565195c8d80ae78035c1b39965379441bf130"
+    },
+    "result": {
+      "text": " No se observa derrame pleural. Nódulo de 3 milímetros en el pulmón derecho.",
+      "loadMs": 11218.051499978174,
+      "generateMs": 2290.153599984478,
+      "cold": true,
+      "device": "GPU",
+      "deviceName": "Intel(R) Arc(TM) Graphics (iGPU)",
+      "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+      "genai": "2026.4.1.0-3408-ab01d1771e4",
+      "memoryBytes": null,
+      "precision": "FP16 weights; f16 inference hint"
+    },
+    "cost": {
+      "currency": "USD",
+      "estimated": null,
+      "actual": null,
+      "rateDate": "2026-10-28",
+      "note": "Estimación del audio original; no factura. Coste local no medido."
+    },
+    "finishedAt": "2026-10-29T00:14:34.883Z",
+    "evaluation": {
+      "normalizer": "es-literal-v1",
+      "referenceWords": 13,
+      "substitutions": 1,
+      "deletions": 0,
+      "insertions": 0,
+      "wer": 0.07692307692307693,
+      "silenceInsertions": null,
+      "alignment": [
+        {
+          "kind": "equal",
+          "reference": "no",
+          "hypothesis": "no"
+        },
+        {
+          "kind": "equal",
+          "reference": "se",
+          "hypothesis": "se"
+        },
+        {
+          "kind": "equal",
+          "reference": "observa",
+          "hypothesis": "observa"
+        },
+        {
+          "kind": "equal",
+          "reference": "derrame",
+          "hypothesis": "derrame"
+        },
+        {
+          "kind": "equal",
+          "reference": "pleural",
+          "hypothesis": "pleural"
+        },
+        {
+          "kind": "equal",
+          "reference": "nódulo",
+          "hypothesis": "nódulo"
+        },
+        {
+          "kind": "equal",
+          "reference": "de",
+          "hypothesis": "de"
+        },
+        {
+          "kind": "substitution",
+          "reference": "tres",
+          "hypothesis": "3"
+        },
+        {
+          "kind": "equal",
+          "reference": "milímetros",
+          "hypothesis": "milímetros"
+        },
+        {
+          "kind": "equal",
+          "reference": "en",
+          "hypothesis": "en"
+        },
+        {
+          "kind": "equal",
+          "reference": "el",
+          "hypothesis": "el"
+        },
+        {
+          "kind": "equal",
+          "reference": "pulmón",
+          "hypothesis": "pulmón"
+        },
+        {
+          "kind": "equal",
+          "reference": "derecho",
+          "hypothesis": "derecho"
+        }
+      ]
+    },
+    "evaluationReferenceVersion": 3
+  },
+  {
+    "id": "1298102e-116b-4626-89d4-1379e0b5f5fb",
+    "batchId": "be2f37d2-8c37-402c-83b3-d69758e1e765",
+    "audioId": "a8c4e61c-efcb-42e3-a16c-de13a7decada",
+    "audioHash": "c34ee1f268b746296881fcaf441565195c8d80ae78035c1b39965379441bf130",
+    "configId": "3fd5aaf0-8ef8-4b16-9d97-3b0911810e79",
+    "configuration": {
+      "name": "Whisper large-v3 · GPU · base",
+      "engine": "whisper",
+      "version": 1,
+      "parentId": null,
+      "model": "whisper-large-v3",
+      "language": "es",
+      "device": "GPU",
+      "precision": "FP16 weights",
+      "beams": 1,
+      "keywords": [],
+      "preparation": "scipy-resample-poly-mono-16k-v1",
+      "mode": "file",
+      "correction": false,
+      "id": "3fd5aaf0-8ef8-4b16-9d97-3b0911810e79",
+      "createdAt": "2026-10-28T19:57:28.888Z"
+    },
+    "referenceAtRun": {
+      "version": 3,
+      "text": "No se observa derrame pleural. Nódulo de tres milímetros en el pulmón derecho.",
+      "createdAt": "2026-10-28T23:47:48.71Z"
+    },
+    "repeat": 1,
+    "build": "4aa71d7c86e2cd8b61943beab8a14ac90547d14d",
+    "sourceHash": "b7b2764fc69880afb1b951a777625e1eddb66207e477fada5822cd05412c480c",
+    "modelRevision": "220761e60602a5ca694c409d5f424563b75d6820",
+    "createdAt": "2026-10-29T00:14:42.089Z",
+    "status": "completed",
+    "text": " No se observa derrame pleural. Nódulo de 3 milímetros en el pulmón derecho.",
+    "error": null,
+    "timings": {
+      "queueMs": 10.48030000005383,
+      "prepareMs": 11.51030000008177,
+      "loadMs": 0,
+      "generateMs": 1915.6851000152528,
+      "requestMs": 1921.0221000000602,
+      "totalMs": 1941.1202999999514,
+      "firstTextMs": null,
+      "requestRtf": 0.34659883894381344
+    },
+    "environment": {
+      "os": "win32",
+      "osRelease": "10.0.26200",
+      "cpu": "Intel(R) Core(TM) Ultra 7 155H",
+      "totalRamBytes": 33752997888,
+      "node": "v24.19.0",
+      "network": null,
+      "source": "uploaded-file"
+    },
+    "audioDurationMs": 5542.494331065759,
+    "startedAt": "2026-10-29T00:14:42.1Z",
+    "derived": {
+      "sha256": "083c03ec5b37a2030dcbd63654ba46d2148ca401551986b5a9c1188368ed2d04",
+      "sampleRate": 16000,
+      "channels": 1,
+      "format": "PCM16",
+      "originalSha256": "c34ee1f268b746296881fcaf441565195c8d80ae78035c1b39965379441bf130"
+    },
+    "result": {
+      "text": " No se observa derrame pleural. Nódulo de 3 milímetros en el pulmón derecho.",
+      "loadMs": 0,
+      "generateMs": 1915.6851000152528,
+      "cold": false,
+      "device": "GPU",
+      "deviceName": "Intel(R) Arc(TM) Graphics (iGPU)",
+      "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+      "genai": "2026.4.1.0-3408-ab01d1771e4",
+      "memoryBytes": null,
+      "precision": "FP16 weights; f16 inference hint"
+    },
+    "cost": {
+      "currency": "USD",
+      "estimated": null,
+      "actual": null,
+      "rateDate": "2026-10-28",
+      "note": "Estimación del audio original; no factura. Coste local no medido."
+    },
+    "finishedAt": "2026-10-29T00:14:44.041Z",
+    "evaluation": {
+      "normalizer": "es-literal-v1",
+      "referenceWords": 13,
+      "substitutions": 1,
+      "deletions": 0,
+      "insertions": 0,
+      "wer": 0.07692307692307693,
+      "silenceInsertions": null,
+      "alignment": [
+        {
+          "kind": "equal",
+          "reference": "no",
+          "hypothesis": "no"
+        },
+        {
+          "kind": "equal",
+          "reference": "se",
+          "hypothesis": "se"
+        },
+        {
+          "kind": "equal",
+          "reference": "observa",
+          "hypothesis": "observa"
+        },
+        {
+          "kind": "equal",
+          "reference": "derrame",
+          "hypothesis": "derrame"
+        },
+        {
+          "kind": "equal",
+          "reference": "pleural",
+          "hypothesis": "pleural"
+        },
+        {
+          "kind": "equal",
+          "reference": "nódulo",
+          "hypothesis": "nódulo"
+        },
+        {
+          "kind": "equal",
+          "reference": "de",
+          "hypothesis": "de"
+        },
+        {
+          "kind": "substitution",
+          "reference": "tres",
+          "hypothesis": "3"
+        },
+        {
+          "kind": "equal",
+          "reference": "milímetros",
+          "hypothesis": "milímetros"
+        },
+        {
+          "kind": "equal",
+          "reference": "en",
+          "hypothesis": "en"
+        },
+        {
+          "kind": "equal",
+          "reference": "el",
+          "hypothesis": "el"
+        },
+        {
+          "kind": "equal",
+          "reference": "pulmón",
+          "hypothesis": "pulmón"
+        },
+        {
+          "kind": "equal",
+          "reference": "derecho",
+          "hypothesis": "derecho"
+        }
+      ]
+    },
+    "evaluationReferenceVersion": 3
+  }
+]

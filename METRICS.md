@@ -62,3 +62,6 @@ Calibración de parada transportada en `end`, solo números finitos y edad infer
 
 Semántica y límites completos en [LABORATORY.md](LABORATORY.md). Cada ejecución registra cola, preparación, petición, carga/generación locales cuando observables, total, estado, hash de original/derivado, configuración, revisión y fuentes. RTF de petición agregado en la versión final. Referencias y resultados no se sobrescriben; puntuación visible contra última referencia, snapshot histórico disponible. Ausentes: primera palabra (sin streaming), memoria, coste real, red/servidor Muse desglosados y latencia de captura a texto. Se mantienen null; no se infieren del RTT. P50/P95 exploratorios incluyen cargas frías, identificadas por ejecución; no comparar esos resúmenes como rendimiento sostenido.
 
+
+## Formato por comandos
+Véase DICTATION_COMMANDS.md. commandMs mide transformación del original a formato y construcción de auditoría con reloj monotónico; incluido en totalMs. Se exportan versión, eventos, dudas, original y resultado. No hay tiempos por palabra ni exactitud automática de comandos. Las métricas live incluyen formato y actualización DOM, no presentación física de pantalla. Exportación CSV incluye commandMs y cold para separar carga inicial de uso habitual. Sobreprecio temporal de instrumentación no calibrado; no sumar commandMs a totalMs.

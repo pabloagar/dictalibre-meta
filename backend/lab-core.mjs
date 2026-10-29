@@ -48,7 +48,7 @@ export function configuration(input,previous) {
     preparation:'scipy-resample-poly-mono-16k-v1',mode:'file',correction:false};
 }
 export function csv(rows) {
-  const keys=['id','audioId','configId','status','text','queueMs','prepareMs','loadMs','requestMs','totalMs','wer','error'];
+  const keys=['id','audioId','configId','status','text','queueMs','prepareMs','loadMs','requestMs','totalMs','commandMs','formattedText','commandVersion','commandCount','commandWarnings','cold','wer','error'];
   const cell=v=>'"'+String(v??'').replace(/^[=+@-]/,'\t$&').replaceAll('"','""')+'"';
-  return [keys.map(cell).join(','),...rows.map(r=>keys.map(k=>cell(r[k]??r.timings?.[k]??(k==='wer'?r.evaluation?.wer:null))).join(','))].join('\r\n');
+  return [keys.map(cell).join(','),...rows.map(r=>keys.map(k=>cell(r[k]??r.timings?.[k]??({formattedText:r.formatting?.text,commandVersion:r.formatting?.version,commandCount:r.formatting?.events.length,commandWarnings:r.formatting?.warnings.length,cold:r.result?.cold,wer:r.evaluation?.wer}[k]))).join(','))].join('\r\n');
 }
