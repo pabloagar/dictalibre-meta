@@ -93,3 +93,6 @@ Por solicitud del responsable, selector Muse/Whisper en receptor local, motor co
 
 ## 2026-10-28 · Retorno desde laboratorio
 Se hizo visible Volver al dictado en la cabecera del laboratorio y junto al formulario de Meta. Navegación por enlace local /live, sin reinicio del servidor ni cambios de credencial. Sustituye el enlace menos visible junto a exportaciones.
+
+## 2026-10-28 · Diagnóstico de autenticación Meta
+GET /v1/models ejecutado con la clave ya presente en memoria, sin mostrarla, exportarla ni reiniciar servidor. Respuesta 401, authentication_error, invalid_api_key (455 ms). Confirma rechazo de autenticación también en endpoint general; no es exclusivo del servicio de audio. Sesión de diagnóstico temporal cerrada; laboratorio disponible y clave conservada. Evidencia saneada en experiments/results/2026-10-28-meta-auth/models-check.json.

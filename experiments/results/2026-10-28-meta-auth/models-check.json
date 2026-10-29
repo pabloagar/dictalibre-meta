@@ -1,0 +1,10 @@
+{
+  "checkedAt": "2026-10-29T00:00:34.603Z",
+  "endpoint": "GET /v1/models",
+  "status": 401,
+  "elapsedMs": 455,
+  "errorType": "authentication_error",
+  "errorCode": "invalid_api_key",
+  "models": [],
+  "museListed": false
+}
