@@ -1,0 +1,18 @@
+{
+  "schema": "human-glossary-plan-v1",
+  "keywords": ["neumotórax", "hemotórax", "hemitórax", "esteatosis", "aorta", "litiasis", "hipodensa", "hiperdensa", "hemorragia", "hidrocefalia"],
+  "cases": [
+    {"id":"01","script":"Pequeño neumotórax en el vértice pulmonar derecho sin desplazamiento mediastínico punto","terms":["neumotórax","mediastínico"]},
+    {"id":"02","script":"Hemotórax izquierdo de moderada cuantía sin neumotórax punto","terms":["hemotórax","neumotórax"]},
+    {"id":"03","script":"No se identifica neumotórax ni hemotórax en este examen punto","terms":["neumotórax","hemotórax"]},
+    {"id":"04","script":"En el hemitórax izquierdo se observa engrosamiento pleural punto","terms":["hemitórax","pleural"]},
+    {"id":"05","script":"Esteatosis hepática difusa sin lesiones focales punto","terms":["esteatosis","hepática"]},
+    {"id":"06","script":"Aorta abdominal de veintitrés milímetros sin dilatación aneurismática punto","terms":["aorta","aneurismática"]},
+    {"id":"07","script":"Litiasis renal derecha de seis milímetros sin dilatación de la vía urinaria punto","terms":["litiasis","renal"]},
+    {"id":"08","script":"Lesión hipodensa de uno coma ocho centímetros en el lóbulo hepático izquierdo punto","terms":["hipodensa","hepático"]},
+    {"id":"09","script":"Imagen hiperdensa de nueve milímetros en el riñón izquierdo punto","terms":["hiperdensa","riñón"]},
+    {"id":"10","script":"No hay hemorragia intracraneal ni signos de hidrocefalia punto","terms":["hemorragia","intracraneal","hidrocefalia"]},
+    {"id":"11","script":"Neumoperitoneo de pequeña cuantía sin líquido libre punto","terms":["neumoperitoneo"]},
+    {"id":"12","script":"Quiste pancreático de trece milímetros sin cambios respecto al examen previo punto","terms":["quiste","pancreático"]}
+  ]
+}
