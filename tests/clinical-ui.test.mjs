@@ -10,10 +10,12 @@ function setup(options={}){
  for(const key of ['window','document','localStorage','NodeFilter','Option','MutationObserver','CustomEvent'])globalThis[key]=key==='window'?window:window[key];
  globalThis.Option=function(text,value){const option=document.createElement('option');option.textContent=text;option.value=value;return option;};
  Object.defineProperty(globalThis,'navigator',{configurable:true,value:window.navigator});
- globalThis.fetch=async()=>({ok:true,json:async()=>({templates:[]})});
+ globalThis.fetch=async()=>({ok:true,json:async()=>({templates:options.library??[]})});
  document.body.innerHTML='<div id="parent"></div>';
  localStorage.setItem('dicta-report-v1',options.savedDraft??'');
  localStorage.setItem('dicta-report-context-v1',JSON.stringify(options.savedDraft?{name:'Anterior',text:'ANTERIOR'}:null));
+ if(options.ownTemplates)localStorage.setItem('dicta-templates-v1',JSON.stringify(options.ownTemplates));
+ if(options.favorites)localStorage.setItem('dicta-template-favorites-v1',JSON.stringify(options.favorites));
  const editor=mountReport(document.querySelector('#parent'),{globalReview:false,...options});
  const button=text=>[...document.querySelectorAll('button')].find(b=>b.textContent===text);
  return {window,editor,button};
@@ -95,6 +97,7 @@ for(const savedTheme of [null,'sala'])test('montaje completo, controles y tema g
  assert.equal(document.querySelectorAll('#create').length,1);
  assert.ok(document.querySelector('.clinical-settings #metrics-export'));
  assert.ok(document.querySelector('.clinical-status'));
+ assert.ok(document.querySelector('.empty-guide .quick-templates'));assert.equal(document.querySelector('.first-use-help'),null);
  assert.equal(document.querySelectorAll('.clinical-record').length,1);
  assert.equal(document.querySelectorAll('.sex-control').length,1);assert.ok(document.querySelector('.clinical-sheet > .clinical-editbar .sex-control'));assert.equal(document.querySelector('header .sex-control'),null);
  assert.equal(document.querySelector('.clinical-settings').open,false);
@@ -272,5 +275,28 @@ test('rediseño: reloj y carga visibles, cancelación y respuesta tardía no rea
  await new Promise(r=>setTimeout(r,1050));assert.match(document.querySelector('.review-elapsed').textContent,/00:01/);
  button('Cancelar revisión').click();assert.equal(editor.reviewPanel.dataset.busy,'false');assert.equal(document.querySelector('.review-progress').hidden,true);assert.equal(document.querySelector('.review-elapsed').hidden,true);
  finish({id:'late',status:'completed',suggestions:[]});await reviewing;assert.equal(editor.reviewPanel.dataset.busy,'false');assert.match(editor.reviewPanel.querySelector('[role=status]').textContent,/cancelled/);
+ await window.happyDOM.close();
+});
+
+test('accesos rápidos: cinco plantillas, favoritas primero, inserción completa y deshacer',async()=>{
+ const library=Array.from({length:7},(_,i)=>({id:'synthetic-'+i,name:'Plantilla sintética '+i,text:'HALLAZGOS\nContenido sintético '+i}));
+ const {window,editor,button}=setup({library,favorites:['synthetic-4']});await new Promise(r=>setTimeout(r,0));
+ const quick=editor.quickTemplates;assert.equal(quick.children.length,5);assert.equal(quick.firstChild.textContent,'Plantilla sintética 4');
+ quick.firstChild.click();assert.equal(editor.model.text,library[4].text);assert.equal(editor.context().templateName,library[4].name);assert.equal(editor.element.dataset.empty,'false');
+ assert.equal([...quick.children].every(b=>b.disabled),true);assert.equal(document.activeElement,editor.element);
+ const events=JSON.parse(localStorage.getItem('dicta-editor-metrics-v1')).events;assert.ok(events.some(e=>e.type==='template-quick-applied'&&e.position===1&&e.favorite));
+ button('Deshacer').click();assert.equal(editor.model.text,'');assert.equal(quick.firstChild.disabled,false);
+ const target=quick.lastChild;const expected=library.find(t=>t.name===target.textContent);target.click();assert.equal(editor.model.text,expected.text);
+ button('Rehacer').click();assert.equal(editor.model.text,expected.text);
+ await window.happyDOM.close();
+});
+
+test('accesos rápidos: catálogo pequeño, cambios de favoritas y guardas de texto/dictado',async()=>{
+ const {window,editor,button}=setup({ownTemplates:[{name:'Uno',text:'Texto uno'},{name:'Dos',text:'Texto dos'}]});await new Promise(r=>setTimeout(r,0));
+ assert.equal(editor.quickTemplates.children.length,2);
+ document.querySelector('[aria-label="Favorita: Dos"]').click();assert.equal(editor.quickTemplates.firstChild.textContent,'Dos');
+ editor.begin('pending');editor.quickTemplates.firstChild.onclick();assert.equal(editor.model.text,'');assert.equal(editor.model.pending,true);editor.cancel('pending');
+ editor.element.textContent='Conservar texto';editor.element.dispatchEvent(new window.Event('input'));editor.quickTemplates.firstChild.onclick();assert.equal(editor.model.text,'Conservar texto');
+ button('Deshacer').click();editor.quickTemplates.firstChild.click();assert.equal(editor.model.text,'Texto dos');
  await window.happyDOM.close();
 });

@@ -138,11 +138,11 @@ settingsBody.replaceChildren(settingsNav,settingsMain);settingsBody.setAttribute
 const settingsBackdrop=make('div','settings-backdrop');settingsBackdrop.setAttribute('aria-hidden','true');settingsBody.before(settingsBackdrop);settingsBackdrop.onclick=()=>{settings.open=false;settings.querySelector('summary').focus();};
 settings.addEventListener('toggle',()=>{if(settings.open)settingsClose.focus();});
 settingsBody.addEventListener('keydown',e=>{if(e.key!=='Tab')return;const items=[...settingsBody.querySelectorAll('button,input,select,a[href],summary')].filter(n=>!n.disabled&&!n.closest('[hidden]')&&!n.hidden&&n.tabIndex!==-1&&!(n.matches('summary')?n.parentElement.parentElement:n.parentElement)?.closest('details:not([open])'));const first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}});
-const firstHelp=make('button','first-use-help','¿Primera vez? Ver «Cómo usar» en Ajustes'),emptyGuide=make('div','empty-guide');
+const emptyGuide=make('div','empty-guide');
 const guideText=make('p','','Conecta tu teléfono para dictar, o escribe aquí directamente. Usa '),templateShortcut=make('button','inline-template-link','Plantilla');templateShortcut.type='button';
 const templatePicker=templatePanel.querySelector('.template-picker');templatePicker.id='report-template-picker';templateShortcut.setAttribute('aria-controls',templatePicker.id);templateShortcut.setAttribute('aria-expanded','false');
 templateShortcut.onclick=()=>{templatePanel.open=true;track('template-entry',{source:'empty-guide'});};templatePanel.addEventListener('toggle',()=>templateShortcut.setAttribute('aria-expanded',String(templatePanel.open)));
-guideText.append(templateShortcut,' si quieres partir de una estructura.');emptyGuide.append(guideText,firstHelp);reportEditor.element.after(emptyGuide);firstHelp.onclick=()=>{showSettingsPage('ayuda');settings.open=true;};
+guideText.append(templateShortcut,' si quieres partir de una estructura.');emptyGuide.append(guideText,reportEditor.quickTemplates);reportEditor.element.after(emptyGuide);
 const emptySteps=make('div','empty-steps');emptySteps.append(make('strong','','CÓMO USAR'),steps.cloneNode(true));emptyGuide.append(emptySteps);
 const syncFirstHelp=()=>{emptyGuide.hidden=reportEditor.element.dataset.empty!=='true';};new MutationObserver(syncFirstHelp).observe(reportEditor.element,{attributes:true,attributeFilter:['data-empty']});syncFirstHelp();
 // Segmented buttons drive the same selects; no changes to engine or transport logic.
