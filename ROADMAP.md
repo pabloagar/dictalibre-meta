@@ -1,5 +1,7 @@
 # Diez fases de Dicta Libre
 
+**Corte actualizado del MVP, 02-11-2026:** consultar [MVP_STATUS.md](MVP_STATUS.md), con los dos gráficos de avance y la prueba iPhone del 03-11. Las tablas y cortes inferiores conservan el historial del plan amplio; no sustituyen ese estado de cierre.
+
 Actualización: 02-11-2026, America/Santiago. Las diez fases reemplazan la agrupación F0–F7 del primer borrador. Se avanza mediante discusión, implementación acotada y validación. La tabla inicial refleja el estado actual; los cortes fechados al final conservan la evolución histórica.
 
 ## Estado respecto de las diez fases originales
