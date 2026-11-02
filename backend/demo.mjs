@@ -13,7 +13,7 @@ import {TERM_VERSION} from './term-format.mjs';
 import {COMMAND_VERSION} from './dictation-commands.mjs';
 
 const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
-const STATIC={'/live':'apps/desktop/index.html','/live.js':'apps/desktop/live.js','/stream-client.js':'apps/desktop/stream-client.js','/review-ui.js':'apps/shared/review-ui.js','/report-editor.js':'apps/desktop/report-editor.js','/shared/report-model.js':'apps/shared/report-model.js','/shared/lab-timing.js':'apps/shared/lab-timing.js'};
+const STATIC={'/live':'apps/desktop/index.html','/live.js':'apps/desktop/live.js','/stream-client.js':'apps/desktop/stream-client.js','/review-ui.js':'apps/shared/review-ui.js','/report-editor.js':'apps/desktop/report-editor.js','/report-review.js':'apps/desktop/report-review.js','/shared/report-model.js':'apps/shared/report-model.js','/shared/lab-timing.js':'apps/shared/lab-timing.js'};
 const MIME={html:'text/html; charset=utf-8',js:'text/javascript; charset=utf-8'};
 const COOKIE='dicta_demo';
 const digest=v=>createHash('sha256').update(String(v)).digest();

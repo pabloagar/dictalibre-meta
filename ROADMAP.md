@@ -21,6 +21,10 @@ Se conserva la numeración y propósito del plan inicial; las modificaciones de 
 | 9. Editor e inserción | Parcial / piloto | Borrador dentro del informe, selección por toma, persistencia local, deshacer y copiar; 285 plantillas únicas importadas y activadas en servidor principal | Prueba física de selección/cancelación/copia y contenido heredado. Biblioteca activada el 01-11 con autorización; falta validación de uso/contenido. Inserción directa RIS diferida |
 | 10. Evaluación y evidencia | Infraestructura técnica cerrada; evaluación transversal abierta | Laboratorio ampliado activo; 6/6 transcripciones reales, tres pares y exportación HTTP verificada el 02-11; referencias TTS provisionales | Referencias humanas, evaluación reservada, errores de números/unidades/negaciones/lateralidad y términos; instalación limpia, resultados negativos, documentación y demo |
 
+## Prioridad tras implementar A compacta (02-11-2026)
+
+La base visual y los controles del editor están implementados; no equivale a cerrar la aceptación de fase 9. Próximo paso: recorrer desde S25 físico conectar → dictar → corregir → deshacer/rehacer → copiar, con informes sintéticos, pausas y reconexión; registrar pérdidas, duplicados y tiempos. Después, fase 10: congelar configuración y comparar tareas/errores con referencias humanas. La revisión Meta continúa como piloto de fase 8 en laboratorio; habilitarla en la demo pública requiere un trabajo separado de backend, aislamiento/límites y evaluación humana. No hace falta otro rediseño para iniciar estas pruebas.
+
 ## Acuerdos de fases 1 y 2
 
 El S25 Ultra es fijo. Pantalla encendida y página visible. Micrófono preparado durante la sesión, descartando muestras fuera de toma. Comparar mantener pulsado y pulsar para iniciar/parar antes de decidir una preferencia. Botón físico pospuesto. Dos navegadores y relay WebSocket; QR directo con token temporal o código manual con confirmación en PC. La prueba conjunta incluye redes diferentes desde el principio.

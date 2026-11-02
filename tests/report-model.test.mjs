@@ -1,4 +1,21 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {ReportModel} from '../apps/shared/report-model.js';
+test('rehacer conserva texto y plantilla; nueva edición invalida futuro y tomas pendientes bloquean ambos',()=>{
+ const m=new ReportModel('Inicial');m.reset('Plantilla');m.templateContext={name:'Sintética'};
+ m.undo();assert.equal(m.text,'Inicial');assert.equal(m.templateContext,null);
+ m.redo();assert.equal(m.text,'Plantilla');assert.equal(m.templateContext.name,'Sintética');
+ m.edit('Nueva');m.undo();m.edit('Otra');assert.equal(m.redo(),false);assert.equal(m.text,'Otra');
+ m.begin('take',4,4);m.preview('take','provisional');assert.throws(()=>m.redo());assert.throws(()=>m.undo());
+ m.finish('take','final');m.undo();assert.equal(m.text,'Otra');m.redo();assert.equal(m.text,'Otra final');
+});
+test('agrupar escritura mantiene el estado anterior al grupo y no reutiliza futuro',()=>{
+ const m=new ReportModel();m.edit('a');m.edit('ab',{group:true});m.edit('abc',{group:true});m.undo();assert.equal(m.text,'');m.redo();assert.equal(m.text,'abc');m.undo();m.edit('nuevo',{group:true});assert.equal(m.redo(),false);m.undo();assert.equal(m.text,'');
+});
+test('enlaces de revisión solo a citas únicas, exactas y no solapadas',async()=>{
+ const {reviewRanges}=await import('../apps/shared/report-model.js');
+ assert.deepEqual(reviewRanges('derecho e izquierdo',[{original:'derecho'},{original:'izquierdo'},{original:'inexistente'}]),[{id:'1',start:0,end:7},{id:'2',start:10,end:19}]);
+ assert.deepEqual(reviewRanges('dos dos',[{original:'dos'}]),[]);
+ assert.deepEqual(reviewRanges('nódulo derecho',[{original:'nódulo derecho'},{original:'derecho'}]),[{id:'1',start:0,end:14}]);
+});
 test('borradores sustituyen solo selección; cancelar restaura plantilla',()=>{const m=new ReportModel('Inicio. Sin derrame. Fin.');m.begin('a',8,20);m.preview('a','Derrame');m.preview('a','Derrame derecho.');assert.equal(m.text,'Inicio. Derrame derecho. Fin.');assert.equal(m.committed(),'Inicio. Sin derrame. Fin.');m.cancel('a');assert.equal(m.text,'Inicio. Sin derrame. Fin.');});
 test('destino fijado, final único, deshacer completo',()=>{const m=new ReportModel('A  B');m.begin('a',2,2);m.preview('a','tres');m.preview('a','3 cm');m.finish('a','3 cm');assert.equal(m.text,'A 3 cm B');assert.equal(m.finish('a','duplicado'),null);m.undo();assert.equal(m.text,'A  B');});
 test('edición antes de toma desplaza destino; editar provisional se bloquea',()=>{const m=new ReportModel('A  B');m.begin('a',2,2);m.preview('a','texto');m.edit('Inicio A texto B');assert.equal(m.anchors.get('a').start,9);assert.throws(()=>m.edit('Inicio A otro B'));m.finish('a','final');assert.equal(m.text,'Inicio A final B');});

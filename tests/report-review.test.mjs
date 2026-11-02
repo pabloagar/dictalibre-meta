@@ -44,7 +44,7 @@ test('UI: copiar ofrece revisar o continuar; edición invalida avisos y respuest
  const ui=vm.runInContext('mountReportReview(args)',box);
  assert.equal(ui.beforeCopy(),false);assert.equal(calls,0);
  elements.find(n=>n.textContent==='Copiar sin revisar').onclick();assert.equal(copies,1);
- const pending=elements.find(n=>n.textContent==='Revisar informe').onclick();await wait(()=>typeof resolveReview==='function');
+ const pending=elements.find(n=>n.textContent==='Enviar a Meta y revisar').onclick();await wait(()=>typeof resolveReview==='function');
  snapshot={...snapshot,text:'Texto modificado.'};ui.changed();resolveReview({id:'r',status:'completed',suggestions:[]});await pending;
  assert.equal(ui.beforeCopy(),false);assert.equal(copies,1);
  assert.ok(elements.some(n=>String(n.textContent).includes('Puedes revisar')));

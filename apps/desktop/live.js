@@ -54,7 +54,7 @@ function showFigureDoubts(warnings){
 }
 // Hoja clínica: preserve the mounted editor, transport controls and listeners.
 document.body.classList.add('live-workspace','clinical-workspace');
-const layoutMetrics={version:'hoja-clinica-v4',serverBuild:initialState.build??null,serverSourceHash:initialState.sourceHash??null,createdAt:new Date().toISOString(),browser:navigator.userAgent,device:null,network:null,audioSource:null,clockResolutionMs:null,instrumentationOverheadMs:null,events:[]};
+const layoutMetrics={version:'a-compacta-v1',serverBuild:initialState.build??null,serverSourceHash:initialState.sourceHash??null,createdAt:new Date().toISOString(),browser:navigator.userAgent,device:null,network:null,audioSource:null,clockResolutionMs:null,instrumentationOverheadMs:null,audioMeter:{updates:0,totalPaintMs:0,maxPaintMs:0,source:'received-pcm-rms'},events:[]};
 const track=(type,data={})=>{layoutMetrics.events.push({type,atMs:performance.now(),...data});if(layoutMetrics.events.length>500)layoutMetrics.events.shift();};
 const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text)n.textContent=text;return n;};
 const makeDetails=(label,cls)=>{const d=make('details',cls);d.append(make('summary','',label));return d;};
@@ -66,16 +66,16 @@ const sex=make('div','sex-control');sex.setAttribute('role','group');sex.setAttr
 for(const value of ['F','M','—']){const button=make('button','',value);button.setAttribute('aria-pressed',String(value===selectedSex));button.onclick=()=>{selectedSex=value;for(const b of sex.querySelectorAll('button'))b.setAttribute('aria-pressed',String(b===button));sheetSex.textContent='Sexo '+value;track('study-sex',{value});};sex.append(button);}
 templatePanel.after(sex);
 reportEditor.element.addEventListener('template-applied',()=>{selectedSex='—';sheetSex.textContent='Sexo —';for(const b of sex.querySelectorAll('button'))b.setAttribute('aria-pressed',String(b.textContent==='—'));});
-const connection=makeDetails('Conectar teléfono','connection-panel'),pairing=document.querySelector('.pairing');connection.append(pairing);
+const connection=makeDetails('Conecta tu teléfono para empezar','connection-panel'),pairing=document.querySelector('.pairing');connection.append(pairing);
 const connectButton=pairing.querySelector('#create');connectButton.textContent='Mostrar QR';
 const strip=document.querySelector('.record-strip');strip.classList.add('clinical-record');
-sex.after(connection,strip);
-const syncConnection=()=>{const connected=!document.querySelector('#paired').hidden;connection.querySelector('summary').textContent=connected?'Teléfono conectado':'Conectar teléfono';if(connected)connection.open=false;};
+sex.after(connection,strip);connection.addEventListener('toggle',()=>{if(connection.open&&document.querySelector('#paired').hidden&&document.querySelector('#pairing').hidden&&document.querySelector('#confirm-panel').hidden&&!connectButton.disabled)connectButton.click();});
+const syncConnection=()=>{const connected=!document.querySelector('#paired').hidden;connection.querySelector('summary').textContent=connected?'Teléfono conectado':'Conecta tu teléfono para empezar';if(connected)connection.open=false;};
 new MutationObserver(syncConnection).observe(document.querySelector('#paired'),{attributes:true,attributeFilter:['hidden']});syncConnection();
-const settings=makeDetails('Ajustes','clinical-settings');controls.append(settings);
+const settings=makeDetails('Ajustes','clinical-settings');const editbar=make('div','clinical-editbar');editbar.setAttribute('role','toolbar');editbar.setAttribute('aria-label','Edición del informe');report.prepend(editbar);editbar.append(controls.querySelector('.report-undo'),controls.querySelector('.report-redo'));
 const settingsBody=make('div','settings-body');settings.append(settingsBody);settingsBody.append(engineLabel,glossaryLabel,segmentationLabel,reviewLabel,commandsLabel,engineHint,commandHelp);
-const sizeControls=make('div','size-controls','Tamaño del informe ');for(const label of ['Reducir tamaño del informe','Aumentar tamaño del informe'])sizeControls.append(controls.querySelector(`[aria-label="${label}"]`));settingsBody.append(sizeControls);
-let theme='sala';try{if(localStorage.getItem('dicta-theme-v1')==='dia')theme='dia';}catch{}
+const sizeControls=make('div','size-controls','Texto ');sizeControls.append(controls.querySelector('[aria-label="Reducir tamaño del informe"]'),controls.querySelector('.report-font-value'),controls.querySelector('[aria-label="Aumentar tamaño del informe"]'));editbar.append(sizeControls,settings);
+let theme='dia';try{const saved=localStorage.getItem('dicta-theme-v1');if(['sala','dia'].includes(saved))theme=saved;}catch{}
 const themeButton=make('button','theme-toggle');const applyTheme=()=>{document.body.dataset.theme=theme;themeButton.textContent=theme==='sala'?'Tema: Sala · cambiar a Día':'Tema: Día · cambiar a Sala';};applyTheme();
 themeButton.onclick=()=>{theme=theme==='sala'?'dia':'sala';applyTheme();try{localStorage.setItem('dicta-theme-v1',theme);}catch{}track('theme',{theme});};settingsBody.append(themeButton);
 if(!isDemo){const link=make('a','','Abrir laboratorio');link.href='/';link.target='_blank';link.rel='noopener';settingsBody.append(link);}
@@ -84,22 +84,25 @@ const diagnostics=document.querySelector('.diagnostics');diagnostics.prepend(doc
 settingsBody.append(takes,document.querySelector('#recordings').closest('details'),diagnostics);
 const transcript=document.querySelector('.transcript');document.querySelector('.section-head').remove();
 const desk=make('div','clinical-desk'),sheet=make('div','clinical-sheet'),sheetHead=make('div','sheet-head');
-const sheetSex=make('span','','Sexo —');sheetHead.append(make('span','','Informe en edición · no enviado a ningún sistema'),sheetSex);
+const sheetSex=make('span','','Sexo —');sheetHead.append(make('span','','Informe radiológico · documento en curso'),sheetSex);
 reportEditor.element.before(desk);desk.append(sheet);sheet.append(sheetHead,reportEditor.element);
 const margin=make('aside','clinical-notes');margin.setAttribute('aria-label','Notas del estudio');desk.append(margin);
-const connectionNote=make('section','clinical-note neutral');connectionNote.append(make('h2','','DICTADO'),document.querySelector('#record-help'));margin.append(connectionNote);
-const glossaryNote=make('section','clinical-note neutral');glossaryNote.append(make('h2','','GLOSARIO DE ESTE ESTUDIO'));const glossaryText=make('p','');const glossaryChange=make('button','','Cambiar');glossaryChange.onclick=()=>{settings.open=true;glossary.focus();};glossaryNote.append(glossaryText,glossaryChange);margin.append(glossaryNote);
+const connectionNote=make('section','clinical-note neutral');connectionNote.append(make('h2','','DICTADO'),document.querySelector('#record-help'));settingsBody.append(connectionNote);
+const glossaryNote=make('section','clinical-note neutral');glossaryNote.append(make('h2','','GLOSARIO DE ESTE ESTUDIO'));const glossaryText=make('p','');const glossaryChange=make('button','','Cambiar');glossaryChange.onclick=()=>{settings.open=true;glossary.focus();};glossaryNote.append(glossaryText,glossaryChange);settingsBody.append(glossaryNote);
 const syncGlossary=()=>{const c=initialState.configs.find(c=>c.id===glossary.value);glossaryText.textContent=engineSelect.value==='whisper'?'Whisper local · no utiliza este glosario.':c?.keywords?.length?`${c.name} · ${c.keywords.length} términos. Mejora de reconocimiento sin medir.`:'Sin glosario. Puedes elegir uno en Ajustes.';};syncGlossary();glossary.addEventListener('change',syncGlossary);engineSelect.addEventListener('change',syncGlossary);
 margin.append(figureAlert);
-const note=make('section','clinical-note editing-note');note.append(make('h2','','TU INFORME'),make('p','','Empieza a dictar o escribe en la hoja. Usa Plantilla cuando quieras partir de una estructura.'));margin.append(note);
+const note=make('section','clinical-note editing-note');note.append(make('h2','','TU INFORME'),make('p','','Empieza a dictar o escribe en la hoja. Usa Plantilla cuando quieras partir de una estructura.'));settingsBody.append(note);
 const help=report.querySelector('.report-help');const editorHelp=makeDetails('Ayuda del editor','editor-help');editorHelp.append(help);settingsBody.append(editorHelp);
-const status=document.querySelector('#status');connectionNote.append(status);
+const status=document.querySelector('#status');status.classList.add('clinical-status');editbar.after(status);
+margin.append(reportEditor.reviewPanel);
+const level=document.querySelector('#level'),bars=make('span','audio-bars');bars.setAttribute('aria-hidden','true');for(let i=0;i<9;i++)bars.append(make('i',''));level.after(bars);
+const paintLevel=()=>{const paintStart=performance.now();const value=Math.max(0,Math.min(1,Number(level.value)||0));for(const [i,bar] of [...bars.children].entries()){const lit=value>(i+1)/12;bar.style.height=(3+(lit?value*(13-Math.abs(i-4)):0))+'px';bar.classList.toggle('lit',lit);}const elapsed=performance.now()-paintStart;layoutMetrics.audioMeter.updates++;layoutMetrics.audioMeter.totalPaintMs+=elapsed;layoutMetrics.audioMeter.maxPaintMs=Math.max(layoutMetrics.audioMeter.maxPaintMs,elapsed);};new MutationObserver(paintLevel).observe(level,{attributes:true,attributeFilter:['value']});paintLevel();
 const layoutExport=make('button','','Exportar mediciones de disposición');diagnostics.append(layoutExport);layoutExport.onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(layoutMetrics,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='dicta-disposicion-metricas.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 for(const [name,element] of [['connection',connection],['settings',settings],['templates',templatePanel],['takes-review',takes],['diagnostics',diagnostics]])element.addEventListener('toggle',()=>track('panel-toggle',{panel:name,open:element.open}));
 for(const popup of [connection,settings,templatePanel])popup.addEventListener('toggle',()=>{if(popup.open)for(const other of [connection,settings,templatePanel])if(other!==popup)other.open=false;});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')for(const popup of [connection,settings,templatePanel])if(popup.open){popup.open=false;popup.querySelector('summary').focus();}});
 let lastScroll=0;reportEditor.element.addEventListener('scroll',()=>{const now=performance.now();if(now-lastScroll>200){track('editor-scroll');lastScroll=now;}},{passive:true});
-requestAnimationFrame(()=>{const r=reportEditor.element.getBoundingClientRect();track('editor-visible',{viewportWidth:innerWidth,viewportHeight:innerHeight,top:r.top,height:r.height,visibleHeight:Math.max(0,Math.min(r.bottom,innerHeight)-Math.max(0,r.top)),initialCharacters:reportEditor.model.text.length});});
+requestAnimationFrame(()=>{const r=reportEditor.element.getBoundingClientRect();track('editor-visible',{viewportWidth:innerWidth,viewportHeight:innerHeight,top:r.top,width:r.width,height:r.height,visibleHeight:Math.max(0,Math.min(r.bottom,innerHeight)-Math.max(0,r.top)),initialCharacters:reportEditor.model.text.length});});
  const seconds=v=>v==null?'sin medición':`${(v/1000).toFixed(2)} s`;
 async function api(path,data,signal){if(path==='/api/state'&&data===undefined)return sharedState();const response=await fetch(path,{signal,...(data===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})});const value=await response.json();if(!response.ok)throw Error(value.error);return value;}
 window.addEventListener('dicta-new-session',()=>{generation++;if(recordingAnchor)reportEditor.cancel(recordingAnchor);for(const job of jobs)if(job.anchor)reportEditor.cancel(job.anchor);recordingAnchor=null;commandsToggle.disabled=false;engineSelect.disabled=false;reviewToggle.disabled=false;glossary.disabled=false;segmentationSelect.disabled=false;recordingEngine=null;stream=null;for(const s of streams)s.cancel();streams.clear();for(const job of jobs){job.controller.abort();if(job.runId)void api('/api/cancel',{id:job.runId}).catch(()=>{});}jobs.clear();for(const card of panel.querySelectorAll('article'))card.remove();});

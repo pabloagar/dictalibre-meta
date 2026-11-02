@@ -2,9 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {Window} from 'happy-dom';
-const source=fs.readFileSync(new URL('../apps/desktop/report-editor.js',import.meta.url),'utf8').replace("'/shared/report-model.js'",JSON.stringify(new URL('../apps/shared/report-model.js',import.meta.url).href));
+const source=fs.readFileSync(new URL('../apps/desktop/report-editor.js',import.meta.url),'utf8').replace("'/report-review.js'",JSON.stringify(new URL('../apps/desktop/report-review.js',import.meta.url).href)).replace("'/shared/report-model.js'",JSON.stringify(new URL('../apps/shared/report-model.js',import.meta.url).href));
 const {mountReport}=await import('data:text/javascript;base64,'+Buffer.from(source+'\n//# sourceURL=clinical-editor-test.js').toString('base64'));
-function setup(){
+function setup(options={}){
  const window=new Window({url:'http://127.0.0.1:8799'});
  for(const key of ['window','document','localStorage','NodeFilter','Option','MutationObserver','CustomEvent'])globalThis[key]=key==='window'?window:window[key];
  globalThis.Option=function(text,value){const option=document.createElement('option');option.textContent=text;option.value=value;return option;};
@@ -13,7 +13,7 @@ function setup(){
  document.body.innerHTML='<div id="parent"></div>';
  localStorage.setItem('dicta-report-v1','Informe antiguo sintético');
  localStorage.setItem('dicta-report-context-v1',JSON.stringify({name:'Anterior',text:'ANTERIOR'}));
- const editor=mountReport(document.querySelector('#parent'),{globalReview:false});
+ const editor=mountReport(document.querySelector('#parent'),{globalReview:false,...options});
  const button=text=>[...document.querySelectorAll('button')].find(b=>b.textContent===text);
  return {window,editor,button};
 }
@@ -41,6 +41,22 @@ test('encabezados conservan offsets de dictado y el texto plano',async()=>{
  assert.equal(editor.element.textContent,editor.model.text);assert.equal(editor.model.pending,false);
  await window.happyDOM.close();
 });
+
+test('A compacta: rehacer contexto, letra y copia limpia de anotaciones; ediciones invalidan avisos',async()=>{
+ const {window,editor,button}=setup({globalReview:true});
+ let copied=null;Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{copied=text;}},configurable:true});
+ const input=text=>{editor.element.textContent=text;editor.element.dispatchEvent(new window.Event('input'));};
+ input('Hallazgo derecho. Resumen izquierdo.');button('Deshacer').click();assert.equal(editor.model.text,'');button('Rehacer').click();assert.equal(editor.model.text,'Hallazgo derecho. Resumen izquierdo.');
+ document.querySelector('[aria-label="Aumentar tamaño del informe"]').click();assert.equal(editor.element.style.fontSize,'20px');
+ globalThis.fetch=async()=>({ok:true,json:async()=>({id:'synthetic-review',status:'completed',suggestions:[{original:'izquierdo',reason:'Comprobar lateralidad.',evidence:['derecho','izquierdo']}]})});
+ button('Revisar con IA').click();await button('Enviar a Meta y revisar').onclick();
+ assert.equal(editor.element.querySelector('.report-annotation').textContent,'izquierdo');assert.equal(editor.element.textContent,editor.model.text);
+ await button('Copiar para RIS').onclick();assert.equal(copied,'Hallazgo derecho. Resumen izquierdo.');
+ button('Es correcto').click();assert.equal(editor.element.querySelector('.report-annotation'),null);assert.equal(editor.model.text,copied);
+ await button('Enviar a Meta y revisar').onclick();assert.ok(editor.element.querySelector('.report-annotation'));
+ input('Edición nueva');assert.equal(editor.element.querySelector('.report-annotation'),null);assert.equal(document.querySelector('.report-global-review').dataset.stale,'true');
+ await window.happyDOM.close();
+});
 test('montaje completo mantiene controles, hoja y ajustes accesibles',async()=>{
  const {window}=setup();document.body.innerHTML=fs.readFileSync(new URL('../apps/desktop/index.html',import.meta.url),'utf8').split('<body>')[1].split('</body>')[0];
  globalThis.requestAnimationFrame=()=>0;
@@ -54,8 +70,12 @@ test('montaje completo mantiene controles, hoja y ajustes accesibles',async()=>{
  assert.equal(document.querySelector('.clinical-sheet .report-editor').textContent,'');
  assert.equal(document.querySelectorAll('#create').length,1);
  assert.ok(document.querySelector('.clinical-settings #metrics-export'));
- assert.ok(document.querySelector('.clinical-notes #status'));
+ assert.ok(document.querySelector('.clinical-status'));
  assert.equal(document.querySelectorAll('.clinical-record').length,1);
  assert.equal(document.querySelector('.clinical-settings').open,false);
+ assert.ok(document.querySelector('.clinical-editbar .report-redo'));
+ assert.ok(document.querySelector('.clinical-notes .report-global-review'));
+ const level=document.querySelector('#level');level.value=.8;await new Promise(r=>setTimeout(r,0));assert.ok(document.querySelectorAll('.audio-bars .lit').length>0);
+ level.value=0;await new Promise(r=>setTimeout(r,0));assert.equal(document.querySelectorAll('.audio-bars .lit').length,0);
  await window.happyDOM.close();delete globalThis.__clinicalTest;
 });
