@@ -360,3 +360,50 @@ body.clinical-workspace, .clinical-workspace .workspace,.clinical-workspace .mai
 .clinical-workspace .report-editor[data-empty=true]::before{font:italic 400 26px/1.5 var(--dl-font-doc);color:var(--dl-muted)}
 .clinical-workspace .dictation-provisional{background:transparent;color:var(--dl-muted);font-style:italic;text-decoration:underline dotted;text-underline-offset:5px;border:0}
 .clinical-workspace .report-heading{font:600 13px var(--dl-font-ui);letter-spacing:.08em;color:var(--dl-muted)}
+
+/* B: template palette, settings modal and real controls. */
+.clinical-workspace [hidden]{display:none!important}
+.clinical-workspace .template-picker{display:grid;grid-template-columns:300px minmax(0,1fr);padding:0;height:560px;width:780px;box-shadow:var(--dl-shadow-pop);background:var(--dl-sheet);border:1px solid var(--dl-line);border-radius:6px;overflow:auto}
+.clinical-workspace .template-left{display:flex;flex-direction:column;gap:12px;min-height:0;padding:16px;background:var(--dl-bar);border-right:1px solid var(--dl-line)}
+.clinical-workspace .template-left>strong{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--dl-muted)}
+.clinical-workspace .template-list{overflow:auto;min-height:0;flex:1}
+.clinical-workspace .template-group{font:600 11px var(--dl-font-ui);text-transform:uppercase;letter-spacing:.08em;color:var(--dl-muted);margin:12px 0 4px;padding-left:12px}
+.clinical-workspace .template-row{display:flex;align-items:center;border:1px solid transparent;border-radius:5px;padding-left:12px}
+.clinical-workspace .template-row[data-selected=true]{background:var(--dl-sheet);border-color:var(--dl-line)}
+.clinical-workspace .template-row .template-choice{flex:1;text-align:left;min-height:40px;white-space:normal;background:transparent;border:0;padding:6px 0;font-size:14px}
+.clinical-workspace .template-row .template-star{width:36px;flex:none;min-height:36px;padding:0;border:0;background:transparent;color:var(--dl-muted)}
+.clinical-workspace .template-star[aria-pressed=true]{color:var(--dl-accent)}
+.clinical-workspace .template-right{display:flex;flex-direction:column;gap:12px;min-width:0;min-height:0;padding:18px 22px}
+.clinical-workspace .template-picker-head{margin:0;font-size:18px}
+.clinical-workspace .template-right>details:first-of-type{display:flex;flex-direction:column;flex:1;min-height:100px;overflow:auto;background:var(--dl-bg);border:1px solid var(--dl-line);padding:14px 18px;border-radius:5px}
+.clinical-workspace .template-picker pre{font:400 16px/1.6 var(--dl-font-doc);color:var(--dl-ink);max-height:none;white-space:pre-wrap;margin:0}
+.clinical-workspace .template-picker .template-picker-actions{position:static;padding:0;background:transparent;gap:12px;align-items:center;flex-wrap:wrap}
+.clinical-workspace .template-picker-actions button{min-height:40px;font-size:13px}
+.clinical-workspace .save-current-template{border:0;background:transparent;text-decoration:underline;text-underline-offset:3px;text-align:left;white-space:normal;flex:1}
+.clinical-workspace .template-right>details:not(:first-of-type){font-size:12px}
+.clinical-workspace .template-right>details[open]:not(:first-of-type){max-height:210px;overflow:auto}
+.clinical-workspace .template-right input,.clinical-workspace .template-right textarea{width:100%;font:14px var(--dl-font-ui);color:var(--dl-ink);background:var(--dl-bg);border:1px solid var(--dl-line);padding:8px;margin:4px 0}
+.clinical-workspace .connection-panel[open]>.pairing{background:var(--dl-sheet);box-shadow:var(--dl-shadow-pop);border-color:var(--dl-line);padding:20px 22px}
+.clinical-workspace .settings-backdrop{position:fixed;inset:0;background:var(--dl-scrim);z-index:90}
+.clinical-workspace .clinical-settings[open]>.settings-body{position:fixed;z-index:91;top:50%;left:50%;right:auto;transform:translate(-50%,-50%);width:880px;max-width:calc(100vw - 32px);max-height:calc(100dvh - 48px);min-height:min(560px,calc(100dvh - 48px));display:flex;gap:0;padding:0;background:var(--dl-sheet);border:1px solid var(--dl-line);border-radius:8px;overflow:auto;box-shadow:var(--dl-shadow-dialog)}
+.clinical-workspace .settings-nav{flex:0 0 220px;display:flex;flex-direction:column;gap:2px;background:var(--dl-bar);border-right:1px solid var(--dl-line);padding:18px 12px}
+.clinical-workspace .settings-nav h2{font-size:18px;margin:4px 8px 12px}
+.clinical-workspace .settings-tab{min-height:44px;text-align:left;background:transparent;border:0;font-size:15px}
+.clinical-workspace .settings-tab[aria-current=page]{background:var(--dl-soft);font-weight:600}
+.clinical-workspace .settings-main{flex:1;min-width:0;padding:22px 28px 28px;overflow:auto}
+.clinical-workspace .settings-main h3{font-size:18px;margin:6px 0 24px}
+.clinical-workspace .settings-close{float:right;min-height:40px}
+.clinical-workspace .settings-main label{display:block;margin:18px 0;font-size:14px}
+.clinical-workspace .settings-main p{font-size:13px;line-height:1.5;color:var(--dl-muted)}
+.clinical-workspace .settings-segments{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.clinical-workspace .settings-segments button{font-size:13px;min-height:40px;background:var(--dl-sheet);border-color:var(--dl-line);white-space:normal}
+.clinical-workspace .settings-segments button[aria-pressed=true]{background:var(--dl-act);color:var(--dl-act-ink)}
+.clinical-workspace input[role=switch]{appearance:none;display:inline-block;width:44px;height:26px;border:1px solid var(--dl-muted);border-radius:20px;vertical-align:middle;position:relative;background:var(--dl-bg);cursor:pointer}
+.clinical-workspace input[role=switch]::after{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;border-radius:50%;background:var(--dl-muted)}
+.clinical-workspace input[role=switch]:checked{background:var(--dl-act)}
+.clinical-workspace input[role=switch]:checked::after{left:21px;background:var(--dl-act-ink)}
+.clinical-workspace .help-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.clinical-workspace .help-step{padding:16px;background:var(--dl-bg);border:1px solid var(--dl-line);border-radius:6px}
+.clinical-workspace .help-step h4{font-size:15px;margin:0}
+.clinical-workspace .first-use-help{background:transparent;color:var(--dl-accent);border:0;text-decoration:underline;font-size:14px;padding:8px 0;text-align:left}
+.clinical-workspace .advanced-settings{border-top:1px solid var(--dl-line);padding-top:12px;margin-top:20px}

@@ -105,7 +105,10 @@ test('montaje completo mantiene controles, hoja y ajustes accesibles',async()=>{
  assert.equal(pairing.style.left,'240px');assert.equal(pairing.style.top,'68px');
  pairing.click();assert.equal(connection.open,true);document.body.click();assert.equal(connection.open,false);
  const templates=document.querySelector('.template-library-panel');templates.open=true;templates.dispatchEvent(new window.Event('toggle'));
- assert.equal(document.querySelector('.template-picker').style.width,'360px');
+ assert.equal(document.querySelector('.template-picker').style.width,'780px');
+ const settings=document.querySelector('.clinical-settings');settings.open=true;settings.dispatchEvent(new window.Event('toggle'));await new Promise(r=>setTimeout(r,0));assert.equal(templates.open,false);
+ document.querySelector('[data-page="apariencia"]').click();assert.equal(document.querySelector('.appearance-panel').hidden,false);document.querySelector('[data-value="penumbra"]').click();assert.equal(document.body.dataset.theme,'penumbra');assert.equal(localStorage.getItem('dicta-theme-v1'),'penumbra');
+ document.querySelector('[data-page="ayuda"]').click();assert.equal(document.querySelectorAll('.help-step').length,4);document.querySelector('.settings-close').click();assert.equal(settings.open,false);
  const level=document.querySelector('#level');level.value=.8;await new Promise(r=>setTimeout(r,0));assert.ok(document.querySelectorAll('.audio-bars .lit').length>0);
  level.value=0;await new Promise(r=>setTimeout(r,0));assert.equal(document.querySelectorAll('.audio-bars .lit').length,0);
  await window.happyDOM.close();delete globalThis.__clinicalTest;
@@ -117,4 +120,13 @@ test('tema: Día por defecto, valores válidos y migración Sala a Ámbar',()=>{
  const resolve=new Function(declaration+';return resolveTheme;')();
  for(const input of [null,undefined,'','invalid'])assert.equal(resolve(input),'dia');
  assert.equal(resolve('sala'),'ambar');for(const theme of ['dia','penumbra','ambar'])assert.equal(resolve(theme),theme);
+});
+
+test('paleta: favorita por fila y guardar el informe actual como plantilla',async()=>{
+ const {window,editor,button}=setup();editor.element.textContent='Texto sintético de plantilla propia';editor.element.dispatchEvent(new window.Event('input'));
+ button('Guardar el informe actual como plantilla').click();assert.equal(document.querySelector('[aria-label="Contenido de plantilla"]').value,editor.model.text);
+ document.querySelector('[aria-label="Nombre de plantilla"]').value='Mi estructura';button('Guardar nueva plantilla').click();
+ assert.equal(JSON.parse(localStorage.getItem('dicta-templates-v1')).at(-1).text,editor.model.text);
+ const star=[...document.querySelectorAll('.template-star')].find(b=>b.getAttribute('aria-label')==='Favorita: Mi estructura');star.click();assert.equal(JSON.parse(localStorage.getItem('dicta-template-favorites-v1')).length,1);
+ assert.equal(editor.model.text,'Texto sintético de plantilla propia');await window.happyDOM.close();
 });
