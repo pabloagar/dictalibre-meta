@@ -1,0 +1,244 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>
+<title>Hoja clínica v3</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Public+Sans:wght@400;500;600;700&family=Atkinson+Hyperlegible+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: documento de una columna que recorre el flujo en cuatro momentos (elegir plantilla → dictar → cambiar plantilla → ajustes).
+   Las maquetas usan la paleta «Hoja clínica» v2.1 (sala por defecto, grises cálidos, un color por significado) y van en
+   contenedores con desplazamiento propio. La página sigue el tema del visor. */
+:root{--bg:#efede8;--surface:#faf9f6;--fg:#24221e;--muted:#59544b;--line:#d6d1c7;--warn:#8a5a00;--warn-bg:#f1e6cf;
+  --ui:'Public Sans',system-ui,sans-serif;--mono:'Atkinson Hyperlegible Mono',ui-monospace,monospace}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#131211;--surface:#1c1b19;--fg:#c8c4bb;--muted:#99948a;--line:#33312d;--warn:#c99a4b;--warn-bg:#2a2418;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#131211;--surface:#1c1b19;--fg:#c8c4bb;--muted:#99948a;--line:#33312d;--warn:#c99a4b;--warn-bg:#2a2418;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:16px/1.55 var(--ui)}
+.wrap{max-width:1180px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:40px}
+h1{font-size:30px;line-height:1.15;margin:0;text-wrap:balance}
+h2{font-size:21px;margin:0;text-wrap:balance}
+h3{font-size:16px;margin:0}
+p{margin:0;max-width:72ch}
+.lead{color:var(--muted)}
+.meta{font:13px var(--mono);color:var(--muted)}
+section{display:grid;gap:14px;min-width:0}
+.step{font:600 13px var(--mono);color:var(--muted)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:14px;display:grid;gap:6px;align-content:start}
+.card p,.card li{font-size:15px}
+ul.plain{margin:0;padding-left:18px;display:grid;gap:3px}
+.stage{overflow-x:auto;border:1px solid var(--line);border-radius:4px;background:var(--surface);padding:14px}
+.row{display:flex;gap:18px;align-items:flex-start;width:max-content}
+.cap{font:12px var(--mono);color:var(--muted);margin-bottom:6px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:4px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;color:var(--muted);font-weight:600}
+code{font:13px var(--mono)}
+
+/* ===== Maquetas «Hoja clínica» v3 · sala por defecto (.H), día opcional (.H.dia) ===== */
+.H{--mesa:#131211;--hoja:#1c1b19;--barra:#181715;--ln:#33312d;--tinta:#c8c4bb;--t2:#99948a;--t3:#8a857c;--fin:#34322d;--fintx:#d8d4cb;
+  --rec:#d9705f;--recbg:#2a1c19;--alerta:#c99a4b;--alertabg:#2a2418;--borr:#99948a;--chip:#22211e;
+  font-family:'Public Sans',system-ui,sans-serif;color:var(--tinta)}
+.H.dia{--mesa:#e6e2da;--hoja:#f6f4ef;--barra:#eeebe4;--ln:#cfc9be;--tinta:#24221e;--t2:#59544b;--t3:#5f5a51;--fin:#3a3732;--fintx:#f6f4ef;
+  --rec:#a8321f;--recbg:#f3e0da;--alerta:#8a5a00;--alertabg:#f1e6cf;--borr:#59544b;--chip:#f6f4ef}
+.H .desk{width:1180px;height:600px;grid-template-columns:minmax(0,1fr);background:var(--mesa);border:1px solid var(--ln);display:grid;grid-template-rows:auto 1fr;font-size:13.5px;position:relative;overflow:hidden}
+.H .bar{display:flex;align-items:center;gap:6px;padding:9px 12px;min-width:0;overflow:hidden;font-size:12.5px;background:var(--barra);border-bottom:1px solid var(--ln);flex-wrap:nowrap}
+.H .bar>*{flex-shrink:0}
+.H .name{font-weight:700;white-space:nowrap}
+.H .name small{display:block;font-weight:400;font-size:11px;color:var(--t3)}
+.H .sep{width:1px;align-self:stretch;background:var(--ln);margin:0 4px}
+.H .grow{flex:1}
+.H .btn{border:1px solid var(--ln);background:var(--chip);color:var(--tinta);padding:6px 10px;border-radius:4px;font:inherit;white-space:nowrap}
+.H .btn.fin{background:var(--fin);border-color:var(--fin);color:var(--fintx);font-weight:600}
+.H .btn.ghost{background:transparent}
+.H .tplchip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--ln);background:var(--chip);border-radius:4px;padding:5px 9px;white-space:nowrap}
+.H .tplchip b{font-weight:600}
+.H .tplchip span{color:var(--t2);text-decoration:underline;text-underline-offset:3px}
+.H .seg{display:inline-flex;border:1px solid var(--ln);border-radius:4px;overflow:hidden;white-space:nowrap}
+.H .seg span{padding:5px 9px;color:var(--t2);border-right:1px solid var(--ln)}
+.H .seg span:last-child{border-right:0}
+.H .seg span.lab{color:var(--t3);background:transparent}
+.H .seg span.on{background:var(--tinta);color:var(--hoja);font-weight:700}
+.H .gloss{color:var(--t2);white-space:nowrap;font-size:12.5px}
+.H .gloss b{color:var(--alerta);font-weight:600}
+.H .live{display:inline-flex;align-items:center;gap:7px;border:2px solid var(--rec);background:var(--recbg);color:var(--rec);padding:4px 9px;border-radius:4px;font-weight:600;white-space:nowrap}
+.H .live i{width:8px;height:8px;border-radius:50%;background:var(--rec)}
+.H .live span{color:var(--tinta);font-weight:500}
+.H .idle{display:inline-flex;align-items:center;gap:7px;color:var(--t2);white-space:nowrap}
+.H .idle i{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--t2)}
+.H .mesa{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:18px;padding:16px 22px;min-height:0}
+.H .sheet{background:var(--hoja);border:1px solid var(--ln);padding:24px 48px;overflow:hidden}
+.H .shead{display:flex;justify-content:space-between;font-size:11.5px;color:var(--t3);border-bottom:1px solid var(--ln);padding-bottom:8px;margin-bottom:12px}
+.H .txt{font:17px/1.62 'Source Serif 4',Georgia,serif;max-width:64ch;font-variant-numeric:lining-nums tabular-nums}
+.H .txt h5{font:600 12.5px 'Public Sans',sans-serif;color:var(--t2);margin:12px 0 3px}
+.H .txt p{margin:0 0 7px}
+.H .draft{font-style:italic;text-decoration:underline dotted 2px var(--borr);text-underline-offset:4px}
+.H .caret{display:inline-block;width:2px;height:1.05em;background:var(--rec);vertical-align:-2px}
+.H .sens{background:var(--alertabg);box-shadow:inset 0 -2px 0 var(--alerta)}
+.H .ref{font:700 10px 'Public Sans',sans-serif;color:var(--alerta);vertical-align:super}
+.H .notes{display:grid;gap:10px;align-content:start}
+.H .note{background:var(--hoja);border:1px solid var(--ln);border-left:4px solid var(--alerta);padding:9px 10px;border-radius:3px;display:grid;gap:6px;font-size:12.5px}
+.H .note h6{margin:0;font-size:11.5px;color:var(--alerta)}
+.H .note.neutral{border-left-color:var(--t3)} .H .note.neutral h6{color:var(--t2)}
+.H .note .acts{display:flex;gap:5px;flex-wrap:wrap}
+.H .note .btn{font-size:11.5px;padding:3px 7px}
+/* Selector de plantilla a pantalla: solo antes de la primera plantilla */
+.H .picker{display:grid;place-items:start center;padding:28px 22px;min-height:0}
+.H .pk{width:720px;background:var(--hoja);border:1px solid var(--ln);border-radius:4px;padding:20px 22px;display:grid;gap:12px}
+.H .pk h4{margin:0;font-size:17px}
+.H .pk .q{border:1px solid var(--ln);border-radius:4px;padding:9px 11px;color:var(--t3);display:flex;justify-content:space-between}
+.H .pk .q kbd{font:11px 'Atkinson Hyperlegible Mono',monospace;border:1px solid var(--ln);padding:0 4px;border-radius:3px}
+.H .pk .grid{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+.H .pk .it{display:grid;grid-template-columns:22px 1fr auto;gap:8px;align-items:center;padding:7px 4px;border-bottom:1px solid var(--ln)}
+.H .pk .it em{font:11px 'Atkinson Hyperlegible Mono',monospace;color:var(--t3);font-style:normal}
+.H .pk .it small{font-size:11px;color:var(--t3)}
+.H .pk .it.on{background:var(--chip);outline:1px solid var(--t3)}
+.H .pk .foot{display:flex;gap:10px;align-items:center;color:var(--t2);font-size:12.5px}
+/* Popovers */
+.H .pop{position:absolute;background:var(--hoja);border:1px solid var(--t3);border-radius:4px;padding:12px;display:grid;gap:8px;font-size:12.5px;width:320px}
+.H .pop h6{margin:0;font-size:12px}
+.H .pop .opt{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid var(--ln)}
+.H .pop .opt:last-child{border-bottom:0}
+.H .pop .opt span{color:var(--t2)}
+.H .pop .acts{display:flex;gap:6px}
+/* Teléfono */
+.H .phone{width:300px;height:600px;background:var(--mesa);border:1px solid var(--ln);display:flex;flex-direction:column;font-size:13.5px}
+.H .ph-top{display:flex;justify-content:space-between;padding:11px 13px;color:var(--t2)}
+.H .visor{margin:0 13px;background:#100f0e;color:#c8c4bb;border-radius:6px;padding:13px 15px;display:grid;gap:7px}
+.H.dia .visor{background:#24221e;color:#ece8e0}
+.H .visor .l1{display:flex;justify-content:space-between}
+.H .visor .t{font:700 42px/1 'Public Sans',sans-serif;font-variant-numeric:tabular-nums}
+.H .visor .vu{height:5px;background:#3d3a34;border-radius:3px;overflow:hidden}
+.H .visor .vu i{display:block;height:100%;background:#d9705f}
+.H .visor .d{font-size:12px;color:#8a857c;border-top:1px solid #3d3a34;padding-top:7px;display:grid;gap:2px}
+.H .visor b{color:#e8806f}
+.H .key{margin:auto 13px 0;height:250px;border-radius:14px;background:#7a3328;color:#f1ece4;display:grid;place-content:center;text-align:center;gap:5px}
+.H .key b{font-size:19px}
+.H .ph-mode{margin:10px 13px 13px;font-size:12px;color:var(--t2)}
+.H .phone.rec{box-shadow:inset 0 0 0 5px var(--rec)}
+</style>
+
+<div class="wrap">
+<header style="display:grid;gap:10px">
+  <div class="meta">Dicta Libre · propuesta B «Hoja clínica» v3 · 2 de noviembre de 2026 · maquetas con texto sintético · el menú y la plantilla de un solo uso ya funcionan en /live; el resto no está implementado</div>
+  <h1>Hoja clínica v3: plantilla de un solo uso y menú ordenado</h1>
+  <p class="lead">Parte del diseño actual (sala por defecto, grises cálidos) y lo adapta a cómo trabaja el radiólogo: elige la plantilla una vez, la plantilla desaparece y queda solo el informe, y el menú muestra arriba lo que se usa en cada estudio. Lo técnico pasa a «Ajustes».</p>
+</header>
+
+<section>
+  <h2>El menú, de izquierda a derecha</h2>
+  <div class="cols">
+    <div class="card"><h3>1 · El estudio</h3><p>Plantilla aplicada («TC de abdomen y pelvis · cambiar») y sexo <b>F · M · —</b>. Es lo que define este informe. El glosario propuesto aparece como nota al margen, marcado «sin medir».</p></div>
+    <div class="card"><h3>2 · El dictado</h3><p>Un solo indicador: gris «Teléfono conectado» en reposo y rojo «Grabando 00:04 en Hallazgos, párrafo 2» al dictar. Si no hay teléfono, aquí aparece «Conectar teléfono».</p></div>
+    <div class="card"><h3>3 · La salida</h3><p>Deshacer, Revisar informe y Copiar para RIS, siempre en el mismo lugar. Copiar es gris: no encandila.</p></div>
+    <div class="card"><h3>Ajustes (a demanda)</h3><p>Motor, segmentación, comandos de dictado, tamaño de letra, laboratorio y diagnóstico. Hoy están a la vista y empujan el informe hacia abajo.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="step">Momento 1 · antes de la primera plantilla</div>
+  <h2>Elegir la plantilla ocupa la pantalla una sola vez</h2>
+  <p class="lead">Al abrir sin informe, lo primero es elegir. Los 10 exámenes más solicitados van arriba, en orden, con su glosario de demostración. Una tecla para buscar (/) y «Informe en blanco» siempre a mano. Al elegir, el selector desaparece.</p>
+  <div class="stage H"><div class="cap">Escritorio · sala · sin informe todavía</div>
+    <div class="desk">
+      <div class="bar"><span class="name">Dicta Libre<small>prototipo · solo material sintético</small></span><span class="sep"></span><span class="idle"><i></i>Teléfono conectado</span><span class="grow"></span><button class="btn ghost">Ajustes ▾</button></div>
+      <div class="picker"><div class="pk">
+        <h4>¿Qué estudio vas a informar?</h4>
+        <div class="q"><span>Buscar plantilla por estudio, región o frase</span><kbd>/</kbd></div>
+        <div class="grid">
+          <div><div class="it on"><em>1</em><span>TC de abdomen y pelvis</span><small>glosario demo</small></div><div class="it"><em>2</em><span>TC de cerebro</span><small>glosario demo</small></div><div class="it"><em>3</em><span>TC de tórax</span><small>glosario demo</small></div><div class="it"><em>4</em><span>AngioTC de tórax (TEP)</span><small>glosario demo</small></div><div class="it"><em>5</em><span>TC de columna</span><small>glosario demo</small></div></div>
+          <div><div class="it"><em>6</em><span>TC de cuello</span><small>glosario demo</small></div><div class="it"><em>7</em><span>TC de cavidades, órbitas y oídos</span><small>glosario demo</small></div><div class="it"><em>8</em><span>PieloTC / UroTC</span><small>glosario demo</small></div><div class="it"><em>9</em><span>AngioTC de cerebro y cuello</span><small>glosario demo</small></div><div class="it"><em>10</em><span>AngioTC de aorta</span><small>glosario demo</small></div></div>
+        </div>
+        <div class="foot"><button class="btn">Informe en blanco</button><button class="btn ghost">Mis plantillas (3)</button><span class="grow"></span><span>↑ ↓ y Enter para elegir</span></div>
+      </div></div>
+    </div></div>
+</section>
+
+<section>
+  <div class="step">Momento 2 · dictando</div>
+  <h2>Solo queda el informe y el menú del estudio</h2>
+  <p class="lead">La plantilla ya no ocupa espacio: la hoja usa el ancho. Sexo marcado F; el informe menciona próstata, así que aparece el aviso local (no va a Meta). La toma en curso escribe en Hallazgos, con borrador en cursiva.</p>
+  <div class="stage"><div class="row H">
+    <div><div class="cap">Escritorio · sala · grabando</div>
+    <div class="desk">
+      <div class="bar"><span class="name">Dicta Libre<small>prototipo · solo material sintético</small></span><span class="sep"></span>
+        <span class="tplchip"><b>TC de abdomen y pelvis</b> <span>cambiar</span></span>
+        <span class="seg"><span class="lab">Sexo</span><span class="on">F</span><span>M</span><span>—</span></span>
+        <span class="grow"></span>
+        <span class="live"><i></i>Grabando 00:04 <span>Hallazgos ¶2</span></span><span class="sep"></span>
+        <button class="btn ghost">Deshacer</button><button class="btn">Revisar</button><button class="btn fin">Copiar para RIS</button><button class="btn ghost">Ajustes ▾</button></div>
+      <div class="mesa">
+        <div class="sheet"><div class="shead"><span>Informe en edición · no enviado a ningún sistema</span><span>Sexo F</span></div>
+          <div class="txt"><h5>Técnica</h5><p>Tomografía computada de abdomen y pelvis con contraste endovenoso.</p>
+          <h5>Hallazgos</h5><p>Hígado de tamaño normal, sin lesiones focales. Vía biliar no dilatada.</p>
+          <p><span class="sens">Próstata</span><span class="ref">1</span> de tamaño normal. <span class="draft">Útero en anteversión, sin lesiones</span><span class="caret"></span></p>
+          <h5>Impresión</h5><p>Sin hallazgos agudos.</p></div></div>
+        <div class="notes">
+          <div class="note"><h6>1 · Revisar sexo</h6><span>«Próstata» en un informe marcado F.</span><div class="acts"><button class="btn">Ir al texto</button><button class="btn">Es correcto</button></div><span style="color:var(--t3);font-size:11px">Revisión local; no se envía a Meta.</span></div>
+          <div class="note neutral"><h6>Glosario de este estudio</h6><span>Demo · 20 términos. Sin medir: no garantiza mejor reconocimiento.</span><div class="acts"><button class="btn">Cambiar</button><button class="btn">Sin glosario</button></div></div>
+        </div>
+      </div>
+    </div></div>
+    <div><div class="cap">Teléfono · sala · grabando</div>
+      <div class="phone rec"><div class="ph-top"><span>Conectado al PC</span><span>Opciones</span></div>
+        <div class="visor"><div class="l1"><b>Grabando</b><span>Toma 4</span></div><div class="t">0:04</div><div class="vu"><i style="width:65%"></i></div><div class="d"><span>TC de abdomen y pelvis · sexo F</span><span>Escribiendo en: Hallazgos, párrafo 2</span></div></div>
+        <div class="key"><b>Suelta para terminar</b><small>El PC muestra el borrador</small></div>
+        <div class="ph-mode">Modo: mantener pulsado</div></div></div>
+  </div></div>
+</section>
+
+<section>
+  <div class="step">Momento 3 · cambiar de plantilla</div>
+  <h2>Cambiar no borra sin avisar</h2>
+  <p class="lead">«cambiar» abre el mismo selector como ventana pequeña. Si el informe tiene texto propio, el botón pide confirmar («Reemplazar informe actual») y recuerda que se puede deshacer. Así funciona hoy en /live.</p>
+  <div class="stage H dia"><div class="cap">Escritorio · día · confirmar reemplazo</div>
+    <div class="desk" style="height:430px">
+      <div class="bar"><span class="name">Dicta Libre<small>prototipo · solo material sintético</small></span><span class="sep"></span>
+        <span class="tplchip"><b>TC de abdomen y pelvis</b> <span>cambiar</span></span>
+        <span class="seg"><span class="lab">Sexo</span><span class="on">F</span><span>M</span><span>—</span></span><span class="grow"></span>
+        <span class="idle"><i></i>Teléfono conectado</span><span class="sep"></span><button class="btn ghost">Deshacer</button><button class="btn">Revisar</button><button class="btn fin">Copiar para RIS</button></div>
+      <div class="mesa" style="grid-template-columns:1fr"><div class="sheet"><div class="txt"><h5>Hallazgos</h5><p>Hígado de tamaño normal, sin lesiones focales. Vía biliar no dilatada.</p></div></div></div>
+      <div class="pop" style="left:200px;top:58px;width:380px">
+        <h6>Cambiar plantilla</h6>
+        <div class="opt"><b>PieloTC / UroTC</b><span>glosario demo</span></div>
+        <p style="font-size:12.5px">Esto reemplaza el informe actual por la plantilla elegida. El sexo vuelve a «—». Podrás deshacerlo.</p>
+        <div class="acts"><button class="btn fin">Reemplazar informe actual</button><button class="btn">Cancelar</button></div>
+      </div>
+    </div></div>
+</section>
+
+<section>
+  <div class="step">Momento 4 · ajustes</div>
+  <h2>Lo técnico, en un solo menú</h2>
+  <p class="lead">Lo que hoy aparece sobre el informe (motor, segmentación, comandos, laboratorio, diagnóstico) pasa a «Ajustes». Cada opción muestra su estado actual, así no hace falta abrirla para saberlo.</p>
+  <div class="stage H"><div class="cap">Escritorio · sala · menú Ajustes abierto</div>
+    <div class="desk" style="height:440px">
+      <div class="bar"><span class="name">Dicta Libre<small>prototipo · solo material sintético</small></span><span class="sep"></span><span class="tplchip"><b>TC de cerebro</b> <span>cambiar</span></span><span class="seg"><span class="lab">Sexo</span><span>F</span><span>M</span><span class="on">—</span></span><span class="grow"></span><span class="idle"><i></i>Teléfono conectado</span><span class="sep"></span><button class="btn ghost">Deshacer</button><button class="btn">Revisar</button><button class="btn fin">Copiar para RIS</button><button class="btn">Ajustes ▴</button></div>
+      <div class="mesa" style="grid-template-columns:1fr"><div class="sheet"><div class="txt"><h5>Hallazgos</h5><p>Sistema ventricular de tamaño normal.</p></div></div></div>
+      <div class="pop" style="right:14px;top:58px">
+        <h6>Ajustes</h6>
+        <div class="opt">Motor <span>Muse-streaming · envía audio a Meta</span></div>
+        <div class="opt">Cierre de toma <span>Manual</span></div>
+        <div class="opt">Comandos de dictado <span>Activados</span></div>
+        <div class="opt">Revisor Meta por toma <span>Activado · envía texto</span></div>
+        <div class="opt">Tamaño de letra <span>A− 17 px A+</span></div>
+        <div class="opt">Tema <span>Sala (día opcional)</span></div>
+        <div class="opt">Laboratorio y diagnóstico <span>Abrir</span></div>
+      </div>
+    </div></div>
+</section>
+
+<section>
+  <h2>Qué cambia respecto de hoy</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Hoy en /live</th><th>v3</th><th>Estado</th></tr></thead>
+    <tbody>
+      <tr><td>Panel «Plantillas» sobre el editor; quedaba abierto</td><td>Selector a pantalla solo al inicio; después «Plantilla: … · cambiar»</td><td>Cierre tras aplicar y confirmación: <b>implementado</b>. Selector a pantalla con los 10 exámenes: propuesta</td></tr>
+      <tr><td>Sexo: lista desplegable junto a los botones</td><td>Selector F · M · — en la barra del estudio</td><td>Revisión local: <b>implementada</b>. Selector segmentado: propuesta</td></tr>
+      <tr><td>Glosario: selector «Configuración de Muse» en la barra de dictado</td><td>Nota al margen «Glosario de este estudio», marcada «sin medir», para cambiarlo o quitarlo</td><td>Propuesta automática: <b>implementada</b>. Nueva ubicación: propuesta</td></tr>
+      <tr><td>Motor, segmentación, comandos y diagnóstico visibles sobre el informe</td><td>Menú «Ajustes» con el estado de cada opción</td><td>Propuesta</td></tr>
+      <tr><td>Avisos de revisión debajo del informe</td><td>Notas al margen junto al párrafo, con «Ir al texto»</td><td>Propuesta</td></tr>
+    </tbody>
+  </table></div>
+  <p>Antes del 4-nov conviene solo lo que no toca la lógica: mover controles existentes a «Ajustes» y a la barra del estudio, y el selector de plantilla a pantalla cuando no hay informe. Las notas al margen alineadas al párrafo quedan para después.</p>
+</section>
+</div>
+</body></html>

@@ -305,3 +305,13 @@ Maquetas en vivo en `docs/propuesta-ui/propuesta-v2.html`, también publicadas c
 - el estado «La toma no produjo texto».
 
 Todo el texto es sintético. **Nada está implementado.** La recomendación no cambia: A en escritorio y el visor de B en el teléfono; antes del 4-nov solo los cambios de §9 que no tocan la lógica.
+
+## Propuesta B v3 (2-nov-2026): plantilla de un solo uso y menú ordenado
+
+Archivo: `docs/propuesta-ui/propuesta-b/propuesta-b-v3.html`. Usa la paleta «Hoja clínica» v2.1 (sala por defecto) y se ordena en cuatro momentos:
+1. selector de plantilla a pantalla solo antes de la primera plantilla, con los 10 exámenes más solicitados;
+2. al dictar, solo el informe y una barra del estudio (plantilla · sexo F/M/— · indicador de dictado · Deshacer · Revisar · Copiar para RIS · Ajustes); el glosario y los avisos van como notas al margen;
+3. cambiar de plantilla pide confirmación si hay texto propio;
+4. lo técnico (motor, cierre de toma, comandos, Revisor, tamaño de letra, tema, laboratorio) se agrupa en «Ajustes» mostrando su estado.
+
+Ya implementado en `/live`: el cierre del panel tras aplicar la plantilla, la confirmación al reemplazar, la revisión local por sexo y la propuesta automática del glosario. Lo demás es propuesta.
