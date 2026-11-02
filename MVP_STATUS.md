@@ -8,7 +8,7 @@ Render activo: a24d976955d81497d48978b3df923d43c5915d61, despliegue dep-dbkeoct6
 ✅ Samsung: conectar → dictar → tomas en cola → nuevo informe
 ✅ Glosario: seleccionado → tres frases correctas comunicadas por usuario
                     ↓
-🟨 Recorrido completo: plantilla → dictado → deshacer/rehacer → revisar → copiar
+✅ Recorrido completo: plantilla → dictado → deshacer/rehacer → revisar → copiar [usuario confirma]
 🟨 Últimos cambios móviles: escáner QR y recuperación de 3–4 minutos
                     ↓
 ⬜ iPhone: Safari, permisos, captura y regreso de otra aplicación
@@ -27,8 +27,8 @@ Render activo: a24d976955d81497d48978b3df923d43c5915d61, despliegue dep-dbkeoct6
 | 5. Comandos/formato | Probado; medidas correctas | Saltos de línea en recorrido final; comas adicionales conocidas |
 | 6. Fusión de motores | Diferida | No bloquea MVP |
 | 7. Terminología | Glosario activo y confirmado | No pedir otra tanda humana para esta adopción |
-| 8. Revisión IA | Activa; integración verificada | Aceptación en recorrido completo, sin cambios automáticos |
-| 9. Editor/plantillas | Implementado y probado técnicamente | Resultado físico de plantilla/deshacer/rehacer/copiar pendiente |
+| 8. Revisión IA | Recorrido aceptado por usuario | Mantener límites de detección registrados |
+| 9. Editor/plantillas | Recorrido físico aceptado por usuario | Sin pendientes funcionales comunicados en este bloque |
 | 10. Entrega | Pendiente | iPhone, ensayo, versión fija y video |
 
 Los estados no son porcentajes ni medidas de precisión. La aceptación Samsung es comunicada por el responsable y apoyada por captura; no fue una toma realizada por el agente.
@@ -45,3 +45,5 @@ Comparación previa de 12 audios humanos: términos 8/12→12/12, coincidencia e
 2. Un control de últimos cambios móviles: QR desde la página, preparación inicial, regreso sin preparación separada tras 3–4 minutos; desconexión vencida comprensible sin perder informe. Retorno breve ya aprobado previamente.
 3. iPhone con Safari: protocolo tests/IPHONE_MVP.md. Pendiente disponibilidad, sin dar compatibilidad por garantizada.
 4. Resolver solo fallos bloqueantes encontrados, fijar versión/configuración y grabar un ensayo más video de respaldo. Mantener fuera: fusión, nuevos rediseños, Tonos y plantillas por voz. Puntuación adicional conocida no frena la adopción acordada; conservarla como limitación.
+
+Actualización posterior: responsable confirma plantilla, deshacer/rehacer, revisión, copia y nuevo informe vacío con teléfono conectado. Bloque de editor aprobado por comunicación del usuario; no hay nueva medición automatizada. Señala puntuación añadida sin querer: defecto pendiente a investigar sin borrar signos dictados. No se considera corregido ni se cambia producción. Siguiente bloque: conexión Samsung; iPhone/Safari al día siguiente. El punto 1 anterior queda completado; conservar los restantes.
