@@ -1,0 +1,289 @@
+{
+  "schema": "mvp-synthetic-summary-v1",
+  "build": "ecf0da79ba76dac272eadf721bf01adeed316999",
+  "protocolHash": "118cf9305dd23879e2f6e1700634e3d2425238925648e7fdc61455ed32e44ca2",
+  "resultsHash": "4f5a229b780c5bcacaad648c17cca548b4e377bde33449e6949b97d019b04eb3",
+  "referenceValidated": false,
+  "assessment": "agent comparison to provisional TTS scripts; no human listening or clinical validation",
+  "conditions": {
+    "repetitions": 1,
+    "os": "win32",
+    "osRelease": "10.0.26200",
+    "node": "v24.22.1",
+    "browser": null,
+    "phone": null,
+    "network": null,
+    "audioSource": "System.Speech local synthetic TTS",
+    "voices": [
+      "Microsoft Helena Desktop",
+      "Microsoft Laura",
+      "Microsoft Pablo"
+    ],
+    "referenceValidated": false,
+    "referenceOrigin": "TTS input script, no human listening validation",
+    "replay": "PCM16 frames, 80ms paced over loopback; provider adapter paces its own upload",
+    "clockResolutionMs": null,
+    "instrumentationOverheadMs": null
+  },
+  "counts": {
+    "audioFiles": 15,
+    "independentScripts": 5,
+    "completedAsr": 15,
+    "formattedMatches": 11,
+    "mismatchedCases": 4,
+    "reviewOutcomes": 15,
+    "uniqueProviderReviews": 9,
+    "cachedReuses": 6,
+    "noticesAcrossCases": 8,
+    "uniqueNotices": 7,
+    "mismatchedCasesWithNotice": 4,
+    "matchedCasesWithNotice": 3,
+    "originalsPreserved": 15
+  },
+  "timingMs": {
+    "serverEndReceivedToFinal": {
+      "n": 15,
+      "min": 447.5852999999988,
+      "median": 772.2399000000005,
+      "max": 955.0362000000023
+    },
+    "providerEndStreamToFinal": {
+      "n": 15,
+      "min": 195.53430000000662,
+      "median": 219.6821,
+      "max": 258.1235000000015
+    },
+    "uniqueReviewRequest": {
+      "n": 9,
+      "min": 1834.1140000000014,
+      "median": 3526.4542000000074,
+      "max": 5620.251399999994
+    }
+  },
+  "protectedContentAssessment": {
+    "basis": "manual agent text comparison, provisional script",
+    "polarityMarkers": {
+      "preserved": 12,
+      "opportunities": 12,
+      "note": "no/sin/affirmation retained; wrong noun can still invalidate a full assertion"
+    },
+    "laterality": {
+      "preserved": 6,
+      "opportunities": 6
+    },
+    "measureAndUnit": {
+      "preserved": 6,
+      "opportunities": 6
+    },
+    "wholeFindingAdditionsObserved": 0,
+    "neumothoraxTerm": {
+      "correct": 3,
+      "opportunities": 6
+    }
+  },
+  "reviewAssessment": {
+    "usefulErrorNoticesAcrossCases": 4,
+    "additionalCompletenessNoticesAcrossCases": 4,
+    "additionalCompletenessNoticesUnique": 3,
+    "note": "Completeness notices are not dictation errors: missing side/size and impression/hallazgo coverage. May be relevant to complete-report review; not evidence of ASR failure. No automatic edits."
+  },
+  "acceptance": {
+    "allInferencesCompleted": true,
+    "allProtectedClinicalContentAndCommandsPreserved": false,
+    "mvpQualityGate": "not closed",
+    "humanReferenceValidationPending": true,
+    "iphone": "owner to test"
+  },
+  "perCase": [
+    {
+      "caseId": "microsoft-helena-desktop-commands",
+      "baseId": "commands",
+      "voice": "Microsoft Helena Desktop",
+      "status": "completed",
+      "formattedMatchIgnoringCaseAndHorizontalSpaces": true,
+      "annotation": null,
+      "reviewStatus": "completed",
+      "noticeCount": 0,
+      "originalPreserved": true
+    },
+    {
+      "caseId": "microsoft-helena-desktop-negation",
+      "baseId": "negation",
+      "voice": "Microsoft Helena Desktop",
+      "status": "completed",
+      "formattedMatchIgnoringCaseAndHorizontalSpaces": false,
+      "annotation": {
+        "stage": "asr",
+        "kind": "terminology-substitution",
+        "expected": "neumotórax",
+        "observed": "neuromotor ax"
+      },
+      "reviewStatus": "completed",
+      "noticeCount": 1,
+      "originalPreserved": true
+    },
+    {
+      "caseId": "microsoft-helena-desktop-positive",
+      "baseId": "positive",
+      "voice": "Microsoft Helena Desktop",
+      "status": "completed",
+      "formattedMatchIgnoringCaseAndHorizontalSpaces": false,
+      "annotation": {
+        "stage": "asr",
+        "kind": "terminology-substitution",
+        "expected": "neumotórax",
+        "observed": "neuromotorax"
+      },
+      "reviewStatus": "completed",
+      "noticeCount": 1,
+      "originalPreserved": true
+    },
+    {
+      "caseId": "microsoft-helena-desktop-left-decimal",
+      "baseId": "left-decimal",
+      "voice": "Microsoft Helena Desktop",
+      "status": "completed",
+      "formattedMatchIgnoringCaseAndHorizontalSpaces": true,
+      "annotation": null,
+      "reviewStatus": "completed",
+      "noticeCount": 0,
+      "originalPreserved": true
+    },
+    {
+      "caseId": "microsoft-helena-desktop-sections",
+      "baseId": "sections",
+      "voice": "Microsoft Helena Desktop",
+      "status": "completed",
+      "formattedMatchIgnoringCaseAndHorizontalSpaces": false,
+      "annotation": {
+        "stage": "asr-and-number-and-command-formatting",
+        "kind": "heading-command-error",
+        "expected": "Hallazgos:",
+        "observed": "Hallazgos 2.",
+        "chain": [
+          "ASR: dos punto (singular)",
+          "number formatter: dos -> 2",
+          "command formatter: punto -> ."
+        ]
+      },
+      "reviewStatus": "completed",
+      "noticeCount": 2,
+      "originalPreserved": true
+    },
+    {
+      "caseId": "microsoft-laura-commands",
+      "baseId": "commands",
+      "voice": "Microsoft Laura",
+      "status": "completed",
+      "formattedMatchIgnoringCaseAndHorizontalSpaces": true,
+      "annotation": null,
+      "reviewStatus": "completed",
+      "noticeCount": 0,
+      "originalPreserved": true
+    },
+    {
+      "caseId": "microsoft-laura-negation",
+      "baseId": "negation",
+      "voice": "Microsoft Laura",
+      "status": "completed",
+      "formattedMatchIgnoringCaseAndHorizontalSpaces": true,
+      "annotation": null,
+      "reviewStatus": "completed",
+      "noticeCount": 0,
+      "originalPreserved": true
+    },
+    {
+      "caseId": "microsoft-laura-positive",
+      "baseId": "positive",
+      "voice": "Microsoft Laura",
+      "status": "completed",
+      "formattedMatchIgnoringCaseAndHorizontalSpaces": true,
+      "annotation": null,
+      "reviewStatus": "completed",
+      "noticeCount": 1,
+      "originalPreserved": true
+    },
+    {
+      "caseId": "microsoft-laura-left-decimal",
+      "baseId": "left-decimal",
+      "voice": "Microsoft Laura",
+      "status": "completed",
+      "formattedMatchIgnoringCaseAndHorizontalSpaces": true,
+      "annotation": null,
+      "reviewStatus": "completed",
+      "noticeCount": 0,
+      "originalPreserved": true
+    },
+    {
+      "caseId": "microsoft-laura-sections",
+      "baseId": "sections",
+      "voice": "Microsoft Laura",
+      "status": "completed",
+      "formattedMatchIgnoringCaseAndHorizontalSpaces": true,
+      "annotation": null,
+      "reviewStatus": "completed",
+      "noticeCount": 1,
+      "originalPreserved": true
+    },
+    {
+      "caseId": "microsoft-pablo-commands",
+      "baseId": "commands",
+      "voice": "Microsoft Pablo",
+      "status": "completed",
+      "formattedMatchIgnoringCaseAndHorizontalSpaces": true,
+      "annotation": null,
+      "reviewStatus": "completed",
+      "noticeCount": 0,
+      "originalPreserved": true
+    },
+    {
+      "caseId": "microsoft-pablo-negation",
+      "baseId": "negation",
+      "voice": "Microsoft Pablo",
+      "status": "completed",
+      "formattedMatchIgnoringCaseAndHorizontalSpaces": true,
+      "annotation": null,
+      "reviewStatus": "completed",
+      "noticeCount": 0,
+      "originalPreserved": true
+    },
+    {
+      "caseId": "microsoft-pablo-positive",
+      "baseId": "positive",
+      "voice": "Microsoft Pablo",
+      "status": "completed",
+      "formattedMatchIgnoringCaseAndHorizontalSpaces": false,
+      "annotation": {
+        "stage": "asr",
+        "kind": "terminology-and-grammar-substitution",
+        "expected": "se observa neumotórax",
+        "observed": "se observan eumotorax"
+      },
+      "reviewStatus": "completed",
+      "noticeCount": 1,
+      "originalPreserved": true
+    },
+    {
+      "caseId": "microsoft-pablo-left-decimal",
+      "baseId": "left-decimal",
+      "voice": "Microsoft Pablo",
+      "status": "completed",
+      "formattedMatchIgnoringCaseAndHorizontalSpaces": true,
+      "annotation": null,
+      "reviewStatus": "completed",
+      "noticeCount": 0,
+      "originalPreserved": true
+    },
+    {
+      "caseId": "microsoft-pablo-sections",
+      "baseId": "sections",
+      "voice": "Microsoft Pablo",
+      "status": "completed",
+      "formattedMatchIgnoringCaseAndHorizontalSpaces": true,
+      "annotation": null,
+      "reviewStatus": "completed",
+      "noticeCount": 1,
+      "originalPreserved": true
+    }
+  ]
+}
