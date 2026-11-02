@@ -459,6 +459,8 @@ body.clinical-workspace, .clinical-workspace .workspace,.clinical-workspace .mai
 .clinical-workspace .clinical-sheet{position:relative}
 .clinical-workspace .empty-guide{position:absolute;top:146px;left:44px;right:44px;font-size:13px;color:var(--dl-muted)}
 .clinical-workspace .empty-guide p{margin:0 0 16px;line-height:1.5}
+.clinical-workspace .empty-guide .inline-template-link{display:inline;min-height:0;padding:0;margin:0;border:0;border-radius:0;background:transparent;font:inherit;color:var(--dl-accent);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.clinical-workspace .empty-guide .inline-template-link:hover{background:transparent;text-decoration-thickness:2px}
 .clinical-workspace .clinical-editbar:has(.clinical-settings[open]){z-index:100}
 .clinical-workspace .template-picker .template-row button:hover{background:var(--dl-soft)}
 @media(max-width:900px){.clinical-workspace .empty-guide{left:22px;right:22px;top:140px}}
