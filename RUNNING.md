@@ -1,6 +1,8 @@
-# Ejecutar la prueba de las fases 1 y 2
+# Ejecutar Dicta Libre
 
-Implementación inicial del 28-10-2026. Solo audio sintético; sin ASR ni corrección. El receptor y el teléfono usan navegador. El servidor de enlace se ejecuta como un proceso aparte: en esta demo se aloja temporalmente en el equipo de desarrollo y se publica por un túnel HTTPS. No es aún un servicio permanente en la nube.
+Estado actual: para dictado con ASR abrir http://127.0.0.1:8789/live después de iniciar tanto Start-Demo.ps1 como Start-Lab.ps1. Preparar credencial Meta y/o Python/modelo según LABORATORY.md. Una instalación nueva no incluye audios, claves ni plantillas privadas.
+
+Las instrucciones siguientes explican también la prueba independiente de captura/transporte, sin ASR. El receptor y el teléfono usan navegador. El servidor de enlace se ejecuta como un proceso aparte: en esta demo se aloja temporalmente en el equipo de desarrollo y se publica por un túnel HTTPS. No es aún un servicio permanente en la nube.
 
 ## Requisitos
 
@@ -25,11 +27,11 @@ En PowerShell, desde la raíz del proyecto:
 .\scripts\Start-Demo.ps1
 ```
 
-El script descarga `cloudflared` oficial 2026.10.5 en `.tools/` si falta, verifica SHA-256 y abre procesos ocultos para el relay y el túnel. No lo instala como servicio. Imprime la URL HTTPS temporal que debes abrir **también en el PC**. Si PowerShell bloquea scripts por una política local, no cambiarla automáticamente: ejecutar desde un entorno autorizado o usar los comandos de despliegue manual siguientes.
+El script descarga `cloudflared` oficial 2026.10.5 en `.tools/` si falta, verifica SHA-256 y abre procesos ocultos para el relay y el túnel. No lo instala como servicio. Imprime la URL HTTPS temporal para transporte. Para transcribir, iniciar además `powershell.exe -NoProfile -File scripts/Start-Lab.ps1` y abrir `/live` en el laboratorio local del PC. Si PowerShell bloquea scripts por una política local, no cambiarla automáticamente: ejecutar desde un entorno autorizado o usar los comandos de despliegue manual siguientes.
 
 1. En el PC, abrir la URL HTTPS, pulsar **Conectar teléfono**.
 2. En el S25 Ultra, escanear el QR. Alternativa: abrir la misma URL con `/mobile` e introducir el código de diez caracteres. El código vence a los dos minutos y es de un solo uso.
-3. Pulsar **Conectar con el PC**. Comparar el número de cuatro cifras de ambos dispositivos y confirmar en el PC.
+3. El QR conecta directamente usando un token temporal de un uso. Solo al introducir el código manual, comparar el número de cuatro cifras y confirmar en el PC.
 4. En el teléfono, pulsar **Preparar micrófono** y aceptar el permiso para ese sitio. Esperar a que indique que está preparado. Para revisar solo transporte, usar **Probar con tono sintético, sin micrófono**.
 5. Probar **Mantener pulsado** con una frase; soltar. Luego probar **Inicio / parada**. No cambiar de modo durante una toma.
 6. En el PC, esperar **Integridad verificada**, escuchar y, opcionalmente, descargar el WAV. Se conservan las últimas cinco tomas en memoria del navegador.

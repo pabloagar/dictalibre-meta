@@ -1,5 +1,28 @@
 # Contribuciones y procedencia
 
+## Estado actual · 1 de noviembre de 2026
+
+La idea y exploración conceptual precedieron al evento; la implementación concursante comenzó el 28-10-2026. La asistencia de IA se utiliza para código, pruebas y documentación. No se reivindican pesos ni entrenamiento de modelos externos.
+
+| Contribución propia implementada | Evidencia | Límite |
+| --- | --- | --- |
+| Captura móvil, QR/código, relay e integridad | apps/mobile, backend/server.mjs, pruebas de protocolo | Demo temporal; pruebas físicas pendientes de completar |
+| Adaptadores Muse-Normal, Muse-streaming y Whisper local | backend/lab*, backend/muse-stream.mjs | Modelos externos; sin superioridad clínica acreditada |
+| Laboratorio, versiones y métricas | apps/lab, METRICS.md, EXPERIMENTS.md | Datos privados no distribuidos |
+| Segmentación opcional, comandos y números | backend/speech-turns.mjs, backend/number-format.mjs | Piloto con original conservado |
+| Revisor Meta con aprobación humana | backend/meta-review.mjs, META_REVIEW.md | No valida clínicamente el informe |
+| Editor, plantillas propias e importador | PHASE_9_EDITOR.md, TEMPLATE_LIBRARY.md | Código incluido; colección externa privada excluida |
+
+Se conservan los 19 commits originales. Los cambios acumulados posteriores se registran con la fecha real del nuevo commit, sin reconstruir artificialmente fechas. PUBLICATION.md describe auditoría y pendientes de reglas/licencia.
+
+Pendiente: aceptación física completa, referencias humanas independientes, evaluación de errores clínicamente relevantes, entrega y comprobante del concurso.
+
+## Registro histórico de contribuciones
+
+Las afirmaciones de ausencia o pendientes siguientes describen el momento de cada entrada, no el estado actual.
+
+
+
 ## Origen y alcance temporal
 
 La idea, investigación y exploración conceptual anteceden al evento. La nueva implementación concursante inicia el 28-10-2026. Este registro no afirma ausencia de experimentos anteriores ni atribuye a esta implementación trabajo previo.
@@ -45,3 +68,12 @@ Extensión posterior del mismo día: puente local seguro al relay, procesamiento
 
 Nueva contribución: interfaz local de experimentos, validación de audio, adaptación a entrada común, cola, referencias/configuraciones inmutables por versión, comparación WER, conservación de fallos, métricas y exportación. Código en apps/lab, backend/lab* y scripts de laboratorio. Whisper, Muse, OpenVINO, NumPy y SciPy son dependencias externas, no modelos entrenados por Dicta Libre. Se probó Whisper en GPU; integración Muse pendiente de credencial. El laboratorio no acredita por sí solo novedad científica ni contribución Meta validada en la demo.
 
+
+## 29-10-2026 · fase 8
+Contribución nueva: cola de revisión posterior al ASR, contrato de sugerencias ancladas, validación local, decisiones/edición/deshacer trazables, interfaz compartida dictado/laboratorio y métricas exportables. Meta aporta el servicio remoto muse-spark-1.3; no se atribuye autoría de sus pesos. Pruebas y límites en META_REVIEW.md y EXPERIMENTS.md.
+
+## Fase 9 · 29-10-2026
+Editor anclado a tomas, plantillas locales y dictado provisional dentro del documento, guardado de borrador consolidado, deshacer/copia e instrumentación. Código nuevo sin biblioteca de editor adicional. Evaluación del revisor sobre transcripciones ya existentes es un experimento nuevo, no una nueva ejecución ASR.
+
+## Importador y selector de biblioteca
+Código nuevo de importación TXT/DOCX/ZIP, clasificación de referencias, inventario/hash/tiempos, separación conservadora y deduplicación; selector con búsqueda, categorías y favoritas. El contenido de la colección es externo, preexistente y local, no contribución de autoría del proyecto.

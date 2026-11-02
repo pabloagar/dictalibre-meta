@@ -43,7 +43,7 @@ function renderMetrics() {
     for (const value of [label, ms(stat.p50), ms(stat.p95), stat.n]) { const td = document.createElement('td'); td.textContent = value; tr.append(td); }
     $('timing-rows').append(tr);
   }
-  const labels = { prepareMs:'Preparar micrófono (incluye permiso)', startControlMs:'Orden de inicio → captura', stopFlushMs:'Detener → último bloque capturado', senderHashMs:'Verificar hash en celular', pcHashMs:'Verificar hash en PC', stopToVerifiedMs:'Detener → entrega confirmada',asrQueueMs:'Cola ASR',asrRunMs:'Petición ASR',receiveEndToTextMs:'Fin recibido en PC → texto',stopToTextEstimateMs:'Detener → texto estimado',clockUncertaintyMs:'Resolución orientativa parada → texto' };
+  const labels = { startToFirstPartialMs:'Inicio recibido → primer borrador streaming', prepareMs:'Preparar micrófono (incluye permiso)', startControlMs:'Orden de inicio → captura', stopFlushMs:'Detener → último bloque capturado', senderHashMs:'Verificar hash en celular', pcHashMs:'Verificar hash en PC', stopToVerifiedMs:'Detener → entrega confirmada',asrQueueMs:'Cola ASR',asrRunMs:'Petición ASR',receiveEndToTextMs:'Fin recibido en PC → texto',stopToTextEstimateMs:'Detener → texto estimado',clockUncertaintyMs:'Resolución orientativa parada → texto' };
   $('stage-times').textContent = Object.entries(labels).map(([key,label]) => `${label}: ${ms(latestTrace.stages[key])}`).join(' · ');
   $('transport-counts').textContent = `${s.blocks} bloques · ${s.bytes} bytes de audio y cabecera · cola máxima ${s.queueBytes.max ?? '—'} bytes · duplicados ${latestTrace.counters.duplicates} · errores de secuencia ${latestTrace.counters.sequenceErrors} · sin estimación ${s.unestimatedBlocks}`;
 }
@@ -75,6 +75,8 @@ function addClip(record, complete, hash = '') {
   while (clipURLs.length > 5) { const old = clipURLs.shift(); old.article.remove(); URL.revokeObjectURL(old.url); }
 }
 function interrupted(reason) {
+  if(!current){displayIdle();status(reason);return;}
+  window.dispatchEvent(new Event('dicta-recording-abort'));
   window.dispatchEvent(new Event('dicta-recording-stop'));
   if (current) { latestTrace.status = 'incomplete'; latestTrace.reason = reason; renderMetrics(); addClip(current, false); current = null; }
   displayIdle(); status(reason, 'error'); $('record-help').textContent = 'La toma se interrumpió. Inicia otra desde el teléfono.';
@@ -92,7 +94,8 @@ async function complete(m) {
     latestTrace.stage('pcHashMs', performance.now() - hashStart); latestTrace.status = 'verified'; Object.assign(latestTrace.counters, m.counters); renderMetrics();
     client.send({ type: 'verified', id: recording.id, hash });
     addClip(recording, true, hash); current = null; displayIdle();
-    if(recording.samples&&location.pathname==='/live')window.dispatchEvent(new CustomEvent('dicta-take',{detail:{recordingId:recording.id,blob:wavBlob(recording.parts,recording.rate),stopStamp:m.stopStamp,receivedEnd,trace:latestTrace,stamp:()=>client?.clock.stamp(),renderMetrics}}));
+    if(recording.samples&&location.pathname==='/live')window.dispatchEvent(new CustomEvent('dicta-take',{detail:{recordingId:recording.id,pcmHash:hash,blob:wavBlob(recording.parts,recording.rate),stopStamp:m.stopStamp,receivedEnd,trace:latestTrace,stamp:()=>client?.clock.stamp(),renderMetrics}}));
+    else window.dispatchEvent(new Event('dicta-recording-abort'));
     window.dispatchEvent(new Event('dicta-recording-stop'));
     status(m.samples ? 'Audio recibido completo. Escucha la toma y comprueba el inicio y el final.' : 'La toma quedó vacía. Mantén pulsado mientras hablas.', m.samples ? 'success' : '');
     $('record-help').textContent = 'Listo para recibir la siguiente toma.';
@@ -105,6 +108,7 @@ function onMessage(m) {
     const frame = decodeChunk(m);
     if (frame.recordingId !== current.id || frame.sequence !== current.frames) throw new Error('Secuencia incorrecta.');
     const bytes = frame.pcm.slice(); current.parts.push(bytes); current.frames++; current.samples += frame.samples;
+    window.dispatchEvent(new CustomEvent('dicta-pcm',{detail:{recordingId:current.id,bytes}}));
     const timing = pendingTiming?.sequence === frame.sequence ? pendingTiming : null; pendingTiming = null;
     const estimate = arrivalEstimate(timing?.sent, receivedStamp);
     latestTrace.block(frame.sequence, { bytes: m.byteLength, bufferMs: frame.samples / current.rate * 1000,
@@ -143,7 +147,7 @@ function onMessage(m) {
     case 'pairing_metrics': showPairing(m.pairing); break;
     case 'paired': showPairing(m.pairing); clearInterval(pairingTimer); $('pairing').hidden = true; $('confirm-panel').hidden = true; $('paired').hidden = false; status('Conectados. Prepara el micrófono en el teléfono.', 'success'); break;
     case 'start':
-      window.dispatchEvent(new Event('dicta-recording-start'));
+      window.dispatchEvent(new CustomEvent('dicta-recording-start',{detail:m}));
       latestTrace = new RecordingMetrics(m.id, m.rate, m.source, m.mode); traces.set(m.id, latestTrace);
       while (traces.size > 5) traces.delete(traces.keys().next().value);
       previousArrival = null; pendingTiming = null; renderMetrics();
@@ -175,3 +179,6 @@ $('create').onclick = () => {
 $('approve').onclick = () => client?.send({ type: 'approve' });
 $('close').onclick = () => { client?.send({ type: 'close' }); client?.close(); };
 window.addEventListener('pagehide', () => client?.close());
+
+$('restart').onclick=()=>{window.dispatchEvent(new Event('dicta-new-session'));client?.send({type:'close'});client?.close();sessionStorage.setItem('dicta-restart','1');location.reload();};
+if(sessionStorage.getItem('dicta-restart')==='1'){sessionStorage.removeItem('dicta-restart');$('create').click();}

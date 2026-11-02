@@ -1,5 +1,7 @@
 # Laboratorio local de transcripción
 
+**Estado actual al 1 de noviembre:** disponibles Muse-Normal, Muse-streaming y Whisper local (OpenVINO, GPU, beams=1), Revisor Meta experimental y editor. Muse se ha probado con éxito tras reemplazar la credencial. Los párrafos de primeras pruebas conservan fallos históricos, no un bloqueo actual. El laboratorio guarda datos privados localmente y no debe publicarse por el túnel. El Revisor envía texto a Meta cuando está habilitado, incluso si la transcripción proviene de Whisper; desactivarlo para una comparación de ASR exclusivamente local. Biblioteca privada no incluida en GitHub.
+
 **Credencial persistente (actualización):** «Guardar clave en este PC» escribe `.env.local` en la raíz, oculto en Windows y excluido de Git. Se carga automáticamente al iniciar; sustituye el comportamiento anterior de memoria solamente. El archivo contiene `META_API_KEY=...`; se puede editar localmente y reiniciar, o usar el formulario para aplicar sin reinicio. Es texto local sin cifrado propio y hereda permisos de la carpeta en Windows. No se sirve por HTTP ni se incluye en catálogos/exportaciones. Una clave vacía borra el valor guardado.
 
 «Comprobar conexión con Meta» ejecuta GET /v1/models con la credencial del servidor y devuelve únicamente estado, tipo/código de error y nombres de modelos. No devuelve la clave ni el cuerpo arbitrario del error remoto. Éxito en listado verifica autenticación general, no una transcripción exitosa. La prueba con la credencial anterior respondió 401/invalid_api_key; la nueva persistencia no convierte una clave rechazada en válida.
@@ -36,7 +38,7 @@ Los audios, derivados, versiones y resultados permanecen en `data/local/lab/`, e
 - Entrada común: audio original inmutable identificado por SHA-256. Preparación compartida a PCM16 mono 16 kHz con media de canales y `scipy.signal.resample_poly`. Cada derivado tiene hash y relación al original; sin filtro de ruido ni VAD.
 - Salida: texto original, estado, modelo/revisión, configuración, tiempos, error y capacidades ausentes como null. Cambiar motor no exige cambiar captura ni evaluación.
 
-Primera versión configurable: Muse sin glosario o con lista de términos; Whisper búsqueda de 1 beam validada. Las variantes 3/5 quedaron bloqueadas tras reproducir fallo de remote_tensor en GPU; no hay fallback a CPU. Se conserva la configuración fallida como evidencia. Guardar genera una configuración nueva; los resultados previos conservan su snapshot. Español fijo, sin streaming, contexto textual libre, cuantización, corrector, editor clínico ni conexión directa a captura en esta entrega. Apagar un motor consiste en no seleccionarlo; preparar audio es obligatorio en este primer adaptador.
+Primera versión configurable: Muse sin glosario o con lista de términos; Whisper búsqueda de 1 beam validada. Las variantes 3/5 quedaron bloqueadas tras reproducir fallo de remote_tensor en GPU; no hay fallback a CPU. Se conserva la configuración fallida como evidencia. Guardar genera una configuración nueva; los resultados previos conservan su snapshot. Aquella primera versión tenía español fijo y no incluía streaming ni editor; ambos se incorporaron después. Cuantización y contexto textual libre no se presuponen implementados. Apagar un motor consiste en no seleccionarlo; preparar audio es obligatorio en este primer adaptador.
 
 ## Reproducción del entorno
 
@@ -46,7 +48,7 @@ Python 3.12, Node >=22 y controlador Intel GPU compatible ya instalado. No se mo
 python -m venv .venv
 .venv/Scripts/python.exe -m pip install -r requirements-lab.lock.txt
 .venv/Scripts/python.exe scripts/download-lab-model.py
-npm ci
+pnpm install --frozen-lockfile
 npm run lab
 ```
 
@@ -83,3 +85,22 @@ Se ejecutó Whisper real en Intel Arc integrada, tanto con una frase sintética 
 
 ## Dictado con comandos
 Desde /live se aplican comandos básicos al terminar la toma y se conserva el original. El enlace de cada toma abre el mismo audio con Muse/Whisper base seleccionados para ejecutar la comparación después. Formato y auditoría se guardan por ejecución, sin modificar resultados históricos. Instrucciones y referencias: DICTATION_COMMANDS.md.
+
+## Números y comparación con glosario
+El laboratorio permite activar «Escribir cantidades en cifras» independientemente de los comandos. Muestra el original y el resultado numérico intermedio, con dudas y duración; conserva la configuración por ejecución. Detalles y límites en DICTATION_COMMANDS.md. Está disponible la configuración Muse · glosario radiológico piloto (20 keywords); los resultados de las cinco tomas y sus dos repeticiones se conservan en el catálogo. Ver EXPERIMENTS.md: mejora léxica exploratoria, sin validación clínica ni referencias humanas confirmadas.
+
+## Muse streaming experimental · 28-10-2026
+Disponible en /live junto a Muse por toma y Whisper local. El glosario se elige independientemente para las dos modalidades de Muse; por defecto no se aplica. La clave sigue solo en el backend local.
+
+Flujo: PCM del teléfono → receptor → WebSocket local /asr-stream → remuestreo continuo → WebSocket Meta → borradores acumulativos reemplazables → final verificado → números → comandos → informe. Se utiliza PUSH_TO_TALK, una conexión por toma, PCM16 mono a 24 kHz. Se envía endStream únicamente después de validar el hash PCM y vaciar la cola de envío. Los parciales no se añaden al informe ni pasan por reglas de formato.
+
+El audio original, el derivado enviado, las hipótesis, configuración, hashes y métricas se guardan en el laboratorio. La vista distingue file de streaming aunque compartan configuración base; el resumen de tiempos por archivo excluye streaming. Un final perdido o una interrupción quedan como fallo, sin promover el último parcial. No hay reintento ni cambio de motor automático.
+
+Límites del prototipo: una toma streaming simultánea, 180 s máximo, cola de audio máxima 10 s, conexión 10 s y espera de final 30 s después de endStream. Esperar el resultado antes de la siguiente toma. No se implementó detección automática de turnos ni recuperación de sesiones. La entrada del micrófono real del S25 sigue pendiente de validación por el responsable.
+
+Remuestreo independiente sinc-Hann de 64 intervalos, versión sinc-hann-64-mono-24k-v1. Se verifican continuidad entre bloques, duración y señal de control; falta caracterizar su respuesta espectral y comparar su efecto sobre reconocimiento. El modo por archivo usa otra preparación (scipy a 16 kHz): no atribuir todas las diferencias de texto al transporte streaming.
+
+Fuente del contrato consultada: https://dev.meta.ai/docs/speech-to-text (28-10-2026).
+
+## Prueba de segmentación desde el teléfono
+En http://127.0.0.1:8789/live elegir Muse-streaming y Segmentación automática · prueba; crear sesión y escanear QR. Mantener pantalla móvil visible; usar iniciar/parar para una toma con varias pausas. Las pausas consolidan segmentos sin detener el micrófono. Solo al detener se aplican números/comandos al conjunto y se añade al informe. Guardado de audio/resultados/segmentos en laboratorio; máximo 180 s. Cierre manual sigue disponible y es el predeterminado al recargar. Prueba física pendiente del usuario.

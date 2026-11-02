@@ -29,6 +29,12 @@ logs/
 *.m4a
 *.webm
 *.pcm
+*.ogg
+*.flac
+*.aac
+*.mp4
+*.zip
+design/*.png
 *.safetensors
 *.gguf
 

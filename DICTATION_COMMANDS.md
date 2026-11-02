@@ -1,6 +1,6 @@
 # Comandos de dictado · prototipo básico
 
-El 28-10-2026 se incorporó un módulo independiente de formato, común a Muse y Whisper. No es una implementación completa de Dragon ni utiliza su código. El ASR sigue funcionando por toma completa; aún no muestra palabras durante el habla.
+El 28-10-2026 se incorporó un módulo independiente de formato, común a Muse y Whisper. No es una implementación completa de Dragon ni utiliza su código. Muse permite toma completa o streaming con borrador durante el habla. Los comandos se aplican solo al resultado final; Whisper permanece por toma.
 
 ## Comportamiento
 
@@ -41,3 +41,8 @@ Aceptación: originales inmutables, saltos/puntuación esperados en casos de con
 - [Philips SpeechExec, guía rápida en español](https://www.speechmike.com/fileadmin/Products/pse4400/qsg/pse4400_qsg_es.pdf): tabla de comandos Dragon, incluidos dos puntos y punto y coma. Fuente del integrador; la guía distingue comandos en vivo y grabaciones.
 
 Referencias de comportamiento, sin código ni recursos de Dragon incorporados.
+
+## Cantidades en cifras (28-10-2026)
+Nueva etapa independiente es-cardinals-v1: ASR original → números → comandos. Convierte cardinales españoles de 0 a 999 y decimales compatibles: tres → 3, dos coma cinco → 2,5, doce por ocho → 12 por 8. Conserva unidades, artículos un/una, expresiones numéricas no soportadas y ambigüedades; no resuelve errores del reconocimiento. «Dos coma seis cinco» se conserva y señala como dudoso. No convierte escalas ni cambia medidas mediante reglas clínicas.
+
+El laboratorio permite desactivar esta etapa; en dictado en vivo está activada. Se guardan original, texto numérico intermedio, resultado de comandos, versión, eventos, dudas y duración. Los offsets numéricos corresponden al original; los offsets de comandos corresponden a su entrada, identificada por formatting.input. Los históricos no cambian. Las pruebas automatizadas verifican originales, decimales, ambigüedades, comandos, persistencia y exportación.

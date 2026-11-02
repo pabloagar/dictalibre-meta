@@ -58,7 +58,7 @@ export class RecordingMetrics {
     this.createdAt = new Date().toISOString(); this.blocks = new Map(); this.status = 'recording';
     this.counters = { duplicates: 0, sequenceErrors: 0, telemetryOmitted: 0 };
     this.stages = Object.fromEntries(['prepareMs','startControlMs','stopFlushMs','senderHashMs','pcHashMs','stopToVerifiedMs',
-      'asrQueueMs','asrRunMs','firstTextMs','finalTextMs','suggestionMs','receiveEndToTextMs','stopToTextEstimateMs','clockUncertaintyMs'].map(k => [k, null]));
+      'asrQueueMs','asrRunMs','firstTextMs','finalTextMs','startToFirstPartialMs','suggestionMs','receiveEndToTextMs','stopToTextEstimateMs','clockUncertaintyMs'].map(k => [k, null]));
     this.reason = null;
   }
   block(sequence, values) {

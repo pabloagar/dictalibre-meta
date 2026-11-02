@@ -1,19 +1,25 @@
 # Diez fases de Dicta Libre
 
-Actualización: 28-10-2026, America/Santiago. Las diez fases reemplazan la agrupación F0–F7 del primer borrador. Se avanza mediante discusión, implementación acotada y validación. La documentación inicial ya existe.
+Actualización: 01-11-2026, America/Santiago. Las diez fases reemplazan la agrupación F0–F7 del primer borrador. Se avanza mediante discusión, implementación acotada y validación. La tabla inicial refleja el estado actual; los cortes fechados al final conservan la evolución histórica.
 
-| Fase | Objetivo | Estado y criterio de aceptación |
-| --- | --- | --- |
-| 1. Captura | S25 Ultra, interfaz abierta, micrófono preparado y dos controles táctiles | Prototipo implementado; validado con tono y pruebas de worklet. Voz real e integridad aportadas por el usuario; faltan series cortas, límites audibles e interrupciones |
-| 2. Transporte | Emparejamiento y envío durante la toma, Wi-Fi y 4G/5G desde el inicio | Relay y URL temporal implementados; WSS sintético público comprobado. Evidencia del usuario con celular 4G y PC Wi-Fi; faltan series repetidas y recuperación explícita tras interrupción |
-| 3. Segmentación inteligente | Decidir qué audio procesar sin perder palabras en límites | Pendiente de discutir; contrastar segmentación externa con el contrato real del ASR |
-| 4. Reconocimiento de voz | Audio a texto y tiempos medidos | Whisper GPU validado con control sintético; Muse seleccionable también en vivo. Primera petición real Muse devolvió 401, pendiente resolver autenticación y probar dictado físico del S25 Ultra |
-| 5. Reconstrucción del texto | Ordenar y consolidar parciales/finales sin duplicar ni perder texto | Pendiente; verificar primero la semántica real de eventos del proveedor |
-| 6. Transcripción híbrida | Comparar motores sobre el mismo audio y evaluar una combinación | Experimento pendiente, sin promesa de mejora ni decisión final sobre motores |
-| 7. Contexto y terminología | Medir ASR con y sin vocabulario radiológico | Pendiente; términos/corpus congelados y controles de sobrecorrección |
-| 8. Incertidumbre y propuestas | Señalar dudas y alternativas con Meta bajo revisión humana | Pendiente; original preservado, abstención y ninguna modificación clínica silenciosa |
-| 9. Editor e inserción | Mostrar, revisar y transferir texto al computador | Pendiente de discutir; copia/pega y posible integración Windows son decisiones futuras |
-| 10. Evaluación y evidencia | Comparar exactitud, seguridad, latencia y costes | Se recopila evidencia desde cada fase; evaluación de IA aún no ejecutada |
+## Estado respecto de las diez fases originales
+
+Se conserva la numeración y propósito del plan inicial; las modificaciones de alcance acordadas (S25 Ultra, prioridad Wi-Fi, tomas principales de 2–10 s, validación incremental) prevalecen sobre el borrador inicial. «Operativa» significa recorrido funcional probado, no validación clínica ni cierre de todas las pruebas de resistencia.
+
+**Recuento:** 3 operativas (1, 2, 4) y 7 parciales/en validación (3, 5, 6, 7, 8, 9, 10). Segmentación, Revisor Meta y editor ya tienen implementación; sus pruebas pendientes no equivalen a módulos desde cero. Ninguna aceptación clínica global está cerrada. La fusión automática de fase 6 y la inserción directa al RIS de la visión original no son requisitos acordados para esta demo.
+
+| Fase original | Estado | Evidencia actual | Qué falta / criterio de cierre |
+|---|---|---|---|
+| 1. Captura de audio | Operativa | S25, AudioWorklet, PCM, voz real y comprobación de integridad | Series cortas sin perder inicio/final; permisos, interrupciones y visibilidad. Segundo plano no prometido |
+| 2. Comunicación celular-computador | Operativa | QR/código, bloques en vivo, Wi-Fi y datos móviles probados, ACK/hash | Repetición en condiciones variables y recuperación explícita sin falso éxito; alojamiento temporal sigue siendo limitación |
+| 3. Segmentación inteligente | Parcial / en validación | Muse-streaming con cierre manual PUSH_TO_TALK o segmentación ENDPOINTING; prueba técnica con 3 segmentos y tomas físicas de un segmento | Comparación física pareada con pausas, sin perder/duplicar palabras. El botón controla el micrófono en ambos modos; una pausa no crea un párrafo |
+| 4. Reconocimiento de voz | Operativa | Muse-Normal, Muse-streaming y Whisper local con OpenVINO/GPU; originales y tiempos persistidos | Confirmar referencias multivoz y errores clínicos; esta evidencia completa aceptación, no exige otro motor |
+| 5. Reconstrucción del texto | Parcial avanzada | Reemplazo de parciales, final único, orden por toma y formato básico | Punto aparte, puntuación sobrante y mayúsculas; pruebas de cancelación/orden/límites. Ningún parcial se promueve como final por fallo |
+| 6. Transcripción híbrida | Parcial | Comparaciones de los mismos audios y métricas separadas | Alinear desacuerdos y evaluar si una combinación supera al motor individual. Si no mejora o altera clínica, documentar resultado negativo y no fusionar automáticamente |
+| 7. Contexto y terminología médica | Parcial avanzada | Glosario versionado y comparación con/sin él | Referencias revisadas, efecto por término y regresiones en textos/voces no usados para ajustar. No asumir que el glosario siempre mejora |
+| 8. Incertidumbre y propuestas clínicas | Parcial / piloto | Revisor Meta muse-spark-1.3, propuestas localizadas, aceptar/rechazar/editar/deshacer, originales conservados; 25/27 respuestas válidas en evaluación multivoz | Juicio humano de propuestas y errores introducidos, abstenciones y corpus reservado. Validez de formato no demuestra exactitud clínica; ningún cambio silencioso |
+| 9. Editor e inserción | Parcial / piloto | Borrador dentro del informe, selección por toma, persistencia local, deshacer y copiar; 285 plantillas únicas importadas y activadas en servidor principal | Prueba física de selección/cancelación/copia y contenido heredado. Biblioteca activada el 01-11 con autorización; falta validación de uso/contenido. Inserción directa RIS diferida |
+| 10. Evaluación y evidencia | Parcial transversal | Laboratorio, hashes, configuraciones, tiempos y comparaciones guardados | Referencias humanas, evaluación reservada, errores de números/unidades/negaciones/lateralidad y términos; instalación limpia, resultados negativos, documentación y demo |
 
 ## Acuerdos de fases 1 y 2
 
@@ -23,20 +29,25 @@ La demo temporal aloja el relay en el computador de desarrollo y usa un túnel H
 
 ## Siguiente paso concreto
 
-Ejecutar [DEVICE_CHECKLIST.md](tests/DEVICE_CHECKLIST.md) con el teléfono: series de cinco dictados de 2–10 segundos por control en Wi-Fi y en 4G (5G solo si está disponible). Escuchar inicio/final y verificar ausencia de audio entre tomas. Registrar preferencia de control y cualquier fallo.
+1. Validar la experiencia integrada de fases 3/5/9 con series de 2–10 s: destino, reemplazo, cifras, comandos, pausa manual/automática, deshacer y copia. Exportar últimas cinco tomas y mediciones del editor antes de cambiar condiciones. Protocolo en CODE_REVIEW_2026-11-01.md.
+2. Revisar fase 8 por separado sobre las mismas tomas: observar propuesta, aceptar/rechazar/deshacer y comprobar texto vecino/original. No activar simultáneamente varias variantes mientras se compara latencia.
+3. Corregir los hallazgos prioritarios de recursos después de guardar baseline: consultas repetidas del catálogo y retención de tarjetas. Medir antes/después manteniendo resultados/textos intactos. No se hicieron estas optimizaciones durante las grabaciones.
+4. Biblioteca completa activada el 01-11: validar selección, contenido heredado y copia con el responsable. La disposición enfocada ya está integrada; probarla dictando desde S25.
+5. Completar aceptación de recuperación y acceso. El túnel temporal volvió a fallar el 01-11 y se renovó sin reiniciar laboratorio. Un enlace estable es prioridad para la demo.
+6. Fase 10: confirmar referencias de los nueve M4A, errores de términos/negaciones/lateralidad/medidas y evaluación reservada. Congelar configuración, instalación limpia, versiones/licencias, repositorio público, trazabilidad y demo. No usar el guion como referencia oral exacta sin escuchar.
 
-Corregir los fallos observados antes de integrar ASR. Después discutir la fase 3 conjuntamente con los requisitos de entrada/eventos del candidato ASR de fase 4; esa revisión de interfaz no implica implementar todas las fases a la vez.
+Fine-tuning no es requisito previo: primero referencias revisadas y evidencia de errores repetibles que glosario/formato no resuelvan. No se implementa fusión automática ni generación de informes a partir de instrucciones dictadas.
 
-## Camino crítico provisional hasta el 4 de noviembre
+## Orden propuesto y camino crítico hasta el 4 de noviembre
 
-- **28–29 oct:** completar aceptación de captura/transporte y decidir ajustes.
-- **29–30 oct:** verificar acceso real, condiciones e interfaz del modelo Meta/ASR; acordar fases 3–5.
-- **30 oct–1 nov:** implementar el recorrido de transcripción acordado y medir baseline.
-- **1–2 nov:** experimentos acotados de terminología/alternativas y revisión humana según lo que apruebe la discusión.
-- **3 nov:** congelar configuración, evaluación, demo y reproducción desde instalación limpia.
-- **4 nov, antes de 18:00:** revisión documental, repositorio público y entrega. Reconfirmar plazo oficial.
+Calendario de trabajo propuesto; no representa tareas ya realizadas ni una garantía de completar toda la visión.
 
-Fechas previstas, no trabajo realizado. No se afirma que quepa toda la visión en ese plazo: al cerrar cada fase se revisará el alcance siguiente. Si el acceso Meta falla, debe quedar explícito; las respuestas simuladas no cumplen esa integración. No declarar mejoras si los experimentos no las muestran.
+- **1 nov · fases 3/5/8/9:** pruebas físicas controladas, exportaciones, revisión de recursos y de propuestas. Activar biblioteca al terminar; no interrumpir tomas.
+- **2 nov · aceptación 1/2 y fases 5/7/8/9:** resolver fallos concretos, consultas innecesarias y acceso estable; repetir casos afectados con evidencia antes/después. Revisar referencias y contenido de plantillas.
+- **3 nov · fase 10 y aceptación 1/2/4:** congelar configuración, evaluación reservada, instalación limpia y grabación de demo. Revisar repositorio público/licencias/trazabilidad. Si faltan referencias o estabilidad, reducir alcance de la demostración y declarar la limitación.
+- **4 nov:** revisión y entrega según fecha indicada por el responsable. Hora exacta, zona y reglas oficiales siguen pendientes de confirmar.
+
+Si hay que recortar, conservar captura/transporte, Muse streaming, números/comandos fiables, editor y evidencia. Segmentar automáticamente y fusionar motores no deben retrasar el recorrido ya funcional; cualquier recorte se registra como alcance pendiente, no fase completada. El piloto clínico de fase 8 solo se incorpora si conserva supervisión y evidencia suficiente.
 
 ## Trazabilidad y pendientes
 
@@ -51,8 +62,22 @@ Este criterio sustituye el requisito previo de 30 s; las tomas largas son prueba
 
 La toma de 8,504 s ya es evidencia válida del caso principal. No hace falta repetirla por no llegar a 30 s. 5G y grabación de tres minutos son complementarios; los tests automáticos del límite se conservan.
 
-Antes de programar transcripción: discutir el motor y comprobar acceso, licencia, español médico, formatos/frecuencia y si acepta toma completa o streaming. Para el primer recorrido propuesto, una toma corta terminada puede ser una unidad de entrada, si el motor lo admite; no imponer segmentación inteligente ni streaming antes de conocer ese contrato. Medir cola, inferencia, primer/final texto y error de palabras/términos, conservando el original. Esta propuesta no selecciona ni integra un motor.
-# Actualización: laboratorio de transcripción aprobado e iniciado
+## Evolución del alcance
 
-28-10-2026: el responsable autorizó implementar el alcance de [LABORATORY.md](LABORATORY.md). Primera entrega local operativa con Whisper large-v3/OpenVINO/GPU. Próxima puerta de aceptación: credencial Muse, prueba del contrato real, 3–5 dictados sintéticos del S25 Ultra de 2–10 s con referencia revisada y ejecución de ambos motores sobre los mismos archivos. Después: piloto reservado y revisión de errores clínicos. No avanzar a corrección ni integración automática en captura antes de revisar esta evidencia. Wi-Fi principal para demo; no depende de que el laboratorio se publique.
+La aprobación del laboratorio, la resolución de la credencial Muse y las pruebas por toma/streaming ya ocurrieron y están en HACKATHON_LOG.md. Los requisitos antiguos de «antes de programar ASR» eran puertas históricas, no bloqueos actuales. Continúa pendiente la validación humana y la aceptación de robustez; no se presentan estas pruebas de ingeniería como validación clínica.
 
+## Estado al cerrar la jornada del 28-10-2026
+Streaming ya fue probado desde el micrófono del responsable; seis tomas verificadas y comparación del mismo audio con ambos motores. La espera final estimada promedió 1,34 s en esa serie, sin prometer ese valor en otras condiciones. Muse por toma y Whisper siguen disponibles. Los límites operativos y métricas están en LABORATORY.md/METRICS.md. El ZIP con varias voces se conserva localmente; es evaluación, no entrenamiento automático.
+
+## Evidencia multivoz por streaming
+Los nueve archivos aportados ya se reprodujeron a ritmo real y se compararon con Muse por toma y Whisper caliente, sin cambiar reglas. Véase EXPERIMENTS.md y el reporte local data/local/lab/reports/2026-10-28-multivoice/streaming/REVIEW.md. La siguiente intervención propuesta es fase 5 (casos concretos de comandos/números) junto con referencias de fase 10; este ensayo no modifica esa funcionalidad.
+
+## Actualización 29-10-2026 · fase 3 en pruebas
+Segmentación automática de Muse-streaming implementada como opción experimental y verificada con servidor simulado y un control Meta real. La fase 3 pasa de función principal pendiente a parcial/en validación: falta experiencia física, referencias de pausas y comparación pareada con cierre manual. Recuento actualizado: 3 operativas, 6 parciales, 1 con función principal pendiente (8); ninguna aceptación clínica implícita. No se cambiaron reglas de números/comandos. El estado anterior queda como corte histórico del 28-10.
+
+## Actualización 29-10-2026 · fase 8 para piloto
+Revisor Meta implementado y probado técnicamente con proveedores simulados y diez revisiones reales de textos sintéticos. La fase 8 pasa de pendiente principal a parcial/en validación. Recuento de trabajo: 3 operativas y 7 parciales; no supone cerrar validación clínica. Pendientes de fase 8: revisión humana de propuestas, corpus reservado, errores introducidos/falsas alertas, aceptación desde celular y medición de interacción. No añade entrenamiento ni fusión automática de motores.
+
+
+## Fase 9 · alcance acordado y piloto del 29-10
+Editor con plantillas propias, dictado provisional en el destino seleccionado, consolidación/cancelación, deshacer y copiar implementados. Inserción directa al RIS diferida por decisión del responsable. Pendientes: prueba física S25, plantillas aportadas por radiólogos, revisión de contenido heredado, propuestas Meta contextualizadas visualmente y evaluación de usabilidad. No cerrar fase 9 por pruebas simuladas.

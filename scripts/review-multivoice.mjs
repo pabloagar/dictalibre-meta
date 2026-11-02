@@ -1,0 +1,11 @@
+// Reuse ASR snapshots; do not re-transcribe or send references to the reviewer.
+import fs from 'node:fs';
+const base='data/local/lab/reports/2026-10-28-multivoice',dir='data/local/lab/reports/2026-10-29-review-multivoice';fs.mkdirSync(dir,{recursive:true});
+if(fs.existsSync(dir+'/protocol.json'))throw Error('Este experimento ya está registrado. Usa otro directorio para una nueva repetición.');
+const files=JSON.parse(fs.readFileSync(base+'/comparison.json')),streams=JSON.parse(fs.readFileSync(base+'/streaming/comparison.json'));
+const selection=streams.replays.flatMap(x=>[...files.runs.filter(r=>r.audioId===x.sourceAudioId).map(r=>({caseId:x.id,runId:r.id,mode:r.configuration.engine==='muse'?'Muse-Normal':'Whisper local'})),{caseId:x.id,runId:x.runId,mode:'Muse-streaming'}]);
+if(selection.length!==27)throw Error('Se esperaban 27 ejecuciones.');
+const origin='http://127.0.0.1:8789',state=await(await fetch(origin+'/api/state')).json();
+const protocol={createdAt:new Date().toISOString(),hypothesis:'Revisión localizada de los mismos nueve audios: detectar errores sin introducir cambios clínicos.',acceptance:'Original ASR inmutable y ninguna propuesta aplicada automáticamente. Calidad pendiente de valoración humana y referencia escuchada.',selection,repeats:1,sourceHash:state.sourceHash,build:state.build,network:null,browser:null,device:null,source:'ASR guardado de nueve lecturas sintéticas; no nueva captura ni nueva ASR',metrics:{requestMs:'Petición completa backend → respuesta, ms; no inferencia pura.',queueMs:'Encolado → inicio trabajo, ms',quality:'No calculada como mejora: referencias aún no verificadas escuchando cada lectura.'},split:'Exploratorio, sin ajuste de reglas. Los nueve ya se examinaron previamente; no son conjunto independiente reservado.'};
+fs.writeFileSync(dir+'/protocol.json',JSON.stringify(protocol,null,2));
+const ids=[];for(const item of selection){const res=await fetch(origin+'/api/reviews',{method:'POST',headers:{Origin:origin},body:JSON.stringify({runId:item.runId})});if(!res.ok)throw Error('No se pudo encolar');ids.push((await res.json()).id);}fs.writeFileSync(dir+'/batch.json',JSON.stringify({ids},null,2));console.log(JSON.stringify({dir,count:ids.length}));

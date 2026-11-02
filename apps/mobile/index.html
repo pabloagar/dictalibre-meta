@@ -5,6 +5,8 @@
 <header><a class="brand" href="/mobile"><span class="brand-mark">d.</span> dicta libre</a><span class="tag">MICRÓFONO</span></header>
 <main><h1>Micrófono del teléfono</h1>
 <div id="status" class="status" role="status" aria-live="polite">Introduce el código que muestra el computador.</div>
+<button id="restart" class="quiet">Reiniciar sesión</button>
+<button id="export-lifecycle" class="quiet">Exportar diagnóstico de interrupciones</button>
 <section id="join-panel" class="card"><label for="join-code" class="input-label">Código del computador</label><input id="join-code" class="code-input" placeholder="Ej. A12B34C56D" maxlength="14" autocomplete="off" autocapitalize="characters" spellcheck="false"><button id="join" class="primary">Conectar con el PC ↗</button></section>
 <div id="confirm-panel" class="confirm" hidden><p>Confirma este número en el computador:</p><strong id="confirm-code"></strong></div>
 <section id="controls" class="card control-card" hidden>
@@ -20,5 +22,5 @@
   <p id="verified" class="verification" role="status"></p>
   <button id="close" class="quiet">Finalizar sesión y liberar micrófono</button>
 </section>
-<p class="tiny privacy-note">Sin transcripción ni IA en esta prueba. El audio pasa por el servidor de enlace y se conserva temporalmente en el navegador receptor.</p>
+<p class="tiny privacy-note">Al bloquear o cambiar de aplicación se libera el micrófono. Vuelve y pulsa Reactivar micrófono; si se perdió la conexión, empareja de nuevo. Las tomas guardadas permanecen en el laboratorio.</p>
 </main><footer>DICTA LIBRE · PRUEBA DE CAPTURA</footer></div></body></html>

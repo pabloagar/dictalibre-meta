@@ -9,6 +9,7 @@ export function demoConnection(root){
 export function attachLiveBridge(server,connection){
  const wss=new WebSocketServer({noServer:true,maxPayload:32768,perMessageDeflate:false});
  server.on('upgrade',(req,socket,head)=>{
+  if(req.url==='/asr-stream')return;
   const origin=`http://127.0.0.1:${server.address().port}`;
   if(req.url!=='/ws'||req.headers.origin!==origin||req.headers.host!==new URL(origin).host||wss.clients.size>=3){socket.destroy();return;}
   let config;try{config=connection();}catch{socket.destroy();return;}

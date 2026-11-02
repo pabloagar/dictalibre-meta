@@ -9,18 +9,19 @@ import {createLab,museTranscribe} from '../backend/lab.mjs';
 function wav(){const b=Buffer.alloc(64044);b.write('RIFF');b.writeUInt32LE(b.length-8,4);b.write('WAVEfmt ',8);b.writeUInt32LE(16,16);b.writeUInt16LE(1,20);b.writeUInt16LE(1,22);b.writeUInt32LE(16000,24);b.writeUInt32LE(32000,28);b.writeUInt16LE(2,32);b.writeUInt16LE(16,34);b.write('data',36);b.writeUInt32LE(64000,40);return b;}
 test('comandos: original, formato opcional, auditoría y exportación persistidos',async()=>{
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'dicta-commands-'));
- const lab=createLab({dataDir:dir,keyFile:path.join(dir,'.env.local'),worker:{call:async m=>{fs.copyFileSync(m.input,m.output);},close(){}},muse:async()=>({text:'no hay derrame punto nuevo párrafo estable'})});
+ const lab=createLab({dataDir:dir,keyFile:path.join(dir,'.env.local'),worker:{call:async m=>{fs.copyFileSync(m.input,m.output);},close(){}},reviewProvider:async()=>({content:'{"suggestions":[]}'}),muse:async()=>({text:'no hay derrame punto nuevo párrafo nódulo de dos coma cinco milímetros'})});
  lab.server.listen(0,'127.0.0.1');await once(lab.server,'listening');const base=`http://127.0.0.1:${lab.server.address().port}`;
  const post=async(p,body)=>{const r=await fetch(base+p,{method:'POST',headers:{Origin:base},body:Buffer.isBuffer(body)?body:JSON.stringify(body)});assert.ok(r.ok);return r.json();};
  try{
   await post('/api/key',{key:'fixture'});const audio=await post('/api/audio',wav());const state=await (await fetch(base+'/api/state')).json();const config=state.configs.find(c=>c.engine==='muse');
-  for(const commandsEnabled of [true,false])await post('/api/runs',{audioIds:[audio.id],configIds:[config.id],repeats:1,commandsEnabled});
+  for(const commandsEnabled of [true,false])await post('/api/runs',{audioIds:[audio.id],configIds:[config.id],repeats:1,commandsEnabled,numbersEnabled:commandsEnabled,reviewEnabled:commandsEnabled});
   for(let i=0;i<100&&lab.db.runs.some(r=>['queued','running'].includes(r.status));i++)await new Promise(r=>setTimeout(r,10));
+  for(let i=0;i<100&&lab.db.reviews[0]?.status!=='completed';i++)await new Promise(r=>setTimeout(r,5));assert.equal(lab.db.reviews.length,1);assert.equal(lab.db.reviews[0].status,'completed');
   const out=await (await fetch(base+'/api/export')).json();const [on,off]=out.runs;
   assert.equal(on.status,'completed');assert.equal(off.status,'completed');assert.equal(on.text,off.text);
-  assert.equal(on.formatting.text,'No hay derrame.\n\nEstable');assert.equal(on.formatting.events.length,2);assert.equal(off.formatting,null);assert.equal(off.timings.commandMs,0);
+  assert.equal(on.formatting.text,'No hay derrame.\n\nNódulo de 2,5 milímetros');assert.equal(on.formatting.events.length,2);assert.equal(off.formatting,null);assert.equal(off.numberFormatting,null);assert.equal(on.numberFormatting.events.length,1);assert.ok(on.timings.numberFormatMs>=0);assert.ok(on.text.includes('dos coma cinco'));assert.equal(off.timings.commandMs,0);
   const saved=JSON.parse(fs.readFileSync(path.join(dir,'catalog.json'),'utf8'));assert.deepEqual(saved.runs[0].formatting,on.formatting);
-  const csv=await (await fetch(base+'/api/export?format=csv')).text();assert.ok(csv.includes('formattedText'));assert.ok(csv.includes('No hay derrame.\n\nEstable'));
+  const csv=await (await fetch(base+'/api/export?format=csv')).text();assert.ok(csv.includes('formattedText'));assert.ok(csv.includes('No hay derrame.\n\nNódulo de 2,5 milímetros'));
  }finally{const closed=once(lab.server,'close');lab.close();await closed;fs.rmSync(dir,{recursive:true,force:true});}
 });
 test('WAV rechaza truncamiento y formato no PCM16',()=>{assert.equal(wavInfo(wav()).durationMs,2000);assert.throws(()=>wavInfo(wav().subarray(0,100)));const b=wav();b.writeUInt16LE(3,20);assert.throws(()=>wavInfo(b));});

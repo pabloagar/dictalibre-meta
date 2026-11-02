@@ -4,7 +4,7 @@
   "private": true,
   "packageManager": "pnpm@11.25.0",
   "type": "module",
-  "description": "Prueba de captura y transporte de audio sintético: fases 1 y 2",
+  "description": "Dictado radiológico experimental con Muse, Whisper local, laboratorio comparativo y editor revisable",
   "engines": { "node": ">=22" },
   "scripts": {
     "lab": "node backend/lab.mjs",

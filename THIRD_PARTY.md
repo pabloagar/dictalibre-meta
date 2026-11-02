@@ -1,6 +1,6 @@
 # Modelos, dependencias y licencias
 
-Actualización: 28-10-2026. Se separan componentes usados y candidatos. Ningún modelo ha sido descargado, llamado o evaluado en esta implementación. Una ficha pública no demuestra acceso de esta cuenta.
+Estado actual al 1 de noviembre: Muse Voice Transcribe (por toma y streaming), Muse Spark 1.3 y Whisper large-v3/OpenVINO han sido ejecutados. Los inventarios de versiones efectivas aparecen en las actualizaciones del laboratorio y Revisor al final de este documento. Código propio sin licencia de reutilización elegida; ver PUBLICATION.md. Las secciones preliminares siguientes conservan decisiones históricas del 28 de octubre y no describen el estado actual.
 
 ## Componentes usados en fases 1 y 2
 
@@ -15,7 +15,7 @@ Actualización: 28-10-2026. Se separan componentes usados y candidatos. Ningún 
 
 Los paquetes npm conservan sus avisos originales en `node_modules`; sus integridades están fijadas en `pnpm-lock.yaml`. QR se sirve desde el paquete instalado y mantiene el encabezado de licencia. No se vendieron ni atribuyeron como propios. Hash SHA-256 del ejecutable cloudflared verificado antes de ejecutar: `db4e4c413612a0916f3e1679d3caaf376f94911952d163028fb726fb2e0516a9`. No se distribuye ese ejecutable en Git.
 
-No hay frameworks de interfaz, SDK de modelos, bases de datos ni pesos instalados. El contenedor Docker está preparado pero no validado. La selección de Node reemplaza la propuesta inicial de FastAPI para el relay; Python sigue siendo una posibilidad futura para ASR.
+En la implementación inicial de captura/transporte no había frameworks de interfaz, SDK de modelos, bases de datos ni pesos instalados. El contenedor Docker está preparado pero no validado. La selección de Node reemplaza la propuesta inicial de FastAPI para el relay; Python sigue siendo una posibilidad futura para ASR.
 
 ## Evaluación preliminar de Meta
 
@@ -70,3 +70,10 @@ Esta actualización sustituye el estado «no instalado» de los candidatos Whisp
 
 Lock completo: requirements-lab.lock.txt. Inventario extraído de metadatos instalados, incluidos avisos declarados: experiments/lab-dependencies.json. No sustituye una revisión jurídica ni todos los avisos de redistribución de binarios. Pesos, entorno y WAV no incluidos en Git. DO_NOT_TRACK y HF_HUB_DISABLE_TELEMETRY activados en el worker/descargador; no se añade analítica de uso. La dependencia openvino-telemetry viene con el runtime; no se incorpora un servicio propio de telemetría externa.
 
+
+## Revisor Meta · 29-10-2026
+muse-spark-1.3 vía Meta Model API, servicio remoto propietario; no se descargan ni modifican pesos. Contrato [chat completions](https://dev.meta.ai/docs/protocols/chat-completions). Acceso probado con clave existente. Tarifa, cuotas, retención y condiciones de cuenta/concurso siguen pendientes de verificación específica; no se atribuye licencia Llama a este servicio. Sin dependencias nuevas instaladas.
+
+
+## Colección externa de plantillas
+Colección PLANTILLAS GENERALES PUC aportada por el responsable, importada solo en data/local/templates (ignorado por Git). No es código ni autoría nueva del hackathon; fuente y hashes conservados. Permisos de redistribución no acreditados; no se incorpora el contenido al repositorio público. PDF/presentaciones se registran como referencia y no como plantillas del producto.
