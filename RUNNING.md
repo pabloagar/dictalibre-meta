@@ -68,7 +68,7 @@ Cada push a esa rama vuelve a desplegar y corta las sesiones en curso: no public
 - No proyectar el QR ni difundir el código: el QR empareja sin confirmación durante 2 minutos.
 - Ante un fallo, usar el video de respaldo o el PC.
 
-Local, sin clave real no transcribe: `DEMO_ACCESS_CODE=... PUBLIC_ORIGIN=http://127.0.0.1:8787 HOST=127.0.0.1 pnpm demo`. La imagen Docker y el despliegue en Render aún no se han probado; este PC no tiene Docker.
+Local, sin clave real no transcribe: `DEMO_ACCESS_CODE=... PUBLIC_ORIGIN=http://127.0.0.1:8787 HOST=127.0.0.1 pnpm demo`. La imagen Docker está desplegada en Render; versión dicta/Propuesta B `8f89952` verificada en https://dictalibre-demo.onrender.com/live el 02-11-2026. La ejecución Docker local no se probó en este PC. Detalles y límites en HACKATHON_LOG.md.
 
 ## Enlace fijo para el teléfono
 

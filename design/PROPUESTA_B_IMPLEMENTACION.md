@@ -1,6 +1,6 @@
 # Propuesta B rev. 3 — implementación y comprobaciones
 
-02-11-2026. Rama **codex/ui-propuesta-b**, creada desde codex/capture-transport. El responsable aprobó el inventario y las funciones nuevas. Su instrucción específica de trabajar en una rama separada, sin merge ni push a ramas existentes, prevalece sobre la publicación habitual en la rama principal. No se despliega a Render en esta entrega.
+02-11-2026. Implementación inicial en **codex/ui-propuesta-b**, creada desde codex/capture-transport, con inventario y funciones aprobadas. Se mantuvo inicialmente separada por instrucción del responsable. Posteriormente autorizó publicar la versión guardada: integrada sin conflictos y activa en Render con `8f89952c827e44623ff1ae46bb0da3e9dbae563f`. Trazabilidad en HACKATHON_LOG.md.
 
 ## Alcance implementado
 
@@ -63,4 +63,4 @@ Estado, reloj y audio centrados en la cabecera; en ancho reducido ocupan una fil
 
 ## Pendiente de aceptación
 
-Dictado físico desde S25, recorrido completo con servidores reales y comodidad en una sala de informes. No hay validación clínica ni con usuarios. No se ha publicado la rama en Render ni unido a codex/capture-transport. El laboratorio local lee la carpeta de trabajo: puede servir recursos de esta rama al recargar; no se reinició y no se verificó su versión activa por el bloqueo de acceso citado.
+Dictado físico desde S25, recorrido completo con audio real y comodidad en una sala de informes. No hay validación clínica ni con usuarios. Render y la integración en codex/capture-transport están comprobados; también acceso, QR automático y controles de escritorio en la web real, sin audio. El laboratorio local lee la carpeta de trabajo; no se reinició ni se verificaron de nuevo sus metadatos de arranque.
