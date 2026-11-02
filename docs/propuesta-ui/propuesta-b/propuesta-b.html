@@ -7,11 +7,11 @@
 /* Layout: documento de propuesta de una columna; cada dirección trae sus propias maquetas con su paleta fija (A oscura, B papel),
    dentro de contenedores con desplazamiento horizontal propio. La página en sí sigue el tema del visor. */
 :root{
-  --bg:#f2f4f3; --surface:#ffffff; --fg:#1b2422; --muted:#56635f; --line:#d2d9d6; --accent:#1d5a52; --warn:#8a4b00; --warn-bg:#f7ead8;
+  --bg:#efede8; --surface:#faf9f6; --fg:#24221e; --muted:#59544b; --line:#d6d1c7; --accent:#3a3732; --warn:#8a5a00; --warn-bg:#f1e6cf;
   --ui:'Public Sans',system-ui,sans-serif; --mono:'Atkinson Hyperlegible Mono',ui-monospace,monospace;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#161918;--surface:#1e2221;--fg:#d6dcd8;--muted:#9ba6a1;--line:#343c39;--accent:#7cc0b4;--warn:#f0a74e;--warn-bg:#3a2d1c;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#161918;--surface:#1e2221;--fg:#d6dcd8;--muted:#9ba6a1;--line:#343c39;--accent:#7cc0b4;--warn:#f0a74e;--warn-bg:#3a2d1c;color-scheme:dark}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#131211;--surface:#1c1b19;--fg:#c8c4bb;--muted:#99948a;--line:#33312d;--accent:#d8d4cb;--warn:#c99a4b;--warn-bg:#2a2418;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#131211;--surface:#1c1b19;--fg:#c8c4bb;--muted:#99948a;--line:#33312d;--accent:#d8d4cb;--warn:#c99a4b;--warn-bg:#2a2418;color-scheme:dark}
 body{background:var(--bg);color:var(--fg);font:16px/1.55 var(--ui)}
 .wrap{max-width:1180px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:44px}
 h1{font-size:30px;line-height:1.15;margin:0;text-wrap:balance;letter-spacing:-.3px}
@@ -42,9 +42,9 @@ th{font-size:12px;color:var(--muted);font-weight:600}
 .pill{display:inline-block;font:600 11px var(--mono);padding:2px 7px;border-radius:3px;background:var(--warn-bg);color:var(--warn)}
 
 /* ===== Dirección B · Hoja clínica (papel, fija; variante sala abajo) ===== */
-.B{--b-desk:#e4e8e7;--b-sheet:#ffffff;--b-bar:#f4f6f5;--b-ln:#c9d0ce;--b-ink:#1c2a2e;--b-ink2:#4f5f64;--b-ink3:#55646a;--b-inst:#1d5a52;--b-rec:#b3261e;--b-recbg:#fbe4e2;--b-draft:#fff2c2;--b-draftln:#a37a00;--b-alert:#8f4700;--b-alertbg:#fcecd9;
+.B{--b-desk:#e6e2da;--b-sheet:#f6f4ef;--b-bar:#eeebe4;--b-ln:#cfc9be;--b-ink:#24221e;--b-ink2:#59544b;--b-ink3:#5f5a51;--b-inst:#59544b;--b-fin:#3a3732;--b-fintx:#f6f4ef;--b-rec:#a8321f;--b-recbg:#f3e0da;--b-draft:transparent;--b-draftln:#59544b;--b-alert:#8a5a00;--b-alertbg:#f1e6cf;
   font-family:'Public Sans',system-ui,sans-serif;color:var(--b-ink)}
-.B.sala{--b-desk:#171a1b;--b-sheet:#22272a;--b-bar:#1d2123;--b-ln:#3a4245;--b-ink:#d3d9d8;--b-ink2:#a6b0b0;--b-ink3:#8e9899;--b-inst:#7cc0b4;--b-rec:#ef7a72;--b-recbg:#3b2221;--b-draft:#3b3420;--b-draftln:#d9b44a;--b-alert:#f2a65a;--b-alertbg:#3a2c1d}
+.B.sala{--b-desk:#131211;--b-sheet:#1c1b19;--b-bar:#181715;--b-ln:#33312d;--b-ink:#c8c4bb;--b-ink2:#99948a;--b-ink3:#8a857c;--b-inst:#99948a;--b-fin:#34322d;--b-fintx:#d8d4cb;--b-rec:#d9705f;--b-recbg:#2a1c19;--b-draft:transparent;--b-draftln:#99948a;--b-alert:#c99a4b;--b-alertbg:#2a2418}
 .B .desk{width:1080px;height:640px;background:var(--b-desk);display:grid;grid-template-rows:50px 1fr;border:1px solid var(--b-ln);font-size:14px}
 .B .bar{display:flex;align-items:center;gap:10px;padding:0 16px;background:var(--b-bar);border-bottom:1px solid var(--b-ln)}
 .B .bar .name{font-weight:700}
@@ -54,8 +54,8 @@ th{font-size:12px;color:var(--muted);font-weight:600}
 .B .live i{width:9px;height:9px;border-radius:50%;background:var(--b-rec)}
 .B .live span{color:var(--b-ink);font-weight:500}
 .B .btn{border:1px solid var(--b-ln);background:var(--b-sheet);color:var(--b-ink);padding:6px 11px;border-radius:4px;font:inherit;font-size:13px}
-.B .btn.fin{background:var(--b-inst);border-color:var(--b-inst);color:#fff;font-weight:600}
-.B.sala .btn.fin{color:#10201d}
+.B .btn.fin{background:var(--b-fin);border-color:var(--b-fin);color:var(--b-fintx);font-weight:600}
+.B.sala .btn.fin{color:var(--b-fintx)}
 .B .mesa{display:grid;grid-template-columns:220px 1fr 250px;gap:18px;padding:16px 18px;min-height:0}
 .B .lat h4{margin:0 0 6px;font-size:12px}
 .B .inp{border:1px solid var(--b-ln);background:var(--b-sheet);padding:7px 9px;border-radius:4px;color:var(--b-ink3);font-size:13px}
@@ -72,7 +72,7 @@ th{font-size:12px;color:var(--muted);font-weight:600}
 .B .txt{font:17.5px/1.62 'Source Serif 4',Georgia,serif;font-variant-numeric:lining-nums tabular-nums;max-width:60ch}
 .B .txt h5{font:600 13px 'Public Sans',sans-serif;color:var(--b-ink2);margin:14px 0 3px}
 .B .txt p{margin:0 0 8px}
-.B .draft{background:var(--b-draft);box-shadow:inset 0 -2px 0 var(--b-draftln);font-style:italic}
+.B .draft{background:var(--b-draft);text-decoration:underline dotted 2px var(--b-draftln);text-underline-offset:4px;font-style:italic}
 .B .caret{display:inline-block;width:2px;height:1.05em;background:var(--b-rec);vertical-align:-2px}
 .B .sens{box-shadow:inset 0 -3px 0 var(--b-alert);background:var(--b-alertbg)}
 .B .ref{font:700 10px 'Public Sans',sans-serif;color:var(--b-alert);vertical-align:super}
@@ -85,14 +85,14 @@ th{font-size:12px;color:var(--muted);font-weight:600}
 .B .note.gl{border-left-color:var(--b-inst)} .B .note.gl h6{color:var(--b-inst)}
 .B .phone{width:330px;height:690px;background:var(--b-desk);display:flex;flex-direction:column;border:1px solid var(--b-ln);font-size:14px}
 .B .ph-top{display:flex;justify-content:space-between;padding:12px 14px;font-size:13px;color:var(--b-ink2)}
-.B .visor{margin:0 14px;background:#1c2a2e;color:#e9efed;border-radius:6px;padding:14px 16px;display:grid;gap:8px}
-.B.sala .visor{background:#0d0f10}
+.B .visor{margin:0 14px;background:#24221e;color:#ece8e0;border-radius:6px;padding:14px 16px;display:grid;gap:8px}
+.B.sala .visor{background:#100f0e}
 .B .visor .l1{display:flex;justify-content:space-between;font-size:13px}
 .B .visor .l1 b{font-size:14px}
 .B .visor .t{font:700 46px/1 'Public Sans',sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-1px}
-.B .visor .vu{height:5px;background:#3a474b;border-radius:3px;overflow:hidden}
-.B .visor .vu i{display:block;height:100%;background:#a9b7b6}
-.B .visor .d{font-size:12.5px;color:#a9b7b6;border-top:1px solid #3a474b;padding-top:8px;display:grid;gap:2px}
+.B .visor .vu{height:5px;background:#3d3a34;border-radius:3px;overflow:hidden}
+.B .visor .vu i{display:block;height:100%;background:#a8a297}
+.B .visor .d{font-size:12.5px;color:#a8a297;border-top:1px solid #3d3a34;padding-top:8px;display:grid;gap:2px}
 .B .grow{flex:1}
 .B .key{margin:0 14px;height:290px;border:2px solid var(--b-ln);border-radius:14px;background:var(--b-sheet);display:grid;place-content:center;text-align:center;gap:6px}
 .B .key b{font-size:20px}
@@ -100,10 +100,10 @@ th{font-size:12px;color:var(--muted);font-weight:600}
 .B .ph-mode{display:flex;justify-content:space-between;align-items:center;margin:10px 14px 14px;font-size:12.5px;color:var(--b-ink2)}
 .B .ph-mode span:last-child{border:1px solid var(--b-ln);padding:8px 10px;border-radius:4px;color:var(--b-ink)}
 .B .phone.rec{box-shadow:inset 0 0 0 6px var(--b-rec)}
-.B .phone.rec .visor .l1 b{color:#ff9d96}
-.B .phone.rec .visor .vu i{background:#ff6b61}
-.B .phone.rec .key{background:#c4433b;border-color:#c4433b;color:#fff}
-.B .phone.rec .key small{color:#ffe5e2}
+.B .phone.rec .visor .l1 b{color:#e8806f}
+.B .phone.rec .visor .vu i{background:#d9705f}
+.B .phone.rec .key{background:#7a3328;border-color:#7a3328;color:#f1ece4}
+.B .phone.rec .key small{color:#e8ded3}
 @media (max-width:560px){h1{font-size:25px}}
 </style>
 
@@ -138,11 +138,11 @@ th{font-size:12px;color:var(--muted);font-weight:600}
     <div class="card"><h3>Tipografía</h3><ul class="plain"><li>Source Serif 4 para el informe (17,5 px, 60 caracteres, cifras tabulares).</li><li>Public Sans para la interfaz y el visor.</li><li>Separa con claridad lo que se copia de lo que es control.</li></ul></div>
     <div class="card"><h3>Paleta</h3>
       <div class="swatches">
-        <div class="sw"><i style="background:#ffffff"></i><b>#ffffff</b><span>hoja</span></div>
-        <div class="sw"><i style="background:#1c2a2e"></i><b>#1c2a2e</b><span>tinta 14,8:1</span></div>
-        <div class="sw"><i style="background:#1d5a52"></i><b>#1d5a52</b><span>institucional</span></div>
-        <div class="sw"><i style="background:#b3261e"></i><b>#b3261e</b><span>grabando</span></div>
-        <div class="sw"><i style="background:#fff2c2"></i><b>#fff2c2</b><span>borrador</span></div>
+        <div class="sw"><i style="background:#131211"></i><b>#131211</b><span>mesa · sala</span></div>
+        <div class="sw"><i style="background:#1c1b19"></i><b>#1c1b19</b><span>hoja · sala</span></div>
+        <div class="sw"><i style="background:#c8c4bb"></i><b>#c8c4bb</b><span>tinta 9,9:1</span></div>
+        <div class="sw"><i style="background:#d9705f"></i><b>#d9705f</b><span>grabando</span></div>
+        <div class="sw"><i style="background:#c99a4b"></i><b>#c99a4b</b><span>alerta</span></div>
       </div></div>
   </div>
   <div class="stage"><div class="stage-row B">

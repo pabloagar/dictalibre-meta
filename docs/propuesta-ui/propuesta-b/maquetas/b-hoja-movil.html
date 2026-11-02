@@ -8,11 +8,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--ui:'Public Sans',system-ui,sans-serif}
-.dia{--fondo:#f4f6f5;--visor:#1c2a2e;--visor-texto:#e9efed;--visor-2:#a9b7b6;--linea:#c9d0ce;--tinta:#1c2a2e;--tinta-2:#4f5f64;--tecla:#ffffff;--grabando:#b3261e;--proc:#1d5a52;--error:#9b1c13}
-.sala{--fondo:#151819;--visor:#0d0f10;--visor-texto:#d3d9d8;--visor-2:#8e9899;--linea:#343c3f;--tinta:#d3d9d8;--tinta-2:#a6b0b0;--tecla:#22272a;--grabando:#c4433b;--proc:#7cc0b4;--error:#f08a7e}
+.dia{--fondo:#e6e2da;--visor:#24221e;--visor-texto:#ece8e0;--visor-2:#a8a297;--linea:#cfc9be;--tinta:#24221e;--tinta-2:#59544b;--tecla:#f6f4ef;--grabando:#a8321f;--proc:#59544b;--error:#8f2a1c}
+.sala{--fondo:#131211;--visor:#100f0e;--visor-texto:#c8c4bb;--visor-2:#8a857c;--linea:#33312d;--tinta:#c8c4bb;--tinta-2:#99948a;--tecla:#1c1b19;--grabando:#7a3328;--proc:#99948a;--error:#7a3328}
 *{box-sizing:border-box}
-body{margin:0;background:#9aa3a2;font:16px/1.4 var(--ui);display:flex;gap:28px;padding:30px 24px;align-items:flex-start}
-.wrap{position:relative}.cap{position:absolute;top:-24px;font-size:13px;color:#1c2a2e}
+body{margin:0;background:#8c877e;font:16px/1.4 var(--ui);display:flex;gap:28px;padding:30px 24px;align-items:flex-start}
+.wrap{position:relative}.cap{position:absolute;top:-24px;font-size:13px;color:#24221e}
 .tel{width:412px;height:915px;background:var(--fondo);color:var(--tinta);display:flex;flex-direction:column;overflow:hidden}
 .sup{display:flex;justify-content:space-between;padding:14px 16px;font-size:14px;color:var(--tinta-2)}
 .sup b{color:var(--tinta);font-weight:600}
@@ -21,8 +21,8 @@ body{margin:0;background:#9aa3a2;font:16px/1.4 var(--ui);display:flex;gap:28px;p
 .visor .linea1{display:flex;justify-content:space-between;align-items:baseline}
 .visor .est{font-size:15px;font-weight:700;letter-spacing:.2px}
 .visor .t{font:700 54px/1 var(--ui);font-variant-numeric:tabular-nums;letter-spacing:-1px;margin-top:10px}
-.visor .dest{font-size:14px;color:var(--visor-2);margin-top:10px;border-top:1px solid #3a474b;padding-top:10px}
-.visor .vu{height:6px;background:#3a474b;margin-top:12px;border-radius:3px;overflow:hidden}
+.visor .dest{font-size:14px;color:var(--visor-2);margin-top:10px;border-top:1px solid #3d3a34;padding-top:10px}
+.visor .vu{height:6px;background:#3d3a34;margin-top:12px;border-radius:3px;overflow:hidden}
 .visor .vu i{display:block;height:100%;background:var(--visor-2)}
 .esp{flex:1}
 .tecla{margin:0 16px;height:380px;border:2px solid var(--linea);border-radius:14px;background:var(--tecla);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;text-align:center;padding:16px}
@@ -31,15 +31,15 @@ body{margin:0;background:#9aa3a2;font:16px/1.4 var(--ui);display:flex;gap:28px;p
 .modo{margin:12px 16px 0;display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--tinta-2)}
 .modo button{font:inherit;color:var(--tinta);border:1px solid var(--linea);background:transparent;padding:10px 12px;border-radius:4px;min-height:44px}
 .pie{padding:12px 16px 16px;font-size:12px;color:var(--tinta-2)}
-.rec .visor .est{color:#ff9d96}
-.rec .visor .vu i{background:#ff6b61}
-.rec .tecla{background:var(--grabando);border-color:var(--grabando);color:#fff}
-.rec .tecla small{color:#ffe5e2}
+.rec .visor .est{color:#e8806f}
+.rec .visor .vu i{background:#d9705f}
+.rec .tecla{background:var(--grabando);border-color:var(--grabando);color:#f1ece4}
+.rec .tecla small{color:#e8ded3}
 .rec{box-shadow:inset 0 0 0 8px var(--grabando)}
 .proc .visor .est{color:var(--visor-texto)}
 .proc .tecla{border-style:dashed}
-.err .visor{background:var(--error);color:#fff}
-.err .visor .dest{color:#ffe1dd;border-color:#ffffff55}
+.err .visor{background:var(--error);color:#f6f4ef}
+.err .visor .dest{color:#eadbd3;border-color:#f6f4ef55}
 .err .tecla{opacity:.6}
 .accion{display:block;margin:12px 16px 0;padding:16px;border-radius:6px;background:var(--tinta);color:var(--fondo);text-align:center;font-weight:700}
 </style>

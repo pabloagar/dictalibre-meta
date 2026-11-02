@@ -5,22 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Maqueta B · Hoja de informe · escritorio</title>
 <!-- Maqueta estática de propuesta. No es la aplicación. Texto 100 % sintético.
-     Cambiar data-tema="sala" en <html> para ver la variante de bajo deslumbramiento. -->
+     Sala es el tema predeterminado; agregar data-tema="dia" en <html> para ver la variante de día. -->
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --mesa:#e4e8e7; --hoja:#ffffff; --barra:#f4f6f5; --linea:#c9d0ce;
-  --tinta:#1c2a2e; --tinta-2:#4f5f64; --tinta-3:#55646a;
-  --institucional:#1d5a52; --grabando:#b3261e; --grabando-suave:#fbe4e2;
-  --borrador:#fff2c2; --borrador-borde:#a37a00; --alerta:#8f4700; --alerta-suave:#fcecd9; --foco:#0b57d0;
+  /* Sala (predeterminado): grises neutros levemente cálidos; un color por significado. Contrastes en ../tokens-hoja-clinica.css */
+  --mesa:#131211; --hoja:#1c1b19; --barra:#181715; --linea:#33312d;
+  --tinta:#c8c4bb; --tinta-2:#99948a; --tinta-3:#8a857c;
+  --institucional:#99948a; --accion-final:#34322d; --accion-final-texto:#d8d4cb; --grabando:#d9705f; --grabando-suave:#2a1c19;
+  --borrador:transparent; --borrador-borde:#99948a; --alerta:#c99a4b; --alerta-suave:#2a2418; --foco:#d8d4cb;
   --serif:'Source Serif 4',Georgia,serif; --ui:'Public Sans',system-ui,sans-serif;
   font:14px/1.45 var(--ui); color:var(--tinta);
+  color-scheme:dark;
 }
-:root[data-tema="sala"]{
-  --mesa:#171a1b; --hoja:#22272a; --barra:#1d2123; --linea:#3a4245;
-  --tinta:#d3d9d8; --tinta-2:#a6b0b0; --tinta-3:#8e9899;
-  --institucional:#7cc0b4; --grabando:#ef7a72; --grabando-suave:#3b2221;
-  --borrador:#3b3420; --borrador-borde:#d9b44a; --alerta:#f2a65a; --alerta-suave:#3a2c1d; --foco:#ffd27a;
+:root[data-tema="dia"]{
+  --mesa:#e6e2da; --hoja:#f6f4ef; --barra:#eeebe4; --linea:#cfc9be;
+  --tinta:#24221e; --tinta-2:#59544b; --tinta-3:#5f5a51;
+  --institucional:#59544b; --accion-final:#3a3732; --accion-final-texto:#f6f4ef; --grabando:#a8321f; --grabando-suave:#f3e0da;
+  --borrador:transparent; --borrador-borde:#59544b; --alerta:#8a5a00; --alerta-suave:#f1e6cf; --foco:#24221e;
+  color-scheme:light;
 }
 *{box-sizing:border-box} body{margin:0;background:var(--mesa);min-height:100vh}
 button{font:inherit;color:inherit;cursor:pointer}
@@ -36,8 +39,8 @@ kbd{font:600 11px var(--ui);border:1px solid var(--linea);padding:1px 5px;border
 .dictando i{width:10px;height:10px;border-radius:50%;background:var(--grabando)}
 .dictando span{color:var(--tinta);font-weight:500}
 .btn{border:1px solid var(--linea);background:var(--hoja);padding:7px 12px;border-radius:4px;min-height:34px;display:inline-flex;align-items:center;gap:8px}
-.btn.final{background:var(--institucional);border-color:var(--institucional);color:#fff;font-weight:600}
-:root[data-tema="sala"] .btn.final{color:#10201d}
+.btn.final{background:var(--accion-final);border-color:var(--accion-final);color:var(--accion-final-texto);font-weight:600}
+:root[data-tema="dia"] .btn.final{color:var(--accion-final-texto)}
 .btn.final b{font-weight:400;opacity:.85}
 
 .mesa{display:grid;grid-template-columns:280px minmax(0,780px) 300px;justify-content:center;gap:24px;padding:24px 20px}
@@ -58,7 +61,7 @@ kbd{font:600 11px var(--ui);border:1px solid var(--linea);padding:1px 5px;border
 .texto{font:19px/1.65 var(--serif);max-width:64ch;font-variant-numeric:lining-nums tabular-nums}
 .texto h3{font:600 15px var(--ui);margin:24px 0 6px;color:var(--tinta-2)}
 .texto p{margin:0 0 10px}
-.borrador{background:var(--borrador);box-shadow:inset 0 -2px 0 var(--borrador-borde);font-style:italic}
+.borrador{background:var(--borrador);text-decoration:underline dotted 2px var(--borrador-borde);text-underline-offset:4px;font-style:italic}
 .caret{display:inline-block;width:2px;height:1.1em;background:var(--grabando);vertical-align:-3px;margin-left:1px}
 .sensible{box-shadow:inset 0 -3px 0 var(--alerta);background:var(--alerta-suave)}
 .ref{font:700 11px var(--ui);color:var(--alerta);vertical-align:super;margin-left:2px}
