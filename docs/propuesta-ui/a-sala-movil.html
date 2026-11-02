@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maqueta A · Sala de lectura · móvil</title>
+<!-- Maqueta estática: cuatro estados del teléfono a 412×915 px CSS (S25 Ultra). No es la aplicación. -->
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;500;700&family=Atkinson+Hyperlegible+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--fondo:#161918;--superficie:#202423;--linea:#363c3a;--texto:#d5dad6;--texto-2:#a3aca7;--texto-3:#848e89;
+--grabando:#e8665f;--grabando-fuerte:#c7362f;--ok:#8cc49a;--error:#f08a7e;--foco:#ffd27a;
+--ui:'Atkinson Hyperlegible Next',system-ui,sans-serif;--mono:'Atkinson Hyperlegible Mono',ui-monospace,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:#0f1110;font:16px/1.4 var(--ui);color:var(--texto);display:flex;gap:28px;padding:24px;align-items:flex-start}
+.tel{width:412px;height:915px;background:var(--fondo);border:1px solid #2c3230;display:grid;grid-template-rows:auto auto 1fr auto;position:relative;overflow:hidden}
+.cap{position:absolute;top:-22px;left:0;font-size:13px;color:#7d8782}
+.wrap{position:relative}
+.barra{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--linea);font-size:14px}
+.barra .pc{display:flex;gap:8px;align-items:center}
+.barra .pc i{width:8px;height:8px;border-radius:50%;background:var(--ok)}
+.barra button{all:unset;color:var(--texto-2);padding:10px 4px;font-size:14px}
+.info{padding:18px 16px 0}
+.estado{font-size:34px;font-weight:700;letter-spacing:-.4px;margin:0}
+.det{color:var(--texto-2);margin:6px 0 0;font-size:15px}
+.tiempo{font:600 56px/1 var(--mono);margin-top:18px;font-variant-numeric:tabular-nums}
+.limite{font-size:13px;color:var(--texto-3);margin-top:6px}
+.nivel{display:flex;gap:3px;height:28px;align-items:flex-end;margin-top:16px}
+.nivel b{flex:1;background:var(--linea);border-radius:1px}
+.modo{display:grid;grid-template-columns:1fr 1fr;margin:0 16px 12px;border:1px solid var(--linea);border-radius:6px;overflow:hidden}
+.modo span{padding:14px 8px;text-align:center;font-size:15px;color:var(--texto-2)}
+.modo span[aria-checked="true"]{background:var(--superficie);color:var(--texto);font-weight:700;box-shadow:inset 0 -3px 0 var(--texto)}
+.pulsador{margin:0 16px 16px;height:320px;border-radius:10px;border:2px solid var(--linea);background:var(--superficie);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;font-size:22px;font-weight:700}
+.pulsador small{font-size:15px;font-weight:400;color:var(--texto-2)}
+.pulsador svg{width:44px;height:44px;stroke:currentColor;fill:none;stroke-width:2}
+/* Grabando: toda la pantalla cambia, no solo un punto */
+.rec{background:#2b1514;box-shadow:inset 0 0 0 6px var(--grabando-fuerte)}
+.rec .estado{color:var(--grabando)}
+.rec .nivel b{background:var(--grabando)}
+.rec .pulsador{background:var(--grabando-fuerte);border-color:var(--grabando-fuerte);color:#fff}
+.rec .pulsador small{color:#fbe3e1}
+.err .estado{color:var(--error)}
+.err .pulsador{border-style:dashed;color:var(--texto-3)}
+.accion{margin:14px 16px 0;padding:16px;border-radius:8px;background:var(--texto);color:var(--fondo);font-weight:700;text-align:center;font-size:17px}
+.ok .estado{color:var(--ok)}
+.pie{padding:0 16px 14px;font-size:12px;color:var(--texto-3)}
+</style>
+</head>
+<body>
+
+<div class="wrap"><div class="cap">Listo · micrófono preparado</div>
+<section class="tel" aria-label="Estado listo">
+  <div class="barra"><span class="pc"><i aria-hidden="true"></i>Conectado al PC</span><button>Más opciones</button></div>
+  <div class="info">
+    <p class="estado" role="status">Listo para dictar</p>
+    <p class="det">Destino en el PC: Hallazgos, párrafo 2</p>
+    <div class="tiempo">00:00</div>
+    <div class="limite">Hasta 3 min por toma · pantalla encendida</div>
+    <div class="nivel" aria-hidden="true"><b style="height:10%"></b><b style="height:12%"></b><b style="height:8%"></b><b style="height:10%"></b><b style="height:9%"></b><b style="height:11%"></b><b style="height:8%"></b><b style="height:10%"></b><b style="height:9%"></b><b style="height:12%"></b><b style="height:8%"></b><b style="height:10%"></b></div>
+  </div>
+  <div></div>
+  <div>
+    <div class="modo" role="radiogroup" aria-label="Forma de grabar"><span role="radio" aria-checked="true">Mantener pulsado</span><span role="radio" aria-checked="false">Pulsar para iniciar y detener</span></div>
+    <div class="pulsador" role="button" tabindex="0"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="12" y="4" width="8" height="16" rx="4"/><path d="M8 15v2a8 8 0 0 0 16 0v-2M16 25v4M11 29h10"/></svg>Mantén pulsado para dictar<small>Suelta para terminar la toma</small></div>
+    <div class="pie">Fuera de una toma el audio se descarta: no se guarda ni se envía.</div>
+  </div>
+</section></div>
+
+<div class="wrap"><div class="cap">Grabando · pulgar sobre el control</div>
+<section class="tel rec" aria-label="Estado grabando">
+  <div class="barra"><span class="pc"><i aria-hidden="true"></i>Conectado al PC</span><button>Más opciones</button></div>
+  <div class="info">
+    <p class="estado" role="status" aria-live="assertive">Grabando</p>
+    <p class="det">El PC recibe audio · 41 bloques confirmados</p>
+    <div class="tiempo">00:04</div>
+    <div class="limite">Quedan 2:56 de esta toma</div>
+    <div class="nivel" aria-hidden="true"><b style="height:30%"></b><b style="height:62%"></b><b style="height:80%"></b><b style="height:44%"></b><b style="height:70%"></b><b style="height:92%"></b><b style="height:55%"></b><b style="height:38%"></b><b style="height:66%"></b><b style="height:48%"></b><b style="height:22%"></b><b style="height:35%"></b></div>
+  </div>
+  <div></div>
+  <div>
+    <div class="modo" role="radiogroup" aria-label="Forma de grabar" aria-disabled="true"><span role="radio" aria-checked="true">Mantener pulsado</span><span role="radio" aria-checked="false">Pulsar para iniciar y detener</span></div>
+    <div class="pulsador" role="button" aria-pressed="true">Suelta para terminar<small>Mientras mantengas pulsado se graba</small></div>
+    <div class="pie">No se puede cambiar el modo durante una toma.</div>
+  </div>
+</section></div>
+
+<div class="wrap"><div class="cap">Toma recibida · integridad comprobada en el PC</div>
+<section class="tel ok" aria-label="Estado toma recibida">
+  <div class="barra"><span class="pc"><i aria-hidden="true"></i>Conectado al PC</span><button>Más opciones</button></div>
+  <div class="info">
+    <p class="estado" role="status">Toma 7 recibida</p>
+    <p class="det">El PC confirmó los 48 bloques y el hash. El texto se revisa en el PC.</p>
+    <div class="tiempo">00:05</div>
+    <div class="limite">Lista para la siguiente toma</div>
+  </div>
+  <div></div>
+  <div>
+    <div class="modo" role="radiogroup" aria-label="Forma de grabar"><span role="radio" aria-checked="true">Mantener pulsado</span><span role="radio" aria-checked="false">Pulsar para iniciar y detener</span></div>
+    <div class="pulsador" role="button" tabindex="0"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="12" y="4" width="8" height="16" rx="4"/><path d="M8 15v2a8 8 0 0 0 16 0v-2M16 25v4M11 29h10"/></svg>Mantén pulsado para dictar<small>Suelta para terminar la toma</small></div>
+    <div class="pie">«Recibida» confirma los bytes, no que el reconocimiento sea correcto.</div>
+  </div>
+</section></div>
+
+<div class="wrap"><div class="cap">Error · conexión perdida durante la toma</div>
+<section class="tel err" aria-label="Estado error">
+  <div class="barra"><span class="pc" style="color:var(--error)">Sin conexión con el PC</span><button>Más opciones</button></div>
+  <div class="info">
+    <p class="estado" role="alert">La toma 8 no llegó completa</p>
+    <p class="det">Se perdió la conexión a los 00:03. En el PC, el informe vuelve al texto previo a esta toma.</p>
+    <div class="accion">Emparejar de nuevo</div>
+    <p class="det" style="margin-top:12px">Pulsa Conectar teléfono en el PC y escanea el QR nuevo.</p>
+  </div>
+  <div></div>
+  <div>
+    <div class="pulsador" aria-disabled="true">Grabación desactivada<small>Conecta para volver a dictar</small></div>
+    <div class="pie">El micrófono quedó liberado.</div>
+  </div>
+</section></div>
+
+</body>
+</html>
