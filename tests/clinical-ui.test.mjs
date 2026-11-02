@@ -71,12 +71,12 @@ test('A compacta: rehacer contexto, letra y copia limpia de anotaciones; edicion
  input('Hallazgo derecho. Resumen izquierdo.');button('Deshacer').click();assert.equal(editor.model.text,'');button('Rehacer').click();assert.equal(editor.model.text,'Hallazgo derecho. Resumen izquierdo.');
  document.querySelector('[aria-label="Aumentar tamaño del informe"]').click();assert.equal(editor.element.style.fontSize,'20px');
  globalThis.fetch=async()=>({ok:true,json:async()=>({id:'synthetic-review',status:'completed',suggestions:[{original:'izquierdo',reason:'Comprobar lateralidad.',evidence:['derecho','izquierdo']}]})});
- button('Revisar con IA').click();await button('Enviar a Meta y revisar').onclick();
+ await button('Revisar con IA').onclick();
  assert.equal(editor.element.querySelector('.report-annotation').textContent,'izquierdo');assert.equal(editor.element.textContent,editor.model.text);
  button('Nuevo informe').click();button('Vaciar y empezar').click();assert.equal(editor.model.text,'');assert.equal(editor.reviewPanel.hidden,true);button('Deshacer').click();assert.equal(editor.element.querySelector('.report-annotation').textContent,'izquierdo');assert.equal(editor.reviewPanel.hidden,false);
  await button('Copiar para RIS').onclick();assert.equal(copied,'Hallazgo derecho. Resumen izquierdo.');
  button('Es correcto').click();assert.equal(editor.element.querySelector('.report-annotation'),null);assert.equal(editor.model.text,copied);
- await button('Enviar a Meta y revisar').onclick();assert.ok(editor.element.querySelector('.report-annotation'));
+ await button('Revisar de nuevo').onclick();assert.ok(editor.element.querySelector('.report-annotation'));
  input('Edición nueva');assert.equal(editor.element.querySelector('.report-annotation'),null);assert.equal(document.querySelector('.report-global-review').dataset.stale,'true');
  await window.happyDOM.close();
 });
@@ -179,5 +179,19 @@ test('recarga conserva texto confirmado y sexo; no recupera el provisional como 
  const next=mountReport(document.querySelector('#parent'),{globalReview:false});assert.equal(next.model.text,'Confirmado sintético.');assert.equal(next.getSex(),'F');assert.equal(next.model.pending,false);assert.equal(next.model.history.length,0);
  assert.ok(document.body.textContent.includes('Borrador recuperado'));
  const metrics=JSON.parse(localStorage.getItem('dicta-editor-metrics-v1'));const restore=metrics.events.find(e=>e.type==='draft-restored');assert.equal(restore.restored,true);assert.ok(restore.elapsedMs>=0);assert.equal(restore.failed,false);
+ await window.happyDOM.close();
+});
+
+test('aceptar propuesta global conserva el resto y permite deshacer',async()=>{
+ const {window,editor,button}=setup({globalReview:true});
+ const original='Engrosamiento de 24 mili. Milímetros de espesor.';
+ editor.element.textContent=original;editor.element.dispatchEvent(new window.Event('input'));
+ globalThis.fetch=async()=>({ok:true,json:async()=>({id:'synthetic-proposal',status:'completed',suggestions:[{original:'mili. Milímetros',replacement:'milímetros',reason:'Unidad truncada y repetida.',kind:'format',category:'grammar',evidence:['mili. Milímetros']}]})});
+ await button('Revisar con IA').onclick();
+ assert.equal(editor.model.text,original);
+ button('Aceptar').click();
+ assert.equal(editor.model.text,'Engrosamiento de 24 milímetros de espesor.');
+ button('Deshacer').click();
+ assert.equal(editor.model.text,original);
  await window.happyDOM.close();
 });

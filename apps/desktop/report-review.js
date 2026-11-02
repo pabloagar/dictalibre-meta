@@ -1,13 +1,13 @@
 const el=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
 async function api(path,data){const r=await fetch(path,data===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});const value=await r.json();if(!r.ok)throw Error(value.error||'Revisión no disponible.');return value;}
 
-export function mountReportReview({controls,section,copyButton,snapshot,onCopy,event,available=true,onAnnotations=()=>{},onNavigate=()=>{},getRanges=()=>[]}){
-  const button=el('button','Revisar con IA');button.className='report-review-button';controls.insertBefore(button,copyButton);
+export function mountReportReview({controls,section,copyButton,snapshot,onCopy,event,available=true,onAnnotations=()=>{},onNavigate=()=>{},getRanges=()=>[],onApply=()=>false}){
+  const button=el('button','Revisar con IA');button.className='report-review-button';button.title='Envía el informe a Meta para revisarlo; no aplica cambios automáticamente.';controls.insertBefore(button,copyButton);
   const box=el('section');box.className='report-global-review';box.hidden=true;box.setAttribute('aria-label','Revisión global del informe');section.append(box);
   box.append(el('strong','Revisión con IA · Meta'));
   const close=el('button','Cerrar');close.className='review-close';close.onclick=()=>{box.hidden=true;button.focus?.();};box.append(close);
-  const status=el('p',available?'Revisa una copia del informe con Meta. No modifica el texto.':'La revisión con IA no está habilitada en esta demo pública. El dictado con Muse sí está disponible.');status.setAttribute('role','status');box.append(status);
-  const send=el('button','Enviar a Meta y revisar');send.hidden=!available;box.append(send);
+  const status=el('p',available?'Revisa una copia del informe con Meta. Los cambios requieren tu aceptación.':'La revisión con IA no está habilitada en esta demo pública. El dictado con Muse sí está disponible.');status.setAttribute('role','status');box.append(status);
+  const send=el('button','Revisar de nuevo');send.hidden=!available;box.append(send);
   if(available)box.append(el('p','Se envía el informe completo y la ficha de la plantilla. Comprueba las contradicciones, términos o comandos señalados. No es una lista de datos que debas añadir.'));
   const cancel=el('button','Cancelar revisión');cancel.hidden=true;box.append(cancel);
   const warnings=el('div');box.append(warnings);
@@ -35,6 +35,10 @@ export function mountReportReview({controls,section,copyButton,snapshot,onCopy,e
     result=r;warnings.replaceChildren();
     for(const [index,s] of (r.suggestions??[]).entries()){const id=String(index+1),row=el('article');row.dataset.reviewId=id;row.tabIndex=-1;const label={contradiction:'Contradicción entre fragmentos',ambiguous_term:'Término para comprobar',format:'Formato o comando'}[s.kind];if(label)row.append(el('small',label));row.append(el('strong',id+' · «'+s.original+'»'),el('p',s.reason));for(const quote of s.evidence??[])row.append(el('blockquote',quote));
       if(getRanges(r.suggestions??[]).some(a=>a.id===id)){const go=el('button','Ir al texto');go.onclick=()=>onNavigate(id);row.append(go);}else row.append(el('small','Comprueba la cita en el informe; no hay un único fragmento al que enlazar.'));
+      if(typeof s.replacement==='string'&&s.replacement!==s.original&&s.reason?.trim()){
+        row.append(el('small','Cambio propuesto'),el('blockquote',s.replacement));
+        const apply=el('button','Aceptar');apply.onclick=()=>{const state=current();if(state.pending||requested!==signature(state))return;const at=state.text.indexOf(s.original);if(at<0||state.text.indexOf(s.original,at+1)>=0)return;if(onApply({start:at,end:at+s.original.length,original:s.original,replacement:s.replacement})){event('report-suggestion-accepted',{reviewId:r.id,warning:index});changed();}};row.append(apply);
+      }
       const accept=el('button','Es correcto');accept.onclick=()=>{if(requested!==signature(current())||current().pending)return;acknowledged.add(id);row.hidden=true;changed();event('report-warning-acknowledged',{reviewId:r.id,warning:index});};row.append(accept);warnings.append(row);}
     changed();
     if(r.status==='completed'&&lastShown!==r.id){lastShown=r.id;event('report-review-shown',{reviewId:r.id,elapsedMs:performance.now()-started,stale:signature(current())!==requested,warningCount:r.suggestions.length});}
@@ -53,7 +57,8 @@ export function mountReportReview({controls,section,copyButton,snapshot,onCopy,e
     try{const r=await api('/api/report-reviews',{text:s.text,context:s.context});if(token!==epoch){if(['queued','running'].includes(r.status))void api('/api/reviews/cancel',{id:r.id}).catch(()=>{});return;}result=r;if(['queued','running'].includes(r.status))await poll(r.id,token);else{busy=false;cancel.hidden=true;render(r);}}
     catch(e){if(token!==epoch)return;busy=false;cancel.hidden=true;render({status:'error',error:e.message,suggestions:[]});}
   }
-  button.onclick=()=>{box.hidden=!box.hidden;if(!box.hidden)changed();event('panel-toggle',{panel:'report-review',open:!box.hidden});};send.onclick=reviewFirst.onclick=request;
+  // One click explicitly requests review; a current result is reopened without resending.
+  button.onclick=()=>{box.hidden=false;changed();event('panel-toggle',{panel:'report-review',open:true});if(!busy&&(!result||result.status!=='completed'||requested!==signature(current())))return request();};send.onclick=reviewFirst.onclick=request;
   copyAnyway.onclick=()=>{if(current().pending||offered!==signature(current()))return;offer.hidden=true;event('report-copy-without-review',{});onCopy();};
   cancel.onclick=()=>{epoch++;clearTimeout(timer);busy=false;cancel.hidden=true;if(result?.id)void api('/api/reviews/cancel',{id:result.id}).catch(()=>{});render({status:'cancelled',error:'Cancelada por el usuario.',suggestions:[]});event('report-review-cancel',{});};
   changed();

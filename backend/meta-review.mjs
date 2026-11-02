@@ -56,7 +56,7 @@ export function createReviewer({db,save,getKey,sourceHash,build,provider=reviewW
   if(existing&&!m.retry)return existing;
   if(existing&&['queued','running'].includes(existing.status))return existing;
   if(db.reviews.filter(r=>['queued','running'].includes(r.status)).length>=100)throw Error('Cola de revisión llena.');
-  const r={id:randomUUID(),scope:'report',runId:null,audioId:null,baseText:m.text,input,inputHash,config:{...REVIEW_CONFIG,promptVersion:'report-consistency-v2-evidence-only',prompt:REPORT_PROMPT,promptHash:hash(Buffer.from(REPORT_PROMPT))},build,sourceHash,status:'queued',createdAt:new Date().toISOString(),suggestions:[],error:null,usage:null,providerModel:null,timings:{queueMs:null,requestMs:null,validationMs:null,totalMs:null},uiMeasurements:[]};
+  const r={id:randomUUID(),scope:'report',runId:null,audioId:null,baseText:m.text,input,inputHash,config:{...REVIEW_CONFIG,promptVersion:'report-consistency-v3-explicit-proposals',prompt:REPORT_PROMPT,promptHash:hash(Buffer.from(REPORT_PROMPT))},build,sourceHash,status:'queued',createdAt:new Date().toISOString(),suggestions:[],error:null,usage:null,providerModel:null,timings:{queueMs:null,requestMs:null,validationMs:null,totalMs:null},uiMeasurements:[]};
   db.reviews.push(r);queued.set(r.id,performance.now());save();setImmediate(pump);return r;
  }
  async function pump(){

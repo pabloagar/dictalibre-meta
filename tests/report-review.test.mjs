@@ -6,6 +6,40 @@ import {reviewContext,validateReportEvidence} from '../backend/review-context.mj
 const wait=async fn=>{for(let i=0;i<100;i++){if(fn())return;await new Promise(r=>setTimeout(r,5));}throw Error('timeout');};
 const text='Hallazgos: nódulo derecho. Conclusión: nódulo izquierdo.';
 const warning={kind:'contradiction',original:'nódulo derecho',replacement:null,category:'sensitive',reason:'Comprobar si es el mismo hallazgo.',evidence:['nódulo derecho','nódulo izquierdo']};
+
+test('global proposals require evidence and preserve protected numbers and laterality',()=>{
+ const original='35 mili. Milímetros de espesor.';
+ const s={original,replacement:'35 milímetros de espesor.',category:'grammar',kind:'format',reason:'Unidad truncada y repetida.',evidence:[original]};
+ assert.equal(validateReportEvidence(JSON.stringify({suggestions:[s]}),original,validateReview)[0].replacement,s.replacement);
+ for(const replacement of ['50 milímetros de espesor.','35 centímetros de espesor.'])assert.equal(validateReportEvidence(JSON.stringify({suggestions:[{...s,replacement}]}),original,validateReview)[0].replacement,null);
+ assert.throws(()=>validateReportEvidence(JSON.stringify({suggestions:[{...s,reason:''}]}),original,validateReview));
+});
+
+test('global UI applies only explicit acceptance and blocks stale proposals',async()=>{
+ const elements=[];const el=tag=>{const n={tag,textContent:'',hidden:false,dataset:{},children:[],append(...x){this.children.push(...x);},setAttribute(){},insertBefore(){},replaceChildren(){this.children=[];}};elements.push(n);return n;};
+ let state={text:'35 mili. Milímetros.',pending:false,context:null},applied=0;
+ const response={id:'test',status:'completed',suggestions:[{original:state.text,replacement:'35 milímetros.',kind:'format',reason:'Unidad repetida.',evidence:[state.text]}]};
+ const ctx={document:{createElement:el},performance:{now:()=>100},setTimeout,clearTimeout,encodeURIComponent,fetch:async()=>({ok:true,json:async()=>response})};
+ vm.createContext(ctx);vm.runInContext(fs.readFileSync('apps/desktop/report-review.js','utf8').replace('export function','function'),ctx);
+ ctx.args={controls:el('div'),section:el('section'),copyButton:el('button'),snapshot:()=>state,onCopy(){},event(){},onApply:p=>{applied++;assert.equal(p.original,state.text);state={...state,text:p.replacement};return true;}};
+ vm.runInContext('mountReportReview(args)',ctx);
+ await elements.find(n=>n.textContent==='Revisar de nuevo').onclick();assert.equal(applied,0);
+ const accept=elements.find(n=>n.textContent==='Aceptar');assert.ok(accept);accept.onclick();assert.equal(applied,1);assert.equal(state.text,'35 milímetros.');
+ accept.onclick();assert.equal(applied,1);
+});
+
+test('one click requests review; concurrent clicks and current results do not resend',async()=>{
+ const elements=[];const el=tag=>{const n={tag,textContent:'',hidden:false,dataset:{},append(){},setAttribute(){},insertBefore(){},replaceChildren(){}};elements.push(n);return n;};
+ let calls=0,resolve;let state={text:'Texto.',pending:false,context:null};
+ const ctx={document:{createElement:el},performance:{now:()=>100},setTimeout,clearTimeout,encodeURIComponent,fetch:async()=>{calls++;return {ok:true,json:()=>new Promise(r=>resolve=r)};}};
+ vm.createContext(ctx);vm.runInContext(fs.readFileSync('apps/desktop/report-review.js','utf8').replace('export function','function'),ctx);
+ ctx.args={controls:el('div'),section:el('section'),copyButton:el('button'),snapshot:()=>state,onCopy(){},event(){}};
+ vm.runInContext('mountReportReview(args)',ctx);
+ const button=elements.find(n=>n.className==='report-review-button');const pending=button.onclick();assert.equal(calls,1);button.onclick();assert.equal(calls,1);
+ await wait(()=>!!resolve);resolve({id:'one',status:'completed',suggestions:[]});await pending;
+ button.onclick();assert.equal(calls,1);
+ state={...state,text:'Editado.'};resolve=null;const next=button.onclick();assert.equal(calls,2);await wait(()=>!!resolve);resolve({id:'two',status:'completed',suggestions:[]});await next;
+});
 test('contexto acotado, sin rutas ni metadatos arbitrarios; revisión global exige citas y nunca sustituye',()=>{
  const c=reviewContext({templateName:'TC tórax',reportText:'Previo',path:'PRIVADO',reference:'NO ENVIAR'});
  assert.equal(c.path,undefined);assert.equal(c.reference,undefined);assert.equal(c.reportText,'Previo');
@@ -20,7 +54,7 @@ test('toma conserva contexto inmutable; global conserva snapshot, deduplica y re
  const inputs=[],db={runs:[{id:'r',status:'completed',text:'Ate tacia.',configuration:{keywords:[]},reviewContext:{templateName:'TC',reportText:'Hallazgos previos.'}}]};
  const q=createReviewer({db,save(){},getKey:()=>'',provider:async input=>{inputs.push(structuredClone(input));return {content:JSON.stringify({suggestions:input.reviewScope==='report'?[warning]:[]})};}});
  try{const take=q.enqueue('r');db.runs[0].reviewContext.reportText='CAMBIADO';await wait(()=>take.status==='completed');assert.equal(inputs[0].context.reportText,'Hallazgos previos.');
- const global=q.enqueueReport({text,context:{templateName:'TC'}});assert.equal(q.enqueueReport({text,context:{templateName:'TC'}}).id,global.id);await wait(()=>global.status==='completed');assert.equal(global.baseText,text);assert.equal(global.suggestions[0].evidence.length,2);assert.ok(global.timings.requestMs>=0);assert.equal(global.config.promptVersion,'report-consistency-v2-evidence-only');
+ const global=q.enqueueReport({text,context:{templateName:'TC'}});assert.equal(q.enqueueReport({text,context:{templateName:'TC'}}).id,global.id);await wait(()=>global.status==='completed');assert.equal(global.baseText,text);assert.equal(global.suggestions[0].evidence.length,2);assert.ok(global.timings.requestMs>=0);assert.equal(global.config.promptVersion,'report-consistency-v3-explicit-proposals');
  assert.notEqual(q.enqueueReport({text,context:{templateName:'RM'}}).inputHash,global.inputHash);
  global.config.promptHash='previous-prompt';assert.notEqual(q.enqueueReport({text,context:{templateName:'TC'}}).id,global.id);
  assert.throws(()=>q.enqueueReport({text:' '}));assert.throws(()=>q.enqueueReport({text:'x'.repeat(20001)}));
@@ -47,7 +81,7 @@ test('UI: copiar ofrece revisar o continuar; edición invalida avisos y respuest
  const ui=vm.runInContext('mountReportReview(args)',box);
  assert.equal(ui.beforeCopy(),false);assert.equal(calls,0);
  elements.find(n=>n.textContent==='Copiar sin revisar').onclick();assert.equal(copies,1);
- const pending=elements.find(n=>n.textContent==='Enviar a Meta y revisar').onclick();await wait(()=>typeof resolveReview==='function');
+ const pending=elements.find(n=>n.textContent==='Revisar de nuevo').onclick();await wait(()=>typeof resolveReview==='function');
  snapshot={...snapshot,text:'Texto modificado.'};ui.changed();resolveReview({id:'r',status:'completed',suggestions:[]});await pending;
  assert.equal(ui.beforeCopy(),false);assert.equal(copies,1);
  assert.ok(elements.some(n=>String(n.textContent).includes('Puedes revisar')));
