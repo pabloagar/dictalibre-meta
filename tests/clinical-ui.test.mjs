@@ -339,3 +339,38 @@ test('preferencia elegida antes de cargar catálogo no se mezcla con favoritas i
  assert.equal(document.querySelector('[aria-label="Favorita: Posterior"]').getAttribute('aria-pressed'),'false');
  await window.happyDOM.close();
 });
+
+test('campo de plantilla: clic selecciona solo el marcador, reemplazo y deshacer',async()=>{
+ const original='ANTECEDENTES\n[Completar antecedentes clínicos.]\n\nHALLAZGOS\nSin alteraciones.';
+ const {window,editor,button}=setup({savedDraft:original});
+ const field=editor.element.querySelector('.report-placeholder');field.click();
+ assert.equal(document.activeElement,editor.element);
+ assert.equal(window.getSelection().toString(),'[Completar antecedentes clínicos.]');assert.equal(editor.model.text,original);
+ // Simular la edición nativa del rango, seguida del evento input del navegador.
+ const range=window.getSelection().getRangeAt(0);range.deleteContents();range.insertNode(document.createTextNode('Control clínico.'));
+ editor.element.dispatchEvent(new window.Event('input'));
+ assert.equal(editor.model.text,original.replace('[Completar antecedentes clínicos.]','Control clínico.'));
+ assert.equal(editor.element.querySelector('.report-placeholder'),null);
+ button('Deshacer').click();assert.equal(editor.model.text,original);
+ assert.ok(editor.element.querySelector('.report-placeholder'));
+ const event=JSON.parse(localStorage.getItem('dicta-editor-metrics-v1')).events.find(e=>e.type==='template-field-selected');
+ assert.equal(event.characters,'[Completar antecedentes clínicos.]'.length);assert.ok(event.elapsedMs>=0);assert.equal(event.text,undefined);
+ await window.happyDOM.close();
+});
+
+test('campo de plantilla: teclado, lateralidad, dictado y corchetes ordinarios',async()=>{
+ const original='ANTECEDENTES\n[Completar antecedentes clínicos.]\n\nTÉCNICA\nRodilla [indicar lado].\n[Texto libre]';
+ const {window,editor,button}=setup({savedDraft:original});
+ assert.equal(editor.element.querySelectorAll('.report-placeholder').length,2);
+ const side=editor.element.querySelectorAll('.report-placeholder')[1];side.focus();
+ side.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));
+ assert.equal(window.getSelection().toString(),'[indicar lado]');
+ editor.begin('field-take');editor.preview('field-take','derecha');await editor.finish('field-take','derecha','fixture');
+ assert.equal(editor.model.text,original.replace('[indicar lado]','derecha'));
+ button('Deshacer').click();assert.equal(editor.model.text,original);
+ editor.element.querySelector('.report-placeholder').click();editor.begin('pending-field');
+ const count=()=>JSON.parse(localStorage.getItem('dicta-editor-metrics-v1')).events.filter(e=>e.type==='template-field-selected').length;
+ const before=count();editor.element.querySelector('.report-placeholder')?.click();assert.equal(count(),before);
+ editor.cancel('pending-field');assert.equal(editor.model.text,original);
+ await window.happyDOM.close();
+});
