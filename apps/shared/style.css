@@ -480,3 +480,66 @@ body.clinical-workspace[data-theme="ambar"] .dicta-wordmark>.dicta-logo-light{di
 body.clinical-workspace[data-theme="penumbra"] .dicta-wordmark>.dicta-logo-dark,
 body.clinical-workspace[data-theme="ambar"] .dicta-wordmark>.dicta-logo-dark{display:block}
 .clinical-workspace .clinical-brand{display:flex;align-items:center;min-height:40px;padding:5px 0;flex-shrink:0}
+
+/* Keep recording status on the header's centre axis, independent of action widths. */
+.clinical-workspace .clinical-topbar{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:24px;width:100%}
+.clinical-workspace .clinical-start{display:flex;align-items:center;gap:20px;min-width:0}
+.clinical-workspace .clinical-topbar>.clinical-record{margin:0;justify-self:center}
+.clinical-workspace .clinical-topbar>.primary-actions{margin:0;justify-self:end}
+
+/* Dictation settings: contextual fields, aligned switches, secondary diagnostics. */
+.clinical-workspace .clinical-settings[open]>.settings-body{width:960px;overflow:hidden}
+.clinical-workspace .settings-nav{flex-basis:184px}
+.clinical-workspace .settings-main{padding:20px 28px;overscroll-behavior:contain;font-size:14px;line-height:1.5}
+.clinical-workspace .settings-main h3{font-size:22px;margin:4px 88px 8px 0}
+.clinical-workspace .settings-main .settings-intro{margin:0 80px 16px 0}
+.clinical-workspace .dictation-section{border:1px solid var(--dl-line);border-radius:8px;padding:16px 20px;margin:0 0 12px}
+.clinical-workspace .setting-field{display:grid;grid-template-columns:138px minmax(0,1fr);gap:8px 16px;align-items:start;margin-top:12px;padding-top:12px;border-top:1px solid var(--dl-line)}
+.clinical-workspace .setting-field .setting-label{font-size:13px;font-weight:600;line-height:1.5;padding-top:10px}
+.clinical-workspace .setting-field .settings-segments{margin:0;gap:6px}
+.clinical-workspace .setting-field>.tiny{grid-column:2;font-size:12px;line-height:1.55;margin:0}
+.clinical-workspace .engine-setting{display:block;border:0;margin:0;padding:0}
+.clinical-workspace .engine-setting .setting-label{display:block;padding:0;margin:0 0 10px;font-size:14px}
+.clinical-workspace .engine-setting .settings-segments{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.clinical-workspace .engine-setting>.tiny{margin-top:10px}
+.clinical-workspace .text-settings h4{font-size:14px;font-weight:600;margin:0 0 12px}
+.clinical-workspace .settings-main .setting-switch{display:flex;align-items:center;justify-content:space-between;gap:24px;margin:0;cursor:pointer}
+.clinical-workspace .setting-switch-copy{display:block;min-width:0}
+.clinical-workspace .setting-switch strong{display:block;font-size:14px;font-weight:400;line-height:1.5}
+.clinical-workspace .setting-description{display:block;font-size:12px;line-height:1.55;color:var(--dl-muted);margin-top:4px}
+.clinical-workspace .setting-switch input[role=switch]{flex:0 0 44px;margin:0}
+.clinical-workspace .setting-switch input:disabled{cursor:default;opacity:.4}
+.clinical-workspace .setting-switch+.setting-switch,.clinical-workspace .command-reference+.setting-switch{margin-top:12px;padding-top:12px;border-top:1px solid var(--dl-line)}
+.clinical-workspace .command-reference{border:0;padding:0;margin-top:8px;background:transparent}
+.clinical-workspace .command-reference>summary{font-size:12px;color:var(--dl-muted);padding:4px 0}
+.clinical-workspace .command-reference .tiny{padding-top:8px;font-size:12px}
+.clinical-workspace .advanced-settings{margin:4px 0 0;padding:0;border:0;background:transparent}
+.clinical-workspace .advanced-settings>summary{font-size:13px;font-weight:600;padding:10px 0}
+.clinical-workspace .advanced-description{display:block;font-size:12px;line-height:1.5;font-weight:400;color:var(--dl-muted);margin:4px 0 0 15px}
+.clinical-workspace .advanced-settings>details{border:1px solid var(--dl-line);border-radius:6px;margin:10px 0;padding:12px 14px;background:transparent}
+.clinical-workspace .advanced-settings>details>summary{position:static;background:transparent;padding:2px 0}
+.clinical-workspace .advanced-settings .lab-link{display:inline-block;margin:8px 0}
+.clinical-workspace .howto-panel>.editor-help{margin:16px 0}
+@media(max-width:1150px){
+ .clinical-workspace .clinical-topbar{grid-template-columns:minmax(0,1fr) auto;gap:12px 20px}
+ .clinical-workspace .clinical-topbar>.clinical-record{grid-column:1/-1;grid-row:2}
+ .clinical-workspace .clinical-topbar>.primary-actions{grid-column:2;grid-row:1}
+}
+@media(max-width:900px){
+ .clinical-workspace .clinical-settings[open]>.settings-body{overflow:auto}
+ .clinical-workspace .settings-nav{flex-basis:auto}
+ .clinical-workspace .settings-main{padding:20px}
+}
+@media(max-width:760px){
+ .clinical-workspace .clinical-topbar{grid-template-columns:minmax(0,1fr)}
+ .clinical-workspace .clinical-start{flex-wrap:wrap;justify-content:center;gap:12px}
+ .clinical-workspace .clinical-topbar>.primary-actions{grid-column:1;grid-row:3;justify-self:center;flex-wrap:wrap;justify-content:center}
+}
+@media(max-width:600px){
+ .clinical-workspace .dictation-section{padding:16px}
+ .clinical-workspace .setting-field{grid-template-columns:minmax(0,1fr)}
+ .clinical-workspace .setting-field>.tiny{grid-column:1}
+ .clinical-workspace .setting-field .setting-label{padding-top:0}
+ .clinical-workspace .engine-setting .settings-segments{grid-template-columns:minmax(0,1fr)}
+ .clinical-workspace .settings-main .settings-intro{margin-right:0}
+}

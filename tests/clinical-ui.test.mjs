@@ -109,6 +109,18 @@ for(const savedTheme of [null,'sala'])test('montaje completo, controles y tema g
  const templates=document.querySelector('.template-library-panel');templates.open=true;templates.dispatchEvent(new window.Event('toggle'));
  assert.equal(document.querySelector('.template-picker').style.width,'780px');
  const settings=document.querySelector('.clinical-settings');settings.open=true;settings.dispatchEvent(new window.Event('toggle'));await new Promise(r=>setTimeout(r,0));assert.equal(templates.open,false);
+ const engine=document.querySelector('select[aria-label="Motor para dictar"]'),segments=document.querySelector('select[aria-label="Segmentación de Muse-streaming"]'),glossary=document.querySelector('select[aria-label="Glosario de Muse"]');
+ assert.equal(segments.parentElement.hidden,true);assert.equal(glossary.parentElement.hidden,true);
+ document.querySelector('[role="group"][aria-label="Motor para dictar"]').querySelector('button:last-child').click();
+ assert.equal(engine.value,'muse-stream');assert.equal(segments.parentElement.hidden,false);assert.equal(glossary.parentElement.hidden,false);
+ assert.ok(engine.parentElement.contains(document.getElementById(engine.getAttribute('aria-describedby'))));
+ assert.ok(segments.parentElement.contains(document.getElementById(segments.getAttribute('aria-describedby'))));
+ const commands=document.querySelector('[role="switch"][aria-label="Aplicar comandos de dictado"]');commands.click();assert.equal(commands.checked,false);commands.click();assert.equal(commands.checked,true);
+ const review=document.querySelector('[role="switch"][aria-label="Revisar cada toma con IA"]');review.click();assert.equal(review.checked,false);
+ const advanced=document.querySelector('.advanced-settings');assert.equal(advanced.open,false);assert.ok(advanced.contains(document.querySelector('#recordings')));assert.ok(advanced.contains(document.querySelector('#metrics-export')));
+ // Happy DOM omits the implicit tabIndex=0 that Chrome gives native summaries.
+ for(const summary of settings.querySelectorAll('summary'))summary.tabIndex=0;
+ const firstSetting=document.querySelector('[data-page="dictado"]');firstSetting.focus();firstSetting.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Tab',shiftKey:true,bubbles:true}));assert.equal(document.activeElement.parentElement.className,'advanced-settings');
  document.querySelector('[data-page="apariencia"]').click();assert.equal(document.querySelector('.appearance-panel').hidden,false);document.querySelector('[data-value="penumbra"]').click();assert.equal(document.body.dataset.theme,'penumbra');assert.equal(localStorage.getItem('dicta-theme-v1'),'penumbra');
  document.querySelector('[data-page="ayuda"]').click();assert.equal(document.querySelectorAll('.help-step').length,4);document.querySelector('.settings-close').click();assert.equal(settings.open,false);
  const level=document.querySelector('#level');level.value=.8;await new Promise(r=>setTimeout(r,0));assert.ok(document.querySelectorAll('.audio-bars .lit').length>0);

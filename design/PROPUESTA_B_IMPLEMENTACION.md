@@ -57,6 +57,10 @@ Capturas locales (fuera de Git): carpeta de visualizaciones de esta sesión, sub
 2. `node scripts/preview-desktop-b.mjs` abre un servidor exclusivamente local en http://127.0.0.1:8796/live. Sirve los archivos de UI reales con un catálogo y revisión sintéticos. El pie lo identifica; no existe transporte de audio en ese fixture.
 3. Probar inicio, temas, Plantilla, edición, Nuevo informe/Deshacer, revisión y copia. No confundir el fixture con el laboratorio ni con Render.
 
+## Ajuste posterior: cabecera y Dictado
+
+Estado, reloj y audio centrados en la cabecera; en ancho reducido ocupan una fila propia. Ajustes → Dictado agrupa motor y sus opciones, comandos/revisión al terminar la toma y herramientas del laboratorio plegadas. Ayudas junto a cada control, interruptores alineados y Ayuda del editor en Cómo usar. Se conserva la paleta de la propuesta. Metodología y límites de comprobación en METRICS.md, apartado «Estado centrado y Dictado agrupado».
+
 ## Pendiente de aceptación
 
 Dictado físico desde S25, recorrido completo con servidores reales y comodidad en una sala de informes. No hay validación clínica ni con usuarios. No se ha publicado la rama en Render ni unido a codex/capture-transport. El laboratorio local lee la carpeta de trabajo: puede servir recursos de esta rama al recargar; no se reinició y no se verificó su versión activa por el bloqueo de acceso citado.
