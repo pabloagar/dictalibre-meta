@@ -266,3 +266,6 @@ Con aprobación del responsable, los 10 glosarios de demostración se ordenaron 
 `/live` ahora carga los glosarios de demostración como configuraciones de solo lectura marcadas «sin medir». Al aplicar una plantilla reconocida por su nombre, propone el glosario de su examen; la configuración por defecto no cambió.
 
 Pruebas nuevas (`examForTemplate` y carga en el laboratorio) vistas fallar antes de implementar: 98/98 Node y 5/5 Python. Se verificó en Chromium con el laboratorio real (plantilla propia «TC de cerebro» → glosario propuesto; plantilla sin examen → vuelve a «Sin glosario»). Pendiente: revisar en el PC del responsable qué plantillas PUC reconoce `examForTemplate` y la revisión de las 10 listas.
+
+## 2026-11-02 · Editor: plantilla de un solo uso y revisión local por sexo
+Con aprobación del responsable, el panel de plantillas se cierra después de aplicar una y pide confirmación antes de reemplazar un informe con contenido propio. Además se agregó un selector de sexo (F/M) que activa una revisión local, con regla exacta, de órganos que no corresponden. No se envía a Meta ni cambia texto. Detalle en `PHASE_9_EDITOR.md`. Resultado: 100/100 pruebas Node y 5/5 Python; recorrido verificado en Chromium con el laboratorio real.

@@ -58,3 +58,18 @@ export function examForTemplate(template){
  if(cat!=='tomografia'&&!/\b(tc|tac|angio|tomograf|pielo|uro)/.test(n))return null;
  return EXAM_PATTERNS.find(([,re])=>re.test(n))?.[0]??null;
 }
+// Confirmación antes de reemplazar el informe por otra plantilla: solo si hay contenido propio (distinto de la plantilla aplicada).
+export function needsReplaceConfirmation(committed,template){return committed.trim()!==''&&committed!==(template?.text??'');}
+// Revisión LOCAL (no se envía a Meta) de órganos que no corresponden al sexo marcado por el médico (F/M).
+// Regla exacta: lista cerrada de órganos y derivados, sin distinguir mayúsculas ni tildes. «Mama» queda fuera a propósito
+// (los hombres tienen tejido mamario). Es un aviso para revisar, nunca un cambio: hay excepciones reales.
+const ORGANOS={
+ F:[['útero',/\b(utero|uterin[oa]s?|histerectomia)\b/],['ovario',/\b(ovari[oa]s?|ovaric[oa]s?|ooforectomia)\b/],['endometrio',/\bendometri(o|al|ales)\b/],['miometrio',/\bmiometri(o|al)\b/],['trompa uterina',/\btrompas? (de falopio|uterinas?)\b/],['cérvix',/\bcervix\b/],['vagina',/\bvagina(l|les)?\b/]],
+ M:[['próstata',/\b(prostat(a|ico|ica|icos|icas)|prostatectomia)\b/],['vesículas seminales',/\bvesiculas? seminal(es)?\b/],['testículo',/\b(testicul(o|os|ar|ares)|orquiectomia)\b/],['epidídimo',/\bepididim(o|os|aria|ario)\b/],['escroto',/\b(escroto|escrotal(es)?)\b/],['pene',/\b(pene|peneano)\b/],['conducto deferente',/\bconductos? deferentes?\b/]],
+};
+export function sexAnatomyWarnings(text,sexo){
+ if(sexo!=='F'&&sexo!=='M')return [];
+ const original=String(text).normalize('NFC'),p=original.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(),out=[];
+ for(const [termino,re] of ORGANOS[sexo==='F'?'M':'F']){const m=re.exec(p);if(m){const fragmento=original.slice(m.index,m.index+m[0].length);out.push({termino,fragmento,inicio:m.index,mensaje:`Revisar: «${fragmento}» en un informe marcado ${sexo}.`});}}
+ return out;
+}

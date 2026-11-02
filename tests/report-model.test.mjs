@@ -47,3 +47,24 @@ test('examen de la plantilla por nombre: angio antes que simple, columna cervica
  assert.equal(examForTemplate({name:'AngioTAC de tórax',category:'Otros / por clasificar'}),'angiotc-torax-tep');
  assert.equal(examForTemplate({name:'Radiografía de tórax',category:'Radiografía'}),null);
 });
+test('reemplazar el informe con otra plantilla pide confirmación solo si hay contenido propio',async()=>{
+ const {needsReplaceConfirmation}=await import('../apps/shared/report-model.js');
+ assert.equal(needsReplaceConfirmation('',null),false);assert.equal(needsReplaceConfirmation('  \n',null),false);
+ assert.equal(needsReplaceConfirmation('HALLAZGOS\n',{text:'HALLAZGOS\n'}),false,'plantilla sin cambios');
+ assert.equal(needsReplaceConfirmation('HALLAZGOS\nSin derrame.',{text:'HALLAZGOS\n'}),true);
+ assert.equal(needsReplaceConfirmation('Texto dictado',null),true);
+});
+test('sexo F/M: avisa órganos del otro sexo con regla exacta; mama no avisa; sin dato no avisa',async()=>{
+ const {sexAnatomyWarnings}=await import('../apps/shared/report-model.js');
+ const t='Próstata de tamaño normal. Útero en anteversión. Ovarios sin lesiones. Mama derecha sin nódulos. Vesículas seminales simétricas. Testículos no evaluados.';
+ assert.deepEqual(sexAnatomyWarnings(t,'F').map(w=>w.termino),['próstata','vesículas seminales','testículo']);
+ assert.deepEqual(sexAnatomyWarnings(t,'M').map(w=>w.termino),['útero','ovario']);
+ assert.deepEqual(sexAnatomyWarnings(t,''),[]);assert.deepEqual(sexAnatomyWarnings(t,null),[]);
+ assert.deepEqual(sexAnatomyWarnings('Mamas con ginecomastia.','M'),[]);
+ assert.deepEqual(sexAnatomyWarnings('Lesión prostática; histerectomía previa.','F').map(w=>w.termino),['próstata']);
+ assert.deepEqual(sexAnatomyWarnings('Antecedente de histerectomía. Lecho prostático.','M').map(w=>w.termino),['útero']);
+ assert.deepEqual(sexAnatomyWarnings('ESTRUCTURAS UTERINAS','M').map(w=>w.termino),['útero'],'sin distinguir mayúsculas ni tildes');
+ assert.deepEqual(sexAnatomyWarnings('Cervical sin alteraciones; ovalado.','M'),[],'no confunde columna cervical ni «ovalado»');
+ assert.equal(sexAnatomyWarnings(t,'F')[0].mensaje,'Revisar: «Próstata» en un informe marcado F.');
+ assert.equal(sexAnatomyWarnings('\n  HALLAZGOS\n  Próstata aumentada.','F')[0].fragmento,'Próstata','la posición no se corre con espacios iniciales');
+});

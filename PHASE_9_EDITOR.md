@@ -23,3 +23,15 @@ Pruebas reproducibles: node --test tests/report-model.test.mjs. Casos de selecci
 
 ## Biblioteca importada
 Además de plantillas propias, biblioteca local con buscador sin acentos, categorías, favoritas y vista previa/procedencia. Detalles, cantidades y estado de activación en TEMPLATE_LIBRARY.md. La revisión clínica del contenido sigue pendiente.
+
+## 2026-11-02 · Plantilla de un solo uso y revisión local de sexo (F/M)
+Aprobado por el responsable.
+
+- **Plantilla de un solo uso:** al pulsar «Crear informe», el panel de plantillas se cierra y su resumen muestra «Plantilla: <nombre> · cambiar». Si el informe tiene contenido propio, aplicar otra plantilla pide un segundo clic («Reemplazar informe actual»); el cambio se puede deshacer.
+- **Revisión de sexo:** selector «Sexo: sin dato / F / M», que vuelve a «sin dato» al crear un informe nuevo. Activa una revisión **local**, que no se envía a Meta, con regla exacta: órganos femeninos (útero, ovario, endometrio, miometrio, trompa uterina, cérvix, vagina, histerectomía) en un informe marcado M, o masculinos (próstata, vesículas seminales, testículo, epidídimo, escroto, pene, conducto deferente, prostatectomía, orquiectomía) en uno marcado F.
+  - «Mama» queda fuera a propósito.
+  - El aviso cita el fragmento («Revisar: «Próstata» en un informe marcado F.»), nunca cambia texto ni bloquea la copia, y se descarta con «Es correcto».
+  - Eventos de medición: `sex-marked` y `sex-warning-dismissed`.
+- **Pruebas:** `needsReplaceConfirmation` y `sexAnatomyWarnings` en `tests/report-model.test.mjs`, vistas fallar antes de implementar.
+- **Verificación:** recorrido en Chromium con el laboratorio real.
+- **Límites:** la lista es cerrada y no reconoce sinónimos fuera de ella. No sabe de cirugías de afirmación de género ni de intersexualidad: por eso el aviso es solo para revisar.
