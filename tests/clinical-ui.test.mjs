@@ -24,7 +24,7 @@ test('inicio vacío aun con borrador anterior; plantilla explícita, confirmaci�
  const select=document.querySelector('[aria-label="Plantilla para el informe"]');select.value='0';
  panel.open=true;button('Aplicar plantilla').click();
  assert.match(editor.model.text,/TÉCNICA/);assert.equal(panel.open,false);
- assert.equal(panel.querySelector('summary').textContent,'Planilla');assert.equal(panel.hidden,false);
+ assert.equal(panel.querySelector('summary').textContent,'Plantilla');assert.equal(panel.hidden,false);
  assert.equal(editor.element.textContent,editor.model.text);assert.equal(editor.element.querySelectorAll('.report-heading').length,3);
  editor.element.textContent='Texto sintético propio';editor.element.dispatchEvent(new window.Event('input'));
  panel.open=true;select.value='';button('Aplicar plantilla').click();
@@ -96,7 +96,7 @@ test('montaje completo mantiene controles, hoja y ajustes accesibles',async()=>{
  assert.equal(document.querySelector('.clinical-settings').open,false);
  assert.ok(document.querySelector('.clinical-editbar .report-redo'));
  assert.equal(document.querySelector('.template-library-panel').nextElementSibling,document.querySelector('.clinical-settings'));
- assert.equal(document.querySelector('.template-library-panel summary').textContent,'Planilla');
+ assert.equal(document.querySelector('.template-library-panel summary').textContent,'Plantilla');
  assert.ok(document.querySelector('.clinical-notes .report-global-review'));
  const connection=document.querySelector('.connection-panel'),pairing=document.querySelector('.pairing');
  connection.querySelector('summary').getBoundingClientRect=()=>({left:240,bottom:60});
