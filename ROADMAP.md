@@ -105,3 +105,5 @@ Aceptación real completada: seis transcripciones/tres pares, una revisión Meta
 ## Ideas después del MVP · acceso a Tonos
 
 - [ ] **Selector «Tonos» bajo EN ESPERA/reloj/nivel**, visible para cambiar apariencia sin entrar a Ajustes. Presentación cuidada, nombres vinculados a medicina o personal de salud: ejemplos propuestos por el responsable «Sala nocturna», «Natural» y un tercer nombre pendiente. Reutilizar los temas existentes (Día, Penumbra, Ámbar), mantener bajo deslumbramiento y preferencia persistente; no dar nombres por aprobados ni añadir temas todavía. Evaluar que no reste claridad al estado de grabación ni espacio al informe. Idea solicitada el 02-11-2026, no implementada, posterior al MVP.
+
+Actualización de recuperación temporal, 02-11-2026: implementación y 147 pruebas automáticas completadas en 8d3507b. Ventana de 120 s y recuperación del mismo teléfono sin reiniciar micrófono. **El pendiente de cierre sigue abierto hasta repetir WhatsApp físicamente en Samsung y comprobar iPhone.** No confundir implementación con aceptación del dispositivo.
