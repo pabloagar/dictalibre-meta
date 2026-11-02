@@ -24,8 +24,8 @@ const fingerprint = data => createHash('sha256').update(data).digest('hex');
 const nowMs = () => performance.timeOrigin + performance.now();
 
 export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL = 120_000,
-  sessionTTL = 30 * 60_000, maxSessions = 30, route = null, canCreate = null, clientIp = null, passUpgrade = null } = {}) {
-  const sessions = new Map(), codes = new Map(), tokens = new Map(), attempts = new Map();
+  sessionTTL = 30 * 60_000, maxSessions = 30, resumeTTL = 120_000, route = null, canCreate = null, clientIp = null, passUpgrade = null } = {}) {
+  const sessions = new Map(), codes = new Map(), tokens = new Map(), attempts = new Map(), resumes = new Map();
   const headers = {
     'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer',
     'Permissions-Policy': 'microphone=(self), camera=()',
@@ -61,7 +61,7 @@ export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL 
 
   function finishSession(session, reason = 'Sesión cerrada.') {
     if (!session || !sessions.has(session.id)) return;
-    sessions.delete(session.id); codes.delete(session.code); tokens.delete(session.tokenHash);
+    resumes.delete(session.resumeHash); sessions.delete(session.id); codes.delete(session.code); tokens.delete(session.tokenHash);
     for (const ws of [session.desktop, session.mobile]) {
       send(ws, { type: 'closed', reason });
       if (ready(ws)) ws.close(1000, 'session-ended');
@@ -74,7 +74,22 @@ export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL 
       createdToPairedMs: now - session.createdMono,
       requestToPairedMs: now - session.joinMono,
       confirmationWaitMs: session.method === 'manual' ? now - session.joinMono : null };
-    for (const target of [session.desktop, session.mobile]) send(target, { type: 'paired', maxSeconds: MAX_SECONDS, pairing: session.pairing });
+    const resumeToken = issueResume(session);
+    for (const target of [session.desktop, session.mobile]) send(target, { type: 'paired', maxSeconds: MAX_SECONDS, pairing: session.pairing, ...(target===session.mobile?{resumeToken}: {}) });
+  }
+  function issueResume(s) {
+    resumes.delete(s.resumeHash);
+    const token = randomBytes(32).toString('hex');
+    s.resumeHash = fingerprint(token); resumes.set(s.resumeHash, s);
+    return token;
+  }
+  function suspend(s, ws) {
+    if (!sessions.has(s.id) || s.mobile !== ws) return;
+    abort(s, 'Teléfono desconectado: toma interrumpida, no completada.');
+    s.mobile = null; ws.session = null;
+    s.resumeUntil = Math.min(Date.now() + resumeTTL, s.expires);
+    send(s.desktop, {type:'mobile_suspended', windowMs:resumeTTL});
+    ws.close(1000, 'mobile-suspended');
   }
   function abort(session, reason) {
     if (!session.recording) return;
@@ -130,6 +145,15 @@ export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL 
         if (m.type === 'ping') { send(ws, { type: 'pong', echo: m.echo, serverReceive: receivedAt, serverSend: nowMs() }); return; }
         if (!session) {
           if (!limit(clientIp ? clientIp(req) : req.socket.remoteAddress)) throw new Error('Demasiados intentos. Espera un minuto.');
+          if (m.type === 'resume') {
+            const s = typeof m.token === 'string' && /^[a-f0-9]{64}$/.test(m.token) ? resumes.get(fingerprint(m.token)) : null;
+            if (!s || !sessions.has(s.id) || !s.approved || s.mobile || !s.resumeUntil || Date.now() >= s.resumeUntil || !ready(s.desktop)) throw new Error('No se pudo recuperar la conexión. Escanea un nuevo QR desde el PC.');
+            const remainingMs = s.resumeUntil - Date.now();
+            s.mobile = ws; ws.session = s; ws.role = 'mobile'; s.resumeUntil = null;
+            const resumeToken = issueResume(s);
+            send(ws, {type:'paired', resumed:true, pairing:s.pairing, remainingMs, resumeToken});
+            send(s.desktop, {type:'paired', resumed:true, pairing:s.pairing}); return;
+          }
           if (m.type === 'create') {
             if (canCreate && !canCreate(req)) throw new Error('Ingresa el código de la demostración.');
             if (sessions.size >= maxSessions) throw new Error('Servidor ocupado.');
@@ -153,6 +177,7 @@ export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL 
           }
           throw new Error('Primero crea o une una sesión.');
         }
+        if (m.type === 'suspend' && ws.role === 'mobile' && session.approved) { suspend(session, ws); return; }
         if (m.type === 'close') { finishSession(session); return; }
         if (m.type === 'approve' && ws.role === 'desktop' && session.mobile && !session.approved) {
           if (Date.now() > session.pairExpires) throw new Error('Emparejamiento vencido.');
@@ -218,12 +243,12 @@ export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL 
         send(ws, { type: 'error', message: error.message });
       }
     });
-    ws.on('close', () => { if (ws.session) finishSession(ws.session, 'Se perdió la conexión. Vuelve a emparejar los dispositivos.'); });
+    ws.on('close', () => { if (ws.session) { if (ws.role === 'mobile' && ws.session.approved) suspend(ws.session, ws); else finishSession(ws.session, 'Se perdió la conexión. Vuelve a emparejar los dispositivos.'); } });
   });
   const timer = setInterval(() => {
     const now = Date.now();
     for (const s of sessions.values()) {
-      if (now > s.expires || (!s.approved && now > s.pairExpires)) finishSession(s, 'La sesión venció. Crea una nueva.');
+      if ((s.resumeUntil && now >= s.resumeUntil) || now > s.expires || (!s.approved && now > s.pairExpires)) finishSession(s, 'La sesión venció. Crea una nueva.');
       else if (s.recording && now - s.recording.last > 15_000) abort(s, 'No llegó audio o confirmación a tiempo. Grabación incompleta.');
     }
     for (const [key, value] of attempts) if (now - value.start > 60_000) attempts.delete(key);

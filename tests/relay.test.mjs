@@ -33,7 +33,7 @@ async function environment(t, options) {
     const pc = await peer(); pc.send({ type: 'create' }); const created = await pc.next('created');
     const phone = await peer(); phone.send({ type: 'join', code: created.code });
     const a = await pc.next('pending'), b = await phone.next('pending'); assert.equal(a.confirm, b.confirm);
-    pc.send({ type: 'approve' }); await pc.next('paired'); await phone.next('paired');
+    pc.send({ type: 'approve' }); await pc.next('paired'); phone.paired=await phone.next('paired');
     return { pc, phone, code: created.code };
   }
   return { relay, origin, peer, pair };
@@ -102,9 +102,9 @@ test('hash incorrecto nunca se marca verificado', async t => {
   phone.send(frame()); await pc.next('binary'); phone.send({ type: 'end', id: 1, frames: 1, samples: 480, hash: 'wrong' });
   assert.match((await pc.next('aborted')).reason, /integridad/);
 });
-test('caída del teléfono cierra la sesión y avisa al PC', async t => {
+test('caída del teléfono interrumpe toma y conserva emparejamiento temporal', async t => {
   const { pair } = await environment(t); const { pc, phone } = await pair(); await start(pc, phone);
-  phone.ws.terminate(); assert.match((await pc.next('closed')).reason, /perdió/);
+  phone.ws.terminate(); assert.match((await pc.next('aborted')).reason, /interrumpida/); assert.equal((await pc.next('mobile_suspended')).windowMs,120000);
 });
 test('rechaza comandos de grabación del receptor', async t => {
   const { pair } = await environment(t); const { pc } = await pair(); pc.send({ type: 'start', id: 1, rate: 48000 }); assert.match((await pc.next('error')).message, /permitida/);
@@ -129,7 +129,7 @@ test('QR conecta sin aprobar, consume ambos accesos y exporta tiempos sin token'
   const pc = await peer(); pc.send({type:'create'}); const created = await pc.next('created');
   assert.match(created.token, /^[a-f0-9]{64}$/);
   const phone = await peer(); phone.send({type:'join_qr',token:created.token});
-  const result = await pc.next('paired'); await phone.next('paired');
+  const result = await pc.next('paired'); phone.paired=await phone.next('paired');
   assert.equal(result.pairing.method,'qr'); assert.equal(result.pairing.confirmationWaitMs,null);
   assert.ok(result.pairing.requestToPairedMs >= 0);
   assert.equal(JSON.stringify(result).includes(created.token),false);
@@ -155,4 +155,26 @@ test('manual conserva confirmación y anula el QR incluso antes de aprobar', asy
   phone.send({type:'approve'}); assert.match((await phone.next('error')).message,/confirmación/);
   pc.send({type:'approve'}); const paired=await pc.next('paired');
   assert.equal(paired.pairing.method,'manual'); assert.ok(paired.pairing.confirmationWaitMs>=0);
+});
+
+
+test('recuperación autenticada rota token y preserva sesión sin grabar',async t=>{
+ const {pair,peer,relay}=await environment(t);const {pc,phone}=await pair();const token=phone.paired.resumeToken;
+ const attacker=await peer();attacker.send({type:'resume',token:'0'.repeat(64)});await attacker.next('error');
+ phone.send({type:'suspend'});await pc.next('mobile_suspended');
+ const back=await peer();back.send({type:'resume',token});const renewed=await back.next('paired');assert.notEqual(renewed.resumeToken,token);
+ assert.equal(renewed.resumed,true);assert.equal((await pc.next('paired')).resumed,true);
+ assert.equal([...relay.sessions.values()][0].recording,null);
+ attacker.send({type:'resume',token});await attacker.next('error');
+ back.send({type:'start',id:1,rate:48000});await pc.next('start');
+ back.send({type:'close'});await pc.next('closed');
+ attacker.send({type:'resume',token:renewed.resumeToken});await attacker.next('error');
+});
+test('recuperación rechaza plazo vencido y cierre del PC',async t=>{
+ const {pair,peer,relay}=await environment(t);const {pc,phone}=await pair();const token=phone.paired.resumeToken;
+ phone.send({type:'suspend'});await pc.next('mobile_suspended');
+ const session=[...relay.sessions.values()][0];session.resumeUntil=Date.now()-1;
+ const back=await peer();back.send({type:'resume',token});await back.next('error');
+ pc.send({type:'close'});await pc.next('closed');assert.equal(relay.sessions.size,0);
+ back.send({type:'resume',token});await back.next('error');
 });

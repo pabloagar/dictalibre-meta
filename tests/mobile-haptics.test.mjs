@@ -72,3 +72,19 @@ test('fallos de vibración/almacenamiento no bloquean captura; inicio tardío y 
   p.run('start();stop();captureStarted(recording);abort("cancelada");');
   assert.deepEqual(p.pulses, []);
 });
+
+test('recuperación móvil vuelve emparejada pero sin preparar ni iniciar micrófono',()=>{
+ const p=phone();p.box.connections=[];
+ p.run("context=null;worklet=null;prepared=false;client=null;resumeToken='temporal';resumeUntil=Date.now()+120000;");
+ p.box.RelayClient=class{constructor(onMessage,onClose){this.onMessage=onMessage;this.onClose=onClose;}connect(request){p.box.connections.push(request);}send(){return true;}};
+ p.run('reconnect();');assert.equal(p.box.connections.length,1);assert.equal(p.box.connections[0].type,'resume');
+ p.run("onMessage({type:'paired',resumed:true,resumeToken:'rotado'});");
+ assert.equal(p.run('paired'),true);assert.equal(p.run('prepared'),false);assert.equal(p.run('recording'),null);assert.equal(p.$('record').disabled,true);
+ assert.equal(p.run("lifecycle.at(-1).resumed"),true);assert.equal(p.run('resumeToken'),'rotado');
+});
+test('móvil no recupera oculto, vencido ni después de cierre explícito',()=>{
+ const p=phone();p.run("client=null;resumeToken='temporal';resumeUntil=Date.now()-1;reconnect();");assert.equal(p.run('resumeToken'),null);
+ assert.match(p.statuses.at(-1),/superó dos minutos/);
+ p.run("resumeToken='temporal';resumeUntil=Date.now()+120000;document.hidden=true;reconnect();");assert.equal(p.run('client'),null);
+ p.run("context=null;worklet=null;onMessage({type:'closed',reason:'Sesión cerrada'});");assert.equal(p.run('resumeToken'),null);
+});

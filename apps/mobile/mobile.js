@@ -1,6 +1,7 @@
 import { $, RelayClient, status, clock } from '/shared/client.js';
 import { encodeChunk, sha256 } from '/shared/protocol.js';
 
+let resumeToken=null, resumeUntil=0, retryTimer=null;
 let client, stream, context, source, worklet, silent, wakeLock;
 let paired = false, prepared = false, preparing = false, epoch = 0, recording = null, counter = 0, heldPointer = null;
 let mode = 'hold';
@@ -48,7 +49,7 @@ function captureStarted(r, confirmation = 'worklet-start') {
   status('Grabando y enviando al computador.');
 }
 $('export-lifecycle').onclick=()=>{const blob=new Blob([JSON.stringify({schema:'mobile-lifecycle.v1',captureFeedbackVersion:CAPTURE_FEEDBACK_VERSION,clock:'performance.now; ms desde navegación',browser:navigator.userAgent,network:null,events:lifecycle},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='dicta-interrupciones.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
-$('restart').onclick=()=>{lifecycleEvent('reset');if(recording)abort('Sesión reiniciada.');releaseMicrophone();client?.send({type:'close'});client?.close();qrToken=null;$('join-code').value='';$('duration').textContent='00:00';$('received').textContent='0';$('verified').textContent='';$('capture-info').textContent='Micrófono liberado.';status('Crea una sesión nueva en el PC y escanea el nuevo QR.');};
+$('restart').onclick=()=>{forgetResume();lifecycleEvent('reset');if(recording)abort('Sesión reiniciada.');releaseMicrophone();client?.send({type:'close'});client?.close();qrToken=null;$('join-code').value='';$('duration').textContent='00:00';$('received').textContent='0';$('verified').textContent='';$('capture-info').textContent='Micrófono liberado.';status('Crea una sesión nueva en el PC y escanea el nuevo QR.');};
 function report(r, stages = {}, extra = {}) { client?.send({ type: 'sender_metrics', id: r.id, stages, ...extra }); }
 const initialCode = location.hash.slice(1);
 let qrToken = /^qr=[a-f0-9]{64}$/.test(initialCode) ? initialCode.slice(3) : null;
@@ -168,7 +169,7 @@ function stop() {
 function onMessage(m) {
   switch (m.type) {
     case 'pending': $('join-panel').hidden = true; $('confirm-panel').hidden = false; $('confirm-code').textContent = m.confirm; status('Espera la confirmación en el computador.'); break;
-    case 'paired': client.send({ type: 'pairing_metrics', connectToPairedMs: performance.now() - connectStarted }); $('join-panel').hidden = true; paired = true; $('confirm-panel').hidden = true; $('controls').hidden = false; status('Conectado. Prepara el micrófono para empezar.', 'success'); refresh(); break;
+    case 'paired': if(m.resumeToken){resumeToken=m.resumeToken;resumeUntil=0;}lifecycleEvent('connection-ready',{resumed:!!m.resumed});client.send({ type: 'pairing_metrics', connectToPairedMs: performance.now() - connectStarted }); $('join-panel').hidden = true; paired = true; $('confirm-panel').hidden = true; $('controls').hidden = false; status('Conectado. Prepara el micrófono para empezar.', 'success'); refresh(); break;
     case 'receipt':
       if (recording?.id === m.id) {
         $('received').textContent = m.sequence + 1;
@@ -183,20 +184,32 @@ function onMessage(m) {
       $('verified').textContent = m.samples ? '✓ El PC recibió exactamente el mismo audio. Puedes escucharlo allí.' : 'La toma quedó vacía. Prueba de nuevo.';
       status(synthetic ? 'Tono sintético preparado para otra toma.' : 'Micrófono preparado para otra toma.', 'success'); break;
     case 'aborted': if (recording && m.id !== recording.id) break; abort(m.reason, false); break;
-    case 'error': status(m.message, 'error'); if (!paired) client?.close(); break;
-    case 'closed': paired=false;abort(m.reason, false); releaseMicrophone();client?.close();break;
+    case 'error': if(!paired)forgetResume();status(m.message, 'error'); if (!paired) client?.close(); break;
+    case 'closed': forgetResume();paired=false;abort(m.reason, false); releaseMicrophone();client?.close();break;
   }
 }
-$('join').onclick = () => {
-  if (client) return;
-  if (!qrToken && !/^[a-f0-9]{10}$/i.test($('join-code').value.replace(/[\s-]/g, ''))) { status('Introduce los 10 caracteres del código.', 'error'); return; }
-  connectStarted = performance.now();
-  client = new RelayClient(onMessage, () => {
-    lifecycleEvent('connection-closed');paired = false; abort('Conexión cerrada. Crea una sesión nueva en el PC.', false); releaseMicrophone();
-    client = null; $('join-panel').hidden = false; $('confirm-panel').hidden = true; $('controls').hidden = true; refresh();
+function forgetResume(){resumeToken=null;resumeUntil=0;clearTimeout(retryTimer);}
+function reconnect(){
+  if(client||document.hidden||!resumeToken)return;
+  if(Date.now()>=resumeUntil){forgetResume();status('La pausa superó dos minutos. Crea una sesión en el PC y escanea el nuevo QR.');return;}
+  lifecycleEvent('resume-attempt');openConnection({type:'resume',token:resumeToken});
+}
+function openConnection(request){
+  connectStarted=performance.now();
+  client=new RelayClient(onMessage,()=>{
+    lifecycleEvent('connection-closed');paired=false;releaseMicrophone();
+    if(resumeToken&&!resumeUntil)resumeUntil=Date.now()+120000;
+    abort(resumeToken?'Conexión en pausa. Vuelve a Chrome antes de dos minutos.':'Conexión cerrada. Crea una sesión en el PC y escanea el QR.',false);
+    client=null;$('join-panel').hidden=false;$('confirm-panel').hidden=true;$('controls').hidden=true;refresh();
+    if(resumeToken&&!document.hidden)retryTimer=setTimeout(reconnect,1000);
   });
-  const request = qrToken ? { type: 'join_qr', token: qrToken } : { type: 'join', code: $('join-code').value };
-  qrToken = null; client.connect(request); refresh(); status('Conectando…');
+  client.connect(request);refresh();status(request.type==='resume'?'Recuperando conexión…':'Conectando…');
+}
+$('join').onclick=()=>{
+  if(client)return;
+  if(resumeToken){reconnect();return;}
+  if(!qrToken&&!/^[a-f0-9]{10}$/i.test($('join-code').value.replace(/[\s-]/g,''))){status('Introduce los 10 caracteres del código.','error');return;}
+  const request=qrToken?{type:'join_qr',token:qrToken}:{type:'join',code:$('join-code').value};qrToken=null;openConnection(request);
 };
 $('prepare').onclick = () => prepare(false);
 $('test-signal').onclick = () => prepare(true);
@@ -214,12 +227,12 @@ button.addEventListener('contextmenu', event => event.preventDefault());
 button.addEventListener('keydown', event => { if (mode === 'hold' && [' ', 'Enter'].includes(event.key)) { event.preventDefault(); if (!event.repeat) start(); } });
 button.addEventListener('keyup', event => { if (mode === 'hold' && [' ', 'Enter'].includes(event.key)) { event.preventDefault(); stop(); } });
 button.addEventListener('blur', () => { if (mode === 'hold') stop(); });
-$('close').onclick = () => { if (recording) abort('Sesión finalizada.'); releaseMicrophone(); client?.send({ type: 'close' }); client?.close(); };
+$('close').onclick = () => { forgetResume(); if (recording) abort('Sesión finalizada.'); releaseMicrophone(); client?.send({ type: 'close' }); client?.close(); };
 document.addEventListener('visibilitychange', () => {
- if(document.hidden){hiddenAt=performance.now();lifecycleEvent('hidden',{duringTake:!!recording});if(recording)abort('Pantalla oculta o bloqueada: toma interrumpida, no completada.');releaseMicrophone();}
+ if(document.hidden){hiddenAt=performance.now();lifecycleEvent('hidden',{duringTake:!!recording});if(recording)abort('Pantalla oculta o bloqueada: toma interrumpida, no completada.');releaseMicrophone();if(paired&&client&&resumeToken){resumeUntil=Date.now()+120000;client.send({type:'suspend'});client.close();}}
  else {lifecycleEvent('visible',{hiddenDurationMs:hiddenAt===null?null:performance.now()-hiddenAt});hiddenAt=null;
   if(paired&&client){$('prepare').textContent='Reactivar micrófono';status('Volviste a la pantalla. Pulsa Reactivar micrófono para volver a dictar.');}
-  else status('La conexión terminó. Reinicia la sesión en el PC y escanea el nuevo QR.');refresh();}
+  else if(resumeToken)reconnect();else status('La conexión terminó. Crea una sesión en el PC y escanea el nuevo QR.');refresh();}
 });
 window.addEventListener('pagehide', () => { if (recording) client?.send({ type: 'abort' }); releaseMicrophone(); client?.close(); });
 refresh();
