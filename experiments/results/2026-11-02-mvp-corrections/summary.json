@@ -1,0 +1,176 @@
+{
+  "schema": "mvp-corrections-summary-v1",
+  "build": "72f25f05d7c051ada039f28ae00a51fa7c6e3302",
+  "referenceValidated": false,
+  "assessment": "Agent comparison against provisional synthetic scripts; no human listening validation or clinical validation.",
+  "evidenceHashes": {
+    "data/local/lab/reports/mvp-evaluation-1793645039975/protocol.json": "27475d634645c14f2b51aa77e0d1431dd4754dd68350efb0738b0e72e236abc9",
+    "data/local/lab/reports/mvp-evaluation-1793645039975/results.json": "4d6a05f7f3e1e92ab864d927a5cc0c247ba61e55980a096d09d710938f7381f5",
+    "data/local/lab/reports/mvp-corrections-1793645039871/protocol.json": "e96f95b0a8d4ad54d4722819cb6548ffb9f7b9985290ec96d82d46bb381d82ee",
+    "data/local/lab/reports/mvp-corrections-1793645039871/formatting.json": "62344932fcd24ae369851df9562e3d435c0dd6167c63497058ed509211d00076",
+    "data/local/lab/reports/mvp-corrections-1793645039871/same-text-reviews.json": "df9381a9f43f06269801a675210bb05fdd28f0ba869e63fce29609c6cd744bed",
+    "data/local/lab/reports/mvp-corrections-1793645039871/controls.json": "f190fe97fa660edbc11c0621060228955f398c170be4ed92fc4d4ff172649125"
+  },
+  "frozenAsr": {
+    "cases": 15,
+    "beforeMatches": 11,
+    "afterMatches": 12,
+    "changedCases": [
+      "microsoft-helena-desktop-sections"
+    ]
+  },
+  "sameTextReview": {
+    "cases": 15,
+    "beforeNotices": 8,
+    "afterNotices": 3,
+    "beforeUniqueReviews": 9,
+    "afterUniqueReviews": 9,
+    "extraCompletenessNoticesBefore": 4,
+    "extraCompletenessNoticesAfter": 0,
+    "deformedTermsFlaggedAfter": 3,
+    "oldMalformedHeadingMissedAfter": true
+  },
+  "controls": [
+    {
+      "id": "isolated",
+      "expectedNotice": false,
+      "beforeNotices": 1,
+      "afterNotices": 0,
+      "passed": true
+    },
+    {
+      "id": "not-repeated",
+      "expectedNotice": false,
+      "beforeNotices": 1,
+      "afterNotices": 0,
+      "passed": true
+    },
+    {
+      "id": "different-structures",
+      "expectedNotice": false,
+      "beforeNotices": 0,
+      "afterNotices": 0,
+      "passed": true
+    },
+    {
+      "id": "compatible",
+      "expectedNotice": false,
+      "beforeNotices": 0,
+      "afterNotices": 0,
+      "passed": true
+    },
+    {
+      "id": "prior-current",
+      "expectedNotice": false,
+      "beforeNotices": 0,
+      "afterNotices": 0,
+      "passed": true
+    },
+    {
+      "id": "side-conflict",
+      "expectedNotice": true,
+      "beforeNotices": 1,
+      "afterNotices": 1,
+      "passed": true
+    },
+    {
+      "id": "polarity-conflict",
+      "expectedNotice": true,
+      "beforeNotices": 1,
+      "afterNotices": 1,
+      "passed": true
+    },
+    {
+      "id": "size-conflict",
+      "expectedNotice": true,
+      "beforeNotices": 1,
+      "afterNotices": 1,
+      "passed": true
+    },
+    {
+      "id": "term-control",
+      "expectedNotice": true,
+      "beforeNotices": 1,
+      "afterNotices": 1,
+      "passed": true
+    },
+    {
+      "id": "inherited-normality",
+      "expectedNotice": true,
+      "beforeNotices": 1,
+      "afterNotices": 1,
+      "passed": true
+    }
+  ],
+  "freshAudio": {
+    "cases": 15,
+    "matched": 13,
+    "uniqueReviews": 7,
+    "cachedReuses": 8,
+    "noticeCount": 0,
+    "originalsPreserved": 15,
+    "mismatches": [
+      {
+        "caseId": "microsoft-helena-desktop-negation",
+        "expected": "No se observa neumotórax.",
+        "observed": "No se observa neumotorax.",
+        "classification": "missing-accent",
+        "noticeCount": 0
+      },
+      {
+        "caseId": "microsoft-laura-negation",
+        "expected": "No se observa neumotórax.",
+        "observed": "No se observa hemotórax.",
+        "classification": "valid-medical-term-substitution-not-flagged",
+        "noticeCount": 0
+      }
+    ]
+  },
+  "templateModel": {
+    "count": 285,
+    "passed": 285,
+    "privateContentSentToMeta": false,
+    "clinicalValidation": false
+  },
+  "browserSmoke": {
+    "browser": "ChatGPT in-app browser",
+    "url": "http://127.0.0.1:8797/live",
+    "templateCategory": "thyroid ultrasound",
+    "selectedReplacement": true,
+    "undoExact": true,
+    "redoExact": true,
+    "privateContentSentToMeta": false,
+    "audioSource": null
+  },
+  "timingMs": {
+    "serverEndToFinal": {
+      "n": 15,
+      "min": 590.5967999999993,
+      "median": 795.5072,
+      "max": 973.8235999999997
+    },
+    "providerEndToFinal": {
+      "n": 15,
+      "min": 186.18619999999646,
+      "median": 229.12900000000081,
+      "max": 264.4805000000051
+    },
+    "uniqueReviewRequest": {
+      "n": 7,
+      "min": 844.0727999999945,
+      "median": 1811.5501999999979,
+      "max": 2563.738300000012
+    },
+    "clockPrecisionMs": null,
+    "instrumentationOverheadMs": null
+  },
+  "limitations": [
+    "One repetition, five scripts and three synthetic voices; references not human-listened.",
+    "ASR and reviewer comparisons ran concurrently: timing is descriptive, not causal.",
+    "Different ASR outcomes cannot be attributed to the formatting change.",
+    "Text-only reviewer cannot reliably detect a plausible wrong medical word.",
+    "285 template checks exercise the editor model, not clinical review of 285 reports.",
+    "iPhone physical test remains assigned to the owner."
+  ],
+  "mvpQualityGate": "not closed"
+}
