@@ -19,3 +19,18 @@ export function startStream({rate,configId,commandsEnabled,reviewEnabled=false,r
  item.cancel=()=>{if(ws.readyState===WebSocket.OPEN)ws.send(JSON.stringify({type:'cancel'}));ws.close();};
  return item;
 }
+
+// Bounded in-memory FIFO: only one provider stream at a time.
+export function createTakeQueue({maxBytes=64*1024*1024}={}){
+ let tail=Promise.resolve(),bytes=0;
+ return function reserve(){
+  let release;const previous=tail;const completed=new Promise(resolve=>release=resolve);tail=previous.then(()=>completed);
+  let closed=false,buffer=[],localBytes=0,inner=null;
+  const slot={ready:previous,release(){if(closed)return;closed=true;bytes-=localBytes;localBytes=0;buffer=[];release();},
+   open(factory){slot.opened=previous.then(()=>{if(closed)return;inner=factory();const pump=()=>{if(closed||!buffer.length)return;const m=buffer.shift(),size=typeof m==='string'?m.length*2:m.byteLength;bytes-=size;localBytes-=size;inner.send(m);if(buffer.length)setTimeout(pump,10);};pump();});return slot;},
+   send(m){if(closed)return;if(inner&&!buffer.length){inner.send(m);return;}const size=typeof m==='string'?m.length*2:m.byteLength;if(bytes+size>maxBytes){slot.error='Cola de audio llena. Conserva la toma recibida y vuelve a intentarlo.';slot.release();return;}buffer.push(m);localBytes+=size;bytes+=size;},
+   end(hash){slot.send(JSON.stringify({type:'end',pcmHash:hash}));},
+   cancel(){inner?.cancel();slot.release();},get started(){return inner?.started;},get runId(){return inner?.runId;},get done(){return inner?.done;},get firstPartialMs(){return inner?.firstPartialMs;},get error(){return slot.failure??inner?.error;},set error(value){slot.failure=value;}};
+  return slot;
+ };
+}

@@ -435,3 +435,11 @@ Activación recuperación comprobada: Render Live 8d3507bb66d34497c6f0441d211e50
 02-11-2026 · Implementado cambio solicitado a cinco minutos de recuperación en lugar de dos. Mensajes y pruebas coherentes; 147/147 pruebas, sintaxis aprobada. Micrófono sigue requiriendo preparación explícita, sin grabación automática. Prueba física nueva pendiente. Publicación/activación se registra tras coordinar reinicio con responsable.
 
 Activación de cinco minutos autorizada y comprobada: Render Live 168c708962a5ec1e6b136c1ec7ef114ea59e1902, dep-dbkd11ajnfac7381nou0. Recursos móvil/escritorio HTTP 200 coincidentes con código publicado. Sin nueva prueba física. Laboratorio local no reiniciado; código en GitHub, Render actualizado. Registro posterior skip render.
+
+## 02-11-2026 · Preparación integrada y cola de tomas
+
+Solicitud: evitar toque Preparar al volver y pérdida cuando nueva toma empieza antes del resultado previo. Código móvil: un gesto de grabación prepara si falta micrófono, muestra Preparando/Iniciando y confirma captura por primeras muestras. Soltar/cancelar antes de preparación evita inicio tardío; volver a la pestaña nunca graba automáticamente. Preparación manual se conserva como alternativa.
+
+Causas de pérdida encontradas: destino provisional aún ocupado y límite de una inferencia concurrente de demo. Cola FIFO en PC conserva audio en memoria mientras termina toma previa, abre un solo stream y reserva destino después de su predecesor. Configuración capturada por toma, cancelación no permite adelantar posteriores y límite total de buffer 64 MiB con error explícito. Espera identificación del stream antes de consultar resultado. Cola no persiste tras recarga/cierre del PC, no garantiza recuperación tras fallo de red/proveedor. No se copió texto de captura aportada.
+
+151/151 pruebas aprobadas y sintaxis; regresiones cubren preparación/cancelación temprana, FIFO con audio+fin, cancelación/límite y secuencia de inserción. Pruebas previas detectaron expectativas antiguas de botón deshabilitado y fixture sin import de cola, actualizadas. Validación física rápida de tres tomas queda pendiente. Responsable autorizó despliegue fuera de toma; activación se registra después. Sin cambios de backend ni reinicio del laboratorio local.

@@ -2,7 +2,7 @@ import {textIntervals} from '/shared/lab-timing.js';
 import {mountReport} from '/report-editor.js';
 import {mountReview,sharedState,trimTakeCards} from '/review-ui.js';
 import {arrivalEstimate} from '/shared/metrics.js';
-import {startStream} from '/stream-client.js';
+import {startStream,createTakeQueue} from '/stream-client.js';
 const panel=document.querySelector('.transcript-paper');
 document.querySelector('header .tag').textContent='DICTADO · MUSE / WHISPER';
 document.querySelector('footer').textContent='dicta · CAPTURA → MOTOR ELEGIDO → TEXTO';
@@ -24,21 +24,22 @@ const segmentHelp=document.createElement('p');segmentHelp.className='tiny';segme
 const commandHelp=document.createElement('p');commandHelp.className='tiny';commandHelp.textContent='Punto · coma · dos puntos · punto y coma · nueva línea · nuevo párrafo. Se aplican al terminar la toma; original conservado. Desactiva para dictar comandos literalmente. Las cantidades se muestran en cifras, conservando el original.';commandsLabel.after(commandHelp);
 engineSelect.value=initialState.metaConfigured?'muse-stream':'whisper';
 if(isDemo){engineSelect.replaceChildren(new Option('Muse-streaming','muse-stream'));engineSelect.value='muse-stream';reviewToggle.checked=false;reviewLabel.hidden=true;}
-const updateEngine=()=>{segmentationLabel.hidden=engineSelect.value!=='muse-stream';glossaryLabel.hidden=engineSelect.value==='whisper';modelBadge.textContent=engineSelect.value==='muse-stream'?'MUSE · STREAMING':engineSelect.value==='muse'?'MUSE · POR TOMA':'WHISPER LOCAL · GPU';engineHint.textContent=engineSelect.value==='muse-stream'?'El audio se envía a Meta mientras hablas. El borrador puede cambiar; números y comandos se aplican al final. Espera el resultado final antes de otra toma.':engineSelect.value==='muse'?'Cada toma completa se envía a Meta para transcribir. Usa la clave configurada en el laboratorio.':'El audio se transcribe en la GPU de este PC. La primera toma puede tardar mientras carga el modelo.';};
+const updateEngine=()=>{segmentationLabel.hidden=engineSelect.value!=='muse-stream';glossaryLabel.hidden=engineSelect.value==='whisper';modelBadge.textContent=engineSelect.value==='muse-stream'?'MUSE · STREAMING':engineSelect.value==='muse'?'MUSE · POR TOMA':'WHISPER LOCAL · GPU';engineHint.textContent=engineSelect.value==='muse-stream'?'El audio se envía a Meta mientras hablas. El borrador puede cambiar; números y comandos se aplican al final. Las tomas siguientes se procesan en orden; espera «Grabando» antes de hablar.':engineSelect.value==='muse'?'Cada toma completa se envía a Meta para transcribir. Usa la clave configurada en el laboratorio.':'El audio se transcribe en la GPU de este PC. La primera toma puede tardar mientras carga el modelo.';};
 engineSelect.onchange=updateEngine;updateEngine();let recordingEngine=null;
+const reserveTake=createTakeQueue(),takeSlots=new Map();
 let stream=null,recordingConfig=null,recordingReview=true,recordingAnchor=null,recordingContext=null;const streams=new Set();
 window.addEventListener('dicta-recording-start',e=>{
- recordingContext=reportEditor.context();recordingAnchor=crypto.randomUUID();reportEditor.begin(recordingAnchor);
+ recordingContext=reportEditor.context();recordingAnchor=crypto.randomUUID();const queuedAnchor=recordingAnchor,previousAnchor=[...takeSlots.keys()].at(-1),slot=reserveTake();takeSlots.set(queuedAnchor,slot);slot.ready.then(()=>{if(takeSlots.has(queuedAnchor))reportEditor.begin(queuedAnchor,previousAnchor);});
  recordingReview=reviewToggle.checked;reviewToggle.disabled=true;recordingEngine=engineSelect.value;recordingConfig=glossary.value;engineSelect.disabled=true;commandsToggle.disabled=true;glossary.disabled=true;segmentationSelect.disabled=true;
  if(recordingEngine==='muse-stream'){
-  const anchor=recordingAnchor;
+  const anchor=recordingAnchor,streamConfig=recordingConfig,streamReview=recordingReview,streamContext=recordingContext,streamCommands=commandsToggle.checked,streamSegmentation=segmentationSelect.value;
   const card=document.createElement('article');card.className='clip';card.dataset.pending='true';const title=document.createElement('strong');title.textContent=`Toma ${e.detail.id} · Muse-streaming · BORRADOR`;
   const partial=document.createElement('p');partial.className='live-transcript';partial.setAttribute('role','status');partial.textContent='Conectando con Muse…';card.append(title,partial);panel.append(card);
-  stream=startStream({rate:e.detail.rate,configId:recordingConfig,commandsEnabled:commandsToggle.checked,reviewEnabled:recordingReview,reviewContext:recordingContext,segmentation:segmentationSelect.value,onPartial:t=>{partial.textContent=t;},onDraft:t=>reportEditor.preview(anchor,t),onSegments:segments=>{reportEditor.preview(anchor,segments.map(s=>s.text??s.partial??'').filter(Boolean).join(' '));partial.replaceChildren();for(const segment of segments){const row=document.createElement('div');const label=document.createElement('small');label.textContent=segment.text===null?'Borrador · ':'Consolidado por Muse · ';row.append(label,document.createTextNode(segment.text??segment.partial??''));partial.append(row);}title.textContent=`Toma ${e.detail.id} · Muse-streaming · ${segments.filter(t=>t.text!==null).length} segmentos consolidados · micrófono activo`;}});stream.card=card;streams.add(stream);
+  stream=slot.open(()=>startStream({rate:e.detail.rate,configId:streamConfig,commandsEnabled:streamCommands,reviewEnabled:streamReview,reviewContext:streamContext,segmentation:streamSegmentation,onPartial:t=>{partial.textContent=t;},onDraft:t=>reportEditor.preview(anchor,t),onSegments:segments=>{reportEditor.preview(anchor,segments.map(s=>s.text??s.partial??'').filter(Boolean).join(' '));partial.replaceChildren();for(const segment of segments){const row=document.createElement('div');const label=document.createElement('small');label.textContent=segment.text===null?'Borrador · ':'Consolidado por Muse · ';row.append(label,document.createTextNode(segment.text??segment.partial??''));partial.append(row);}title.textContent=`Toma ${e.detail.id} · Muse-streaming · ${segments.filter(t=>t.text!==null).length} segmentos consolidados · micrófono activo`;}}));stream.card=card;streams.add(stream);
  }
 });
 window.addEventListener('dicta-pcm',e=>stream?.send(e.detail.bytes));
-window.addEventListener('dicta-recording-abort',()=>{stream?.cancel();stream=null;reportEditor.cancel(recordingAnchor);recordingAnchor=null;});
+window.addEventListener('dicta-recording-abort',()=>{stream?.cancel();stream=null;reportEditor.cancel(recordingAnchor);takeSlots.get(recordingAnchor)?.release();takeSlots.delete(recordingAnchor);recordingAnchor=null;});
 window.addEventListener('dicta-recording-stop',()=>{engineSelect.disabled=false;reviewToggle.disabled=false;recordingEngine=null;commandsToggle.disabled=false;glossary.disabled=false;segmentationSelect.disabled=false;});
 const notice=document.createElement('p');notice.className='live-notice';notice.textContent='Por toma: texto al terminar. Streaming: borrador mientras hablas y texto final al detener. Audio y resultados se guardan en el laboratorio local.';panel.append(notice);
 if(isDemo)notice.textContent='Demostración: borrador mientras hablas y texto final al detener. El audio se envía a Meta y este servidor no lo guarda.';
@@ -163,18 +164,21 @@ requestAnimationFrame(()=>{const r=reportEditor.element.getBoundingClientRect();
 requestAnimationFrame(()=>{const h=header.getBoundingClientRect(),s=strip.getBoundingClientRect();track('header-layout',{viewportWidth:innerWidth,headerCenterPx:(h.left+h.right)/2,statusCenterPx:(s.left+s.right)/2,centerOffsetPx:(s.left+s.right-h.left-h.right)/2});});
  const seconds=v=>v==null?'sin medición':`${(v/1000).toFixed(2)} s`;
 async function api(path,data,signal){if(path==='/api/state'&&data===undefined)return sharedState();const response=await fetch(path,{signal,...(data===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})});const value=await response.json();if(!response.ok)throw Error(value.error);return value;}
-window.addEventListener('dicta-new-session',()=>{generation++;if(recordingAnchor)reportEditor.cancel(recordingAnchor);for(const job of jobs)if(job.anchor)reportEditor.cancel(job.anchor);recordingAnchor=null;commandsToggle.disabled=false;engineSelect.disabled=false;reviewToggle.disabled=false;glossary.disabled=false;segmentationSelect.disabled=false;recordingEngine=null;stream=null;for(const s of streams)s.cancel();streams.clear();for(const job of jobs){job.controller.abort();if(job.runId)void api('/api/cancel',{id:job.runId}).catch(()=>{});}jobs.clear();for(const card of panel.querySelectorAll('article'))card.remove();});
+window.addEventListener('dicta-new-session',()=>{generation++;for(const slot of takeSlots.values())slot.cancel();takeSlots.clear();if(recordingAnchor)reportEditor.cancel(recordingAnchor);for(const job of jobs)if(job.anchor)reportEditor.cancel(job.anchor);recordingAnchor=null;commandsToggle.disabled=false;engineSelect.disabled=false;reviewToggle.disabled=false;glossary.disabled=false;segmentationSelect.disabled=false;recordingEngine=null;stream=null;for(const s of streams)s.cancel();streams.clear();for(const job of jobs){job.controller.abort();if(job.runId)void api('/api/cancel',{id:job.runId}).catch(()=>{});}jobs.clear();for(const card of panel.querySelectorAll('article'))card.remove();});
 window.addEventListener('pagehide',()=>{for(const s of streams)s.cancel();});
 window.addEventListener('dicta-take',async event=>{
- const take=event.detail,epoch=generation,controller=new AbortController(),reportAnchor=recordingAnchor,job={controller,runId:null,anchor:reportAnchor};jobs.add(job);recordingAnchor=null;
+ const take=event.detail,epoch=generation,controller=new AbortController(),reportAnchor=recordingAnchor,takeSlot=takeSlots.get(reportAnchor),job={controller,runId:null,anchor:reportAnchor};jobs.add(job);recordingAnchor=null;
  const reviewContext=recordingContext;const reviewEnabled=recordingReview;const engine=recordingEngine??engineSelect.value;recordingEngine=null;engineSelect.disabled=false;reviewToggle.disabled=false;commandsToggle.disabled=false;const commandsEnabled=commandsToggle.checked;
  const streamTake=engine==='muse-stream'?stream:null;stream=null;const configId=recordingConfig;glossary.disabled=false;segmentationSelect.disabled=false;
  if(streamTake){streamTake.end(take.pcmHash);streamTake.card.remove();}
  const card=document.createElement('article');card.className='clip';card.dataset.pending='true';const title=document.createElement('strong');title.textContent=`Toma ${take.recordingId} · ${engine==='muse-stream'?'Muse-streaming':engine==='muse'?'Muse-Normal':'Whisper local'}`;
- const text=document.createElement('p');text.className='live-transcript';text.textContent='Preparando transcripción…';text.setAttribute('role','status');
+ const text=document.createElement('p');text.className='live-transcript';text.textContent=takeSlots.size>1?'Toma recibida · en cola de transcripción…':'Preparando transcripción…';text.setAttribute('role','status');
  const timing=document.createElement('p');timing.className='tiny';const cancel=document.createElement('button');cancel.textContent='Cancelar transcripción';cancel.className='quiet';cancel.onclick=()=>{controller.abort();streamTake?.cancel();if(job.runId)void api('/api/cancel',{id:job.runId}).catch(()=>{});};
  card.append(title,text,timing,cancel);panel.append(card);take.trace.asr={status:'queued',runId:null};
  try{
+  await takeSlot?.ready;track('take-queue-ready',{recordingId:take.recordingId,waitMs:performance.now()-take.receivedEnd});await streamTake?.opened;
+  if(streamTake){const handshakeDeadline=performance.now()+15000;while(!streamTake.runId&&!streamTake.error&&performance.now()<handshakeDeadline&&!controller.signal.aborted)await new Promise(r=>setTimeout(r,25));}
+  if(controller.signal.aborted||epoch!==generation)throw Error('Cancelado.');
   let audio=null;
   if(!isDemo){
    const response=await fetch('/api/audio',{method:'POST',signal:controller.signal,headers:{'Content-Type':'audio/wav','X-File-Name':encodeURIComponent(`dictado-${Date.now()}-${take.recordingId}.wav`)},body:take.blob});
@@ -223,7 +227,7 @@ window.addEventListener('dicta-take',async event=>{
   }
   await api('/api/cancel',{id:job.runId});throw Error('Tiempo de espera agotado.');
  }catch(error){if(epoch===generation){reportEditor.cancel(reportAnchor);text.textContent=controller.signal.aborted?'Transcripción cancelada.':`No se pudo transcribir: ${error.message}`;take.trace.asr={status:controller.signal.aborted?'cancelled':'error',runId:job.runId,engine,uiRevision:'commands-live-v1'};timing.textContent=`Fin recibido en PC → error/cancelación: ${seconds(performance.now()-take.receivedEnd)}`;take.renderMetrics();}}
- finally{if(streamTake){streams.delete(streamTake);if(!streamTake.done)streamTake.cancel();}jobs.delete(job);cancel.remove();delete card.dataset.pending;trimTakeCards(panel);}
+ finally{if(streamTake){streams.delete(streamTake);if(!streamTake.done)streamTake.cancel();}takeSlot?.release();takeSlots.delete(reportAnchor);jobs.delete(job);cancel.remove();delete card.dataset.pending;trimTakeCards(panel);}
 });
 
 // Reveal only after the complete workspace has mounted successfully.

@@ -79,7 +79,7 @@ test('recuperación móvil vuelve emparejada pero sin preparar ni iniciar micró
  p.box.RelayClient=class{constructor(onMessage,onClose){this.onMessage=onMessage;this.onClose=onClose;}connect(request){p.box.connections.push(request);}send(){return true;}};
  p.run('reconnect();');assert.equal(p.box.connections.length,1);assert.equal(p.box.connections[0].type,'resume');
  p.run("onMessage({type:'paired',resumed:true,resumeToken:'rotado'});");
- assert.equal(p.run('paired'),true);assert.equal(p.run('prepared'),false);assert.equal(p.run('recording'),null);assert.equal(p.$('record').disabled,true);
+ assert.equal(p.run('paired'),true);assert.equal(p.run('prepared'),false);assert.equal(p.run('recording'),null);assert.equal(p.$('record').disabled,false);
  assert.equal(p.run("lifecycle.at(-1).resumed"),true);assert.equal(p.run('resumeToken'),'rotado');
 });
 test('móvil no recupera oculto, vencido ni después de cierre explícito',()=>{
@@ -87,4 +87,11 @@ test('móvil no recupera oculto, vencido ni después de cierre explícito',()=>{
  assert.match(p.statuses.at(-1),/superó cinco minutos/);
  p.run("resumeToken='temporal';resumeUntil=Date.now()+300000;document.hidden=true;reconnect();");assert.equal(p.run('client'),null);
  p.run("context=null;worklet=null;onMessage({type:'closed',reason:'Sesión cerrada'});");assert.equal(p.run('resumeToken'),null);
+});
+
+test('un gesto prepara e inicia; soltar antes de preparación evita inicio tardío',async()=>{
+ for(const cancel of [false,true]){const p=phone();p.run('prepared=false;');let ready;
+ p.box.prepare=()=>new Promise(resolve=>{ready=()=>{p.run('prepared=true;');resolve();};});
+ const pending=p.run('requestStart()');if(cancel)p.run('releaseStart()');ready();await pending;
+ assert.equal(p.run('recording!==null'),!cancel);if(!cancel)assert.equal(p.run('recording.state'),'starting');assert.deepEqual(p.pulses,[]);}
 });

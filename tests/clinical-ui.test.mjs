@@ -1,3 +1,4 @@
+import {createTakeQueue} from '../apps/desktop/stream-client.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -83,10 +84,10 @@ for(const savedTheme of [null,'sala'])test('montaje completo, controles y tema g
  const {window}=setup();document.body.innerHTML=fs.readFileSync(new URL('../apps/desktop/index.html',import.meta.url),'utf8').split('<body>')[1].split('</body>')[0];
  globalThis.requestAnimationFrame=()=>0;
  const state={configs:[{id:'synthetic',engine:'muse',keywords:[],name:'Prueba'}],metaConfigured:false};
- globalThis.__clinicalTest={mountReport,state};if(savedTheme)localStorage.setItem('dicta-theme-v1',savedTheme);
+ globalThis.__clinicalTest={mountReport,state,createTakeQueue};if(savedTheme)localStorage.setItem('dicta-theme-v1',savedTheme);
  let live=fs.readFileSync(new URL('../apps/desktop/live.js',import.meta.url),'utf8');
  live=live.replace(/^import .*;\r?\n/gm,'');
- live="const {state}=globalThis.__clinicalTest;const mountReport=(p,o)=>globalThis.__clinicalTest.mountReport(p,{...o,globalReview:false});const sharedState=async()=>state;\n"+live;
+ live="const {state,createTakeQueue}=globalThis.__clinicalTest;const mountReport=(p,o)=>globalThis.__clinicalTest.mountReport(p,{...o,globalReview:false});const sharedState=async()=>state;\n"+live;
  await import('data:text/javascript;base64,'+Buffer.from(live+'\n//# sourceURL=clinical-live-test-'+savedTheme+'.js').toString('base64'));
  assert.equal(document.body.dataset.theme,savedTheme==='sala'?'ambar':'dia');if(savedTheme==='sala')assert.equal(localStorage.getItem('dicta-theme-v1'),'ambar');
  assert.equal(document.querySelector('.clinical-editbar .template-library-panel').open,false);
@@ -162,4 +163,10 @@ test('Nuevo informe confirma, conserva preferencias y permite recuperar texto, s
  button('Deshacer').click();assert.equal(editor.model.text,'Texto sintético antes de limpiar');assert.equal(editor.getSex(),'F');assert.equal(editor.model.templateContext.name,'Contexto sintético');button('Rehacer').click();assert.equal(editor.model.text,'');assert.equal(editor.getSex(),'—');
  editor.setSex('M');editor.begin('synthetic-take');assert.equal(button('Nuevo informe').disabled,true);editor.cancel('synthetic-take');assert.equal(button('Nuevo informe').disabled,false);
  await window.happyDOM.close();
+});
+
+test('tomas consecutivas se insertan tras su predecesora sin sustituir texto',async()=>{
+ const {window,editor}=setup();editor.begin('first');editor.preview('first','Primera provisional');
+ await editor.finish('first','Primera definitiva.','run-1');editor.begin('second','first');editor.preview('second','Segunda provisional');await editor.finish('second','Segunda definitiva.','run-2');
+ assert.equal(editor.model.text,'Primera definitiva. Segunda definitiva.');await window.happyDOM.close();
 });
