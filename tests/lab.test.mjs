@@ -50,8 +50,8 @@ test('API: origen, deduplicación, versiones, cola, exportación, cancelación y
   const selection={audioIds:[a.id],configIds:[c.id,c2.id],repeats:2};assert.equal((await post('/api/runs',selection)).status,202);
   s=await finished();assert.equal(s.runs.length,4);assert.ok(s.runs.every(r=>r.status==='completed'&&r.evaluation.wer===0&&r.timings.totalMs>0));assert.deepEqual(s.runs.map(r=>r.configId),[c.id,c2.id,c2.id,c.id]);
   assert.ok(s.runs.every(r=>r.text==='no hay lesión'&&r.formatting.text==='No hay lesión'&&r.commandVersion==='es-basic-v1'&&r.timings.commandMs>=0));
-  assert.equal((await post('/api/live-measurements',{runId:s.runs[0].id,recordingId:1,receiveEndToTextMs:1250,stopToTextEstimateMs:-1,clockUncertaintyMs:12})).status,200);
-  assert.equal((await state()).runs[0].live.stopToTextEstimateMs,null);assert.equal((await state()).runs[0].live.receiveEndToTextMs,1250);
+  assert.equal((await post('/api/live-measurements',{runId:s.runs[0].id,recordingId:1,receiveStartToFirstTextMs:500,receiveStartToFinalTextMs:3000,receiveEndToTextMs:1250,stopToTextEstimateMs:-1,clockUncertaintyMs:12})).status,200);
+  assert.equal((await state()).runs[0].live.stopToTextEstimateMs,null);assert.equal((await state()).runs[0].live.receiveEndToTextMs,1250);assert.equal((await state()).runs[0].live.receiveStartToFinalTextMs,3000);assert.equal((await state()).runs[0].live.receiveStartToFirstTextMs,500);
   await post('/api/references',{audioId:a.id,text:'hay lesión'});s=await state();assert.equal(s.runs[0].referenceAtRun.version,1);assert.equal(s.runs[0].evaluationReferenceVersion,2);assert.equal(s.runs[0].evaluation.insertions,1);
   assert.ok(!(await (await fetch(base+'/api/export')).text()).includes('test-secret'));assert.ok(!fs.readFileSync(path.join(dir,'catalog.json'),'utf8').includes('test-secret'));
   fail=true;await post('/api/runs',{...selection,configIds:[c.id],repeats:1});s=await finished();assert.equal(s.runs.at(-1).status,'error');

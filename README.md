@@ -2,7 +2,9 @@
 
 Repositorio público: [pabloagar/dictalibre-meta](https://github.com/pabloagar/dictalibre-meta).
 
-**Estado al 1 de noviembre de 2026:** captura y transporte, Muse-Normal/Muse-streaming, Whisper local con OpenVINO, laboratorio comparativo, segmentación opcional, números/comandos, glosario, Revisor Meta experimental y editor con plantillas implementados en piloto. 285 plantillas importadas localmente; contenido excluido del repositorio por permisos de redistribución pendientes. Validación física/clínica y entrega aún abiertas. Código preparado para publicación pública; datos privados excluidos. Alcance, auditoría y licencia pendiente en [PUBLICATION.md](PUBLICATION.md).
+**Licencia del código propio:** [PolyForm Noncommercial 1.0.0](LICENSE). Los usos comerciales fuera de sus fines permitidos requieren autorización previa y expresa por escrito del titular. Se conservan las excepciones de la licencia y los derechos contractuales del concurso. Alcance y solicitud de permisos en [LICENSING.md](LICENSING.md). Código disponible con restricciones; no se presenta como open source.
+
+**Estado funcional al 1 de noviembre de 2026:** captura y transporte, Muse-Normal/Muse-streaming, Whisper local con OpenVINO, laboratorio comparativo, segmentación opcional, números/comandos, glosario, Revisor Meta experimental y editor con plantillas implementados en piloto. 285 plantillas importadas localmente; contenido excluido del repositorio por permisos de redistribución pendientes. Validación física/clínica y entrega aún abiertas. Código preparado para publicación pública; datos privados excluidos. Alcance, auditoría y actualización de licencia del 02-11-2026 en [PUBLICATION.md](PUBLICATION.md).
 
 Dicta Libre es un proyecto de dictado médico cuya idea y exploración conceptual precedieron al Meta AI Developer Hackathon 2026. La implementación presentada para el concurso comenzó desde cero el 28 de octubre de 2026, dentro del período oficial del evento.
 
@@ -71,12 +73,16 @@ No incorporar información identificable de pacientes. Usar datos sintéticos o 
 
 La [página oficial](https://dev.meta.ai/events/global-hackathon), consultada nuevamente el 01-11-2026, publica inicio el 26 de octubre y cierre el 4 de noviembre a las 21:00 ET. Objetivo interno: 4 de noviembre a las 18:00, America/Santiago; reconfirmar en el portal antes de enviar.
 
-Las reglas completas siguen pendientes: el [enlace oficial](https://cerebralvalley.ai/e/meta-ai-developer-hackathon/waiver) devolvió una pantalla de carga. Se adoptan las restricciones comunicadas por el responsable —trabajo nuevo durante el evento, repositorio público, atribución, uso significativo de Meta y demo del trabajo concursante— sin afirmar verificación de cada cláusula oficial.
+Las [bases oficiales](https://cerebralvalley.ai/e/meta-ai-developer-hackathon/waiver) se leyeron completas en navegador el 02-11-2026. No se encontró obligación de licencia pública específica ni conflicto entre PolyForm para el público y los permisos separados exigidos por el concurso. Estos permisos son amplios y la licencia pública no los revoca. La comprobación no equivale a aprobación del organizador; el formulario de entrega no fue visible sin autenticar. Detalle en [LICENSING.md](LICENSING.md).
 
-Pendiente: inscripción/elegibilidad, categoría, modelos admitidos, condiciones sobre ideación previa, licencia exigida y formato de entrega. La URL de demo no equivale al repositorio de código. La licencia del código propio está pendiente de elección; ver PUBLICATION.md.
+Pendiente: inscripción/elegibilidad, categoría, modelos admitidos, condiciones sobre ideación previa e instrucciones autenticadas de entrega y posibles actualizaciones. La URL de demo no equivale al repositorio de código. Licencia pública elegida: PolyForm Noncommercial 1.0.0; ver PUBLICATION.md.
 
 ## Revisor Meta experimental
 Fase 8 disponible en laboratorio y dictado: Meta Spark revisa la toma final y ofrece propuestas que requieren aprobación. Original conservado, edición/deshacer y métricas guardadas. Uso, límites y pruebas en [META_REVIEW.md](META_REVIEW.md). No es validación clínica.
 
 ## Editor con plantillas · piloto
 En /live puedes crear un informe desde una plantilla propia, dictar sobre cursor/selección y ver Muse-streaming en ese lugar. Copiar entrega texto para pegar en el RIS. Plantillas/borrador se guardan en este navegador. Uso y límites en [PHASE_9_EDITOR.md](PHASE_9_EDITOR.md).
+
+
+### Estudios del laboratorio
+La ampliación del laboratorio incorpora comparación pareada, WER/CER/S-D-I, anotación clínica humana, edición cronometrada, evaluación del revisor y tareas de usabilidad independientes. Instrucciones y corpus sintético reproducible: [LAB_STUDIES.md](LAB_STUDIES.md). Implementación técnica no equivale a validación clínica. Requiere reiniciar el backend al actualizar; Start-Lab.ps1 reutiliza servidores activos.

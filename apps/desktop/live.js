@@ -1,3 +1,4 @@
+import {textIntervals} from '/shared/lab-timing.js';
 import {mountReport} from '/report-editor.js';
 import {mountReview,sharedState,trimTakeCards} from '/review-ui.js';
 import {arrivalEstimate} from '/shared/metrics.js';
@@ -107,15 +108,16 @@ window.addEventListener('dicta-take',async event=>{
     const report=document.createElement('p');report.className='tiny';report.textContent=run.formatting?`${run.formatting.events.length} comandos aplicados · ${run.formatting.elapsedMs.toFixed(2)} ms · ${run.formatting.warnings.length} dudas conservadas sin convertir. ${run.formatting.warnings.map(w=>w.command+': posible uso literal o decimal').join('; ')}`:'Comandos desactivados para esta toma.';report.textContent+=run.numberFormatting?` Números: ${run.numberFormatting.events.length} conversiones · ${run.numberFormatting.elapsedMs.toFixed(2)} ms · ${run.numberFormatting.warnings.length} dudas.`:'';original.append(report);card.append(original);
     if(run.formatting?.warnings.length||run.numberFormatting?.warnings.length){const warning=document.createElement('p');warning.className='tiny';warning.textContent='Revisa las dudas de comandos: se conservaron palabras potencialmente literales o decimales.';card.append(warning);}
     // DOM update time, not a hardware measurement of screen presentation.
-    const receiveEndToTextMs=performance.now()-take.receivedEnd;
+    const finalDomAt=performance.now();
+    const {receiveEndToTextMs,receiveStartToFirstTextMs,receiveStartToFinalTextMs}=textIntervals({start:take.receivedStart,end:take.receivedEnd,final:finalDomAt,first:streamTake?.firstPartialMs==null?null:streamTake.started+streamTake.firstPartialMs,hasFinalText:!!finalText.trim()});
     const estimate=arrivalEstimate(take.stopStamp,take.stamp());
     const stopToTextEstimateMs=estimate?.usable?estimate.ms:null,clockUncertaintyMs=estimate?.uncertaintyMs??null;
     take.trace.asr={status:'completed',runId:run.id,engine,uiRevision:'numbers-live-v1',model:run.configuration.model,cold:run.result?.cold};
-    for(const [key,value] of Object.entries({receiveEndToTextMs,stopToTextEstimateMs,clockUncertaintyMs,asrQueueMs:run.timings.queueMs,asrRunMs:run.timings.requestMs}))take.trace.stage(key,value);
+    for(const [key,value] of Object.entries({receiveStartToFinalTextMs,receiveStartToFirstTextMs,receiveEndToTextMs,stopToTextEstimateMs,clockUncertaintyMs,asrQueueMs:run.timings.queueMs,asrRunMs:run.timings.requestMs}))take.trace.stage(key,value);
     timing.textContent=`Detener → texto: ${stopToTextEstimateMs==null?'sin calibración':`≈ ${seconds(stopToTextEstimateMs)} (resolución orientativa ${seconds(clockUncertaintyMs)})`} · fin recibido en PC → texto: ${seconds(receiveEndToTextMs)} · cola: ${seconds(run.timings.queueMs)} · motor: ${seconds(run.timings.requestMs)}${run.result?.cold?' · primera carga del modelo':''}`;
     take.renderMetrics();
     if(run.stream){take.trace.asr.streaming={...run.stream,events:undefined};take.trace.stage('startToFirstPartialMs',streamTake?.firstPartialMs);timing.textContent+=` · inicio recibido → primer borrador: ${seconds(streamTake?.firstPartialMs)} · conexión Meta: ${seconds(run.stream.handshakeMs)} · fin recibido en servidor → final: ${seconds(run.stream.endToFinalMs)} · revisiones: ${run.stream.revisionCount} · cierre: ${run.stream.segmentation??'manual'} · segmentos: ${run.stream.segmentCount??0}`;take.renderMetrics();}
-    try{await api('/api/live-measurements',{runId:run.id,recordingId:take.recordingId,source:take.trace.source,receiveEndToTextMs,stopToTextEstimateMs,clockUncertaintyMs,startToFirstPartialMs:streamTake?.firstPartialMs});}catch{timing.textContent+=' · No se pudo guardar esta medición; exporta las métricas de sesión.';}
+    try{await api('/api/live-measurements',{runId:run.id,recordingId:take.recordingId,source:take.trace.source,receiveStartToFinalTextMs,receiveStartToFirstTextMs,receiveEndToTextMs,stopToTextEstimateMs,clockUncertaintyMs,startToFirstPartialMs:streamTake?.firstPartialMs});}catch{timing.textContent+=' · No se pudo guardar esta medición; exporta las métricas de sesión.';}
     return;
    }
    if(run&&!['queued','running'].includes(run.status))throw Error(run.error?.includes('Muse HTTP 401')?'Meta rechazó la autenticación (401). Revisa que sea una clave activa de Meta Model API y vuelve a pegarla en Acceso a Meta del laboratorio; no hace falta reiniciar.':run.error||run.status);

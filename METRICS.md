@@ -135,3 +135,46 @@ Retroalimentación de copia: elapsedMs continúa midiendo solicitud de portapape
 
 ## 2026-11-01 · Revisión global y contexto
 Cada revisión guarda inputHash del texto y contexto, prompt/version/hash, build/sourceHash, cola→inicio (queueMs), solicitud al proveedor→respuesta (requestMs), validación (validationMs) y ejecución total sin cola (totalMs), ms monotónicos; uso de tokens según proveedor o null. Revisión global comparte cola, no sumar su latencia a ASR como tiempo de transcripción. UI: report-review-request, report-review-shown (solicitud UI→resultado DOM, incluye cola/polling), report-review-cancel, report-copy-offer y report-copy-without-review; exportación del editor, sin texto en esos eventos. Polling solo durante trabajo, cada 1000 ms, puede añadir espera de presentación; no mide pintado físico. Sobrecosto total y precisión efectiva en móvil null, pendientes. Snapshot/version por resultado y marcado de desactualizado; no convertir ausencia de avisos en exactitud clínica.
+
+
+## Ampliación de laboratorio · 2026-11-02
+Implementado: CER y exportación ampliada S/D/I por ejecución, sin cambiar ASR ni reglas clínicas. evaluation continúa calculándose contra última referencia, identificada por evaluationReferenceVersion; referenceAtRun conserva snapshot histórico. No se presenta el recálculo como medida tomada al ejecutar. Caché acotada a 500 ejecuciones, invalidada por texto/referencia, evita recalcular CER en cada polling. No migra ni sobrescribe catálogo.
+
+| Métrica | Fórmula/unidad y origen | Inicio→fin / condiciones | Ausentes y exportación |
+| --- | --- | --- | --- |
+| S/D/I, WER | Levenshtein por palabras; WER=(S+D+I)/N, razón | Comparación estática ASR original/referencia; normalizador es-literal-v1 | Sin referencia null; N=0 WER null; JSON/CSV |
+| CER | Distancia Levenshtein por puntos Unicode/N caracteres, razón | Mismo normalizador, palabras unidas por un espacio; incluye espacios, preserva tildes/decimales; no equivalencia tres/3 | Sin referencia o N=0 null; producto de longitudes >4 millones: CER null con motivo; JSON/CSV |
+| characterErrors/referenceCharacters | Conteos enteros normalizados | Evaluación estática, no intervalo temporal | JSON/CSV; límite explícito |
+| Primer texto | firstPartialMs o live.startToFirstPartialMs, ms directos | Inicio servidor→primer parcial o inicio navegador→DOM, relojes separados; incluye silencio/conexión | Existentes JSON; backend también CSV. Archivo sin parcial: null |
+| Final | endToFinalMs o receiveEndToTextMs, ms directos | Fin recibido servidor→final proveedor o fin recibido PC→DOM; no inicio físico del habla | Existentes JSON, cierre backend CSV; ausente null |
+| RTF | requestMs/durationMs, razón | Petición motor→respuesta, archivo, frío identificado | JSON y ahora CSV; streaming null |
+| Fidelidad clínica | Correctas/oportunidades evaluadas por categoría; añadidos separados, conteos | Anotación humana de snapshot de cada etapa, sin reloj | Pendiente; null sin evaluación; futuro JSON de anotaciones |
+| Edición humana | aprobación menos comienzo explícito, ms; número eventos input | Texto visible→aprobación; registrar interrupciones, no usar timestamps del servidor | Captura pendiente; futuro JSON, null al abandonar |
+| Residuales | errores anotados en snapshot aprobado, conteo/categoría | Revisión humana independiente posterior | Pendiente; null sin anotación, futuro JSON |
+| Revisor | precisión propuestas y sensibilidad según protocolo; introducidos conteo | Snapshot antes/después adjudicado por humanos | Pendiente, no inferir de decisiones; futuro JSON/CSV |
+| UX | fin menos inicio explícito, segundos; clics, errores, éxito | Tarea indicada→respuesta confirmada, excluye ASR | Captura integrada pendiente; actual exportación interfaz solo eventos técnicos |
+
+Los decimales no acreditan precisión física. Sobrecosto CER/caché y render no aislado: null; pendiente benchmark pareado instrumentado/no instrumentado antes de comparar latencias pequeñas. Límite WER existente de 1000 palabras se conserva. No hay nuevas medidas acústicas. Protocolo completo: experiments/laboratory-evaluation-v1.md.
+
+
+## 2026-11-02 · Ampliación completada en software
+Esta entrada actualiza el estado pendiente de la sección anterior; las pruebas humanas siguen sin ejecutar. Guía y contratos: LAB_STUDIES.md. studyRecords es append-only; JSON general/estudio conserva snapshots y null; CSV de estudio contiene resumen por registro, sin aplanar oportunidades. CSV general añade tiempos live y mantiene sus columnas anteriores.
+
+| Campo | Fórmula / unidad | Origen, inicio → fin y condiciones | Ausentes / exportación |
+| --- | --- | --- | --- |
+| receiveStartToFirstTextMs | primer texto DOM − recepción start, ms | Un reloj PC; parcial streaming no vacío o final por archivo no vacío; incluye dictado, conexión y procesamiento | Sin texto/inicio o intervalo negativo null; live JSON, CSV y traza |
+| receiveStartToFinalTextMs | final DOM − recepción start, ms | PC, tras actualizar texto y finalizar inserción; incluye polling/formato, sin píxeles físicos | Sin inicio null; live JSON/CSV/traza |
+| elapsedMs edición | aprobación/abandono − comienzo explícito, ms | performance.now navegador; incluye pausas; excluye envío/guardado del registro. Resultado congelado para reintentos | Sin tarea no se guarda; duración inválida rechazada; JSON/CSV |
+| inputEvents / hiddenCount | conteos de eventos input / ocultación | Durante tarea; pegado cuenta un evento, no teclas ni caracteres; no inferir tiempo activo | Campos obligatorios observados; JSON/CSV para input, JSON para hidden |
+| clínica accuracy / errorRate | correctas/N / (sustituidas+omitidas)/N, razones | Anotación humana estática por categoría/etapa; N=correctas+sustituidas+omitidas. Añadidas y no evaluables separados | N=0 null; JSON completo y summary JSON en celda CSV |
+| residuos | mismo conteo clínico en snapshot aprobado | Evaluador independiente, sin intervalo temporal; no inferir de aprobar | Sin anotación ausente; JSON/CSV resumen |
+| review precision / sensitivity | propuestas correctas/evaluadas; errores detectados/previos, razones | Juicios humanos; no evaluables fuera de denominador. detected/corrected no pueden superar previos. corrected, introduced, residual y missed separados | Denominador cero null; sin anotación no calculados; JSON/CSV resumen |
+| UX elapsedMs / clicks / errors | final−inicio ms / conteos | Reloj navegador, clic final incluido e inicial excluido; errores y éxito declarados por observador; sin inferencia durante tarea | Vacíos no convertidos a 0; JSON completo, CSV resumen |
+| delta pareado | B−A, razones WER/CER o ms | Mismo audio, modo y referencia; cargas conocidas distintas rechazadas; desconocidas explícitas | Falta medida en cualquiera null; JSON del par |
+| snrMeasuredDb | 10 log10(sum(señal escalada²)/sum((salida−señal escalada)²)), dB | Generación determinista PCM, sobre todo el clip; incluye cuantización, no acústica | Sin señal se rechaza; manifiesto JSON |
+| verificación corpus elapsedMs | fin verificaciones−inicio lectura, ms | Node performance.now; hashes y validación WAV, excluye escribir reporte | Medida directa, una ejecución; corpus-verification.json |
+
+WER/CER de ediciones se calculan contra referencia oral congelada; no equivalen a evaluación clínica del informe. La aceptación de propuestas no se usa como referencia. Entorno declarado etiquetado; tiempos de UI son mediciones del cliente, no inferencia pura. Precisión efectiva, sobrecosto de persistencia/DOM, anotadores clínicos y validación física no medidos: null. Eventos/snapshots aumentan tamaño del catálogo, sin nueva analítica externa.
+
+## 2026-11-02 · Cambio de licencia
+LICENSE/LICENSING.md y metadatos documentan la elección de PolyForm Noncommercial 1.0.0. No cambia comportamiento, captura, envío de datos ni tiempos de ejecución; no corresponde experimento de rendimiento. Validación pertinente: integridad SHA-256 contra descarga oficial, identificador SPDX en package.json y consistencia documental. No se afirma medición de efecto comercial o jurídico ni elegibilidad; las instrucciones autenticadas de entrega siguen pendientes según LICENSING.md.

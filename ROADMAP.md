@@ -1,6 +1,6 @@
 # Diez fases de Dicta Libre
 
-Actualización: 01-11-2026, America/Santiago. Las diez fases reemplazan la agrupación F0–F7 del primer borrador. Se avanza mediante discusión, implementación acotada y validación. La tabla inicial refleja el estado actual; los cortes fechados al final conservan la evolución histórica.
+Actualización: 02-11-2026, America/Santiago. Las diez fases reemplazan la agrupación F0–F7 del primer borrador. Se avanza mediante discusión, implementación acotada y validación. La tabla inicial refleja el estado actual; los cortes fechados al final conservan la evolución histórica.
 
 ## Estado respecto de las diez fases originales
 
@@ -19,7 +19,7 @@ Se conserva la numeración y propósito del plan inicial; las modificaciones de 
 | 7. Contexto y terminología médica | Parcial avanzada | Glosario versionado y comparación con/sin él | Referencias revisadas, efecto por término y regresiones en textos/voces no usados para ajustar. No asumir que el glosario siempre mejora |
 | 8. Incertidumbre y propuestas clínicas | Parcial / piloto | Revisor Meta muse-spark-1.3, propuestas localizadas, aceptar/rechazar/editar/deshacer, originales conservados; 25/27 respuestas válidas en evaluación multivoz | Juicio humano de propuestas y errores introducidos, abstenciones y corpus reservado. Validez de formato no demuestra exactitud clínica; ningún cambio silencioso |
 | 9. Editor e inserción | Parcial / piloto | Borrador dentro del informe, selección por toma, persistencia local, deshacer y copiar; 285 plantillas únicas importadas y activadas en servidor principal | Prueba física de selección/cancelación/copia y contenido heredado. Biblioteca activada el 01-11 con autorización; falta validación de uso/contenido. Inserción directa RIS diferida |
-| 10. Evaluación y evidencia | Parcial transversal | Laboratorio, hashes, configuraciones, tiempos y comparaciones guardados | Referencias humanas, evaluación reservada, errores de números/unidades/negaciones/lateralidad y términos; instalación limpia, resultados negativos, documentación y demo |
+| 10. Evaluación y evidencia | Infraestructura técnica cerrada; evaluación transversal abierta | Laboratorio ampliado activo; 6/6 transcripciones reales, tres pares y exportación HTTP verificada el 02-11; referencias TTS provisionales | Referencias humanas, evaluación reservada, errores de números/unidades/negaciones/lateralidad y términos; instalación limpia, resultados negativos, documentación y demo |
 
 ## Acuerdos de fases 1 y 2
 
@@ -31,7 +31,7 @@ La demo temporal aloja el relay en el computador de desarrollo y usa un túnel H
 
 1. Validar la experiencia integrada de fases 3/5/9 con series de 2–10 s: destino, reemplazo, cifras, comandos, pausa manual/automática, deshacer y copia. Exportar últimas cinco tomas y mediciones del editor antes de cambiar condiciones. Protocolo en CODE_REVIEW_2026-11-01.md.
 2. Revisar fase 8 por separado sobre las mismas tomas: observar propuesta, aceptar/rechazar/deshacer y comprobar texto vecino/original. No activar simultáneamente varias variantes mientras se compara latencia.
-3. Corregir los hallazgos prioritarios de recursos después de guardar baseline: consultas repetidas del catálogo y retención de tarjetas. Medir antes/después manteniendo resultados/textos intactos. No se hicieron estas optimizaciones durante las grabaciones.
+3. Consultas compartidas y retención de tarjetas ya corregidas y probadas (01-11). Mantener vigilancia del tamaño de catálogo/persistencia; no abrir otra optimización sin una necesidad medida.
 4. Biblioteca completa activada el 01-11: validar selección, contenido heredado y copia con el responsable. La disposición enfocada ya está integrada; probarla dictando desde S25.
 5. Completar aceptación de recuperación y acceso. El túnel temporal volvió a fallar el 01-11 y se renovó sin reiniciar laboratorio. Un enlace estable es prioridad para la demo.
 6. Fase 10: confirmar referencias de los nueve M4A, errores de términos/negaciones/lateralidad/medidas y evaluación reservada. Congelar configuración, instalación limpia, versiones/licencias, repositorio público, trazabilidad y demo. No usar el guion como referencia oral exacta sin escuchar.
@@ -51,7 +51,7 @@ Si hay que recortar, conservar captura/transporte, Muse streaming, números/coma
 
 ## Trazabilidad y pendientes
 
-Mantener commits reales sin alterar fechas, bitácora y resultados asociados a la versión evaluada. Pendientes: reglas completas, inscripción/elegibilidad, licencia del código propio, remoto público y alojamiento estable. La URL de la demo no publica el repositorio ni prueba por sí sola la fecha de creación del código.
+Mantener commits reales sin alterar fechas, bitácora y resultados asociados a la versión evaluada. Pendientes: reglas completas, inscripción/elegibilidad, licencia del código propio y alojamiento estable. El repositorio público ya está creado; falta congelar y comprobar la versión que incluya esta ampliación. La URL de la demo no publica el repositorio ni prueba por sí sola la fecha de creación del código.
 
 ## Cierre de fases 1 y 2: uso principal de 2–10 segundos
 Este criterio sustituye el requisito previo de 30 s; las tomas largas son pruebas complementarias y no bloquean el inicio de ASR.
@@ -81,3 +81,7 @@ Revisor Meta implementado y probado técnicamente con proveedores simulados y di
 
 ## Fase 9 · alcance acordado y piloto del 29-10
 Editor con plantillas propias, dictado provisional en el destino seleccionado, consolidación/cancelación, deshacer y copiar implementados. Inserción directa al RIS diferida por decisión del responsable. Pendientes: prueba física S25, plantillas aportadas por radiólogos, revisión de contenido heredado, propuestas Meta contextualizadas visualmente y evaluación de usabilidad. No cerrar fase 9 por pruebas simuladas.
+
+
+## 02-11-2026 · Cierre de ampliación técnica del laboratorio
+Aceptación real completada: seis transcripciones/tres pares, una revisión Meta, originales preservados y exportaciones HTTP verificadas por cálculo independiente. Informe: experiments/results/2026-11-02-lab-acceptance/README.md. No se cierra validación clínica ni toda la fase 10: referencias TTS provisionales, una voz y tres frases. El siguiente trabajo recomendado es aceptación física integrada de fases 1/2/3/5/8/9 y congelar la demo, no ampliar funcionalidades. Multilingüismo permanece diferido por decisión del responsable.

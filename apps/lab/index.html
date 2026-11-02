@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dicta Libre · Laboratorio</title><link rel="stylesheet" href="/style.css"><script type="module" src="/lab.js"></script></head>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dicta Libre · Laboratorio</title><link rel="stylesheet" href="/style.css"><script type="module" src="/lab.js"></script><script type="module" src="/study.js"></script></head>
 <body><header><a href="/" class="brand">d. <span>dicta libre</span></a><span>LABORATORIO · LOCAL</span><a class="back-to-dictation" href="/live">← Volver al dictado</a><div id="readiness"></div></header>
 <main><div class="intro"><div><h1>Compara tus dictados</h1><p>Elige audios y configuraciones, ejecuta la comparación y revisa los resultados.</p></div><div class="exports"><a href="/api/export">Exportar JSON</a><a href="/api/export?format=csv">CSV</a><a href="/api/reviews/export">CSV revisiones</a></div></div>
 <div id="status" role="status">Carga WAV PCM16 de hasta 3 minutos. Se guardan en este computador.</div>
@@ -11,4 +11,4 @@
 <section><div class="section-title"><h2>Comparación por audio</h2><span class="small">Texto original de cada motor</span></div><div id="comparison" class="comparison"><p class="empty">Los resultados aparecerán aquí. No hay transcripciones simuladas.</p></div></section>
 <section><h2>Resumen del conjunto seleccionado</h2><p class="small">Resumen exploratorio: incluye carga en frío cuando corresponde. Compara tiempos en caliente desde la exportación. Repeticiones no equivalen a audios independientes; P95 no concluyente con pocas muestras.</p><div id="summary"></div></section>
 <section><h2>Historial de ejecuciones</h2><p class="small">Las ejecuciones se conservan al cerrar la página. Exportación incluye todo el historial.</p><div class="table-wrap"><table><thead><tr><th>Audio / configuración</th><th>Estado</th><th>Petición</th><th>Total</th><th>WER</th><th></th></tr></thead><tbody id="history"></tbody></table></div></section></div></div>
-<footer>Captura → preparación → motor intercambiable → original → evaluación. Revisor Meta: sugerencias opcionales bajo aprobación humana.</footer></main></body></html>
+<section id="study" aria-label="Evaluación del laboratorio"></section><footer>Captura → preparación → motor intercambiable → original → evaluación. Revisor Meta: sugerencias opcionales bajo aprobación humana.</footer></main></body></html>

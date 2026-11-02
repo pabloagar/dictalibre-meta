@@ -18,6 +18,16 @@ export function wavInfo(b) {
   return {...fmt,...data,durationMs};
 }
 export function normalize(text) { return text.normalize('NFC').toLocaleLowerCase('es').replace(/[^\p{L}\p{N},.%]+/gu,' ').replace(/(?<!\d)[,.]|[,.](?!\d)/g,' ').replace(/%/g,' % ').trim().split(/\s+/).filter(Boolean); }
+export function characterScore(reference, hypothesis) {
+  const a=Array.from(normalize(reference).join(' ')), b=Array.from(normalize(hypothesis).join(' '));
+  if(a.length*b.length>4000000) return {cer:null,characterErrors:null,referenceCharacters:a.length,cerUnavailable:'Límite de 4 millones de celdas'};
+  let previous=Uint32Array.from({length:b.length+1},(_,i)=>i);
+  for(let i=1;i<=a.length;i++) { const next=new Uint32Array(b.length+1);next[0]=i;
+    for(let j=1;j<=b.length;j++) next[j]=Math.min(previous[j]+1,next[j-1]+1,previous[j-1]+(a[i-1]===b[j-1]?0:1));
+    previous=next;
+  }
+  return {cerNormalizer:'es-literal-characters-v1',referenceCharacters:a.length,characterErrors:previous[b.length],cer:a.length?previous[b.length]/a.length:null};
+}
 export function score(reference, hypothesis) {
   if(reference===null||reference===undefined) return null;
   const a=normalize(reference),b=normalize(hypothesis);
@@ -32,7 +42,7 @@ export function score(reference, hypothesis) {
     else if(i&&d[i][j]===d[i-1][j]+1) {D++;alignment.push({kind:'deletion',reference:a[--i],hypothesis:''});}
     else {I++;alignment.push({kind:'insertion',reference:'',hypothesis:b[--j]});}
   }
-  return {normalizer:'es-literal-v1',referenceWords:a.length,substitutions:S,deletions:D,insertions:I,wer:a.length?(S+D+I)/a.length:null,silenceInsertions:a.length?null:I,alignment:alignment.reverse()};
+  return {...characterScore(reference,hypothesis),normalizer:'es-literal-v1',referenceWords:a.length,substitutions:S,deletions:D,insertions:I,wer:a.length?(S+D+I)/a.length:null,silenceInsertions:a.length?null:I,alignment:alignment.reverse()};
 }
 export function configuration(input,previous) {
   if(!['muse','whisper'].includes(input.engine)) throw new Error('Motor desconocido.');
@@ -48,7 +58,7 @@ export function configuration(input,previous) {
     preparation:'scipy-resample-poly-mono-16k-v1',mode:'file',correction:false};
 }
 export function csv(rows) {
-  const keys=['id','audioId','configId','status','text','queueMs','prepareMs','loadMs','requestMs','totalMs','commandMs','numberFormatMs','numericText','numberVersion','numberWarnings','formattedText','commandVersion','commandCount','commandWarnings','cold','mode','handshakeMs','firstPartialMs','endToFinalMs','endStreamToFinalMs','partialCount','revisionCount','streamSessionMs','wer','error'];
+  const keys=['id','audioId','configId','status','text','queueMs','prepareMs','loadMs','requestMs','totalMs','commandMs','numberFormatMs','numericText','numberVersion','numberWarnings','formattedText','commandVersion','commandCount','commandWarnings','cold','mode','handshakeMs','firstPartialMs','endToFinalMs','endStreamToFinalMs','partialCount','revisionCount','streamSessionMs','wer','error','substitutions','deletions','insertions','referenceWords','cer','characterErrors','referenceCharacters','evaluationReferenceVersion','requestRtf','generateMs','receiveStartToFirstTextMs','receiveStartToFinalTextMs','receiveEndToTextMs','clockUncertaintyMs'];
   const cell=v=>'"'+String(v??'').replace(/^[=+@-]/,'\t$&').replaceAll('"','""')+'"';
-  return [keys.map(cell).join(','),...rows.map(r=>keys.map(k=>cell(r[k]??r.timings?.[k]??r.stream?.[k]??({mode:r.configuration?.mode,formattedText:r.formatting?.text??r.numberFormatting?.text,numericText:r.numberFormatting?.text,numberVersion:r.numberFormatting?.version,numberWarnings:r.numberFormatting?.warnings.length,commandVersion:r.formatting?.version,commandCount:r.formatting?.events.length,commandWarnings:r.formatting?.warnings.length,cold:r.result?.cold,wer:r.evaluation?.wer}[k]))).join(','))].join('\r\n');
+  return [keys.map(cell).join(','),...rows.map(r=>keys.map(k=>cell(r[k]??r.timings?.[k]??r.stream?.[k]??r.live?.[k]??r.evaluation?.[k]??({mode:r.configuration?.mode,formattedText:r.formatting?.text??r.numberFormatting?.text,numericText:r.numberFormatting?.text,numberVersion:r.numberFormatting?.version,numberWarnings:r.numberFormatting?.warnings.length,commandVersion:r.formatting?.version,commandCount:r.formatting?.events.length,commandWarnings:r.formatting?.warnings.length,cold:r.result?.cold,wer:r.evaluation?.wer}[k]))).join(','))].join('\r\n');
 }

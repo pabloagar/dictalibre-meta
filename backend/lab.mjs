@@ -13,6 +13,7 @@ import {formatNumbers,NUMBER_VERSION} from './number-format.mjs';
 import {attachMuseStream} from './muse-stream.mjs';
 import {createReviewer,reviewWithMeta} from './meta-review.mjs';
 import {reviewContext} from './review-context.mjs';
+import {createStudy,studyCsv,comparePair} from './lab-study.mjs';
 import {STREAM_PREPARATION} from './stream-audio.mjs';
 import { wavInfo, hash, configuration, score, csv } from './lab-core.mjs';
 const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
@@ -64,11 +65,14 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
   for(const r of db.runs) if(['queued','running'].includes(r.status)){r.status='interrupted';r.error='Servidor reiniciado antes de terminar.';}
   save();
   let build='unknown';try{build=execFileSync('git',['rev-parse','HEAD'],{cwd:ROOT,encoding:'utf8'}).trim();}catch{}
-  const sourceHash=hash(Buffer.concat(['backend/lab.mjs','backend/meta-key.mjs','backend/meta-review.mjs','backend/review-context.mjs','apps/desktop/report-review.js','apps/shared/review-ui.js','backend/dictation-commands.mjs','backend/number-format.mjs','backend/muse-stream.mjs','backend/speech-turns.mjs','backend/stream-audio.mjs','backend/lab-core.mjs','backend/lab-worker.py','backend/live-bridge.mjs','apps/desktop/live.js','apps/desktop/report-editor.js','apps/shared/report-model.js','apps/desktop/stream-client.js','apps/desktop/desktop.js','apps/mobile/mobile.js','apps/shared/metrics.js'].map(f=>fs.readFileSync(path.join(ROOT,f)))));
+  const sourceHash=hash(Buffer.concat(['backend/lab.mjs','backend/lab-study.mjs','apps/lab/study.js','apps/shared/lab-timing.js','backend/meta-key.mjs','backend/meta-review.mjs','backend/review-context.mjs','apps/desktop/report-review.js','apps/shared/review-ui.js','backend/dictation-commands.mjs','backend/number-format.mjs','backend/muse-stream.mjs','backend/speech-turns.mjs','backend/stream-audio.mjs','backend/lab-core.mjs','backend/lab-worker.py','backend/live-bridge.mjs','apps/desktop/live.js','apps/desktop/report-editor.js','apps/shared/report-model.js','apps/desktop/stream-client.js','apps/desktop/desktop.js','apps/mobile/mobile.js','apps/shared/metrics.js'].map(f=>fs.readFileSync(path.join(ROOT,f)))));
   let apiKey=loadMetaKey(keyFile),active=null,closed=false;
   const reviewer=createReviewer({db,save,getKey:()=>apiKey,sourceHash,build,provider:reviewProvider});
+  const study=createStudy({db,save,build,sourceHash});
   const queuedAt=new Map();
-  const viewRun=r=>{const a=db.audios.find(a=>a.id===r.audioId),ref=a?.references.at(-1);return {...r,evaluation:r.status==='completed'?score(ref?.text??null,r.text):null,evaluationReferenceVersion:ref?.version??null};};
+  const evaluationCache=new Map();
+  const evaluated=(r,ref)=>{const key=JSON.stringify([r.text,ref?.text??null]);const old=evaluationCache.get(r.id);if(old?.key===key)return old.value;const value=score(ref?.text??null,r.text);if(evaluationCache.size>=500)evaluationCache.delete(evaluationCache.keys().next().value);evaluationCache.set(r.id,{key,value});return value;};
+  const viewRun=r=>{const a=db.audios.find(a=>a.id===r.audioId),ref=a?.references.at(-1);return {...r,evaluation:r.status==='completed'?evaluated(r,ref):null,evaluationReferenceVersion:ref?.version??null};};
   async function pump(){
     if(active||closed)return;
     const r=db.runs.find(r=>r.status==='queued');if(!r)return;
@@ -108,6 +112,8 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
       if(req.method==='POST'&&req.headers.origin!==origin)return json({error:'Origen no permitido.'},403);
       const url=new URL(req.url,origin),p=url.pathname;
       if(req.method==='GET'){
+        if(p==='/api/study')return json({records:db.studyRecords,build,sourceHash});
+        if(p==='/api/study/export'){res.setHeader('Content-Disposition','attachment; filename="dicta-estudio.'+(url.searchParams.get('format')==='csv'?'csv':'json')+'"');if(url.searchParams.get('format')==='csv'){res.setHeader('Content-Type','text/csv; charset=utf-8');return res.end('\uFEFF'+studyCsv(db.studyRecords));}return json({schema:'lab-study-v1',exportedAt:new Date().toISOString(),records:db.studyRecords});}
         if(p==='/api/live-info')return json({mobileOrigin:demoConnection(ROOT).origin});
         if(p==='/api/templates'){if(!fs.existsSync(templateFile))return json({templates:[],references:[],summary:null});return json(JSON.parse(fs.readFileSync(templateFile,'utf8')));}
         if(p.startsWith('/api/report-reviews/')){const r=db.reviews.find(r=>r.scope==='report'&&r.id===p.split('/').at(-1));return r?json(r):json({error:'Revisión desconocida.'},404);}
@@ -120,7 +126,7 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
         if(p==='/api/export'){const out={...db,schema:'dicta-libre.lab.v1',exportedAt:new Date().toISOString(),build,sourceHash,runs:db.runs.map(viewRun)};if(url.searchParams.get('format')==='csv'){res.writeHead(200,{...headers,'Content-Type':'text/csv; charset=utf-8','Content-Disposition':'attachment; filename="dicta-lab.csv"'});return res.end('\uFEFF'+csv(out.runs));}res.setHeader('Content-Disposition','attachment; filename="dicta-lab.json"');return json(out);}
         const audio=db.audios.find(a=>p===`/api/audio/${a.id}`);
         if(audio){res.writeHead(200,{...headers,'Content-Type':'audio/wav'});return res.end(fs.readFileSync(path.join(dataDir,'audio',audio.id+'.wav')));}
-        const file={'/':'apps/lab/index.html','/lab.js':'apps/lab/lab.js','/style.css':'apps/lab/style.css','/live':'apps/desktop/index.html','/desktop.js':'apps/desktop/desktop.js','/live.js':'apps/desktop/live.js','/stream-client.js':'apps/desktop/stream-client.js','/receiver.css':'apps/shared/style.css','/qr.js':'node_modules/qrcode-generator/dist/qrcode.js','/review-ui.js':'apps/shared/review-ui.js','/report-editor.js':'apps/desktop/report-editor.js','/report-review.js':'apps/desktop/report-review.js','/shared/report-model.js':'apps/shared/report-model.js','/shared/client.js':'apps/shared/client.js','/shared/protocol.js':'apps/shared/protocol.js','/shared/metrics.js':'apps/shared/metrics.js'}[p];
+        const file={'/':'apps/lab/index.html','/study.js':'apps/lab/study.js','/lab.js':'apps/lab/lab.js','/style.css':'apps/lab/style.css','/live':'apps/desktop/index.html','/desktop.js':'apps/desktop/desktop.js','/live.js':'apps/desktop/live.js','/stream-client.js':'apps/desktop/stream-client.js','/receiver.css':'apps/shared/style.css','/qr.js':'node_modules/qrcode-generator/dist/qrcode.js','/review-ui.js':'apps/shared/review-ui.js','/report-editor.js':'apps/desktop/report-editor.js','/report-review.js':'apps/desktop/report-review.js','/shared/report-model.js':'apps/shared/report-model.js','/shared/client.js':'apps/shared/client.js','/shared/protocol.js':'apps/shared/protocol.js','/shared/lab-timing.js':'apps/shared/lab-timing.js','/shared/metrics.js':'apps/shared/metrics.js'}[p];
         if(file){res.writeHead(200,{...headers,'Content-Type':p.endsWith('.js')?'text/javascript':p.endsWith('.css')?'text/css':'text/html; charset=utf-8'});return res.end(fs.readFileSync(path.join(ROOT,file)));}
         return json({error:'No encontrado.'},404);
       }
@@ -133,9 +139,12 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
       }
       if(raw.length>100000)throw new Error('Petición JSON demasiado grande.');
       const m=JSON.parse(raw.toString()||'{}');
+      if(p==='/api/study/compare')return json(comparePair(db.runs.find(r=>r.id===m.a)?viewRun(db.runs.find(r=>r.id===m.a)):null,db.runs.find(r=>r.id===m.b)?viewRun(db.runs.find(r=>r.id===m.b)):null));
+      if(p==='/api/study/snapshot')return json(study.snapshot(m));
+      if(p==='/api/study')return json(study.append(m),201);
       if(p==='/api/live-measurements'){
         const r=db.runs.find(r=>r.id===m.runId);if(!r||r.status!=='completed')throw Error('Resultado no disponible.');
-        const timing={};for(const key of ['receiveEndToTextMs','stopToTextEstimateMs','clockUncertaintyMs','startToFirstPartialMs']){const v=m[key];timing[key]=typeof v==='number'&&Number.isFinite(v)&&v>=0&&v<600000?v:null;}
+        const timing={};for(const key of ['receiveStartToFirstTextMs','receiveStartToFinalTextMs','receiveEndToTextMs','stopToTextEstimateMs','clockUncertaintyMs','startToFirstPartialMs']){const v=m[key];timing[key]=typeof v==='number'&&Number.isFinite(v)&&v>=0&&v<600000?v:null;}
         r.live={...timing,recordingId:Number.isInteger(m.recordingId)?m.recordingId:null,source:['tone','microphone'].includes(m.source)?m.source:null,measuredBy:'receiver-browser',savedAt:new Date().toISOString()};
         r.environment.source='live-receiver';save();return json({saved:true});
       }

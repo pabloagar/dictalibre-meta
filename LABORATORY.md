@@ -104,3 +104,7 @@ Fuente del contrato consultada: https://dev.meta.ai/docs/speech-to-text (28-10-2
 
 ## Prueba de segmentación desde el teléfono
 En http://127.0.0.1:8789/live elegir Muse-streaming y Segmentación automática · prueba; crear sesión y escanear QR. Mantener pantalla móvil visible; usar iniciar/parar para una toma con varias pausas. Las pausas consolidan segmentos sin detener el micrófono. Solo al detener se aplican números/comandos al conjunto y se añade al informe. Guardado de audio/resultados/segmentos en laboratorio; máximo 180 s. Cierre manual sigue disponible y es el predeterminado al recargar. Prueba física pendiente del usuario.
+
+
+## Estudios ampliados · 2026-11-02
+Panel 04 implementado: comparación filtrada/pareada, anotación clínica por etapa, edición humana, evaluación del revisor y usabilidad independiente, con registros persistentes y exportables. Guía completa, generación/importación de corpus sintético y límites en [LAB_STUDIES.md](LAB_STUDIES.md). Las capacidades están implementadas; ensayos clínicos/humanos y comparación real de robustez pendientes de ejecución.

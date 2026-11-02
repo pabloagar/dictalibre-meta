@@ -43,7 +43,7 @@ function renderMetrics() {
     for (const value of [label, ms(stat.p50), ms(stat.p95), stat.n]) { const td = document.createElement('td'); td.textContent = value; tr.append(td); }
     $('timing-rows').append(tr);
   }
-  const labels = { startToFirstPartialMs:'Inicio recibido → primer borrador streaming', prepareMs:'Preparar micrófono (incluye permiso)', startControlMs:'Orden de inicio → captura', stopFlushMs:'Detener → último bloque capturado', senderHashMs:'Verificar hash en celular', pcHashMs:'Verificar hash en PC', stopToVerifiedMs:'Detener → entrega confirmada',asrQueueMs:'Cola ASR',asrRunMs:'Petición ASR',receiveEndToTextMs:'Fin recibido en PC → texto',stopToTextEstimateMs:'Detener → texto estimado',clockUncertaintyMs:'Resolución orientativa parada → texto' };
+  const labels = { receiveStartToFirstTextMs:'Inicio recibido PC → primer texto', receiveStartToFinalTextMs:'Inicio recibido PC → final', startToFirstPartialMs:'Inicio recibido → primer borrador streaming', prepareMs:'Preparar micrófono (incluye permiso)', startControlMs:'Orden de inicio → captura', stopFlushMs:'Detener → último bloque capturado', senderHashMs:'Verificar hash en celular', pcHashMs:'Verificar hash en PC', stopToVerifiedMs:'Detener → entrega confirmada',asrQueueMs:'Cola ASR',asrRunMs:'Petición ASR',receiveEndToTextMs:'Fin recibido en PC → texto',stopToTextEstimateMs:'Detener → texto estimado',clockUncertaintyMs:'Resolución orientativa parada → texto' };
   $('stage-times').textContent = Object.entries(labels).map(([key,label]) => `${label}: ${ms(latestTrace.stages[key])}`).join(' · ');
   $('transport-counts').textContent = `${s.blocks} bloques · ${s.bytes} bytes de audio y cabecera · cola máxima ${s.queueBytes.max ?? '—'} bytes · duplicados ${latestTrace.counters.duplicates} · errores de secuencia ${latestTrace.counters.sequenceErrors} · sin estimación ${s.unestimatedBlocks}`;
 }
@@ -94,7 +94,7 @@ async function complete(m) {
     latestTrace.stage('pcHashMs', performance.now() - hashStart); latestTrace.status = 'verified'; Object.assign(latestTrace.counters, m.counters); renderMetrics();
     client.send({ type: 'verified', id: recording.id, hash });
     addClip(recording, true, hash); current = null; displayIdle();
-    if(recording.samples&&location.pathname==='/live')window.dispatchEvent(new CustomEvent('dicta-take',{detail:{recordingId:recording.id,pcmHash:hash,blob:wavBlob(recording.parts,recording.rate),stopStamp:m.stopStamp,receivedEnd,trace:latestTrace,stamp:()=>client?.clock.stamp(),renderMetrics}}));
+    if(recording.samples&&location.pathname==='/live')window.dispatchEvent(new CustomEvent('dicta-take',{detail:{recordingId:recording.id,pcmHash:hash,blob:wavBlob(recording.parts,recording.rate),stopStamp:m.stopStamp,receivedStart:recording.receivedStart,receivedEnd,trace:latestTrace,stamp:()=>client?.clock.stamp(),renderMetrics}}));
     else window.dispatchEvent(new Event('dicta-recording-abort'));
     window.dispatchEvent(new Event('dicta-recording-stop'));
     status(m.samples ? 'Audio recibido completo. Escucha la toma y comprueba el inicio y el final.' : 'La toma quedó vacía. Mantén pulsado mientras hablas.', m.samples ? 'success' : '');
@@ -147,11 +147,12 @@ function onMessage(m) {
     case 'pairing_metrics': showPairing(m.pairing); break;
     case 'paired': showPairing(m.pairing); clearInterval(pairingTimer); $('pairing').hidden = true; $('confirm-panel').hidden = true; $('paired').hidden = false; status('Conectados. Prepara el micrófono en el teléfono.', 'success'); break;
     case 'start':
+      const receivedStart=performance.now();
       window.dispatchEvent(new CustomEvent('dicta-recording-start',{detail:m}));
       latestTrace = new RecordingMetrics(m.id, m.rate, m.source, m.mode); traces.set(m.id, latestTrace);
       while (traces.size > 5) traces.delete(traces.keys().next().value);
       previousArrival = null; pendingTiming = null; renderMetrics();
-      current = { id: m.id, rate: m.rate, mode: m.mode, source: m.source, parts: [], samples: 0, frames: 0 };
+      current = { receivedStart, id: m.id, rate: m.rate, mode: m.mode, source: m.source, parts: [], samples: 0, frames: 0 };
       document.body.classList.add('receiving'); $('record-state').textContent = 'RECIBIENDO'; $('record-state').classList.add('active');
       $('duration').textContent = '00:00'; $('frames').textContent = '0'; $('format').textContent = `${m.rate / 1000} kHz · mono`;
       $('record-help').textContent = 'Recibiendo audio mientras dictas. Reproducción disponible al detener.'; status('Grabación en curso.'); break;
