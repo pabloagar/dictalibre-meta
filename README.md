@@ -1,6 +1,6 @@
 # Dicta Libre
 
-Repositorio público: [pabloagar/dicta-libre](https://github.com/pabloagar/dicta-libre).
+Repositorio público: [pabloagar/dictalibre-meta](https://github.com/pabloagar/dictalibre-meta).
 
 **Estado al 1 de noviembre de 2026:** captura y transporte, Muse-Normal/Muse-streaming, Whisper local con OpenVINO, laboratorio comparativo, segmentación opcional, números/comandos, glosario, Revisor Meta experimental y editor con plantillas implementados en piloto. 285 plantillas importadas localmente; contenido excluido del repositorio por permisos de redistribución pendientes. Validación física/clínica y entrega aún abiertas. Código preparado para publicación pública; datos privados excluidos. Alcance, auditoría y licencia pendiente en [PUBLICATION.md](PUBLICATION.md).
 

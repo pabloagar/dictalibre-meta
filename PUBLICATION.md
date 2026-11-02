@@ -2,7 +2,7 @@
 
 Revisión del 1 de noviembre de 2026 (America/Santiago).
 
-Repositorio publicado: https://github.com/pabloagar/dicta-libre. Primera publicación del código: commit `b906676`, 2026-11-01 21:37:58 -03:00, conservando el historial previo.
+Repositorio publicado: https://github.com/pabloagar/dictalibre-meta. Primera publicación del código: commit `b906676`, 2026-11-01 21:37:58 -03:00, conservando el historial previo.
 
 Una copia limpia de ese commit instaló las dependencias mediante `pnpm install --frozen-lockfile`: 70/70 pruebas Node y comprobación de sintaxis aprobadas. La auditoría posterior al commit examinó 257 blobs históricos y 119 archivos candidatos, sin hallazgos. No se ejecutaron llamadas a Meta ni inferencias GPU para esta comprobación.
 
