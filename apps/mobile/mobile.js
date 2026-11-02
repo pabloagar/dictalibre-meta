@@ -9,8 +9,9 @@ let prepareMs = null, connectStarted = null;
 const lifecycle=[];let hiddenAt=null;
 function lifecycleEvent(type,extra={}){lifecycle.push({type,atMs:performance.now(),recordingId:recording?.id??null,paired,...extra});if(lifecycle.length>100)lifecycle.shift();}
 const HAPTIC_MS = 12, HAPTIC_KEY = 'dicta-haptics-v1';
-let hapticsEnabled = false;
-try { hapticsEnabled = localStorage.getItem(HAPTIC_KEY) === 'true'; } catch { /* optional storage */ }
+const CAPTURE_FEEDBACK_VERSION = 'first-input-v2';
+let hapticsEnabled = true;
+try { hapticsEnabled = localStorage.getItem(HAPTIC_KEY) !== 'false'; } catch { /* optional storage */ }
 $('haptics').checked = hapticsEnabled;
 if (typeof globalThis.navigator?.vibrate !== 'function') $('haptics-note').textContent = 'Este navegador no ofrece vibración; puedes grabar normalmente.';
 $('haptics').onchange = () => {
@@ -41,11 +42,12 @@ $('test-haptics').onclick = () => {
     ? 'Pulso de 12 ms solicitado. ¿Lo sentiste? La aceptación del navegador no confirma vibración física. Si no se siente, comprueba que el teléfono no esté en silencio y revisa sus ajustes de vibración.'
     : outcome === 'unsupported' ? 'Este navegador no ofrece vibración.' : 'El navegador no aceptó la vibración. Puedes seguir grabando normalmente.';
 };
-function captureStarted(r) {
+function captureStarted(r, confirmation = 'worklet-start') {
   if (r.state !== 'starting') return;
-  r.state = 'recording'; haptic(r, 'start');
+  r.state = 'recording'; lifecycleEvent('capture-started', { confirmation }); haptic(r, 'start');
+  status('Grabando y enviando al computador.');
 }
-$('export-lifecycle').onclick=()=>{const blob=new Blob([JSON.stringify({schema:'mobile-lifecycle.v1',clock:'performance.now; ms desde navegación',browser:navigator.userAgent,network:null,events:lifecycle},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='dicta-interrupciones.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+$('export-lifecycle').onclick=()=>{const blob=new Blob([JSON.stringify({schema:'mobile-lifecycle.v1',captureFeedbackVersion:CAPTURE_FEEDBACK_VERSION,clock:'performance.now; ms desde navegación',browser:navigator.userAgent,network:null,events:lifecycle},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='dicta-interrupciones.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 $('restart').onclick=()=>{lifecycleEvent('reset');if(recording)abort('Sesión reiniciada.');releaseMicrophone();client?.send({type:'close'});client?.close();qrToken=null;$('join-code').value='';$('duration').textContent='00:00';$('received').textContent='0';$('verified').textContent='';$('capture-info').textContent='Micrófono liberado.';status('Crea una sesión nueva en el PC y escanea el nuevo QR.');};
 function report(r, stages = {}, extra = {}) { client?.send({ type: 'sender_metrics', id: r.id, stages, ...extra }); }
 const initialCode = location.hash.slice(1);
@@ -60,8 +62,8 @@ function refresh() {
   $('modes').disabled = !!recording;
   $('haptics').disabled = !!recording;
   $('test-haptics').disabled = !!recording;
-  $('record').classList.toggle('recording', !!recording && ['starting', 'recording'].includes(recording.state));
-  $('record-label').textContent = recording ? (recording.state === 'finishing' ? 'Comprobando entrega…' : mode === 'hold' ? 'Suelta para detener' : 'Pulsa para detener') : mode === 'hold' ? 'Mantén pulsado para hablar' : 'Pulsa para empezar';
+  $('record').classList.toggle('recording', recording?.state === 'recording');
+  $('record-label').textContent = recording ? ({starting:'Iniciando…',stopping:'Deteniendo…',finishing:'Comprobando entrega…'}[recording.state] ?? (mode === 'hold' ? 'Suelta para detener' : 'Pulsa para detener')) : mode === 'hold' ? 'Mantén pulsado para hablar' : 'Pulsa para empezar';
 }
 function releaseMicrophone() {
   epoch++; prepared = false; preparing = false;
@@ -79,12 +81,14 @@ function abort(reason, notify = true) {
 async function stopped(m) {
   const r = recording;
   if (!r || r.id !== m.id) return;
-  haptic(r, 'stop');
+  if (r.state === 'finishing') return;
+  lifecycleEvent('capture-stopped', { samples: m.samples, limit: !!m.limit });
+  if (m.samples > 0) haptic(r, 'stop');
   r.state = 'finishing'; refresh(); $('level').value = 0;
   const flushedAt = performance.now();
   const stopFlushMs = r.stopAt == null ? null : flushedAt - r.stopAt;
   r.stopAt ??= flushedAt;
-  if (m.limit) status('Límite de 3 minutos alcanzado. Comprobando el audio capturado.');
+  status(m.limit ? 'Límite de 3 minutos alcanzado. Comprobando el audio capturado.' : 'Captura detenida. Comprobando entrega al computador…');
   try {
     const hash = await sha256(r.parts);
     report(r, { stopFlushMs, senderHashMs: performance.now() - flushedAt });
@@ -117,7 +121,7 @@ async function prepare(useSynthetic = false) {
     worklet.port.onmessage = ({ data: m }) => {
       const r = recording;
       if (!r || m.id !== r.id) return;
-      if (m.type === 'started') { report(r, { prepareMs, startControlMs: performance.now() - r.startAt }); captureStarted(r); refresh(); return; }
+      if (m.type === 'started') { report(r, { prepareMs, startControlMs: performance.now() - r.startAt }); captureStarted(r, m.confirmation); refresh(); return; }
       if (m.type === 'stopped') { void stopped(m); return; }
       if (m.type !== 'chunk') return;
       if (client.buffered > 524288) { abort('La conexión está saturada. La toma se detuvo.'); return; }
@@ -152,14 +156,14 @@ function start() {
   if (!prepared || !paired || recording || context?.state !== 'running') return;
   $('verified').textContent = ''; $('received').textContent = '0'; $('duration').textContent = '00:00';
   recording = { id: ++counter, sequence: 0, samples: 0, parts: [], state: 'starting', startAt: performance.now(), sentTimes: new Map(), hapticsEnabled };
-  lifecycleEvent('capture-request', { hapticsEnabled, requestedPulseMs: hapticsEnabled ? HAPTIC_MS : 0, source: synthetic ? 'tone' : 'microphone', mode });
+  lifecycleEvent('capture-request', { captureFeedbackVersion: CAPTURE_FEEDBACK_VERSION, hapticsEnabled, requestedPulseMs: hapticsEnabled ? HAPTIC_MS : 0, source: synthetic ? 'tone' : 'microphone', mode });
   if (!client.send({ type: 'start', id: recording.id, rate: context.sampleRate, mode, source: synthetic ? 'tone' : 'microphone' })) { abort('No hay conexión con el PC.'); return; }
-  worklet.port.postMessage({ type: 'start', id: recording.id }); status('Grabando y enviando al computador.'); refresh();
+  worklet.port.postMessage({ type: 'start', id: recording.id }); status('Iniciando captura… Espera la confirmación para hablar.'); refresh();
 }
 function stop() {
   if (!recording || !['starting', 'recording'].includes(recording.state)) return;
-  recording.stopAt = performance.now(); recording.state = 'finishing'; worklet?.port.postMessage({ type: 'stop' });
-  status('Captura detenida. Entregando el último bloque…'); refresh();
+  recording.stopAt = performance.now(); recording.state = 'stopping'; worklet?.port.postMessage({ type: 'stop' });
+  status('Deteniendo captura…'); refresh();
 }
 function onMessage(m) {
   switch (m.type) {

@@ -18,7 +18,14 @@ test('descarta audio fuera del intervalo y vacía el bloque final al soltar', ()
 });
 test('un toque sin muestras puede terminar sin bloquear la captura', () => {
   const c = capture(); c.command('start'); c.command('stop'); assert.equal(c.messages.at(-1).samples, 0);
+  assert.equal(c.messages.some(m=>m.type==='started'),false);
   c.command('start'); c.input([.3]); c.command('stop'); assert.equal(c.messages.at(-1).samples, 1);
+});
+test('confirma inicio una vez al recibir muestras, incluso silencio, y nunca solo por la orden', () => {
+  const c=capture();c.command('start');c.input([]);assert.equal(c.messages.length,0);
+  c.input([0,0]);c.input([0]);const starts=c.messages.filter(m=>m.type==='started');
+  assert.equal(starts.length,1);assert.equal(starts[0].confirmation,'first-input');
+  c.command('stop');assert.equal(c.messages.at(-1).samples,3);
 });
 test('abort descarta el bloque parcial y permite una nueva toma', () => {
   const c = capture(); c.command('start'); c.input([.9]); c.command('abort'); c.command('start'); c.input([.1]); c.command('stop');
