@@ -89,3 +89,7 @@ Editor con plantillas propias, dictado provisional en el destino seleccionado, c
 
 ## 02-11-2026 · Cierre de ampliación técnica del laboratorio
 Aceptación real completada: seis transcripciones/tres pares, una revisión Meta, originales preservados y exportaciones HTTP verificadas por cálculo independiente. Informe: experiments/results/2026-11-02-lab-acceptance/README.md. No se cierra validación clínica ni toda la fase 10: referencias TTS provisionales, una voz y tres frases. El siguiente trabajo recomendado es aceptación física integrada de fases 1/2/3/5/8/9 y congelar la demo, no ampliar funcionalidades. Multilingüismo permanece diferido por decisión del responsable.
+
+## Pendientes después del cierre del MVP · experiencia de inicio
+
+- [ ] **Abrir directamente el diseño definitivo, sin pantalla «Preparando tu espacio de dictado…».** Solicitud expresa del responsable, 02-11-2026. Entregar la estructura final desde el HTML y preparar conexión/configuración en segundo plano; mantener desactivados solo los controles que aún no estén listos. No volver a mostrar la interfaz heredada ni eliminar la protección actual sin reemplazarla. Criterio de aceptación: hoja definitiva visible desde la primera presentación, sin pantalla intermedia, con errores de conexión comprensibles y temas respetados. Medir primer diseño visible y controles disponibles en condiciones normales y de red lenta antes/después. **Pendiente, no implementado; no bloquea las pruebas actuales ni amplía el MVP.**
