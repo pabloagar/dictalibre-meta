@@ -178,7 +178,7 @@ function onMessage(m) {
       recording = null; $('level').value = 0; refresh();
       $('verified').textContent = m.samples ? '✓ El PC recibió exactamente el mismo audio. Puedes escucharlo allí.' : 'La toma quedó vacía. Prueba de nuevo.';
       status(synthetic ? 'Tono sintético preparado para otra toma.' : 'Micrófono preparado para otra toma.', 'success'); break;
-    case 'aborted': abort(m.reason, false); break;
+    case 'aborted': if (recording && m.id !== recording.id) break; abort(m.reason, false); break;
     case 'error': status(m.message, 'error'); if (!paired) client?.close(); break;
     case 'closed': paired=false;abort(m.reason, false); releaseMicrophone();client?.close();break;
   }

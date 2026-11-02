@@ -15,3 +15,16 @@ test('ocultar interrumpe captura, volver exige gesto y reset no reutiliza token'
  $('restart').onclick();assert.equal(sent.at(-1).type,'close');assert.equal(closed,1);assert.equal($('join-code').value,'');assert.equal($('duration').textContent,'00:00');
  vm.runInContext('paired=false;client=null;',box);listeners.visibilitychange();assert.match(lastStatus,/nuevo QR/);
 });
+test('aborted rezagado de otra toma no anula la toma en curso; el de la toma actual sí',()=>{
+ const elements=new Map(),sent=[],worklet=[];
+ const $=id=>{if(!elements.has(id))elements.set(id,{value:'',textContent:'',classList:{toggle(){}},addEventListener(){}});return elements.get(id);};
+ const document={hidden:false,querySelectorAll:()=>[],addEventListener(){}};
+ const box={$,document,window:{addEventListener(){}},location:{hash:'',pathname:'/mobile'},history:{replaceState(){}},performance:{now:()=>100},status(){},console,setTimeout,clearTimeout};
+ vm.createContext(box);vm.runInContext(fs.readFileSync('apps/mobile/mobile.js','utf8').replace(/^import .*;\r?\n/gm,''),box);
+ box.fakeClient={send:m=>{sent.push(m);return true;},close(){}};box.fakeWorklet={port:{postMessage:m=>worklet.push(m)},disconnect(){}};
+ vm.runInContext("paired=true;prepared=true;client=fakeClient;worklet=fakeWorklet;recording={id:2,state:'starting',sequence:0,samples:0,parts:[],sentTimes:new Map()};",box);
+ vm.runInContext("onMessage({type:'aborted',id:1,reason:'Grabación interrumpida.'})",box);
+ assert.equal(vm.runInContext('recording?.id',box),2);assert.deepEqual(worklet,[]);assert.equal(sent.length,0);
+ vm.runInContext("onMessage({type:'aborted',id:2,reason:'Grabación interrumpida.'})",box);
+ assert.equal(vm.runInContext('recording',box),null);assert.deepEqual(worklet.map(m=>m.type),['abort']);assert.equal(sent.length,0);
+});

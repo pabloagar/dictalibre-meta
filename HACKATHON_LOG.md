@@ -230,3 +230,8 @@ Acordado botón junto a Copiar y aviso al copiar, sin revisión por pausas. Impl
 Activación autorizada por el responsable: laboratorio reiniciado y build de095608b3ff3e7d840da2481ab62f2fc2ba3a23 comprobado por API. Módulo de interfaz global respondió HTTP 200. Catálogo conservado (182 ejecuciones ASR, 53 revisiones al reiniciar).
 
 Verificado recorrido visual en navegador: aviso al copiar, revisión real de contradicción y marcado de desactualizado tras edición. Sin cambios automáticos al informe; prueba sintética en pestaña temporal, restaurada al estado vacío inicial.
+
+## 2026-11-02 · Revisión técnica, propuesta de interfaz y corrección de `aborted` rezagado
+Revisión de solo lectura sobre `654bed8` con anexos por rol (transporte, reconocimiento, frontend, seguridad/historial) y sondas reproducibles: `docs/REVISION_TECNICA.md`, `docs/revision/`. Auditoría UI con capturas emuladas (no S25 físico) y dos direcciones de diseño sin implementar: `docs/PROPUESTA_UI.md`. Línea base: 76/76 pruebas Node, 5/5 Python, sintaxis y `pnpm audit` sin hallazgos; Muse, Revisor Meta, Whisper/GPU, S25 Ultra y túnel no verificables en la nube.
+
+Cambio aprobado por el responsable (hallazgo A2): el teléfono ignora un `aborted` cuyo `id` no corresponde a la toma en curso (`apps/mobile/mobile.js`). Antes, un `aborted` de la toma anterior anulaba la nueva sin avisar al relay y el PC quedaba hasta 15 s «RECIBIENDO» una toma fantasma (reproducido con `docs/revision/sondas/mobile-probes.mjs`). Prueba nueva en `tests/mobile-lifecycle.test.mjs`, vista fallar antes del cambio; 77/77 pruebas Node y 5/5 Python aprobadas en contenedor Linux. Pendiente comprobación física en S25 Ultra con red de RTT alto; no se reinició ningún servicio.

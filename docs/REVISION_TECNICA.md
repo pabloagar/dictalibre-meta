@@ -107,6 +107,8 @@ Formato: **ID · título**, seguido de evidencia, impacto, riesgo de corregirlo,
 
 #### A2 · Un `aborted` atrasado anula la toma nueva en el teléfono [Ejecutado]
 
+> **Estado (2-nov, después de la revisión):** corregido con aprobación del responsable. `mobile.js` ignora un `aborted` con otro `id` y hay una prueba nueva en `tests/mobile-lifecycle.test.mjs`, que falló antes del cambio. Resultado: 77/77 pruebas. Falta la comprobación física en el S25.
+
 - **Evidencia:** `apps/mobile/mobile.js:181` (`case 'aborted': abort(m.reason, false)`) no compara `m.id` con la toma en curso. El relay responde `aborted` con el id antiguo (`backend/server.mjs:162` → `:77`). Se reproduce con `node docs/revision/sondas/mobile-probes.mjs`.
 - **Impacto:**
   - El teléfono cancela la toma nueva sin avisar al relay.
@@ -283,7 +285,7 @@ Ninguna de estas mediciones cambia el comportamiento. Cada una se registra en ME
 
 Son en orden de urgencia y te las haré de a una:
 
-1. ¿Apruebas tocar `mobile.js` para ignorar `aborted` de otra toma (A2)? Es una línea con su prueba, pero es la captura.
+1. ~~¿Apruebas tocar `mobile.js` para ignorar `aborted` de otra toma (A2)?~~ Aprobado e implementado.
 2. ¿El Revisor Meta debe venir **desactivado** por defecto (A4)?
 3. ¿Apruebas ampliar los términos protegidos del Revisor (A3)? Lo hace más conservador.
 4. ¿Qué licencia quieres para el código propio (M11)?
@@ -304,7 +306,7 @@ Son en orden de urgencia y te las haré de a una:
 | 8 | Forzar `text/plain` en la copia manual | M14 | Editor | PoC de Playwright como prueba |
 | 9 | Enviar `/api/reviews/shown` una vez por revisión | M13 | Laboratorio | Nueva |
 | 10 | Reemplazar en HEAD la ruta de Windows con el nombre de pila | §2.4 | `HACKATHON_LOG.md` | — |
-| 11 | **Con tu aprobación:** ignorar `aborted` de otra toma | A2 | **Captura** | `mobile-lifecycle` |
+| 11 | ~~Ignorar `aborted` de otra toma~~ **Hecho el 2-nov** con aprobación del responsable | A2 | **Captura** | `mobile-lifecycle` (77/77) |
 | 12 | **Con tu aprobación:** ampliar los términos protegidos del Revisor | A3 | Revisor | Un caso por término |
 | 13 | **Con tu decisión:** Revisor desactivado por defecto; agregar `LICENSE` | A4, M11 | UI / repo | — |
 | 14 | Pautas de demo en RUNNING.md: no proyectar el QR ni difundir la URL; esperar el texto antes de la siguiente toma; no lanzar lotes mientras se dicta; evitar «punto» seguido de un número | M2, M3, A6, M9, C1 | Docs | — |
