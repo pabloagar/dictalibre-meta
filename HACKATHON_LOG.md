@@ -238,3 +238,13 @@ Cambio aprobado por el responsable (hallazgo A2): el teléfono ignora un `aborte
 
 ## 2026-11-02 · Contexto del Revisor: ficha y sección en vez de plantilla e informe completo
 Diseño aprobado por el responsable. Cada toma envía al Revisor la ficha del estudio (nombre, categoría y origen de la plantilla) y solo la sección de destino (título y texto, máximo 3000 caracteres). «Revisar informe» envía el informe completo con la ficha. El texto de la plantilla ya no se envía y el servidor lo descarta (`report-context-v2`, prompt `radiology-review-v3-section`). Pruebas nuevas en `tests/report-model.test.mjs` y `tests/report-review.test.mjs`, vistas fallar antes de implementar. Resultado: 80/80 pruebas Node y 5/5 Python. La conexión del editor se verificó en Chromium interceptando lo que se enviaría, sin llamar a Meta. El efecto sobre la calidad de la revisión queda pendiente de medir (EXPERIMENTS.md). Material sintético; no se reinició ningún servicio del responsable.
+
+## 2026-11-02 · Vocabulario radiológico por evidencia: TC de tórax (pasos 2 y 3)
+Diseño aprobado por el responsable, con tres decisiones: frecuencia en escala 1–3 con la fuente visible; cero términos no dichos en las grabaciones control; conteos de plantillas solo en su PC. Se agregaron:
+- el vocabulario candidato (321 términos, generado de forma determinista desde el archivo del responsable, sin conteos de plantillas y sin el término de la lista PUC original que coincidía);
+- una propuesta editorial de 60 términos para medir, la planilla de selección e impacto, y 92 frases sintéticas (50 de fase A, 29 de fase B y 13 controles);
+- los scripts de frecuencias locales, preparación de corrida, planilla de errores y ranking;
+- la regla de decisión en código, registrada antes de medir;
+- configuraciones de Muse de solo lectura cargadas desde `data/vocabulario/glosarios/` (hoy vacía), sin escribir en el catálogo.
+
+Pruebas nuevas en `tests/vocabulario.test.mjs`, vistas fallar antes de implementar. El flujo completo se verificó con un Muse simulado; no hubo medición real. Pendiente: el responsable revisa la planilla, graba con dos voces y ejecuta las fases A y B en su PC.

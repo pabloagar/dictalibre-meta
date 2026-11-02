@@ -266,3 +266,56 @@ Protocolo definido antes de medir. **Todavía no hay ejecución**, así que todo
   - las omisiones de casos que dependen de otra sección se registran como costo conocido, no como fallo oculto.
 - **Registro:** build, `promptHash`, `inputHash`, red y fecha. Se conservan los resultados favorables y desfavorables.
 - **Estado:** requiere una credencial Meta en el PC de referencia. En la nube no se pudo ejecutar. `resultados: null`.
+
+## 2026-11-02 · Glosario de Muse por evidencia: TC de tórax (protocolo registrado ANTES de medir)
+
+Diseño aprobado por el responsable el 2-nov-2026. **Todavía no hay ejecución**: todos los resultados son `null`. Materiales en `data/vocabulario/` y scripts `scripts/vocab-*.mjs`.
+
+- **Pregunta.** ¿Qué glosario corto, elegido por medición, mejora el reconocimiento de términos de TC de tórax sin hacer que Muse escriba términos que no se dijeron ni empeore el resto del texto?
+- **Condiciones fijas:**
+  - Muse por archivo en el laboratorio local, con los mismos WAV en todas las variantes;
+  - se evalúa el **texto original del motor**: comandos, números y Revisor desactivados;
+  - el Revisor recibe hoy los mismos términos y su efecto se medirá aparte, sin cambiar su comportamiento;
+  - el streaming se confirmará después con una sola corrida.
+- **Voces:** al menos dos humanas, incluida la del responsable (v1, v2…). Una voz sintética (s1) se informa aparte y no entra en la decisión.
+- **Frases:** sintéticas, escritas por el equipo (`frases-tc-torax.v1.json`), leídas sin decir la puntuación. La referencia es el texto escrito; si una lectura sale distinta, se repite y no se corrige la referencia.
+- **Fase A (selección), sin glosario:**
+  - 50 frases con 60 candidatos (propuesta editorial a confirmar en la planilla);
+  - cada candidato aparece en al menos 3 frases distintas, así que con 2 voces suma 6 o más lecturas;
+  - la tasa de error por término sube de a 1/6 (unos 17 puntos porcentuales).
+- **Selección:**
+  - prioridad = frecuencia 1–3 (plantillas, o prioridad editorial A/B si no hay conteo, con la fuente visible) × tasa de error sin glosario × impacto clínico 1–3 (lo asigna el responsable);
+  - quedan fuera los términos sin medir, con 0 errores o sin impacto;
+  - el ranking es determinista y guarda los datos de entrada y sus hashes.
+- **Fase B (evaluación):**
+  - 29 frases objetivo distintas de las de la fase A, más 13 controles sin candidatos y con palabras que suenan parecido;
+  - variantes: sin glosario (dos repeticiones, para estimar el ruido), glosario actual de 20 términos, y glosarios de 10, 25, 50 y 100 términos, solo si hay suficientes términos elegibles; si no, se omiten y se registra;
+  - el laboratorio alterna el orden de las variantes por audio.
+- **Métricas (conteos, por voz y agrupadas):**
+  - aciertos en términos objetivo: forma exacta, sin distinguir mayúsculas pero sí tildes; una forma flexionada se registra aparte y no cuenta como acierto;
+  - términos del glosario que aparecen sin haberse dicho, en controles y en frases objetivo;
+  - errores en otras palabras, y errores nuevos frente a sin glosario (repetición 1) en el mismo audio;
+  - WER (errores sobre palabras de referencia, normalizador `es-literal-v1`);
+  - latencia de la petición (mediana, ms).
+- **Regla de decisión** (implementada en `decideGlossary`, `backend/vocabulary.mjs`):
+  - se elige el glosario más corto que logre al menos el **90 % de la mejora máxima** en aciertos;
+  - se rechaza con **cualquier** término no dicho en las grabaciones control (cero en N, con N ≥ 20; con 10 controles no se puede medir 1 por cada 100);
+  - se rechaza si su WER general supera al de sin glosario en más que la diferencia entre las dos repeticiones sin glosario;
+  - si ninguna variante cumple, se mantiene el glosario actual;
+  - la latencia se informa y la decide el responsable;
+  - la decisión se toma sobre las voces humanas agrupadas, informando además cada voz.
+- **Límite de Muse:**
+  - el tope de 100 términos es del proyecto (`lab-core.mjs:41`);
+  - en la documentación accesible no se encontró un tope documentado; la documentación oficial no se pudo leer desde la sesión en la nube, por la política de red;
+  - solo se ha probado hasta 20 términos y no se harán pruebas de carga sin consultar.
+- **Frecuencias:**
+  - se cuentan solo en el PC del responsable (`scripts/vocab-frecuencias.mjs`);
+  - se excluye la carpeta 28.10.26;
+  - un 0 en las plantillas no significa que el término sea raro, porque describen sobre todo exámenes normales;
+  - la frecuencia definitiva requiere una exportación local de informes de TC de un período completo, y al repositorio solo pueden llegar los totales agregados.
+- **Verificación del flujo (no es medición):**
+  - en un contenedor Linux se ejecutó el flujo completo con el laboratorio real y un **Muse simulado** que se equivoca a propósito en 12 términos;
+  - fase A: 100 ejecuciones; detectó los 12 términos y ningún otro;
+  - ranking: 12 elegibles, solo la variante de 10 posible y las de 25, 50 y 100 omitidas;
+  - fase B: 336 ejecuciones y la regla aplicada;
+  - no dice nada sobre Muse real.
