@@ -59,7 +59,6 @@ history.replaceState(null, '', location.pathname);
 function refresh() {
   $('join').disabled = !!client;
   $('record').disabled = document.hidden || !paired || !!(recording && !['starting', 'recording'].includes(recording.state));
-  $('prepare').hidden = prepared; $('prepare').disabled = preparing;
   $('test-signal').hidden = prepared; $('test-signal').disabled = preparing;
   $('modes').disabled = !!recording || preparing;
   $('haptics').disabled = !!recording;
@@ -139,9 +138,9 @@ async function prepare(useSynthetic = false) {
     };
     if (stream) stream.getAudioTracks()[0].onended = () => { abort('El sistema interrumpió el micrófono.'); releaseMicrophone(); };
     context.onstatechange = () => {
-      if (prepared && context && context.state !== 'running') { abort('La captura se suspendió. Prepara de nuevo el micrófono.'); releaseMicrophone(); }
+      if (prepared && context && context.state !== 'running') { abort('La captura se suspendió. Usa el botón de dictado para volver a empezar.'); releaseMicrophone(); }
     };
-    prepared = true; preparing = false;lifecycleEvent('microphone-ready',{prepareMs:performance.now()-prepareStart});$('prepare').textContent='Preparar micrófono';
+    prepared = true; preparing = false;lifecycleEvent('microphone-ready',{prepareMs:performance.now()-prepareStart});
     prepareMs = performance.now() - prepareStart;
     const settings = stream?.getAudioTracks()[0].getSettings() ?? {};
     const flag = value => value === undefined ? 'no informado' : value ? 'sí' : 'no';
@@ -151,7 +150,7 @@ async function prepare(useSynthetic = false) {
   } catch (error) {
     obtained?.getTracks().forEach(t => t.stop());
     if (generation !== epoch) return;
-    releaseMicrophone(); status(error.name === 'NotAllowedError' ? 'Permiso denegado. Habilita el micrófono para este sitio y vuelve a prepararlo.' : `No se pudo preparar el micrófono: ${error.message}`, 'error');
+    releaseMicrophone(); status(error.name === 'NotAllowedError' ? 'Permiso denegado. Habilita el micrófono para este sitio y pulsa el botón de dictado.' : `No se pudo preparar el micrófono: ${error.message}`, 'error');
   }
 }
 async function requestStart(){
@@ -220,7 +219,6 @@ $('join').onclick=()=>{
   if(!qrToken&&!/^[a-f0-9]{10}$/i.test($('join-code').value.replace(/[\s-]/g,''))){status('Introduce los 10 caracteres del código.','error');return;}
   const request=qrToken?{type:'join_qr',token:qrToken}:{type:'join',code:$('join-code').value};qrToken=null;openConnection(request);
 };
-$('prepare').onclick = () => prepare(false);
 $('test-signal').onclick = () => prepare(true);
 document.querySelectorAll('[name="mode"]').forEach(input => { input.onchange = () => { if (!recording) { mode = input.value; refresh(); } }; });
 const button = $('record');
@@ -240,7 +238,7 @@ $('close').onclick = () => { forgetResume(); if (recording) abort('Sesión final
 document.addEventListener('visibilitychange', () => {
  if(document.hidden){hiddenAt=performance.now();lifecycleEvent('hidden',{duringTake:!!recording});if(recording)abort('Pantalla oculta o bloqueada: toma interrumpida, no completada.');releaseMicrophone();if(paired&&client&&resumeToken){resumeUntil=Date.now()+300000;client.send({type:'suspend'});client.close();}}
  else {lifecycleEvent('visible',{hiddenDurationMs:hiddenAt===null?null:performance.now()-hiddenAt});hiddenAt=null;
-  if(paired&&client){$('prepare').textContent='Reactivar micrófono';status('Volviste a la pantalla. Usa el botón de dictado para preparar el micrófono y empezar.');}
+  if(paired&&client){status('Volviste a la pantalla. Usa el botón de dictado para preparar el micrófono y empezar.');}
   else if(resumeToken)reconnect();else status('La conexión terminó. Crea una sesión en el PC y escanea el nuevo QR.');refresh();}
 });
 window.addEventListener('pagehide', () => { if (recording) client?.send({ type: 'abort' }); releaseMicrophone(); client?.close(); });

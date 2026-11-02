@@ -14,7 +14,9 @@ test('la vista móvil conserva todos los elementos que usa mobile.js', () => {
 test('el control de grabar queda en la vista principal y lo técnico en Más opciones', () => {
   const opciones = html.slice(html.indexOf('class="more-options"'));
   const principal = html.slice(0, html.indexOf('class="more-options"'));
-  for (const id of ['status', 'duration', 'level', 'prepare', 'record', 'modes']) assert.ok(principal.includes(`id="${id}"`), id);
+  for (const id of ['status', 'duration', 'level', 'record', 'modes']) assert.ok(principal.includes(`id="${id}"`), id);
   for (const id of ['restart', 'export-lifecycle', 'capture-info', 'rtt', 'close', 'test-signal', 'test-haptics']) assert.ok(opciones.includes(`id="${id}"`), id);
   assert.match(html.slice(html.indexOf('</details>')), /sin validación clínica/);
 });
+
+ test('sin botón separado de preparación ni acceso JS a elemento eliminado',()=>{assert.doesNotMatch(fs.readFileSync('apps/mobile/index.html','utf8'),/id="prepare"/);assert.doesNotMatch(fs.readFileSync('apps/mobile/mobile.js','utf8'),/\$\('prepare'\)/);});

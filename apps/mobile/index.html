@@ -13,8 +13,7 @@
 <section id="join-panel" class="card"><label for="join-code" class="input-label">Código del computador</label><input id="join-code" class="code-input" placeholder="Ej. A12B34C56D" maxlength="14" autocomplete="off" autocapitalize="characters" spellcheck="false"><button id="join" class="primary">Conectar con el PC</button></section>
 <div id="confirm-panel" class="confirm" hidden><p>Confirma este número en el computador:</p><strong id="confirm-code"></strong></div>
 <section id="controls" class="control-card" hidden>
-  <button id="prepare" class="primary">Preparar micrófono</button>
-  <p class="tiny prepare-note">Prepara el micrófono una vez. Entre tomas permanece activo, pero su audio no se guarda ni se envía.</p>
+  <p class="tiny prepare-note">El botón de dictado prepara el micrófono. Espera «Grabando» antes de hablar. Entre tomas, el audio se descarta.</p>
   <button id="record" class="record-button" disabled><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="12" y="4" width="8" height="16" rx="4"></rect><path d="M8 15v2a8 8 0 0 0 16 0v-2M16 25v4M11 29h10"></path></svg><span id="record-label">Mantén pulsado para hablar</span></button>
   <fieldset id="modes" class="mode-selector"><legend>Forma de grabar</legend><label><input type="radio" name="mode" value="hold" checked><span>Mantener pulsado</span></label><label><input type="radio" name="mode" value="toggle"><span>Inicio / parada</span></label></fieldset>
 </section>
@@ -30,7 +29,7 @@
   </div>
   <button id="restart" class="quiet">Reiniciar sesión</button>
   <button id="export-lifecycle" class="quiet">Exportar diagnóstico de interrupciones</button>
-  <p class="tiny privacy-note">Al bloquear o cambiar de aplicación se libera el micrófono. Vuelve y pulsa Reactivar micrófono; si se perdió la conexión, empareja de nuevo. Las tomas guardadas permanecen en el laboratorio.</p>
+  <p class="tiny privacy-note">Al bloquear o cambiar de aplicación se libera el micrófono. Vuelve a la misma pestaña antes de cinco minutos y usa el botón de dictado. Si la sesión venció, escanea un nuevo QR desde el PC.</p>
 </details>
 <p class="tiny prototype-note">Prototipo de investigación, sin validación clínica. No uses datos de pacientes.</p>
 </main></div></body></html>
