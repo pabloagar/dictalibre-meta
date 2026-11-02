@@ -1,0 +1,266 @@
+{
+  "schema": "dictation-breadth-summary-v1",
+  "build": "3c576f21b696afbfe9c5260a6094e4e4711af7c2",
+  "protocolHash": "690be97681e63c32fcd5329c07de589bab71d2af194d2cf86f78b69733b279f9",
+  "resultsHash": "58891cea5c84f2b6d6ee5ac2e6b229827323245b6e409a32ab76b47d0daf71a9",
+  "sourceHashes": {
+    "backend/muse-stream.mjs": "e6474a7a2a133ae6e5106bf37ce2fa3dd5845e55ac2c01ffa2ab36b66b03120b",
+    "backend/stream-audio.mjs": "b674779b60211b7a7063ed80913ad0917409cc6a1a5e6bd323df1f3dc19fe682",
+    "backend/speech-turns.mjs": "e41d30905cfe451694e8c86d9007cfde73b1499653421d48822eb2b13becd5da",
+    "backend/lab-core.mjs": "ece51b5330bb3deb30c321e67c5482408250d83188a378cd160d35642275d199",
+    "backend/format-pipeline.mjs": "608c33a4e10260f5344668db31783dee9d6f3b299bf08a72ecc929cd6c9bd0f1",
+    "backend/number-format.mjs": "515dde26d40cf22b860d445e7ab10d9feca66ff0b17a2c0b3ecd392eb79b5953",
+    "backend/term-format.mjs": "b293bb315fcebcd21e3eabb252dd9c7dcfb01ec085b7dfc279ecae9e634dea19",
+    "backend/dictation-commands.mjs": "f8554af66d51dfed302c45a2108933c06c887d2e5747d3064747b2c18d971881",
+    "backend/spoken-colon.mjs": "58f0ab281cb767078c5eea73545880edcc925d7a264bda8a96660bd558f62cba",
+    "data/vocabulario/formas-dictadas.v1.json": "67fd6f32dec31ed260b6d434df2ea1f83b592e9dd2fe96f0a92fad56aaad9aab"
+  },
+  "configuration": {
+    "model": "muse-voice-transcribe-1.0",
+    "variants": [
+      {
+        "id": "baseline",
+        "keywords": []
+      }
+    ],
+    "segmentation": "manual"
+  },
+  "referencesHumanValidated": false,
+  "distinctScripts": 24,
+  "voices": [
+    "Microsoft Helena Desktop",
+    "Microsoft Laura"
+  ],
+  "repetitions": 1,
+  "total": {
+    "runs": 49,
+    "completed": 49,
+    "exactFormatted": 40,
+    "rawTermSequence": 41,
+    "formattedTermSequence": 41,
+    "rawPolarityLaterality": 49,
+    "formattedPolarityLaterality": 49,
+    "formattedQuantitiesUnits": 49
+  },
+  "byVoice": {
+    "Microsoft Helena Desktop": {
+      "runs": 24,
+      "completed": 24,
+      "exactFormatted": 20,
+      "rawTermSequence": 20,
+      "formattedTermSequence": 20,
+      "rawPolarityLaterality": 24,
+      "formattedPolarityLaterality": 24,
+      "formattedQuantitiesUnits": 24
+    },
+    "Microsoft Laura": {
+      "runs": 24,
+      "completed": 24,
+      "exactFormatted": 19,
+      "rawTermSequence": 20,
+      "formattedTermSequence": 20,
+      "rawPolarityLaterality": 24,
+      "formattedPolarityLaterality": 24,
+      "formattedQuantitiesUnits": 24
+    }
+  },
+  "byCategory": {
+    "thorax": {
+      "runs": 14,
+      "completed": 14,
+      "exactFormatted": 10,
+      "rawTermSequence": 11,
+      "formattedTermSequence": 11,
+      "rawPolarityLaterality": 14,
+      "formattedPolarityLaterality": 14,
+      "formattedQuantitiesUnits": 14
+    },
+    "abdomen": {
+      "runs": 10,
+      "completed": 10,
+      "exactFormatted": 7,
+      "rawTermSequence": 7,
+      "formattedTermSequence": 7,
+      "rawPolarityLaterality": 10,
+      "formattedPolarityLaterality": 10,
+      "formattedQuantitiesUnits": 10
+    },
+    "neurology": {
+      "runs": 6,
+      "completed": 6,
+      "exactFormatted": 6,
+      "rawTermSequence": 6,
+      "formattedTermSequence": 6,
+      "rawPolarityLaterality": 6,
+      "formattedPolarityLaterality": 6,
+      "formattedQuantitiesUnits": 6
+    },
+    "bone": {
+      "runs": 4,
+      "completed": 4,
+      "exactFormatted": 4,
+      "rawTermSequence": 4,
+      "formattedTermSequence": 4,
+      "rawPolarityLaterality": 4,
+      "formattedPolarityLaterality": 4,
+      "formattedQuantitiesUnits": 4
+    },
+    "numbers": {
+      "runs": 8,
+      "completed": 8,
+      "exactFormatted": 8,
+      "rawTermSequence": 8,
+      "formattedTermSequence": 8,
+      "rawPolarityLaterality": 8,
+      "formattedPolarityLaterality": 8,
+      "formattedQuantitiesUnits": 8
+    },
+    "commands": {
+      "runs": 4,
+      "completed": 4,
+      "exactFormatted": 2,
+      "rawTermSequence": 2,
+      "formattedTermSequence": 2,
+      "rawPolarityLaterality": 4,
+      "formattedPolarityLaterality": 4,
+      "formattedQuantitiesUnits": 4
+    },
+    "literal-correction": {
+      "runs": 2,
+      "completed": 2,
+      "exactFormatted": 2,
+      "rawTermSequence": 2,
+      "formattedTermSequence": 2,
+      "rawPolarityLaterality": 2,
+      "formattedPolarityLaterality": 2,
+      "formattedQuantitiesUnits": 2
+    },
+    "silence": {
+      "runs": 1,
+      "completed": 1,
+      "exactFormatted": 1,
+      "rawTermSequence": 1,
+      "formattedTermSequence": 1,
+      "rawPolarityLaterality": 1,
+      "formattedPolarityLaterality": 1,
+      "formattedQuantitiesUnits": 1
+    }
+  },
+  "silence": [
+    {
+      "status": "completed",
+      "empty": true
+    }
+  ],
+  "differences": [
+    {
+      "caseId": "microsoft-helena-desktop-pleural-air",
+      "status": "completed",
+      "script": "Se identifica neumotórax basal izquierdo de pequeña cuantía punto",
+      "raw": "Se identifican hemotórax vasal izquierdo de pequeña cuantía punto",
+      "expected": "Se identifica neumotórax basal izquierdo de pequeña cuantía.",
+      "formatted": "Se identifican hemotórax vasal izquierdo de pequeña cuantía.",
+      "rawTermsCorrect": false,
+      "rawPolarityLateralityCorrect": true,
+      "formattedQuantitiesUnitsCorrect": true
+    },
+    {
+      "caseId": "microsoft-helena-desktop-pleural-blood",
+      "status": "completed",
+      "script": "El control muestra hemotórax derecho sin neumotórax asociado punto",
+      "raw": "El control muestra emotorax derecho sin neumotórax asociado punto.",
+      "expected": "El control muestra hemotórax derecho sin neumotórax asociado.",
+      "formatted": "El control muestra emotorax derecho sin neumotórax asociado.",
+      "rawTermsCorrect": false,
+      "rawPolarityLateralityCorrect": true,
+      "formattedQuantitiesUnitsCorrect": true
+    },
+    {
+      "caseId": "microsoft-helena-desktop-liver",
+      "status": "completed",
+      "script": "Esteatosis hepática sin hepatomegalia punto",
+      "raw": "Este Atosis hepática sin hepatomegalia punto.",
+      "expected": "Esteatosis hepática sin hepatomegalia.",
+      "formatted": "Este Atosis hepática sin hepatomegalia.",
+      "rawTermsCorrect": false,
+      "rawPolarityLateralityCorrect": true,
+      "formattedQuantitiesUnitsCorrect": true
+    },
+    {
+      "caseId": "microsoft-helena-desktop-headings",
+      "status": "completed",
+      "script": "Hallazgos dos puntos nueva línea aorta de calibre normal punto nuevo párrafo impresión dos puntos nueva línea sin aneurisma punto",
+      "raw": "Hallazgos dos punto nueva línea horta de calibre normal punto nuevo párrafo impresión dos puntos nueva línea sin aneurisma punto.",
+      "expected": "Hallazgos:\nAorta de calibre normal.\n\nImpresión:\nSin aneurisma.",
+      "formatted": "Hallazgos:\nhorta de calibre normal.\n\nImpresión:\nsin aneurisma.",
+      "rawTermsCorrect": false,
+      "rawPolarityLateralityCorrect": true,
+      "formattedQuantitiesUnitsCorrect": true
+    },
+    {
+      "caseId": "microsoft-laura-pleural-air",
+      "status": "completed",
+      "script": "Se identifica neumotórax basal izquierdo de pequeña cuantía punto",
+      "raw": "Se identifican hemotórax basal izquierdo de pequeña cuantía. Punto.",
+      "expected": "Se identifica neumotórax basal izquierdo de pequeña cuantía.",
+      "formatted": "Se identifican hemotórax basal izquierdo de pequeña cuantía.",
+      "rawTermsCorrect": false,
+      "rawPolarityLateralityCorrect": true,
+      "formattedQuantitiesUnitsCorrect": true
+    },
+    {
+      "caseId": "microsoft-laura-chest-wall",
+      "status": "completed",
+      "script": "Engrosamiento de partes blandas del hemitórax izquierdo punto",
+      "raw": "engrosamiento de partes blandas del hemitorax izquierdo. Punto.",
+      "expected": "Engrosamiento de partes blandas del hemitórax izquierdo.",
+      "formatted": "Engrosamiento de partes blandas del hemitorax izquierdo.",
+      "rawTermsCorrect": true,
+      "rawPolarityLateralityCorrect": true,
+      "formattedQuantitiesUnitsCorrect": true
+    },
+    {
+      "caseId": "microsoft-laura-renal",
+      "status": "completed",
+      "script": "Litiasis ureteral izquierda de cuatro milímetros con hidronefrosis leve punto",
+      "raw": "Lithiasis ureteral izquierda de cuatro milímetros con hidronefrosis leve punto.",
+      "expected": "Litiasis ureteral izquierda de 4 milímetros con hidronefrosis leve.",
+      "formatted": "Lithiasis ureteral izquierda de 4 milímetros con hidronefrosis leve.",
+      "rawTermsCorrect": false,
+      "rawPolarityLateralityCorrect": true,
+      "formattedQuantitiesUnitsCorrect": true
+    },
+    {
+      "caseId": "microsoft-laura-liver",
+      "status": "completed",
+      "script": "Esteatosis hepática sin hepatomegalia punto",
+      "raw": "Este atosis hepática sin hepatomegalia punto.",
+      "expected": "Esteatosis hepática sin hepatomegalia.",
+      "formatted": "Este atosis hepática sin hepatomegalia.",
+      "rawTermsCorrect": false,
+      "rawPolarityLateralityCorrect": true,
+      "formattedQuantitiesUnitsCorrect": true
+    },
+    {
+      "caseId": "microsoft-laura-headings",
+      "status": "completed",
+      "script": "Hallazgos dos puntos nueva línea aorta de calibre normal punto nuevo párrafo impresión dos puntos nueva línea sin aneurisma punto",
+      "raw": "Hallazgos dos puntos nueva línea Horta de calibre normal punto nuevo párrafo impresión dos puntos nueva línea sin aneurisma punto",
+      "expected": "Hallazgos:\nAorta de calibre normal.\n\nImpresión:\nSin aneurisma.",
+      "formatted": "Hallazgos:\nHorta de calibre normal.\n\nImpresión:\nsin aneurisma.",
+      "rawTermsCorrect": false,
+      "rawPolarityLateralityCorrect": true,
+      "formattedQuantitiesUnitsCorrect": true
+    }
+  ],
+  "exploratoryGatePassed": false,
+  "productionChanges": false,
+  "limits": [
+    "Synthetic es-ES voices; input scripts are provisional references, not human-listened truth.",
+    "Mechanical term/marker/quantity checks are not complete semantic or clinical adjudication.",
+    "One run per WAV; no confidence interval or causal comparison with prior corpora.",
+    "Separate local server, shared provider account; no phone latency claims.",
+    "Exact text differences include harmless spelling/punctuation and substantive errors; inspect full differences."
+  ],
+  "scorerHash": "e286f8658cc9df4d7849ad42ff931694aeb7dc132be48b7d97db905df1fc98fc"
+}
