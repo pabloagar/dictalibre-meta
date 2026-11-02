@@ -558,3 +558,9 @@ html[data-boot-theme="ambar"] {background:#110e0a;color:#d8c9b0}
 
 
 body.dicta-access{background:#e2ded4;color:#2b2823} .dicta-access .phone-shell{max-width:480px;margin:6vh auto;padding:24px}.dicta-access header{border-color:#c9c1b3}.dicta-access .card{background:#ebe7dd;border-color:#c9c1b3}.dicta-access h1{font-size:26px;line-height:1.25}.dicta-access .code-input{background:#e5e1d7;color:#2b2823;border-color:#c9c1b3}.dicta-access .primary{background:#45403a;color:#ebe7dd}.dicta-access .tiny,.dicta-access .tag{color:#5b554b}
+
+/* Keep the proposed correction distinct from diagnostic explanations. */
+.clinical-workspace .report-global-review article.correction-proposal{border-left:4px solid var(--dl-accent);background:var(--dl-sheet)}
+.clinical-workspace .report-global-review article:focus{outline:2px solid var(--dl-accent);outline-offset:3px}
+.clinical-workspace .report-global-review .correction-proposal>strong{display:block;margin:8px 0}
+.clinical-workspace .report-global-review .accept-correction{background:var(--dl-accent);color:var(--dl-bg);font-weight:700}
