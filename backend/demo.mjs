@@ -8,6 +8,7 @@ import {createRelay} from './server.mjs';
 import {attachMuseStream} from './muse-stream.mjs';
 import {applyFormatting} from './format-pipeline.mjs';
 import {configuration} from './lab-core.mjs';
+import {MVP_KEYWORDS} from './mvp-glossary.mjs';
 import {validateGlossary,glossaryToConfig} from './vocabulary.mjs';
 import {NUMBER_VERSION} from './number-format.mjs';
 import {TERM_VERSION} from './term-format.mjs';
@@ -28,7 +29,10 @@ export function createDemo({accessCode,metaKey='',reviewProvider=reviewWithMeta,
   const origin=new URL(publicOrigin).origin;
   const secure=origin.startsWith('https:');
   const visitors=new Map(),logins=new Map();
-  const configs=[{...configuration({engine:'muse',name:'Muse · demo'}),id:'demo-muse',createdAt:null,readOnly:true}];
+  const configs=[
+    {...configuration({engine:'muse',name:'Glosario MVP',keywords:[...MVP_KEYWORDS]}),id:'demo-muse',createdAt:null,readOnly:true},
+    {...configuration({engine:'muse',name:'Sin glosario'}),id:'demo-muse-no-glossary',createdAt:null,readOnly:true}
+  ];
   if(fs.existsSync(glossaryDir))for(const f of fs.readdirSync(glossaryDir).filter(f=>f.endsWith('.json')).sort()){try{configs.push(glossaryToConfig(validateGlossary(JSON.parse(fs.readFileSync(path.join(glossaryDir,f),'utf8')))));}catch(e){console.error(`Glosario omitido (${f}): ${e.message}`);}}
   const usage={day:null,audioMs:0};let activeStreams=0;
   const usedToday=()=>{const day=new Date(now()).toISOString().slice(0,10);if(usage.day!==day){usage.day=day;usage.audioMs=0;}return usage.audioMs;};

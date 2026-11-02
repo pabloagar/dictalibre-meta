@@ -103,7 +103,7 @@ reportEditor.element.before(desk);desk.append(sheet);sheet.append(sheetHead,repo
 const margin=make('aside','clinical-notes');margin.setAttribute('aria-label','Notas del estudio');desk.append(margin);
 const connectionNote=make('section','clinical-note neutral');connectionNote.append(make('h2','','Estado del teléfono'),document.querySelector('#record-help'));settingsBody.append(connectionNote);
 const glossaryText=make('p','tiny');
-const syncGlossary=()=>{const c=initialState.configs.find(c=>c.id===glossary.value);glossaryText.hidden=!c?.keywords?.length;glossaryText.textContent=c?.keywords?.length?`${c.keywords.length} términos para orientar el reconocimiento. Mejora sin medir.`:'';};syncGlossary();glossary.addEventListener('change',syncGlossary);
+const syncGlossary=()=>{const c=initialState.configs.find(c=>c.id===glossary.value);glossaryText.hidden=!c?.keywords?.length;glossaryText.textContent=c?.keywords?.length?`${c.keywords.length} términos para orientar el reconocimiento. ${initialState.demo&&c.id==='demo-muse'?'Evaluación preliminar; revisa el resultado.':'Mejora sin medir.'}`:'';};syncGlossary();glossary.addEventListener('change',syncGlossary);
 margin.append(figureAlert);
 const help=report.querySelector('.report-help');const editorHelp=makeDetails('Ayuda del editor','editor-help');editorHelp.append(help);settingsBody.append(editorHelp);
 // Settings is a single modal surface; controls retain their original handlers.

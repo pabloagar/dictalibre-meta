@@ -9,8 +9,8 @@ import {hash} from '../backend/lab-core.mjs';
 
 const freePort=async()=>{const s=net.createServer();s.listen(0,'127.0.0.1');await once(s,'listening');const {port}=s.address();s.close();await once(s,'close');return port;};
 function fakeMuse(final='categoría biurads cuatro a punto'){
-  const provider=new WebSocketServer({port:0});const seen={keys:[],hold:false,sockets:[]};
-  provider.on('connection',s=>{seen.sockets.push(s);let open=false;s.on('message',(b,binary)=>{if(binary)return;const m=JSON.parse(b);if(!open){open=true;seen.keys.push(m.authorization.accessToken);s.send(JSON.stringify({sessionId:'fixture'}));s.send(JSON.stringify({type:'transcript',transcript:'categoría',final:false}));}else if(m.type==='endStream'&&!seen.hold)s.send(JSON.stringify({type:'transcript',transcript:final,final:true,audioProcessedMs:100}));});});
+  const provider=new WebSocketServer({port:0});const seen={keys:[],keywords:[],hold:false,sockets:[]};
+  provider.on('connection',s=>{seen.sockets.push(s);let open=false;s.on('message',(b,binary)=>{if(binary)return;const m=JSON.parse(b);if(!open){open=true;seen.keys.push(m.authorization.accessToken);seen.keywords.push(m.keywords);s.send(JSON.stringify({sessionId:'fixture'}));s.send(JSON.stringify({type:'transcript',transcript:'categoría',final:false}));}else if(m.type==='endStream'&&!seen.hold)s.send(JSON.stringify({type:'transcript',transcript:final,final:true,audioProcessedMs:100}));});});
   return {provider,seen};
 }
 async function start(options={}){
@@ -21,10 +21,10 @@ async function start(options={}){
   const login=async(code='codigo-de-prueba',ip='10.0.0.1')=>{const r=await fetch(origin+'/demo/access',{method:'POST',redirect:'manual',headers:{Origin:origin,'Content-Type':'application/x-www-form-urlencoded','X-Forwarded-For':ip},body:new URLSearchParams({code})});return {status:r.status,cookie:r.headers.get('set-cookie')?.split(';')[0]??null,location:r.headers.get('location'),raw:r.headers.get('set-cookie')};};
   const get=(p,cookie)=>fetch(origin+p,{headers:cookie?{Cookie:cookie}:{},redirect:'manual'});
   const post=(p,cookie,body={})=>fetch(origin+p,{method:'POST',headers:{Origin:origin,Cookie:cookie,'Content-Type':'application/json'},body:JSON.stringify(body)});
-  const dictate=async(cookie,{end=true}={})=>{
+  const dictate=async(cookie,{end=true,configId='demo-muse'}={})=>{
     const ws=new WebSocket(origin.replace('http:','ws:')+'/asr-stream',{origin,headers:{Cookie:cookie}});await once(ws,'open');
     const messages=[];ws.on('message',b=>messages.push(JSON.parse(b)));const closed=once(ws,'close');
-    const pcm=Buffer.alloc(9600);ws.send(JSON.stringify({type:'start',rate:48000,configId:'demo-muse',commandsEnabled:true,numbersEnabled:true,termsEnabled:true}));
+    const pcm=Buffer.alloc(9600);ws.send(JSON.stringify({type:'start',rate:48000,configId,commandsEnabled:true,numbersEnabled:true,termsEnabled:true}));
     if(end){ws.send(pcm);ws.send(JSON.stringify({type:'end',pcmHash:hash(pcm)}));}
     return {ws,messages,closed};
   };
@@ -172,3 +172,14 @@ test('demo: revisor sin clave, cancelación y fallo del proveedor no alteran el 
   assert.equal(result.status,'error');assert.equal(result.baseText,'Fallo sintético');assert.equal(calls,2);assert.deepEqual(result.suggestions,[]);
  }finally{await d.stop();}
 });
+
+ test('demo: default evaluated glossary reaches provider and no-glossary remains selectable',async()=>{
+ const d=await start();try{
+ const {cookie}=await d.login();const state=await (await d.get('/api/state',cookie)).json();
+ const expected=JSON.parse(fs.readFileSync('tests/fixtures/human-glossary-plan.json','utf8')).keywords;
+ assert.equal(state.configs[0].id,'demo-muse');assert.deepEqual(state.configs[0].keywords,expected);
+ const first=await d.dictate(cookie);await first.closed;
+ const second=await d.dictate(cookie,{configId:'demo-muse-no-glossary'});await second.closed;
+ assert.deepEqual(d.seen.keywords,[expected,[]]);
+ }finally{await d.stop();}
+ });
