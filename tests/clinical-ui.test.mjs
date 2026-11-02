@@ -130,3 +130,15 @@ test('paleta: favorita por fila y guardar el informe actual como plantilla',asyn
  const star=[...document.querySelectorAll('.template-star')].find(b=>b.getAttribute('aria-label')==='Favorita: Mi estructura');star.click();assert.equal(JSON.parse(localStorage.getItem('dicta-template-favorites-v1')).length,1);
  assert.equal(editor.model.text,'Texto sintético de plantilla propia');await window.happyDOM.close();
 });
+
+test('Nuevo informe confirma, conserva preferencias y permite recuperar texto, sexo y contexto',async()=>{
+ const {window,editor,button}=setup();const paired=document.createElement('div');paired.id='paired';paired.hidden=false;document.body.append(paired);
+ assert.equal(button('Nuevo informe').disabled,true);editor.setSex('F');assert.equal(button('Nuevo informe').disabled,false);button('Nuevo informe').click();assert.equal(editor.getSex(),'—');button('Deshacer').click();assert.equal(editor.getSex(),'F');
+ editor.element.textContent='Texto sintético antes de limpiar';editor.element.dispatchEvent(new window.Event('input'));editor.model.templateContext={name:'Contexto sintético'};
+ button('A+').click();const size=editor.element.style.fontSize;localStorage.setItem('dicta-theme-v1','ambar');
+ button('Nuevo informe').click();assert.equal(document.querySelector('.new-report-confirm').hidden,false);button('Cancelar').click();assert.equal(editor.model.text,'Texto sintético antes de limpiar');
+ button('Nuevo informe').click();button('Vaciar y empezar').click();assert.equal(editor.model.text,'');assert.equal(editor.getSex(),'—');assert.equal(editor.model.templateContext,null);assert.equal(paired.hidden,false);assert.equal(editor.element.style.fontSize,size);assert.equal(localStorage.getItem('dicta-theme-v1'),'ambar');
+ button('Deshacer').click();assert.equal(editor.model.text,'Texto sintético antes de limpiar');assert.equal(editor.getSex(),'F');assert.equal(editor.model.templateContext.name,'Contexto sintético');button('Rehacer').click();assert.equal(editor.model.text,'');assert.equal(editor.getSex(),'—');
+ editor.setSex('M');editor.begin('synthetic-take');assert.equal(button('Nuevo informe').disabled,true);editor.cancel('synthetic-take');assert.equal(button('Nuevo informe').disabled,false);
+ await window.happyDOM.close();
+});
