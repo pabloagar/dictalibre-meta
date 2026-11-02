@@ -27,7 +27,7 @@ export function mountReportReview({controls,section,copyButton,snapshot,onCopy,e
     if(busy){status.textContent=same&&!s.pending?'Meta está revisando una copia del informe. Puedes seguir editando.':'Informe modificado: la revisión en curso corresponde al texto anterior.';return;}
     if(result){
       const stale=!same||s.pending;
-      status.textContent=stale?'Revisión desactualizada: el informe cambió. Revisa de nuevo antes de interpretar estos avisos.':result.status==='completed'?(result.suggestions.length?`${result.suggestions.length} aviso(s) para comprobar. No se aplican cambios automáticamente.`:'Meta no señaló inconsistencias. Esto no valida clínicamente el informe.'):`Revisión ${result.status}: ${result.error??''}`;
+      status.textContent=stale?'Revisión desactualizada: el informe cambió. Revisa de nuevo antes de interpretar estos avisos.':result.status==='completed'?(result.suggestions.length?`${result.suggestions.length} aviso(s) para comprobar. No se aplican cambios automáticamente.`:'No hay correcciones concretas ni contradicciones señaladas. Esto no valida clínicamente el informe.'):`Revisión ${result.status}: ${result.error??''}`;
       box.dataset.stale=String(stale);
     }
   }

@@ -54,7 +54,7 @@ test('toma conserva contexto inmutable; global conserva snapshot, deduplica y re
  const inputs=[],db={runs:[{id:'r',status:'completed',text:'Ate tacia.',configuration:{keywords:[]},reviewContext:{templateName:'TC',reportText:'Hallazgos previos.'}}]};
  const q=createReviewer({db,save(){},getKey:()=>'',provider:async input=>{inputs.push(structuredClone(input));return {content:JSON.stringify({suggestions:input.reviewScope==='report'?[warning]:[]})};}});
  try{const take=q.enqueue('r');db.runs[0].reviewContext.reportText='CAMBIADO';await wait(()=>take.status==='completed');assert.equal(inputs[0].context.reportText,'Hallazgos previos.');
- const global=q.enqueueReport({text,context:{templateName:'TC'}});assert.equal(q.enqueueReport({text,context:{templateName:'TC'}}).id,global.id);await wait(()=>global.status==='completed');assert.equal(global.baseText,text);assert.equal(global.suggestions[0].evidence.length,2);assert.ok(global.timings.requestMs>=0);assert.equal(global.config.promptVersion,'report-consistency-v3-explicit-proposals');
+ const global=q.enqueueReport({text,context:{templateName:'TC'}});assert.equal(q.enqueueReport({text,context:{templateName:'TC'}}).id,global.id);await wait(()=>global.status==='completed');assert.equal(global.baseText,text);assert.equal(global.suggestions[0].evidence.length,2);assert.ok(global.timings.requestMs>=0);assert.equal(global.config.reasoning_effort,'medium');assert.equal(global.config.max_completion_tokens,8000);assert.equal(global.config.promptVersion,'report-consistency-v4-actionable');
  assert.notEqual(q.enqueueReport({text,context:{templateName:'RM'}}).inputHash,global.inputHash);
  global.config.promptHash='previous-prompt';assert.notEqual(q.enqueueReport({text,context:{templateName:'TC'}}).id,global.id);
  assert.throws(()=>q.enqueueReport({text:' '}));assert.throws(()=>q.enqueueReport({text:'x'.repeat(20001)}));
@@ -93,4 +93,29 @@ test('contexto v2: descarta texto de plantilla y acepta ficha y sección acotada
  assert.equal(c.templateOrigin,'importada');assert.equal(c.sectionTitle,'HALLAZGOS');assert.equal(c.sectionText,'Sin derrame.');
  assert.throws(()=>reviewContext({sectionText:'x'.repeat(3001)}));assert.throws(()=>reviewContext({sectionTitle:'x'.repeat(201)}));
  assert.throws(()=>reviewContext({templateOrigin:'otra'}));
+});
+
+test('global: omite dudas vagas y propuestas idénticas, conserva interpretación protegida y contradicción',()=>{
+ const text='Lesión de siete milimetrijilos. Hallazgo derecho. Hallazgo izquierdo.';
+ const base={original:'milimetrijilos',replacement:null,category:'terminology',kind:'ambiguous_term',reason:'Término dudoso.',evidence:['milimetrijilos']};
+ const validate=s=>validateReportEvidence(JSON.stringify({suggestions:s}),text,validateReview);
+ assert.deepEqual(validate([base]),[]);
+ assert.deepEqual(validate([{...base,replacement:'milimetrijilos'}]),[]);
+ const protectedProposal=validate([{...base,replacement:'milímetros'}])[0];
+ assert.equal(protectedProposal.replacement,null);assert.equal(protectedProposal.proposedReplacement,'milímetros');assert.equal(protectedProposal.guarded,true);
+ const contradiction={original:'Hallazgo derecho.',replacement:null,category:'sensitive',kind:'contradiction',reason:'Lados incompatibles para el mismo hallazgo.',evidence:['Hallazgo derecho.','Hallazgo izquierdo.']};
+ assert.equal(validate([base,contradiction]).length,1);
+ assert.throws(()=>validate([{...contradiction,evidence:['Hallazgo derecho.']}]).length===1);
+});
+
+test('global contabiliza dudas suprimidas y no reutiliza resultado de otro esfuerzo',async()=>{
+ const db={runs:[]};const provider=async()=>({content:JSON.stringify({suggestions:[{original:'Término dudoso.',replacement:null,category:'sensitive',kind:'ambiguous_term',reason:'Sin alternativa concreta.',evidence:['Término dudoso.']}]})});
+ const q=createReviewer({db,save(){},getKey:()=>'',provider});
+ try{
+ const r=q.enqueueReport({text:'Término dudoso.'});await wait(()=>r.status==='completed');
+ assert.equal(r.suggestions.length,0);assert.equal(r.suppressedSuggestionCount,1);
+ r.config.reasoning_effort='low';
+ const next=q.enqueueReport({text:'Término dudoso.'});assert.notEqual(next.id,r.id);
+ await wait(()=>next.status==='completed');
+ }finally{q.close();}
 });
