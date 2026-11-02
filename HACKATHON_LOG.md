@@ -290,3 +290,10 @@ Solicitud: seguir los HTML Hoja clínica v3/propuesta-b-v3; las capturas son con
 Validación del árbol de trabajo basado en 9f88027: pnpm check y pnpm test, 125/125, Windows y Node v24.22.1, una ejecución final de suite; hubo iteraciones documentadas en METRICS.md. Sin audio, ASR, datos de pacientes ni llamadas Meta. Pruebas DOM sintéticas con Happy DOM: no sustituyen verificación gráfica. Control del navegador devolvió rechazo de acceso local; control nativo se detuvo porque no pudo verificar la URL con confianza. Capturas/medidas visuales: null; queda pendiente validar fidelidad, desbordamientos y móvil en navegador real.
 
 Publicación: revisión del diff y auditoría automática detectaron únicamente el DOCX outputs/Dicta_Libre_instrucciones_redisenar_laboratorio.docx ya existente en el historial, sin cambios en esta entrega. No se añade audio, plantillas privadas ni exportación de laboratorio. Fuentes y licencias públicas incluidas. Responsable autorizó reinicio del laboratorio en este chat. Commit y verificación de versión activa se registran en la entrada siguiente tras desplegar.
+
+
+### Activación de Hoja clínica v4
+
+Código publicado en GitHub, rama codex/capture-transport: 68bb8f85e901da24d7b486eb1e91440a5906d37d. Reinicio autorizado y ejecutado del laboratorio local. /api/state devuelve ese build y sourceHash 8e81a1aa5447d3c73ae324b0d2184c48a1ccad19e1e8bd05a24b6cbe5ebb8e8c. Verificación HTTP en http://127.0.0.1:8789: live.js, receiver.css, report-editor.js, Public Sans 400 y Source Serif 4 400 devueltos con 200, MIME correcto y SHA-256 idéntico a los archivos publicados. El servidor sirve esta misma carpeta; no se necesitó copiar a otra. La entrada de activación se publica en un commit documental posterior, sin cambiar el código servido.
+
+Pendiente: recarga y verificación gráfica en navegador real, bloqueadas por el control de equipo. Las pestañas que ya estaban abiertas pueden conservar la interfaz anterior hasta recargar. No se reinició el relay ni se comprobó un despliegue remoto de Render. No quedan cambios de código exclusivamente locales; logs de prueba y auditoría quedan en .runtime/data/local excluidos de Git.
