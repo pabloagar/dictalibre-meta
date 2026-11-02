@@ -1,7 +1,8 @@
 // Cuenta, SOLO EN EL PC DEL RESPONSABLE, cuántas veces aparece cada candidato en las plantillas de TC de tórax.
-// Uso: node scripts/vocab-frecuencias.mjs [--catalogo data/local/templates/catalog.json] [--ids lista-ids.txt] [--excluir 28.10.26]
+// Uso: node scripts/vocab-frecuencias.mjs [--catalogo data/local/templates/catalog.json] [--ids lista-ids.txt] [--excluir 28.10.26] [--solo-totales]
 // Escribe solo totales agregados en data/local/vocabulario/ (fuera de Git). Nunca escribe textos, nombres ni rutas.
-// Los nombres de las plantillas elegidas se muestran SOLO en consola para que el responsable valide el filtro.
+// Los nombres de las plantillas elegidas se muestran SOLO en consola para validar el filtro; --solo-totales los oculta
+// (útil si la salida se va a pegar en un chat o compartir).
 import fs from 'node:fs';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
@@ -20,8 +21,8 @@ const vocab = JSON.parse(fs.readFileSync(path.join('data', 'vocabulario', 'candi
 const ids = idsPath ? new Set(fs.readFileSync(idsPath, 'utf8').split(/\r?\n/).map(s => s.trim()).filter(Boolean)) : null;
 const esTorax = t => ids ? ids.has(t.id) : t.category === 'Tomografía' && /torax|pulmon|tromboemb|\btep\b/.test(plain(t.name ?? ''));
 const plantillas = (catalog.templates ?? []).filter(esTorax);
-console.log(`Plantillas elegidas (${plantillas.length}); revisa que todas sean TC de tórax. Esta lista NO se guarda:`);
-for (const t of plantillas) console.log('  ' + t.name);
+if (process.argv.includes('--solo-totales')) console.log(`Plantillas elegidas: ${plantillas.length} (nombres ocultos por --solo-totales).`);
+else { console.log(`Plantillas elegidas (${plantillas.length}); revisa que todas sean TC de tórax. Esta lista NO se guarda:`); for (const t of plantillas) console.log('  ' + t.name); }
 
 const r = countTermFrequencies({plantillas, terminos: vocab.candidatos.map(c => c.termino), excluirRutas: excluir});
 const out = {
@@ -36,5 +37,8 @@ fs.mkdirSync(dir, {recursive: true});
 const file = path.join(dir, 'frecuencias-tc-torax.json');
 fs.writeFileSync(file, JSON.stringify(out, null, 1));
 console.log(`\nTextos: ${r.textos.total} total, ${r.textos.excluidos_por_ruta} excluidos por ruta, ${r.textos.unicos_exactos} únicos exactos, ${r.textos.unicos_normalizados} únicos normalizados (${r.textos.criterio_normalizado}).`);
+const todo = countTermFrequencies({plantillas: catalog.templates ?? [], terminos: [], excluirRutas: excluir}).textos;
+console.log(`Catálogo completo: ${todo.total} plantillas, ${todo.excluidos_por_ruta} excluidas por ruta, ${todo.unicos_exactos} textos únicos exactos, ${todo.unicos_normalizados} únicos normalizados (para comparar con 230 y 285).`);
 console.log(`Términos con al menos una aparición: ${Object.values(r.apariciones).filter(n => n > 0).length} de ${vocab.candidatos.length}.`);
 console.log(`Guardado en ${file} (fuera de Git). Hash para el registro: ${stableHash(out.apariciones)}`);
+if (process.argv.includes('--solo-totales')) for (const [t, n] of Object.entries(r.apariciones).filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'es'))) console.log(`  ${t}: ${n} (${r.textos_con_termino[t]} textos)`);
