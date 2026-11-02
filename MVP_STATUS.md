@@ -1,51 +1,47 @@
-# MVP · corte del 02-11-2026
+# MVP · cierre actualizado al 02-11-2026
 
-Aplicación activa en Render y laboratorio: `16b62ff`; código evaluado `72f25f0`, sin cambios posteriores de backend/frontend. 161/161 pruebas y sintaxis aprobadas. Evidencia: HACKATHON_LOG.md, tests/MVP_CORRECTIONS_PROTOCOL.md. Este corte sustituye estados anteriores del MVP; no declara validación clínica.
+Render activo: a24d976955d81497d48978b3df923d43c5915d61, despliegue dep-dbkeoct6e07s73cpj2e0 verificado. Glosario MVP predeterminado, alternativa Sin glosario. 205/205 regresiones y sintaxis aprobadas para ese código. Laboratorio local conserva su versión/configuración previa; no se ha reiniciado. Este estado sustituye el corte anterior, sin declarar validación clínica.
 
-## Diseño 1 · recorrido del usuario
+## Gráfico 1 · recorrido hacia la entrega
 
 ```text
-✅ Entrar a dicta y conectar Samsung [prueba comunicada]
-  ↓
-✅ Dictar, editar, copiar y nuevo informe [Samsung comunicado + pruebas técnicas]
-  ↓
-✅ Dos puntos y avisos Spark corregidos [evaluación + despliegue verificado]
-  ↓
-🟨 Volver de WhatsApp sin código [implementado; falta aceptación física final]
-  ↓
-🟨 Plantilla → dictado → revisión → copia [285 pruebas de modelo; falta recorrido físico completo]
-  ↓
-⬜ iPhone [Pablo, 03-11-2026]
-  ↓
-🟨 Calidad de voz humana y errores sensibles [15 audios repetidos; queda sustitución de término]
-  ↓
-⬜ Congelar versión → ensayo completo → video de respaldo → demo
+✅ Samsung: conectar → dictar → tomas en cola → nuevo informe
+✅ Glosario: seleccionado → tres frases correctas comunicadas por usuario
+                    ↓
+🟨 Recorrido completo: plantilla → dictado → deshacer/rehacer → revisar → copiar
+🟨 Últimos cambios móviles: escáner QR y recuperación de 3–4 minutos
+                    ↓
+⬜ iPhone: Safari, permisos, captura y regreso de otra aplicación
+                    ↓
+⬜ Congelar versión → ensayo completo → video de respaldo → entrega
 ```
 
-## Diseño 2 · diez etapas originales
+## Gráfico 2 · diez etapas
 
-| Etapa | Avance orientativo | Para cerrar el alcance MVP |
+| Etapa | Estado MVP | Cierre pendiente |
 |---|---|---|
-| 1. Captura | 🟩🟩🟨 | iPhone: inicio/final, permisos, interrupciones |
-| 2. Conexión | 🟩🟩🟨 | Aceptación física WhatsApp/bloqueo y recuperación sin grabar sola |
-| 3. Segmentación | 🟩🟩🟩 | Manual fijada para demo; automática fuera del cierre |
-| 4. Reconocimiento | 🟩🟩🟨 | Referencias humanas y sustitución neumotórax→hemotórax |
-| 5. Comandos y formato | 🟩🟩🟨 | Corrección probada; repetir medidas/negaciones/comandos con voz física |
-| 6. Fusión de motores | ➖ | Diferida; no bloquea MVP |
-| 7. Terminología | 🟩🟨⬜ | Medir error con referencia escuchada; comparar glosario solo si procede |
-| 8. Revisión con IA | 🟩🟩🟨 | Spark público verificado; aceptación humana y límites de falsos negativos |
-| 9. Editor y plantillas | 🟩🟩🟨 | 285 pruebas de modelo + una plantilla en navegador; recorrido físico completo |
-| 10. Evaluación y entrega | 🟩🟩🟨 | Prueba física, decisión de calidad, congelación y grabación |
+| 1. Captura | Samsung confirmado | iPhone |
+| 2. Conexión | Retorno breve sin código confirmado | QR integrado, 3–4 minutos y vencimiento; iPhone |
+| 3. Segmentación | Lista para MVP | Mantener cierre manual; automática diferida |
+| 4. Reconocimiento | Aceptado preliminarmente | Repetición solo si surge un fallo; otras voces después |
+| 5. Comandos/formato | Probado; medidas correctas | Saltos de línea en recorrido final; comas adicionales conocidas |
+| 6. Fusión de motores | Diferida | No bloquea MVP |
+| 7. Terminología | Glosario activo y confirmado | No pedir otra tanda humana para esta adopción |
+| 8. Revisión IA | Activa; integración verificada | Aceptación en recorrido completo, sin cambios automáticos |
+| 9. Editor/plantillas | Implementado y probado técnicamente | Resultado físico de plantilla/deshacer/rehacer/copiar pendiente |
+| 10. Entrega | Pendiente | iPhone, ensayo, versión fija y video |
 
-🟩 realizado dentro del alcance · 🟨 validación parcial/pendiente · ⬜ tarea pendiente · ➖ diferido. No son porcentajes ni medidas de precisión. Samsung deriva en parte de resultados comunicados por Pablo, no de una repetición actual del agente. Los 285 casos no son 285 validaciones clínicas.
+Los estados no son porcentajes ni medidas de precisión. La aceptación Samsung es comunicada por el responsable y apoyada por captura; no fue una toma realizada por el agente.
 
-## Prioridades
+## Evidencia nueva y alcance
 
-1. Completar recorrido físico iPhone y reconexión; repetir en Samsung si reaparece un fallo.
-2. Validar por escucha referencias y términos sensibles. La segunda serie dio 13/15 coincidencias contra guiones provisionales: una tilde ausente y hemotórax por neumotórax, sin aviso de Spark. En ASR congelado solo la mejora 11→12/15 es atribuible al formateador.
-3. Probar dictado dentro de plantilla y origen del texto: diferenciar normalidad heredada de contenido añadido por reconocimiento. Reemplazo, deshacer, copia y nuevo informe no deben perder texto.
-4. Corregir bloqueantes, repetir casos fallidos y recorrido completo, congelar commit/configuración y grabar demo más video de respaldo. Conservar todos los resultados, no seleccionar solo los favorables.
+El usuario confirma Glosario MVP visible y tres frases correctas, sin cortes ni duplicados. La captura y el texto conservan esteatosis, hemotórax, sin neumotórax, hipodensa, 1,8 centímetros y lateralidad izquierda. Rapidez percibida como muy buena, duración medida null; no inferir latencia del cronómetro visible. Contexto Samsung S25 Ultra/Chrome comunicado previamente; red de esta toma y versión del navegador no confirmadas, null. Sin adjuntar captura ni texto del usuario al repositorio.
 
-Plan de mañana y tabla de registro: [tests/IPHONE_MVP.md](tests/IPHONE_MVP.md). No se necesita añadir otro motor, fusión, Tonos, plantillas por voz ni más rediseños para cerrar este alcance. Ningún resultado anterior garantiza ausencia general de invenciones.
+Comparación previa de 12 audios humanos: términos 8/12→12/12, coincidencia exacta con puntuación 7/12→10/12; dos regresiones de comas. Referencias confirmadas por usuario, una pasada por variante. Responsable aceptó adopción preliminar para MVP: no se cambia retroactivamente la puerta estricta del experimento. No se exige nueva tanda humana para cerrar esta decisión.
 
-Actualización de terminología: piloto equilibrado con neumotórax/hemotórax/hemitórax mejora coincidencias de términos de 8/12 a 12/12 en una voz sintética, dos repeticiones, sin regresiones observadas en controles. Sigue pendiente la prueba humana; no cambia el estado de cierre ni se activa el glosario en producción. Detalles y ocho frases reservadas en [tests/TERM_PAIR_PROTOCOL.md](tests/TERM_PAIR_PROTOCOL.md).
+## Cuatro bloques restantes
+
+1. Un recorrido con plantilla, reemplazo dictado, deshacer/rehacer, revisión explícita y copia. No pedir repetir pruebas ya confirmadas; falta el resultado de este recorrido.
+2. Un control de últimos cambios móviles: QR desde la página, preparación inicial, regreso sin preparación separada tras 3–4 minutos; desconexión vencida comprensible sin perder informe. Retorno breve ya aprobado previamente.
+3. iPhone con Safari: protocolo tests/IPHONE_MVP.md. Pendiente disponibilidad, sin dar compatibilidad por garantizada.
+4. Resolver solo fallos bloqueantes encontrados, fijar versión/configuración y grabar un ensayo más video de respaldo. Mantener fuera: fusión, nuevos rediseños, Tonos y plantillas por voz. Puntuación adicional conocida no frena la adopción acordada; conservarla como limitación.
