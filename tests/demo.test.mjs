@@ -130,5 +130,10 @@ test('demo: el contenedor incluye lo necesario y las plantillas son sintéticas'
   for(const need of ['COPY apps','COPY backend','COPY data/vocabulario','COPY data/demo','backend/demo.mjs'])assert.ok(docker.includes(need),need);
   assert.match(ignore,/^\.env\*/m);assert.match(ignore,/^data\/local/m);assert.match(ignore,/^data\/private/m);assert.doesNotMatch(ignore,/^data$/m);
   const templates=JSON.parse(fs.readFileSync(new URL('../data/demo/plantillas-sinteticas.json',import.meta.url),'utf8')).templates;
-  for(const t of templates){assert.match(t.name,/estructura de ejemplo/);assert.deepEqual(t.sources,[]);}
+  assert.equal(templates.length,5);
+  for(const t of templates){
+    assert.match(t.name,/ejemplo sintético completo/);assert.deepEqual(t.sources,[]);
+    assert.match(t.text,/^EJEMPLO SINTÉTICO · SOLO DEMOSTRACIÓN/);
+    for(const heading of ['TÉCNICA','HALLAZGOS','CONCLUSIÓN'])assert.ok(t.text.split(heading+'\n')[1]?.split('\n\n')[0].trim(),`${t.id}: ${heading} con contenido`);
+  }
 });

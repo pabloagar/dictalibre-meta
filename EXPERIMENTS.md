@@ -346,3 +346,6 @@ Diseño aprobado por el responsable el 2-nov-2026. **Todavía no hay ejecución*
   - ranking: 12 elegibles, solo la variante de 10 posible y las de 25, 50 y 100 omitidas;
   - fase B: 336 ejecuciones y la regla aplicada;
   - no dice nada sobre Muse real.
+
+## 2026-11-02 · Contenido de plantillas de demo
+Cambio de contenido, no de motores: cinco informes sintéticos completos, versión demo-completa-v2. Verificación reproducible: pnpm check y pnpm test (prueba de empaquetado y contenido en tests/demo.test.mjs). Pendiente prueba humana en Render: aplicar cada plantilla, sustituir una frase mediante dictado, deshacer y copiar conservando saltos. No hay nuevas mediciones de latencia ni resultados clínicos; valores no medidos permanecen ausentes. Las medidas y hallazgos del contenido son ficción de demostración.
