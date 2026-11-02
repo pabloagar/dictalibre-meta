@@ -109,3 +109,11 @@ test('montaje completo mantiene controles, hoja y ajustes accesibles',async()=>{
  level.value=0;await new Promise(r=>setTimeout(r,0));assert.equal(document.querySelectorAll('.audio-bars .lit').length,0);
  await window.happyDOM.close();delete globalThis.__clinicalTest;
 });
+
+test('tema: Día por defecto, valores válidos y migración Sala a Ámbar',()=>{
+ const live=fs.readFileSync(new URL('../apps/desktop/live.js',import.meta.url),'utf8');
+ const declaration=live.match(/function resolveTheme\(saved\)\{[^\n]+\}/)[0];
+ const resolve=new Function(declaration+';return resolveTheme;')();
+ for(const input of [null,undefined,'','invalid'])assert.equal(resolve(input),'dia');
+ assert.equal(resolve('sala'),'ambar');for(const theme of ['dia','penumbra','ambar'])assert.equal(resolve(theme),theme);
+});

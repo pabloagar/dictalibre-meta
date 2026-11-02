@@ -232,3 +232,95 @@ body.clinical-workspace{padding-bottom:0}.clinical-workspace header{min-height:5
 .clinical-editbar>.template-library-panel{margin-left:auto;flex-shrink:0}
 .clinical-editbar>.clinical-settings{margin-left:0;flex-shrink:0}
 .clinical-workspace .clinical-editbar>.template-library-panel>summary{max-width:none;white-space:nowrap;font-size:12px;padding:5px 10px;min-height:28px}
+
+/* Propuesta B rev3: exact supplied tokens, scoped to desktop. */
+/* Dicta Libre · Propuesta B · tokens de diseño · revisión 3 (02-11-2026)
+   Tres temas, elegidos en Ajustes › Apariencia:
+   - Día: hueso atenuado (sala con luz encendida o preferencia clara). ~12 % menos luminoso que la hoja anterior.
+   - Penumbra: grafito neutro, acento azul apagado (sala de informes a oscuras, cerca del gris del visor).
+   - Ámbar: sepia profundo, acento ámbar (sala a oscuras, opción cálida).
+   Contrastes WCAG calculados entre pares de este archivo (texto ≥ 4,5:1 en los tres temas).
+   El confort visual NO está medido con radiólogos: son hipótesis de diseño. */
+
+body.clinical-workspace,
+body.clinical-workspace[data-theme="dia"], .clinical-workspace [data-theme="dia"] {
+  color-scheme: light;
+  --dl-bg: #e2ded4;        /* mesa */
+  --dl-sheet: #ebe7dd;     /* hoja: hueso atenuado, sin blanco */
+  --dl-bar: #e5e1d7;       /* barras */
+  --dl-ink: #2b2823;       /* tinta · 11,9:1 sobre hoja */
+  --dl-muted: #5b554b;     /* texto secundario · ≥ 5,0:1 en hoja, barras, mesa y soft */
+  --dl-line: #c9c1b3;      /* bordes (decorativos) */
+  --dl-soft: #dbd5c8;      /* fila / control seleccionado */
+  --dl-accent: #7a5217;    /* revisión · 5,6:1 sobre hoja */
+  --dl-accent-bg: #e9dcc5; /* fondo de aviso / confirmación · acento 5,1:1 */
+  --dl-act: #45403a;       /* acción principal */
+  --dl-act-ink: #f1ede4;   /* texto sobre acción · 8,8:1 */
+  --dl-rec: #97392a;       /* grabando · 5,8:1 */
+  --dl-ok: #3b6536;        /* conectado · 5,5:1 */
+  --dl-scrim: rgba(28, 26, 23, .38);
+  --dl-shadow-pop: 0 14px 36px rgba(0, 0, 0, .14);
+  --dl-shadow-dialog: 0 24px 60px rgba(0, 0, 0, .22);
+
+  --dl-font-ui: 'Public Sans', system-ui, sans-serif;
+  --dl-font-doc: 'Source Serif 4', Georgia, serif;
+  --dl-font-num: 'Atkinson Hyperlegible Mono', ui-monospace, monospace;
+
+  --dl-radius: 5px;
+  --dl-radius-panel: 6px;
+  --dl-radius-dialog: 8px;
+  --dl-control-h: 40px;   /* mínimo; objetivos táctiles principales 44px */
+  --dl-doc-size: 19px;    /* base; rango 14–28 */
+}
+
+body.clinical-workspace[data-theme="penumbra"], .clinical-workspace [data-theme="penumbra"] {
+  color-scheme: dark;
+  --dl-bg: #0e0f10;
+  --dl-sheet: #15171a;
+  --dl-bar: #111214;
+  --dl-ink: #c4c9ce;       /* 10,8:1 sobre hoja: alto, sin llegar a blanco puro */
+  --dl-muted: #878e95;     /* ≥ 4,8:1 */
+  --dl-line: #2e3237;
+  --dl-soft: #1f2226;
+  --dl-accent: #8eaed6;    /* azul apagado · 7,8:1 */
+  --dl-accent-bg: #1d2834;
+  --dl-act: #2b3b4f;       /* acción en azul oscuro, sin rellenos claros */
+  --dl-act-ink: #dce6f2;   /* 9,0:1 */
+  --dl-rec: #e08a7e;       /* 6,9:1 */
+  --dl-ok: #8cbf98;        /* 8,6:1 */
+  --dl-scrim: rgba(0, 0, 0, .55);
+  --dl-shadow-pop: 0 14px 36px rgba(0, 0, 0, .55);
+  --dl-shadow-dialog: 0 24px 60px rgba(0, 0, 0, .65);
+}
+
+body.clinical-workspace[data-theme="ambar"], .clinical-workspace [data-theme="ambar"] {
+  color-scheme: dark;
+  --dl-bg: #110e0a;
+  --dl-sheet: #18140f;
+  --dl-bar: #14110d;
+  --dl-ink: #d8c9b0;       /* crema · 11,3:1 */
+  --dl-muted: #9d8f79;     /* ≥ 4,9:1 */
+  --dl-line: #352e24;
+  --dl-soft: #251f17;
+  --dl-accent: #d6a04b;    /* ámbar · 7,8:1 */
+  --dl-accent-bg: #2c2215;
+  --dl-act: #c8954a;       /* acción ámbar: el único relleno claro */
+  --dl-act-ink: #1a1208;   /* 6,9:1 */
+  --dl-rec: #e2846a;       /* 6,8:1 */
+  --dl-ok: #a8c48a;        /* 9,5:1 */
+  --dl-scrim: rgba(0, 0, 0, .55);
+  --dl-shadow-pop: 0 14px 36px rgba(0, 0, 0, .55);
+  --dl-shadow-dialog: 0 24px 60px rgba(0, 0, 0, .65);
+}
+
+body.clinical-workspace[data-theme]{--paper:var(--dl-bg);--surface:var(--dl-sheet);--field:var(--dl-sheet);--bar:var(--dl-bar);--ink:var(--dl-ink);--muted:var(--dl-muted);--line:var(--dl-line);--mint:var(--dl-soft);--green:var(--dl-act);--on-green:var(--dl-act-ink);--focus:var(--dl-accent);--draft:var(--dl-sheet);--red:var(--dl-rec);background:var(--dl-bg);color:var(--dl-ink)}
+.clinical-workspace .theme-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.clinical-workspace .theme-card{display:flex;flex-direction:column;gap:10px;text-align:left;padding:12px;background:var(--dl-bg);border:1px solid var(--dl-line);color:var(--dl-ink);white-space:normal}
+.clinical-workspace .theme-card[aria-checked=true]{outline:2px solid var(--dl-accent);outline-offset:-2px}
+.clinical-workspace .theme-sample{display:block;padding:12px;background:var(--dl-bg);border:1px solid var(--dl-line);border-radius:4px}
+.clinical-workspace .sample-sheet{display:block;background:var(--dl-sheet);color:var(--dl-ink);padding:12px;font:16px/1.5 var(--dl-font-doc);border:1px solid var(--dl-line)}
+.clinical-workspace .sample-muted{display:block;color:var(--dl-muted);font:12px var(--dl-font-ui)}
+.clinical-workspace .sample-mark{background:var(--dl-accent-bg);text-decoration:underline 2px var(--dl-accent)}
+.clinical-workspace .sample-actions{display:flex;gap:6px;margin-top:8px;font:11px var(--dl-font-ui)}
+.clinical-workspace .sample-actions span{padding:5px;border-radius:4px;background:var(--dl-act);color:var(--dl-act-ink)}
+.clinical-workspace .sample-actions span+span{border:1px solid var(--dl-accent);color:var(--dl-accent);background:var(--dl-bg)}

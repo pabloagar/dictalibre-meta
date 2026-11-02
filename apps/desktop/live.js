@@ -54,7 +54,7 @@ function showFigureDoubts(warnings){
 }
 // Hoja clínica: preserve the mounted editor, transport controls and listeners.
 document.body.classList.add('live-workspace','clinical-workspace');
-const layoutMetrics={version:'a-compacta-v3',serverBuild:initialState.build??null,serverSourceHash:initialState.sourceHash??null,createdAt:new Date().toISOString(),browser:navigator.userAgent,device:null,network:null,audioSource:null,clockResolutionMs:null,instrumentationOverheadMs:null,audioMeter:{updates:0,totalPaintMs:0,maxPaintMs:0,source:'received-pcm-rms'},events:[]};
+const layoutMetrics={version:'propuesta-b-rev3',serverBuild:initialState.build??null,serverSourceHash:initialState.sourceHash??null,createdAt:new Date().toISOString(),browser:navigator.userAgent,device:null,network:null,audioSource:null,clockResolutionMs:null,instrumentationOverheadMs:null,audioMeter:{updates:0,totalPaintMs:0,maxPaintMs:0,source:'received-pcm-rms'},events:[]};
 const track=(type,data={})=>{layoutMetrics.events.push({type,atMs:performance.now(),...data});if(layoutMetrics.events.length>500)layoutMetrics.events.shift();};
 const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text)n.textContent=text;return n;};
 const makeDetails=(label,cls)=>{const d=make('details',cls);d.append(make('summary','',label));return d;};
@@ -76,9 +76,19 @@ new MutationObserver(syncConnection).observe(document.querySelector('#paired'),{
 const settings=makeDetails('Ajustes','clinical-settings');const editbar=make('div','clinical-editbar');editbar.setAttribute('role','toolbar');editbar.setAttribute('aria-label','Edición del informe');report.prepend(editbar);editbar.append(controls.querySelector('.report-undo'),controls.querySelector('.report-redo'));
 const settingsBody=make('div','settings-body');settings.append(settingsBody);settingsBody.append(engineLabel,glossaryLabel,segmentationLabel,reviewLabel,commandsLabel,engineHint,commandHelp);
 const sizeControls=make('div','size-controls','Texto ');sizeControls.append(controls.querySelector('[aria-label="Reducir tamaño del informe"]'),controls.querySelector('.report-font-value'),controls.querySelector('[aria-label="Aumentar tamaño del informe"]'));editbar.append(sizeControls,templatePanel,settings);
-let theme='dia';try{const saved=localStorage.getItem('dicta-theme-v1');if(['sala','dia'].includes(saved))theme=saved;}catch{}
-const themeButton=make('button','theme-toggle');const applyTheme=()=>{document.body.dataset.theme=theme;themeButton.textContent=theme==='sala'?'Tema: Sala · cambiar a Día':'Tema: Día · cambiar a Sala';};applyTheme();
-themeButton.onclick=()=>{theme=theme==='sala'?'dia':'sala';applyTheme();try{localStorage.setItem('dicta-theme-v1',theme);}catch{}track('theme',{theme});};settingsBody.append(themeButton);
+function resolveTheme(saved){return saved==='sala'?'ambar':['dia','penumbra','ambar'].includes(saved)?saved:'dia';}
+let theme='dia';try{const saved=localStorage.getItem('dicta-theme-v1');theme=resolveTheme(saved);if(saved==='sala')localStorage.setItem('dicta-theme-v1',theme);}catch{}
+const appearance=make('section','appearance-panel');appearance.append(make('h3','','Apariencia'));
+const themeCards=make('div','theme-cards');themeCards.setAttribute('role','radiogroup');themeCards.setAttribute('aria-label','Tema');appearance.append(themeCards);
+const themeDescriptions={dia:'Hueso atenuado para una sala con luz.',penumbra:'Grafito neutro y acento azul apagado.',ambar:'Sepia profundo y acento ámbar.'};
+const applyTheme=()=>{document.body.dataset.theme=theme;for(const card of themeCards.children)card.setAttribute('aria-checked',String(card.dataset.value===theme));};
+for(const [value,label] of [['dia','Día'],['penumbra','Penumbra'],['ambar','Ámbar']]){
+ const card=make('button','theme-card');card.type='button';card.dataset.value=value;card.setAttribute('role','radio');card.setAttribute('aria-label',label);card.append(make('strong','',label));
+ const sample=make('span','theme-sample');sample.dataset.theme=value;sample.setAttribute('aria-hidden','true');const paper=make('span','sample-sheet','Texto del informe ');paper.append(make('span','sample-mark','revisable'),make('span','sample-muted','Texto secundario'));const actions=make('span','sample-actions');actions.append(make('span','','Copiar para RIS'),make('span','','Revisar con IA'));sample.append(paper,actions);card.append(sample,make('span','',themeDescriptions[value]));themeCards.append(card);
+ card.onclick=()=>{theme=value;applyTheme();try{localStorage.setItem('dicta-theme-v1',theme);}catch{}track('theme',{theme});};
+ card.onkeydown=e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();const cards=[...themeCards.children],direction=['ArrowLeft','ArrowUp'].includes(e.key)?-1:1,next=cards[(cards.indexOf(card)+direction+cards.length)%cards.length];next.click();next.focus();}};
+}
+applyTheme();settingsBody.append(appearance);
 if(!isDemo){const link=make('a','','Abrir laboratorio');link.href='/';link.target='_blank';link.rel='noopener';settingsBody.append(link);}
 const takes=makeDetails('Tomas y Revisor Meta · últimas 5','takes-panel');takes.append(panel);
 const diagnostics=document.querySelector('.diagnostics');diagnostics.prepend(document.querySelector('.live-metrics'));diagnostics.append(report.querySelector('.editor-export'));
