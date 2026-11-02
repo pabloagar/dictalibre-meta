@@ -419,3 +419,5 @@ Usuario confirma flash persistente tras despliegue da5d8ff. Causa verificada en 
 Activación CSP comprobada en Render: /startup.js y /receiver.css HTTP 200 idénticos a ddc4180. Navegador Chrome autenticado, recarga real: primer snapshot muestra únicamente Preparando tu espacio de dictado y reintento; siguiente snapshot muestra editor definitivo vacío; consola sin errores. No se conectó teléfono ni grabó. Corrige el fallo observado de la implementación anterior. Registro posterior sin redespliegue.
 
 02-11-2026 · A petición del responsable, registrado en ROADMAP.md el pendiente posterior al MVP de eliminar la pantalla de preparación mediante entrega inicial del diseño definitivo. Solo documentación; sin cambios de aplicación ni despliegue. Publicación con skip render para preservar las sesiones.
+
+02-11-2026 · Guardada por solicitud expresa la idea posterior al MVP de insertar plantillas mediante voz, con confirmación ante contenido existente/ambigüedad, aviso sin cambios si no hay coincidencia y deshacer. ROADMAP.md conserva el alcance; no se implementa ni modifica el dictado actual. Cambio documental publicado con skip render, sin interrumpir pruebas.
