@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {createHash} from 'node:crypto';
+const dir=path.resolve(process.argv[2]??'');if(!process.argv[2])throw Error('Pass evidence directory');
+const read=f=>JSON.parse(fs.readFileSync(path.join(dir,f)));
+const hash=f=>createHash('sha256').update(fs.readFileSync(path.join(dir,f))).digest('hex');
+const p=read('protocol.json'),r=read('results.json');
+if(p.schema!=='term-pair-evaluation-v1'||r.length!==32||new Set(r.map(x=>[x.caseId,x.rep,x.variant].join('/'))).size!==32)throw Error('Incomplete or duplicated results');
+const variants=p.variants.map(v=>{const rows=r.filter(x=>x.variant===v.id),targets=rows.filter(x=>x.termSequenceExpected.length),controls=rows.filter(x=>!x.termSequenceExpected.length);return {id:v.id,keywords:v.keywords,runs:rows.length,completed:rows.filter(x=>x.status==='completed').length,targetRuns:targets.length,targetTermSequenceMatches:targets.filter(x=>x.termMatch).length,protectedWordSequenceMatches:rows.filter(x=>x.protectedMatch).length,absentTargetTermsInserted:controls.reduce((n,x)=>n+x.termSequenceObserved.length,0),nonemptySilence:rows.filter(x=>x.caseId==='digital-silence'&&(x.text??'').trim()).length};});
+const paired=r.filter(x=>x.variant==='baseline').map(b=>{const a=r.find(x=>x.caseId===b.caseId&&x.rep===b.rep&&x.variant==='balanced');return {caseId:b.caseId,rep:b.rep,baselineTermMatch:b.termMatch,balancedTermMatch:a.termMatch,regression:(b.termMatch&&!a.termMatch)||(b.protectedMatch&&!a.protectedMatch),improved:!b.termMatch&&a.termMatch,baseline:b.text,balanced:a.text};});
+const [b,a]=variants;
+const summary={schema:'term-pair-summary-v1',build:p.build,protocolHash:hash('protocol.json'),resultsHash:hash('results.json'),referencesHumanValidated:false,voices:p.conditions.voices,distinctAudioFiles:7,digitalSilenceControls:1,repetitions:2,variants,paired,exploratoryGatePassed:a.completed===16&&a.targetTermSequenceMatches>b.targetTermSequenceMatches&&!paired.some(x=>x.regression)&&a.absentTargetTermsInserted===0&&a.nonemptySilence===0,productionAdoption:false,limits:['One synthetic voice, seven voiced files; repetitions are not independent speakers.','References still require human listening.','No semantic postprocessing or Spark correction; raw ASR results retained.','Local automated tests ran during part of replay: no causal latency claim.','Next gate: unseen human-voice contrast cases and adjudication of other word changes.']};
+fs.writeFileSync(path.join(dir,'summary.json'),JSON.stringify(summary,null,2)+'\n');console.log(JSON.stringify(summary,null,2));

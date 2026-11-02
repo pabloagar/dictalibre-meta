@@ -1,0 +1,212 @@
+{
+  "schema": "term-pair-summary-v1",
+  "build": "bfa21f4a2cbf8d392af1e76012e0621be364ab09",
+  "protocolHash": "c3a81bc59d5f2079027e2265699f44f0abb62cd43d176297adf24a9f1269224f",
+  "resultsHash": "b03b3eda4a2253bab82ac16263ff70415451730458509763b42ab7ca7b0ec0d3",
+  "referencesHumanValidated": false,
+  "voices": [
+    "Microsoft Laura"
+  ],
+  "distinctAudioFiles": 7,
+  "digitalSilenceControls": 1,
+  "repetitions": 2,
+  "variants": [
+    {
+      "id": "baseline",
+      "keywords": [],
+      "runs": 16,
+      "completed": 16,
+      "targetRuns": 12,
+      "targetTermSequenceMatches": 8,
+      "protectedWordSequenceMatches": 16,
+      "absentTargetTermsInserted": 0,
+      "nonemptySilence": 0
+    },
+    {
+      "id": "balanced",
+      "keywords": [
+        "neumotórax",
+        "hemotórax",
+        "hemitórax"
+      ],
+      "runs": 16,
+      "completed": 16,
+      "targetRuns": 12,
+      "targetTermSequenceMatches": 12,
+      "protectedWordSequenceMatches": 16,
+      "absentTargetTermsInserted": 0,
+      "nonemptySilence": 0
+    }
+  ],
+  "paired": [
+    {
+      "caseId": "microsoft-laura-negation",
+      "rep": 1,
+      "baselineTermMatch": true,
+      "balancedTermMatch": true,
+      "regression": false,
+      "improved": false,
+      "baseline": "No se observa neumotorax. Punto.",
+      "balanced": "No se observa neumotórax punto."
+    },
+    {
+      "caseId": "microsoft-laura-positive",
+      "rep": 1,
+      "baselineTermMatch": false,
+      "balancedTermMatch": true,
+      "regression": false,
+      "improved": true,
+      "baseline": "se observan hemotorax punto",
+      "balanced": "Se observa neumotórax punto."
+    },
+    {
+      "caseId": "hemo-negative",
+      "rep": 1,
+      "baselineTermMatch": true,
+      "balancedTermMatch": true,
+      "regression": false,
+      "improved": false,
+      "baseline": "No se observa hemotórax.",
+      "balanced": "no se observa hemotórax punto."
+    },
+    {
+      "caseId": "hemo-positive",
+      "rep": 1,
+      "baselineTermMatch": true,
+      "balancedTermMatch": true,
+      "regression": false,
+      "improved": false,
+      "baseline": "Se observa hemotórax punto.",
+      "balanced": "se observa hemotórax punto"
+    },
+    {
+      "caseId": "hemi-right",
+      "rep": 1,
+      "baselineTermMatch": false,
+      "balancedTermMatch": true,
+      "regression": false,
+      "improved": true,
+      "baseline": "Emotorax en el hemitórax derecho punto.",
+      "balanced": "Hemotórax en el hemitórax derecho. Punto."
+    },
+    {
+      "caseId": "hemi-left",
+      "rep": 1,
+      "baselineTermMatch": true,
+      "balancedTermMatch": true,
+      "regression": false,
+      "improved": false,
+      "baseline": "Dolor en el hemitorax izquierdo. Punto.",
+      "balanced": "dolor en el hemitórax izquierdo punto"
+    },
+    {
+      "caseId": "neutral",
+      "rep": 1,
+      "baselineTermMatch": true,
+      "balancedTermMatch": true,
+      "regression": false,
+      "improved": false,
+      "baseline": "traquea centrada punto.",
+      "balanced": "Tráquea centrada, punto."
+    },
+    {
+      "caseId": "digital-silence",
+      "rep": 1,
+      "baselineTermMatch": true,
+      "balancedTermMatch": true,
+      "regression": false,
+      "improved": false,
+      "baseline": "",
+      "balanced": ""
+    },
+    {
+      "caseId": "microsoft-laura-negation",
+      "rep": 2,
+      "baselineTermMatch": false,
+      "balancedTermMatch": true,
+      "regression": false,
+      "improved": true,
+      "baseline": "No se observan eumotorax punto.",
+      "balanced": "No se observa neumotórax. Punto."
+    },
+    {
+      "caseId": "microsoft-laura-positive",
+      "rep": 2,
+      "baselineTermMatch": true,
+      "balancedTermMatch": true,
+      "regression": false,
+      "improved": false,
+      "baseline": "se observa neumotórax. punto.",
+      "balanced": "se observa neumotórax punto."
+    },
+    {
+      "caseId": "hemo-negative",
+      "rep": 2,
+      "baselineTermMatch": true,
+      "balancedTermMatch": true,
+      "regression": false,
+      "improved": false,
+      "baseline": "no se observa hemotórax.",
+      "balanced": "No se observa hemotórax. punto."
+    },
+    {
+      "caseId": "hemo-positive",
+      "rep": 2,
+      "baselineTermMatch": true,
+      "balancedTermMatch": true,
+      "regression": false,
+      "improved": false,
+      "baseline": "se observa hemotorax punto",
+      "balanced": "Se observa hemotórax punto."
+    },
+    {
+      "caseId": "hemi-right",
+      "rep": 2,
+      "baselineTermMatch": false,
+      "balancedTermMatch": true,
+      "regression": false,
+      "improved": true,
+      "baseline": "Emotorax en el hemitórax derecho. Punto.",
+      "balanced": "Hemotórax en el hemitórax derecho. Punto."
+    },
+    {
+      "caseId": "hemi-left",
+      "rep": 2,
+      "baselineTermMatch": true,
+      "balancedTermMatch": true,
+      "regression": false,
+      "improved": false,
+      "baseline": "dolor en el hemitórax izquierdo punto.",
+      "balanced": "dolor en el hemitórax izquierdo punto."
+    },
+    {
+      "caseId": "neutral",
+      "rep": 2,
+      "baselineTermMatch": true,
+      "balancedTermMatch": true,
+      "regression": false,
+      "improved": false,
+      "baseline": "tráquea centrada punto.",
+      "balanced": "traquea centrada. punto."
+    },
+    {
+      "caseId": "digital-silence",
+      "rep": 2,
+      "baselineTermMatch": true,
+      "balancedTermMatch": true,
+      "regression": false,
+      "improved": false,
+      "baseline": "",
+      "balanced": ""
+    }
+  ],
+  "exploratoryGatePassed": true,
+  "productionAdoption": false,
+  "limits": [
+    "One synthetic voice, seven voiced files; repetitions are not independent speakers.",
+    "References still require human listening.",
+    "No semantic postprocessing or Spark correction; raw ASR results retained.",
+    "Local automated tests ran during part of replay: no causal latency claim.",
+    "Next gate: unseen human-voice contrast cases and adjudication of other word changes."
+  ]
+}

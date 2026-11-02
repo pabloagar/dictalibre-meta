@@ -47,3 +47,5 @@ Aplicación activa en Render y laboratorio: `16b62ff`; código evaluado `72f25f0
 4. Corregir bloqueantes, repetir casos fallidos y recorrido completo, congelar commit/configuración y grabar demo más video de respaldo. Conservar todos los resultados, no seleccionar solo los favorables.
 
 Plan de mañana y tabla de registro: [tests/IPHONE_MVP.md](tests/IPHONE_MVP.md). No se necesita añadir otro motor, fusión, Tonos, plantillas por voz ni más rediseños para cerrar este alcance. Ningún resultado anterior garantiza ausencia general de invenciones.
+
+Actualización de terminología: piloto equilibrado con neumotórax/hemotórax/hemitórax mejora coincidencias de términos de 8/12 a 12/12 en una voz sintética, dos repeticiones, sin regresiones observadas en controles. Sigue pendiente la prueba humana; no cambia el estado de cierre ni se activa el glosario en producción. Detalles y ocho frases reservadas en [tests/TERM_PAIR_PROTOCOL.md](tests/TERM_PAIR_PROTOCOL.md).
