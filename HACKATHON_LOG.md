@@ -269,3 +269,6 @@ Pruebas nuevas (`examForTemplate` y carga en el laboratorio) vistas fallar antes
 
 ## 2026-11-02 · Editor: plantilla de un solo uso y revisión local por sexo
 Con aprobación del responsable, el panel de plantillas se cierra después de aplicar una y pide confirmación antes de reemplazar un informe con contenido propio. Además se agregó un selector de sexo (F/M) que activa una revisión local, con regla exacta, de órganos que no corresponden. No se envía a Meta ni cambia texto. Detalle en `PHASE_9_EDITOR.md`. Resultado: 100/100 pruebas Node y 5/5 Python; recorrido verificado en Chromium con el laboratorio real.
+
+## 2026-11-02 · Diseño final del MVP implementado en /live
+Con aprobación del responsable se implementó la propuesta B v3 («Hoja clínica», sala por defecto) en `/live` y se declaró el diseño del MVP hasta agregar otras funciones. Se corrigió antes A1 (conectar el teléfono vaciaba el informe). Verificado en Chromium con plantillas sintéticas: 101 pruebas Node y 5 Python en verde; sin errores de página ni desborde horizontal a 1366, 1440 y 1920 px. No verificado: sesión real con el teléfono, plantillas reales, fuentes alojadas en local ni auditoría de accesibilidad. Véase `docs/DISENO_MVP.md`.

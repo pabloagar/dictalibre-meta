@@ -315,3 +315,7 @@ Archivo: `docs/propuesta-ui/propuesta-b/propuesta-b-v3.html`. Usa la paleta «Ho
 4. lo técnico (motor, cierre de toma, comandos, Revisor, tamaño de letra, tema, laboratorio) se agrupa en «Ajustes» mostrando su estado.
 
 Ya implementado en `/live`: el cierre del panel tras aplicar la plantilla, la confirmación al reemplazar, la revisión local por sexo y la propuesta automática del glosario. Lo demás es propuesta.
+
+## Decisión final (2-nov-2026)
+
+La propuesta B v3 quedó implementada en `/live` y es el diseño del MVP hasta nuevo aviso. Estado, capturas reales y límites en [`DISENO_MVP.md`](DISENO_MVP.md). Lo que esta sección llama «propuesta» arriba y ya figura allí como implementado deja de ser propuesta.

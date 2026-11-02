@@ -1,0 +1,3 @@
+{"version":"sintetico-prueba","summary":{"duplicateOccurrences":0,"references":0},"references":[],"templates":[
+{"id":"t-sint-1","name":"TC de tórax (sintética de prueba)","category":"TC","text":"TÉCNICA\n\nHALLAZGOS\nPulmones sin hallazgos de prueba.\n\nCONCLUSIÓN\n","sources":[{"path":"sintetico/tc-torax.txt"}]},
+{"id":"t-sint-2","name":"TC de abdomen y pelvis (sintética de prueba)","category":"TC","text":"TÉCNICA\n\nHALLAZGOS\nHígado sin hallazgos de prueba.\n\nCONCLUSIÓN\n","sources":[{"path":"sintetico/tc-abdomen.txt"}]}]}

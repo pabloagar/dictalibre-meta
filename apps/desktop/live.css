@@ -1,0 +1,166 @@
+/* Dicta Libre · /live · diseño final del MVP (propuesta B v3 «Hoja clínica»). Ver docs/DISENO_MVP.md.
+   Tema «sala» por defecto; «día» solo con data-theme="dia" (se elige en Ajustes y se recuerda en este navegador).
+   Contrastes calculados en docs/propuesta-ui/contraste.py; hay que medirlos de nuevo en la sala real. */
+:root{--mesa:#131211;--hoja:#1c1b19;--barra:#181715;--linea:#33312d;--tinta:#c8c4bb;--tinta-2:#99948a;--tinta-3:#8a857c;--accion-final:#34322d;--accion-final-texto:#d8d4cb;--grabando:#d9705f;--grabando-suave:#2a1c19;--borrador-subrayado:#99948a;--alerta:#c99a4b;--alerta-suave:#2a2418;--foco:#d8d4cb;--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--ui:'Public Sans','Segoe UI',system-ui,sans-serif;color-scheme:dark}
+:root[data-theme="dia"]{--mesa:#e6e2da;--hoja:#f6f4ef;--barra:#eeebe4;--linea:#cfc9be;--tinta:#24221e;--tinta-2:#59544b;--tinta-3:#5f5a51;--accion-final:#3a3732;--accion-final-texto:#f6f4ef;--grabando:#a8321f;--grabando-suave:#f3e0da;--borrador-subrayado:#59544b;--alerta:#8a5a00;--alerta-suave:#f1e6cf;--foco:#24221e;color-scheme:light}
+
+body.live-workspace{background:var(--mesa);color:var(--tinta);font-family:var(--ui)}
+body.live-workspace :is(button,input,select,textarea,summary){font-family:var(--ui)}
+body.live-workspace .shell{max-width:1500px;padding:0 20px}
+body.live-workspace :focus-visible{outline:2px solid var(--foco);outline-offset:2px}
+body.live-workspace>.shell>header,body.live-workspace footer,body.live-workspace .section-head,body.live-workspace .report-workspace>h2,body.live-workspace .transcript>.muted:not(.compact-help){display:none}
+body.live-workspace .transcript{background:transparent;border:0;padding:0;margin:0;color:var(--tinta)}
+body.live-workspace .transcript-paper{background:transparent;border:0;padding:0;min-height:0}
+body.live-workspace .main-column:has(.takes-panel[open]) .transcript{margin-right:0}
+:root{background:var(--mesa)}
+body.live-workspace .card{background:var(--hoja);border:1px solid var(--linea);color:var(--tinta);border-radius:8px}
+body.live-workspace .muted,body.live-workspace .tiny{color:var(--tinta-2)}
+body.live-workspace .status{background:var(--barra);border:1px solid var(--linea);color:var(--tinta-2);margin:8px 0;padding:6px 12px;font-size:13px}
+body.live-workspace .status.error{color:var(--alerta);background:var(--alerta-suave);border-color:var(--alerta)}
+body.live-workspace .status.success{color:var(--tinta)}
+
+/* Barra del estudio: una sola fila fija arriba */
+body.live-workspace .study-bar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:6px 10px;flex-wrap:wrap;padding:8px 12px;margin:10px 0 0;background:var(--barra);border:1px solid var(--linea);border-radius:8px}
+body.live-workspace .study-bar>*{flex-shrink:0;min-width:0}
+body.live-workspace .study-bar>.grow{flex:1 1 0;flex-shrink:1}
+body.live-workspace .study-brand{display:flex;flex-direction:column;line-height:1.15}
+body.live-workspace .study-brand strong{font-size:14px;font-weight:650;letter-spacing:-.2px}
+body.live-workspace .study-brand small{font-size:10.5px;color:var(--tinta-3)}
+body.live-workspace .study-bar button,body.live-workspace .study-bar summary,body.live-workspace .study-bar select{min-height:34px;font-size:13px;color:var(--tinta);background:transparent;border:1px solid var(--linea);border-radius:6px;padding:6px 10px;width:auto}
+body.live-workspace .study-bar button:hover:not(:disabled),body.live-workspace .study-bar summary:hover{background:var(--hoja)}
+body.live-workspace .study-bar summary{list-style:none;display:flex;align-items:center;gap:4px;white-space:nowrap;font-weight:500}
+body.live-workspace .study-bar summary::-webkit-details-marker{display:none}
+body.live-workspace .study-bar summary::after{content:'▾';font-size:10px;color:var(--tinta-3)}
+body.live-workspace .study-bar details{position:relative}
+body.live-workspace .study-bar details>summary{cursor:pointer}
+
+/* Sexo F · M · — */
+body.live-workspace .sex-seg{display:flex;align-items:center;gap:0}
+body.live-workspace .sex-seg .sex-lab{font-size:11px;color:var(--tinta-3);margin-right:6px}
+body.live-workspace .sex-seg button{border-radius:0;margin-left:-1px;min-width:34px;padding:6px 8px}
+body.live-workspace .sex-seg button:first-of-type{border-radius:6px 0 0 6px;margin-left:0}
+body.live-workspace .sex-seg button:last-of-type{border-radius:0 6px 6px 0}
+body.live-workspace .sex-seg button[aria-pressed="true"]{background:var(--accion-final);color:var(--accion-final-texto);border-color:var(--tinta-2);font-weight:650}
+
+/* Grabación: estado, tiempo y nivel */
+body.live-workspace .record-strip{display:flex;align-items:center;gap:10px;border:0;padding:0;margin:0;background:transparent;border-radius:0}
+body.live-workspace .pill{background:transparent;border:1px solid var(--linea);color:var(--tinta-2);font-size:11px;letter-spacing:.4px;padding:5px 9px}
+body.live-workspace .pill.active{background:var(--grabando-suave);color:var(--grabando);border-color:var(--grabando)}
+body.live-workspace .timer{font-size:18px;color:var(--tinta);font-variant-numeric:tabular-nums}
+body.live-workspace meter{width:70px;background:var(--linea)}
+body.live-workspace meter::-webkit-meter-bar{background:var(--linea)}
+body.live-workspace meter::-webkit-meter-optimum-value{background:var(--tinta-2)}
+
+/* Acciones del informe */
+body.live-workspace .report-actions{display:flex;align-items:center;gap:6px;margin:0}
+body.live-workspace .report-actions .report-copy{background:var(--accion-final);color:var(--accion-final-texto);border-color:var(--tinta-3);font-weight:650}
+body.live-workspace .report-actions .sex-select{display:none}
+
+/* Conexión del teléfono */
+body.live-workspace .study-bar .connection-host{position:relative;order:0;margin:0}
+body.live-workspace .connection-panel>summary{color:var(--tinta-2)}
+body.live-workspace .connection-host.is-connected .connection-panel>summary{color:var(--tinta);border-color:var(--tinta-3)}
+body.live-workspace .connection-panel[open]>.pairing{position:absolute;right:0;top:calc(100% + 6px);z-index:40;width:280px;background:var(--hoja);border:1px solid var(--linea);border-radius:8px;padding:14px;box-shadow:0 12px 32px #0008;color:var(--tinta)}
+body.live-workspace .pairing h2{font-size:14px}
+body.live-workspace .pairing .primary,body.live-workspace .pairing .secondary{background:var(--accion-final);color:var(--accion-final-texto);border:1px solid var(--tinta-3);width:100%}
+body.live-workspace .pairing .quiet{color:var(--tinta-2)}
+body.live-workspace .qr-wrap{background:#f6f4ef;border-radius:6px}
+body.live-workspace .confirm{background:var(--barra);border:1px solid var(--linea)}
+body.live-workspace .live-dot{background:var(--tinta-2)}
+
+/* Ajustes */
+body.live-workspace .settings-menu[open]>.settings-body{position:absolute;right:0;top:calc(100% + 6px);z-index:40;width:320px;max-height:70vh;overflow:auto;display:grid;gap:10px;padding:14px;background:var(--hoja);border:1px solid var(--linea);border-radius:8px;box-shadow:0 12px 32px #0008;font-size:13px}
+body.live-workspace .settings-body label{display:grid;gap:4px;color:var(--tinta-2)}
+body.live-workspace .settings-body :is(select,input[type=text],input:not([type])){background:var(--barra);color:var(--tinta);border:1px solid var(--linea);border-radius:6px;padding:6px 8px;width:100%}
+body.live-workspace .settings-body label:has(input[type=checkbox]){display:flex;align-items:center;gap:8px}
+body.live-workspace .settings-body button,body.live-workspace .settings-body a{color:var(--tinta);background:transparent;border:1px solid var(--linea);border-radius:6px;padding:7px 10px;text-align:left;text-decoration:none;font-size:13px}
+body.live-workspace .settings-row{display:flex;align-items:center;gap:8px;color:var(--tinta-2)}
+body.live-workspace .settings-row span{flex:1}
+body.live-workspace .settings-body p,body.live-workspace .settings-body .tiny{color:var(--tinta-3);margin:0;font-size:12px;line-height:1.45}
+
+/* Plantillas: ventana emergente de uso único */
+body.live-workspace .template-library-panel[open]>:not(summary){font-size:13px}
+body.live-workspace .template-library-panel[open]{z-index:45}
+body.live-workspace .template-library-panel[open]>summary{border-color:var(--tinta-3)}
+body.live-workspace .template-library-panel>:not(summary){display:none}
+body.live-workspace .template-library-panel[open]>:not(summary){display:block}
+body.live-workspace .template-library-panel[open]>.template-quick{display:grid}
+body.live-workspace .template-library-panel[open]::before{content:'';position:fixed;inset:0;background:#0006;z-index:-1}
+body.live-workspace .template-library-panel[open]>summary~*{position:relative}
+body.live-workspace .template-library-panel[open] .report-controls{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+body.live-workspace .template-library-panel :is(input,select,textarea){background:var(--barra);color:var(--tinta);border:1px solid var(--linea);border-radius:6px;padding:7px 9px;font-size:13px;max-width:100%}
+body.live-workspace .template-library-panel button{background:var(--barra);color:var(--tinta);border:1px solid var(--linea);border-radius:6px;padding:7px 10px}
+body.live-workspace .template-library-panel pre{max-height:180px;overflow:auto;background:var(--barra);border:1px solid var(--linea);border-radius:6px;padding:10px;color:var(--tinta-2);font-size:12px}
+body.live-workspace .template-quick{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0 0 12px}
+body.live-workspace .template-quick h3{grid-column:1/-1;margin:0 0 4px;font-size:18px;font-weight:600;font-family:var(--serif)}
+body.live-workspace .quick-item{display:grid;grid-template-columns:28px 1fr;grid-template-rows:auto auto;column-gap:10px;align-items:center;text-align:left;padding:10px 12px;min-height:56px;background:var(--barra);border:1px solid var(--linea);border-radius:8px;color:var(--tinta)}
+body.live-workspace .quick-item:hover:not(:disabled){border-color:var(--tinta-3);background:var(--hoja)}
+body.live-workspace .quick-n{grid-row:1/3;font-size:18px;color:var(--tinta-3);font-variant-numeric:tabular-nums}
+body.live-workspace .quick-name{font-size:14px;font-weight:600}
+body.live-workspace .quick-item small{font-size:11.5px;color:var(--tinta-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body.live-workspace .quick-item:disabled{opacity:1}
+body.live-workspace .quick-item:disabled .quick-name,body.live-workspace .quick-item:disabled small{color:var(--tinta-3)}
+
+/* Sin plantilla: selector centrado a pantalla casi completa */
+body.sin-plantilla.live-workspace .template-library-panel[open]{position:fixed;inset:0;z-index:60;width:auto;max-height:none;box-shadow:none;border:0;border-radius:0;background:var(--mesa)}
+body.sin-plantilla.live-workspace .template-library-panel[open]::before{display:none}
+body.sin-plantilla.live-workspace .template-library-panel[open]>summary{display:none}
+body.sin-plantilla.live-workspace .template-library-panel[open]{display:block;overflow:auto;padding:min(8vh,64px) 20px}
+body.sin-plantilla.live-workspace .template-library-panel[open]>:not(summary){max-width:760px;margin-left:auto;margin-right:auto}
+body.sin-plantilla.live-workspace .template-library-panel[open]>.template-quick{grid-template-columns:repeat(2,minmax(0,1fr))}
+
+/* Hoja: informe al centro y notas al margen */
+body.live-workspace .report-workspace{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:18px;align-items:start;margin:14px 0}
+body.live-workspace .report-workspace>*{grid-column:1}
+body.live-workspace .report-workspace>.notas{grid-column:2;grid-row:1/span 8;position:sticky;top:76px}
+body.live-workspace .report-editor{background:var(--hoja);color:var(--tinta);border:1px solid var(--linea);border-radius:8px;font-family:var(--serif);font-size:24px;line-height:1.6;padding:28px 36px;min-height:62vh;max-height:none;max-width:none}
+body.live-workspace .dictation-provisional{font-style:italic;text-decoration:underline dotted var(--borrador-subrayado);text-underline-offset:4px;background:transparent;color:var(--tinta)}
+body.live-workspace .report-help,body.live-workspace .report-status{color:var(--tinta-3);font-size:12px;margin:4px 2px}
+body.live-workspace .editor-export,body.live-workspace .diagnostics button{background:transparent;color:var(--tinta);border:1px solid var(--linea);border-radius:6px;padding:6px 10px}
+
+/* Notas */
+body.live-workspace .notas{display:grid;gap:10px;font-size:12.5px}
+body.live-workspace .nota,body.live-workspace .notas>p,body.live-workspace .sex-warnings:not(:empty){padding:10px 12px;background:var(--barra);border:1px solid var(--linea);border-radius:8px;color:var(--tinta-2);line-height:1.5;margin:0}
+body.live-workspace .sex-warnings:not(:empty){background:var(--alerta-suave);border-color:var(--alerta);color:var(--tinta)}
+body.live-workspace .sex-warnings p{margin:0 0 8px}
+body.live-workspace .sex-warnings button,body.live-workspace .nota button{background:transparent;color:var(--tinta);border:1px solid var(--linea);border-radius:6px;padding:5px 9px;font-size:12px}
+body.live-workspace .nota h4{margin:0 0 4px;font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--tinta-3);font-weight:600}
+body.live-workspace .nota p{margin:0 0 6px}
+
+/* Paneles auxiliares: tomas, audio, diagnóstico */
+body.live-workspace .auxiliary-panels{display:grid;gap:10px;margin:0 0 20px}
+body.live-workspace .auxiliary-panels summary{color:var(--tinta)}
+body.live-workspace .auxiliary-panels .clip,body.live-workspace .takes-panel article{background:var(--hoja);color:var(--tinta);border-color:var(--linea)}
+body.live-workspace .metrics span,body.live-workspace th{color:var(--tinta-3)}
+body.live-workspace th,body.live-workspace td{border-color:var(--linea)}
+body.live-workspace .live-notice{color:var(--tinta-3)}
+body.live-workspace .report-global-review{background:var(--barra);border-color:var(--linea);color:var(--tinta)}
+body.live-workspace .transcript-paper,body.live-workspace .dictation-report{background:var(--hoja);color:var(--tinta);border-color:var(--linea)}
+
+@media(max-width:1100px){body.live-workspace .study-bar{flex-wrap:wrap}body.live-workspace .report-workspace{grid-template-columns:minmax(0,1fr)}body.live-workspace .report-workspace>.notas{grid-column:1;grid-row:auto;position:static}body.live-workspace .report-editor{padding:20px}}
+
+/* Tomas y Revisor Meta (panel existente) */
+body.live-workspace .takes-panel>summary{background:var(--hoja);color:var(--tinta)}
+body.live-workspace .takes-panel,body.live-workspace .takes-panel[open]{background:var(--hoja);border:1px solid var(--linea);color:var(--tinta);border-radius:8px;padding:10px 14px;box-shadow:none}
+body.live-workspace .takes-panel[open]{position:static;width:auto;right:auto;top:auto;bottom:auto;overflow:visible}
+body.live-workspace .takes-panel button{background:transparent;color:var(--tinta);border:1px solid var(--linea);border-radius:6px;padding:5px 9px}
+body.live-workspace .connection-host.is-connected summary{background:transparent;color:var(--tinta)}
+body.live-workspace .study-bar .connection-panel[open]>.pairing{width:280px}
+body.live-workspace details.card>summary{color:var(--tinta)}
+
+/* Plantillas abiertas desde la barra (después del primer uso): tarjeta flotante bajo la barra */
+body.live-workspace:not(.sin-plantilla) .template-library-panel[open]{position:fixed;left:20px;top:64px;z-index:50;width:min(780px,calc(100vw - 40px));max-height:calc(100vh - 84px);overflow:auto;padding:14px 16px;background:var(--hoja);border:1px solid var(--linea);border-radius:8px;box-shadow:0 12px 32px #0008}
+body.live-workspace:not(.sin-plantilla) .template-library-panel[open]::before{display:none}
+body.live-workspace .template-library-panel[open]>summary{margin-bottom:10px}
+body.live-workspace .template-library-panel[open]>select,body.live-workspace .template-library-panel[open]>.use,body.live-workspace .template-library-panel[open]>button{width:100%;margin-top:8px}
+
+/* Medidor de nivel de audio */
+body.live-workspace .record-strip meter{-webkit-appearance:none;appearance:none;width:70px;height:6px;background:var(--linea);border:0;border-radius:6px}
+body.live-workspace .record-strip meter::-webkit-meter-bar{background:var(--linea);border:0;border-radius:6px;height:6px}
+body.live-workspace .record-strip meter::-webkit-meter-optimum-value,body.live-workspace .record-strip meter::-webkit-meter-suboptimum-value,body.live-workspace .record-strip meter::-webkit-meter-even-less-good-value{background:var(--tinta-2);border-radius:6px}
+body.live-workspace .record-strip .pill{position:static}
+
+body.live-workspace .study-bar .template-library-panel>summary{display:block;max-width:230px;overflow:hidden;text-overflow:ellipsis}
+body.live-workspace .study-bar .template-library-panel[open]>summary{max-width:none}
+@media(max-width:1500px){body.live-workspace .study-brand small{display:none}body.live-workspace .study-bar .template-library-panel>summary{max-width:190px}}
+body.live-workspace{accent-color:var(--tinta-2)}

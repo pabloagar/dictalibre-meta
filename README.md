@@ -16,6 +16,7 @@ Permitir que un profesional sanitario use su celular como micrófono de un compu
 
 - Dictado al terminar cada toma: abrir [dictado local](http://127.0.0.1:8789/live) en el PC, conectar el S25 Ultra mediante su QR y grabar. Muestra texto por toma y latencia, preserva el audio en el laboratorio. Muse también seleccionable por toma o streaming; la autenticación fue resuelta. Streaming muestra parciales reemplazables y aplica números/comandos al final. Véase LABORATORY.md.
 
+- Diseño final del MVP de `/live` («Hoja clínica»: selector de plantilla de un solo uso, barra del estudio, sexo F/M, Ajustes, tema sala/día): véase [docs/DISENO_MVP.md](docs/DISENO_MVP.md), que separa lo comprobado de lo pendiente.
 - Dos vistas web: emisor móvil y receptor de escritorio.
 - S25 Ultra como dispositivo de referencia acordado, con pantalla encendida e interfaz abierta.
 - Emparejamiento directo por QR con token temporal de un uso; el código manual conserva la confirmación del número en el PC.

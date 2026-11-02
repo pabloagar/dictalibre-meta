@@ -105,6 +105,8 @@ Formato: **ID · título**, seguido de evidencia, impacto, riesgo de corregirlo,
 - **Propuesta:** que una sesión nueva **no** reinicie el editor y limpie solo el estado de las tomas. Para vaciar el informe, que haya una acción explícita «Informe en blanco» con confirmación. Agregar la prueba «conectar no altera el informe».
 - **Plazo:** **antes del 4-nov.**
 
+> **Estado (2-nov, después de la revisión):** corregido con aprobación del responsable como parte del diseño final de `/live`. `dicta-new-session` llama a `reportEditor.cancelPending()`, que cancela solo las tomas pendientes. Comprobado en Chromium (`docs/propuesta-ui/mvp/verificacion/a1-conectar-conserva-informe.cjs`); no hay prueba automática en el repositorio y falta la comprobación con el teléfono real. «Reiniciar sesión» también conserva ahora el informe.
+
 #### A2 · Un `aborted` atrasado anula la toma nueva en el teléfono [Ejecutado]
 
 > **Estado (2-nov, después de la revisión):** corregido con aprobación del responsable. `mobile.js` ignora un `aborted` con otro `id` y hay una prueba nueva en `tests/mobile-lifecycle.test.mjs`, que falló antes del cambio. Resultado: 77/77 pruebas. Falta la comprobación física en el S25.

@@ -60,3 +60,10 @@ test('API: origen, deduplicación, versiones, cola, exportación, cancelación y
   const closing=once(lab.server,'close');lab.close();await closing;base=await start();s=await state();assert.equal(s.runs.length,7);assert.equal(s.audios[0].references.length,2);assert.equal(s.metaConfigured,true);
  }finally{const closing=once(lab.server,'close');lab.close();await closing;fs.rmSync(dir,{recursive:true,force:true});}
 });
+test('/live sirve la hoja de estilos del diseño final con tema sala por defecto y tema día explícito',async()=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'dicta-livecss-'));
+ const lab=createLab({dataDir:dir,keyFile:path.join(dir,'.env.local'),worker:{call:async()=>{},close(){}}});
+ lab.server.listen(0,'127.0.0.1');await once(lab.server,'listening');const base=`http://127.0.0.1:${lab.server.address().port}`;
+ try{const r=await fetch(base+'/live.css');assert.equal(r.status,200);assert.match(r.headers.get('content-type'),/text\/css/);const css=await r.text();assert.match(css,/:root\{--mesa:#131211/);assert.match(css,/:root\[data-theme="dia"\]/);assert.doesNotMatch(css,/prefers-color-scheme/);}
+ finally{lab.server.close();}
+});

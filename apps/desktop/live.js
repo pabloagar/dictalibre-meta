@@ -44,7 +44,9 @@ window.addEventListener('dicta-recording-stop',()=>{engineSelect.disabled=false;
 const notice=document.createElement('p');notice.className='live-notice';notice.textContent='Por toma: texto al terminar. Streaming: borrador mientras hablas y texto final al detener. Audio y resultados se guardan en el laboratorio local.';panel.append(notice);
 const link=document.createElement('a');link.href='/';link.target='_blank';link.rel='noopener';link.textContent='Abrir laboratorio y comparar tomas';notice.append(document.createElement('br'),link);
 const jobs=new Set();let generation=0;
-const reportEditor=mountReport(panel,{build:initialState.build,sourceHash:initialState.sourceHash});
+// Exámenes de la demo en orden de solicitud (glosarios de demostración), para la lista rápida del selector de plantillas.
+const examenesDemo=initialState.configs.filter(c=>c.demo&&c.vocabulario?.examen).sort((x,y)=>(x.orden_demo??99)-(y.orden_demo??99)).map(c=>({examen:c.vocabulario.examen,orden:c.orden_demo,nombre:c.name.replace(/^Demo · /,'').replace(/ · \d+ términos \(sin medir\)$/,'')}));
+const reportEditor=mountReport(panel,{build:initialState.build,sourceHash:initialState.sourceHash,examenes:examenesDemo});
 // Move existing controls rather than replace editor/model/event handlers.
  document.body.classList.add('live-workspace');
  const makeDetails=(label,cls)=>{const d=document.createElement('details');d.className=cls;const h=document.createElement('summary');h.textContent=label;d.append(h);return d;};
@@ -70,9 +72,45 @@ const reportEditor=mountReport(panel,{build:initialState.build,sourceHash:initia
  let lastScroll=0;reportEditor.element.addEventListener('scroll',()=>{const now=performance.now();if(now-lastScroll>200){track('editor-scroll');lastScroll=now;}},{passive:true});
  const layoutExport=document.createElement('button');layoutExport.textContent='Exportar mediciones de disposición';diagnostics.append(layoutExport);layoutExport.onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(layoutMetrics,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='dicta-disposicion-metricas.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
  requestAnimationFrame(()=>{const r=reportEditor.element.getBoundingClientRect();track('editor-visible',{viewportWidth:innerWidth,viewportHeight:innerHeight,top:r.top,height:r.height,visibleHeight:Math.max(0,Math.min(r.bottom,innerHeight)-Math.max(0,r.top))});});
+// Diseño final del MVP (propuesta B v3, docs/DISENO_MVP.md): barra del estudio arriba, «Ajustes» con lo técnico y notas
+// al margen. Solo se reubican controles existentes; sus manejadores no cambian. Estilos en /live.css (tema sala por defecto).
+{const css=document.createElement('link');css.rel='stylesheet';css.href='/live.css';document.head.append(css);}
+const temaKey='dicta-tema-v1',aplicarTema=t=>{if(t==='dia')document.documentElement.dataset.theme='dia';else delete document.documentElement.dataset.theme;};
+let temaActual='sala';try{temaActual=localStorage.getItem(temaKey)==='dia'?'dia':'sala';}catch{}aplicarTema(temaActual);
+const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
+const reportSection=reportEditor.element.closest('.report-workspace'),actions=reportSection.querySelector('.report-actions');
+const templatePanelEl=reportSection.querySelector('.template-library-panel'),sexSelectEl=reportSection.querySelector('.sex-select');
+const studyBar=el('div',undefined,'study-bar');studyBar.setAttribute('role','toolbar');studyBar.setAttribute('aria-label','Estudio, dictado e informe');
+const brand=el('div',undefined,'study-brand');brand.append(el('strong','Dicta Libre'),el('small','prototipo · solo material sintético'));
+// Sexo F · M · — (controla el selector existente; la revisión es local y no se envía a Meta).
+const sexSeg=el('div',undefined,'sex-seg');sexSeg.setAttribute('role','group');sexSeg.setAttribute('aria-label','Sexo del paciente');sexSeg.append(el('span','Sexo','sex-lab'));
+const sexButtons=[['F','F'],['M','M'],['','—']].map(([v,t])=>{const b=el('button',t);b.type='button';b.dataset.v=v;b.setAttribute('aria-label',v?`Sexo ${v}`:'Sexo sin dato');b.onclick=()=>{sexSelectEl.value=v;sexSelectEl.dispatchEvent(new Event('change'));syncSex();};sexSeg.append(b);return b;});
+const syncSex=()=>{for(const b of sexButtons)b.setAttribute('aria-pressed',String(b.dataset.v===sexSelectEl.value));};syncSex();sexSelectEl.hidden=true;
+// Teléfono: el botón de conectar vuelve al panel de conexión; la franja «1. Conecta tu teléfono» deja de ocupar la pantalla.
+document.querySelector('.pairing').prepend(connectButton);onboarding.remove();
+// Ajustes: motor, glosario, cierre de toma, Revisor, comandos, tamaño de letra, tema, laboratorio y diagnóstico.
+const ajustes=makeDetails('Ajustes','settings-menu');const ajustesBody=el('div',undefined,'settings-body');ajustes.append(ajustesBody);
+ajustesBody.append(engineLabel,engineHint,...[...settings.children].filter(c=>c.tagName!=='SUMMARY'));settings.remove();
+const fontRow=el('div',undefined,'settings-row');fontRow.append(el('span','Tamaño de letra'),...actions.querySelectorAll('.font-size-btn'));
+const temaRow=el('label','Tema ');const temaSelect=el('select');temaSelect.setAttribute('aria-label','Tema de la interfaz');temaSelect.add(new Option('Sala (bajo brillo)','sala'));temaSelect.add(new Option('Día','dia'));temaSelect.value=temaActual;temaRow.append(temaSelect);
+temaSelect.onchange=()=>{aplicarTema(temaSelect.value);try{localStorage.setItem(temaKey,temaSelect.value);}catch{}track('theme',{tema:temaSelect.value});};
+const diagButton=el('button','Mediciones y diagnóstico');diagButton.type='button';diagButton.onclick=()=>{ajustes.open=false;diagnostics.open=true;diagnostics.scrollIntoView({block:'start'});};
+labLink.textContent='Laboratorio (comparar tomas)';ajustesBody.append(fontRow,temaRow,labLink,diagButton);
+// Notas al margen: estado del dictado, avisos de sexo y glosario de este estudio.
+const notas=el('aside',undefined,'notas');notas.setAttribute('aria-label','Estado, avisos y glosario');
+const glosarioNota=el('div',undefined,'nota nota-glosario'),glosarioTexto=el('p');const glosarioCambiar=el('button','Cambiar');glosarioCambiar.type='button';glosarioCambiar.onclick=()=>{ajustes.open=true;glossary.focus();};
+glosarioNota.append(el('h4','Glosario de este estudio'),glosarioTexto,glossaryNote,glosarioCambiar);
+const syncGlosario=()=>{const o=glossary.selectedOptions[0];glosarioTexto.textContent=o?o.textContent:'Sin glosario';};glossary.addEventListener('change',syncGlosario);syncGlosario();
+window.addEventListener('dicta-template-applied',()=>queueMicrotask(()=>{syncGlosario();syncSex();}));
+notas.append(document.querySelector('#record-help'),reportSection.querySelector('.sex-warnings'),glosarioNota);reportSection.append(notas);
+const grow=el('span',undefined,'grow');
+studyBar.append(brand,templatePanelEl,sexSeg,grow,connectionHost,document.querySelector('.record-strip'),actions,ajustes);
+document.querySelector('main').prepend(studyBar);
+ajustes.addEventListener('toggle',()=>track('panel-toggle',{panel:'ajustes',open:ajustes.open}));
  const seconds=v=>v==null?'sin medición':`${(v/1000).toFixed(2)} s`;
 async function api(path,data,signal){if(path==='/api/state'&&data===undefined)return sharedState();const response=await fetch(path,{signal,...(data===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})});const value=await response.json();if(!response.ok)throw Error(value.error);return value;}
-window.addEventListener('dicta-new-session',()=>{generation++;reportEditor.reset();recordingAnchor=null;commandsToggle.disabled=false;engineSelect.disabled=false;reviewToggle.disabled=false;glossary.disabled=false;segmentationSelect.disabled=false;recordingEngine=null;stream=null;for(const s of streams)s.cancel();streams.clear();for(const job of jobs){job.controller.abort();if(job.runId)void api('/api/cancel',{id:job.runId}).catch(()=>{});}jobs.clear();for(const card of panel.querySelectorAll('article'))card.remove();});
+// Una sesión nueva del teléfono cancela solo las tomas pendientes; el informe se conserva (hallazgo A1 de la revisión técnica).
+window.addEventListener('dicta-new-session',()=>{generation++;reportEditor.cancelPending();recordingAnchor=null;commandsToggle.disabled=false;engineSelect.disabled=false;reviewToggle.disabled=false;glossary.disabled=false;segmentationSelect.disabled=false;recordingEngine=null;stream=null;for(const s of streams)s.cancel();streams.clear();for(const job of jobs){job.controller.abort();if(job.runId)void api('/api/cancel',{id:job.runId}).catch(()=>{});}jobs.clear();for(const card of panel.querySelectorAll('article'))card.remove();});
 window.addEventListener('pagehide',()=>{for(const s of streams)s.cancel();});
 window.addEventListener('dicta-take',async event=>{
  const take=event.detail,epoch=generation,controller=new AbortController(),job={controller,runId:null};jobs.add(job);

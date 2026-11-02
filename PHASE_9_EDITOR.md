@@ -35,3 +35,6 @@ Aprobado por el responsable.
 - **Pruebas:** `needsReplaceConfirmation` y `sexAnatomyWarnings` en `tests/report-model.test.mjs`, vistas fallar antes de implementar.
 - **Verificación:** recorrido en Chromium con el laboratorio real.
 - **Límites:** la lista es cerrada y no reconoce sinónimos fuera de ella. No sabe de cirugías de afirmación de género ni de intersexualidad: por eso el aviso es solo para revisar.
+
+## 2026-11-02 · Diseño final del MVP en /live
+Aprobado por el responsable. `report-editor.js` suma `cancelPending()` (una sesión nueva cancela solo las tomas pendientes y el informe se conserva), la lista rápida de los 10 exámenes y el estado `sin-plantilla` que abre el selector a pantalla completa. `live.js` reubica los controles existentes en la barra del estudio, Ajustes y notas; `apps/desktop/live.css` aporta la paleta. Detalle y pendientes en `docs/DISENO_MVP.md`. Captura, transporte y reconocimiento no cambian.
