@@ -1,0 +1,11 @@
+# Puntuación no solicitada: candidata no habilitada
+
+02-11-2026. Responsable pide corregir mientras prueba conexión, sin Render. La documentación oficial https://dev.meta.ai/docs/speech-to-text describe puntuación incorporada por el modelo, sin procedencia acústica de cada signo. Se consultó también cookbook de Voice API Fundamentals. No se inventó un parámetro remoto para desactivarla.
+
+Hipótesis explorada: retirar comas no numéricas antes de convertir comandos explícitos elimina las dos diferencias observadas. Se añadió modo interno explicit-commas-candidate, NO configurado por demo ni cliente ni activado por defecto. Original intacto, eventos con offsets y motivo, warning por origen desconocido y tiempo medido de transformación. No modifica puntos, dos puntos, símbolos anatómicos ni comas entre cifras; comandos escritos como palabras se convierten después. No se afirma saber cuáles comas fueron realmente dictadas.
+
+Evaluación exploratoria posterior a implementar candidata, no protocolo prospectivo ni nueva inferencia: ASR congelado de 12 resultados humanos con glosario; exactitud con puntuación 10/12→12/12, sin cambios de palabras/medidas en esos resultados. Evidencia privada en human-glossary-1793649230514/punctuation-candidate.json. El corpus no tiene un caso humano de coma dictada absorbida por el ASR, por tanto no demuestra seguridad de borrado.
+
+Control adverso escrito: si el usuario dijo una coma y ASR devolvió solo el símbolo, la candidata la elimina igualmente. Se preservó ese resultado en test con warning. Criterio de adopción no cumplido: debe conservar puntuación explícitamente dictada, no solo ajustar estos doce textos. No desplegar ni habilitar automáticamente. Las reglas deterministas de texto no resuelven esta ambigüedad sin evidencia adicional. Alternativa futura: opción explícita con limitación visible o verificación contra audio; no añadida como función al MVP en esta tarea.
+
+Sintaxis y 209/209 regresiones aprobadas; cuatro tests nuevos, incluyendo resultado adverso. No pruebas físicas nuevas, ninguna llamada de ASR, sin red/dispositivo/latencia de teléfono medidos. Duración transformadora de software no es tiempo de dictado; precisión/sobrecosto no cuantificados. Código experimental guardado con skip render; ningún reinicio. La puntuación espontánea sigue siendo pendiente en producción.
