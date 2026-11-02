@@ -54,7 +54,7 @@ function showFigureDoubts(warnings){
 }
 // Hoja clínica: preserve the mounted editor, transport controls and listeners.
 document.body.classList.add('live-workspace','clinical-workspace');
-const layoutMetrics={version:'a-compacta-v1',serverBuild:initialState.build??null,serverSourceHash:initialState.sourceHash??null,createdAt:new Date().toISOString(),browser:navigator.userAgent,device:null,network:null,audioSource:null,clockResolutionMs:null,instrumentationOverheadMs:null,audioMeter:{updates:0,totalPaintMs:0,maxPaintMs:0,source:'received-pcm-rms'},events:[]};
+const layoutMetrics={version:'a-compacta-v2',serverBuild:initialState.build??null,serverSourceHash:initialState.sourceHash??null,createdAt:new Date().toISOString(),browser:navigator.userAgent,device:null,network:null,audioSource:null,clockResolutionMs:null,instrumentationOverheadMs:null,audioMeter:{updates:0,totalPaintMs:0,maxPaintMs:0,source:'received-pcm-rms'},events:[]};
 const track=(type,data={})=>{layoutMetrics.events.push({type,atMs:performance.now(),...data});if(layoutMetrics.events.length>500)layoutMetrics.events.shift();};
 const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text)n.textContent=text;return n;};
 const makeDetails=(label,cls)=>{const d=make('details',cls);d.append(make('summary','',label));return d;};
@@ -67,6 +67,7 @@ for(const value of ['F','M','—']){const button=make('button','',value);button.
 templatePanel.after(sex);
 reportEditor.element.addEventListener('template-applied',()=>{selectedSex='—';sheetSex.textContent='Sexo —';for(const b of sex.querySelectorAll('button'))b.setAttribute('aria-pressed',String(b.textContent==='—'));});
 const connection=makeDetails('Conecta tu teléfono para empezar','connection-panel'),pairing=document.querySelector('.pairing');connection.append(pairing);
+const closeConnection=make('button','connection-close','Cerrar');closeConnection.setAttribute('aria-label','Cerrar conexión');pairing.prepend(closeConnection);closeConnection.onclick=()=>{connection.open=false;connection.querySelector('summary').focus();};
 const connectButton=pairing.querySelector('#create');connectButton.textContent='Mostrar QR';
 const strip=document.querySelector('.record-strip');strip.classList.add('clinical-record');
 sex.after(connection,strip);connection.addEventListener('toggle',()=>{if(connection.open&&document.querySelector('#paired').hidden&&document.querySelector('#pairing').hidden&&document.querySelector('#confirm-panel').hidden&&!connectButton.disabled)connectButton.click();});
@@ -100,6 +101,11 @@ const paintLevel=()=>{const paintStart=performance.now();const value=Math.max(0,
 const layoutExport=make('button','','Exportar mediciones de disposición');diagnostics.append(layoutExport);layoutExport.onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(layoutMetrics,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='dicta-disposicion-metricas.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 for(const [name,element] of [['connection',connection],['settings',settings],['templates',templatePanel],['takes-review',takes],['diagnostics',diagnostics]])element.addEventListener('toggle',()=>track('panel-toggle',{panel:name,open:element.open}));
 for(const popup of [connection,settings,templatePanel])popup.addEventListener('toggle',()=>{if(popup.open)for(const other of [connection,settings,templatePanel])if(other!==popup)other.open=false;});
+const positionPopup=(popup,body,right=false)=>{if(!popup.open)return;const anchor=popup.querySelector('summary').getBoundingClientRect(),top=Math.max(8,Math.min(anchor.bottom+8,window.innerHeight-100)),width=Math.min(right?360:310,window.innerWidth-16);body.style.width=width+'px';body.style.left=(right?Math.max(8,window.innerWidth-width-16):Math.max(8,Math.min(anchor.left,window.innerWidth-width-8)))+'px';body.style.top=top+'px';body.style.maxHeight=Math.max(80,window.innerHeight-top-12)+'px';};
+const positionPopups=()=>{positionPopup(connection,pairing);positionPopup(templatePanel,templatePanel.querySelector('.template-picker'),true);};
+for(const popup of [connection,templatePanel])popup.addEventListener('toggle',positionPopups);
+window.addEventListener('resize',positionPopups);window.addEventListener('scroll',positionPopups,{capture:true,passive:true});
+document.addEventListener('click',e=>{for(const popup of [connection,settings])if(popup.open&&!popup.contains(e.target)){popup.open=false;track('panel-dismiss',{panel:popup===connection?'connection':'settings',reason:'outside'});}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')for(const popup of [connection,settings,templatePanel])if(popup.open){popup.open=false;popup.querySelector('summary').focus();}});
 let lastScroll=0;reportEditor.element.addEventListener('scroll',()=>{const now=performance.now();if(now-lastScroll>200){track('editor-scroll');lastScroll=now;}},{passive:true});
 requestAnimationFrame(()=>{const r=reportEditor.element.getBoundingClientRect();track('editor-visible',{viewportWidth:innerWidth,viewportHeight:innerHeight,top:r.top,width:r.width,height:r.height,visibleHeight:Math.max(0,Math.min(r.bottom,innerHeight)-Math.max(0,r.top)),initialCharacters:reportEditor.model.text.length});});

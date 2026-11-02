@@ -32,7 +32,7 @@ export function mountReport(parent,{build=null,sourceHash=null,globalReview=true
  const editor=node('div');editor.contentEditable='plaintext-only';editor.setAttribute('role','textbox');editor.setAttribute('aria-label','Informe dictado');editor.setAttribute('aria-multiline','true');editor.className='dictation-report report-editor';editor.spellcheck=true;editor.dataset.empty='true';section.append(editor);
  const status=node('p','Borrador guardado solo en este navegador. Revisa también el contenido heredado de la plantilla.');status.setAttribute('role','status');status.className='tiny';section.append(status);
  const exportButton=node('button','Exportar mediciones del editor');section.append(exportButton);
- const metrics={layoutVersion:'a-compacta-v1',version:EDITOR_VERSION,build,sourceHash,createdAt:new Date().toISOString(),environment:{browser:navigator.userAgent,network:null,device:null},events:[]};let selection={start:model.text.length,end:model.text.length},composing=false;
+ const metrics={layoutVersion:'a-compacta-v2',version:EDITOR_VERSION,build,sourceHash,createdAt:new Date().toISOString(),environment:{browser:navigator.userAgent,network:null,device:null},events:[]};let selection={start:model.text.length,end:model.text.length},composing=false;
  function event(type,data={}){metrics.events.push({type,atMs:performance.now(),...data});if(metrics.events.length>1000)metrics.events.shift();try{localStorage.setItem('dicta-editor-metrics-v1',JSON.stringify(metrics));}catch{}}
  function persist(){try{localStorage.setItem(key,model.committed());localStorage.setItem('dicta-report-context-v1',JSON.stringify(model.templateContext));}catch{status.textContent='No se pudo guardar en este navegador. Copia el informe antes de salir.';}}
  function readSelection(){if(document.activeElement!==editor)return null;const s=window.getSelection();if(!s?.rangeCount)return null;const r=s.getRangeAt(0);if(!editor.contains(r.startContainer)||!editor.contains(r.endContainer))return null;const a=r.cloneRange();a.selectNodeContents(editor);a.setEnd(r.startContainer,r.startOffset);const b=r.cloneRange();b.selectNodeContents(editor);b.setEnd(r.endContainer,r.endOffset);return {start:a.toString().length,end:b.toString().length};}
@@ -62,16 +62,38 @@ export function mountReport(parent,{build=null,sourceHash=null,globalReview=true
  const copyReport=async(skipReview=false)=>{const start=performance.now();if(model.pending)return;if(!skipReview&&reportReview&&!reportReview.beforeCopy())return;clearTimeout(copyFeedbackTimer);const text=model.text;try{await navigator.clipboard.writeText(text);copy.textContent='✓ Informe copiado';status.textContent='Informe copiado. Puedes pegarlo en el RIS.';event('copy',{elapsedMs:performance.now()-start,characters:text.length,ok:true,feedback:'button-and-status'});}catch{copy.textContent='No se pudo copiar';status.textContent='No se pudo copiar automáticamente. Selecciona el informe y copia con Ctrl+C.';event('copy',{elapsedMs:performance.now()-start,ok:false,feedback:'button-and-status'});}copyFeedbackTimer=setTimeout(()=>{copy.textContent='Copiar para RIS';},3000);};
  exportButton.onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(metrics,null,2)],{type:'application/json'}));const a=node('a');a.href=url;a.download='dicta-editor-metricas.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
  const templatePanel=node('details');templatePanel.className='template-library-panel';templatePanel.append(node('summary','Plantilla'));
- section.prepend(templatePanel);templatePanel.append(filters,libraryInfo,select,use,preview,templateDetails);
- let replaceConfirmed=false;const replaceNote=node('p','Esto reemplaza el informe actual. Puedes deshacerlo.');replaceNote.hidden=true;templatePanel.append(replaceNote);
- const cancelTemplate=node('button','Cancelar');templatePanel.append(cancelTemplate);cancelTemplate.onclick=()=>{templatePanel.open=false;};
+ const templateBody=node('div');templateBody.className='template-picker';templateBody.setAttribute('role','region');templateBody.setAttribute('aria-label','Elegir plantilla');
+ const pickerHead=node('div');pickerHead.className='template-picker-head';const cancelTemplate=node('button','Cerrar');cancelTemplate.setAttribute('aria-label','Cerrar plantillas');pickerHead.append(node('strong','Plantillas'),cancelTemplate);
+ const libraryDetails=node('details');libraryDetails.append(node('summary','Información de la biblioteca'),libraryInfo);
+ const pickerActions=node('div');pickerActions.className='template-picker-actions';pickerActions.append(favorite,use);
+ section.prepend(templatePanel);templatePanel.append(templateBody);templateBody.append(pickerHead,filters,select,pickerActions,preview,templateDetails,libraryDetails);
+ let replaceConfirmed=false;const replaceNote=node('p','Esto reemplaza el informe actual. Puedes deshacerlo.');replaceNote.hidden=true;pickerActions.before(replaceNote);
+ cancelTemplate.onclick=()=>{templatePanel.open=false;templatePanel.querySelector('summary').focus();};
+ document.addEventListener('click',e=>{if(templatePanel.open&&!templatePanel.contains(e.target)){templatePanel.open=false;event('panel-dismiss',{panel:'templates',reason:'outside'});}});
  const resetConfirmation=()=>{replaceConfirmed=false;replaceNote.hidden=true;use.textContent='Aplicar plantilla';};select.addEventListener('change',resetConfirmation);editor.addEventListener('input',resetConfirmation);
  templatePanel.addEventListener('toggle',()=>{resetConfirmation();if(templatePanel.open)search.focus();});
  templatePanel.addEventListener('keydown',e=>{if(e.key==='Escape'){templatePanel.open=false;templatePanel.querySelector('summary').focus();}});
 
  section.querySelector('h2').textContent='Informe';
  const smaller=node('button','A−'),larger=node('button','A+');smaller.setAttribute('aria-label','Reducir tamaño del informe');larger.setAttribute('aria-label','Aumentar tamaño del informe');let fontSize=19;
- const fontValue=node('output','19 px');fontValue.className='report-font-value';fontValue.setAttribute('aria-label','Tamaño del informe');const resize=delta=>{fontSize=Math.max(14,Math.min(28,fontSize+delta));editor.style.fontSize=fontSize+'px';fontValue.textContent=fontSize+' px';smaller.disabled=fontSize===14;larger.disabled=fontSize===28;event('font-size',{pixels:fontSize});};smaller.onclick=()=>resize(-1);larger.onclick=()=>resize(1);
+ let fitGeneration=0;
+ const fontValue=node('output','19 px');fontValue.className='report-font-value';fontValue.setAttribute('aria-label','Tamaño del informe');
+ const setFontSize=pixels=>{fontSize=Math.max(14,Math.min(28,pixels));editor.style.fontSize=fontSize+'px';fontValue.textContent=fontSize+' px';smaller.disabled=fontSize===14;larger.disabled=fontSize===28;};
+ const resize=delta=>{fitGeneration++;setFontSize(fontSize+delta);event('font-size',{pixels:fontSize});};smaller.onclick=()=>resize(-1);larger.onclick=()=>resize(1);
+ editor.addEventListener('input',()=>fitGeneration++);
+ editor.addEventListener('template-applied',()=>{
+  const generation=++fitGeneration,text=model.text;
+  Promise.resolve(document.fonts?.ready).then(()=>window.requestAnimationFrame(()=>{
+   if(generation!==fitGeneration||model.text!==text||!editor.isConnected)return;
+   const started=performance.now();setFontSize(19);
+   if(!editor.clientHeight||!editor.clientWidth){event('template-fit',{pixels:19,fits:null,reason:'layout-unavailable'});return;}
+   while(fontSize>14&&(editor.scrollHeight>editor.clientHeight+1||editor.scrollWidth>editor.clientWidth+1))setFontSize(fontSize-1);
+   const fits=editor.scrollHeight<=editor.clientHeight+1&&editor.scrollWidth<=editor.clientWidth+1;
+   editor.scrollTop=0;editor.scrollLeft=0;editor.focus({preventScroll:true});setSelection({start:0,end:0});
+   if(!fits)status.textContent='Plantilla insertada a 14 px. Desplázate para ver el informe completo; puedes cambiar el tamaño de letra.';
+   event('template-fit',{pixels:fontSize,fits,viewportWidth:window.innerWidth,viewportHeight:window.innerHeight,editorWidth:editor.clientWidth,editorHeight:editor.clientHeight,contentHeight:editor.scrollHeight,elapsedMs:performance.now()-started});
+  }));
+ });
  controls.prepend(templatePanel);controls.insertBefore(smaller,copy);controls.insertBefore(fontValue,copy);controls.insertBefore(larger,copy);copy.classList.add('report-copy');
  templatePanel.addEventListener('toggle',()=>event('panel-toggle',{panel:'templates',open:templatePanel.open}));
  help.className='report-help';editor.after(help);status.className='report-status';exportButton.className='editor-export';

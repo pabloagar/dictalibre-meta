@@ -42,6 +42,26 @@ test('encabezados conservan offsets de dictado y el texto plano',async()=>{
  await window.happyDOM.close();
 });
 
+test('selector compacto: cerrar fuera/Escape, ajustar solo al insertar y respetar mínimo de 14 px',async()=>{
+ const {window,editor,button}=setup();
+ window.requestAnimationFrame=callback=>{callback();return 0;};
+ const panel=document.querySelector('.template-library-panel'),select=document.querySelector('[aria-label="Plantilla para el informe"]');
+ panel.open=true;document.querySelector('[aria-label="Buscar plantillas"]').click();assert.equal(panel.open,true);
+ document.body.click();assert.equal(panel.open,false);
+ panel.open=true;panel.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));assert.equal(panel.open,false);
+ panel.open=true;button('Cerrar').click();assert.equal(panel.open,false);
+ let height=160;
+ Object.defineProperties(editor.element,{clientHeight:{get:()=>height},clientWidth:{get:()=>600},scrollHeight:{get:()=>Number.parseInt(editor.element.style.fontSize||'19')*10},scrollWidth:{get:()=>600}});
+ select.value='0';panel.open=true;button('Aplicar plantilla').click();await new Promise(r=>setTimeout(r,0));
+ assert.equal(panel.open,false);assert.equal(editor.element.style.fontSize,'16px');assert.match(editor.model.text,/CONCLUSIÓN/);
+ let fit=JSON.parse(localStorage.getItem('dicta-editor-metrics-v1')).events.filter(e=>e.type==='template-fit').at(-1);assert.equal(fit.fits,true);
+ editor.element.textContent='Más texto sintético';editor.element.dispatchEvent(new window.Event('input'));await new Promise(r=>setTimeout(r,0));assert.equal(editor.element.style.fontSize,'16px');
+ height=100;panel.open=true;button('Aplicar plantilla').click();button('Reemplazar informe actual').click();await new Promise(r=>setTimeout(r,0));
+ assert.equal(editor.element.style.fontSize,'14px');assert.equal(document.querySelector('[aria-label="Reducir tamaño del informe"]').disabled,true);
+ fit=JSON.parse(localStorage.getItem('dicta-editor-metrics-v1')).events.filter(e=>e.type==='template-fit').at(-1);assert.equal(fit.fits,false);assert.match(document.querySelector('.report-status').textContent,/Desplázate/);
+ await window.happyDOM.close();
+});
+
 test('A compacta: rehacer contexto, letra y copia limpia de anotaciones; ediciones invalidan avisos',async()=>{
  const {window,editor,button}=setup({globalReview:true});
  let copied=null;Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{copied=text;}},configurable:true});
@@ -75,6 +95,13 @@ test('montaje completo mantiene controles, hoja y ajustes accesibles',async()=>{
  assert.equal(document.querySelector('.clinical-settings').open,false);
  assert.ok(document.querySelector('.clinical-editbar .report-redo'));
  assert.ok(document.querySelector('.clinical-notes .report-global-review'));
+ const connection=document.querySelector('.connection-panel'),pairing=document.querySelector('.pairing');
+ connection.querySelector('summary').getBoundingClientRect=()=>({left:240,bottom:60});
+ connection.open=true;connection.dispatchEvent(new window.Event('toggle'));
+ assert.equal(pairing.style.left,'240px');assert.equal(pairing.style.top,'68px');
+ pairing.click();assert.equal(connection.open,true);document.body.click();assert.equal(connection.open,false);
+ const templates=document.querySelector('.template-library-panel');templates.open=true;templates.dispatchEvent(new window.Event('toggle'));
+ assert.equal(document.querySelector('.template-picker').style.width,'360px');
  const level=document.querySelector('#level');level.value=.8;await new Promise(r=>setTimeout(r,0));assert.ok(document.querySelectorAll('.audio-bars .lit').length>0);
  level.value=0;await new Promise(r=>setTimeout(r,0));assert.equal(document.querySelectorAll('.audio-bars .lit').length,0);
  await window.happyDOM.close();delete globalThis.__clinicalTest;
