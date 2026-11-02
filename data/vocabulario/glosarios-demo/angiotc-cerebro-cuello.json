@@ -1,0 +1,160 @@
+{
+ "schema": "dicta-libre.glosario-demo.v1",
+ "examen": "angiotc-cerebro-cuello",
+ "nombre": "AngioTC de cerebro y cuello (incluye perfusión)",
+ "estado": "glosario de demostración, sin medir",
+ "regla": "Términos de las secciones del examen; sin lateralidad, negaciones, unidades ni lista PUC; variantes agrupadas; por grupo: prioridad A, técnicos (10+ letras, sigla o epónimo), conteo en plantillas como apoyo y orden de la fuente; grupos intercalados. Revisión del responsable pendiente.",
+ "secciones": [
+  "ANGIOTAC DE CEREBRO Y CUELLO, Y PERFUSIÓN"
+ ],
+ "fuente": {
+  "nombre": "Vocabulario_por_TAC_y_patologia.txt",
+  "sha256": "6fbd26a02da704236d9f2a6e3ee30ed9ab179be8d2f1de530ddba1e0ff48bb5d"
+ },
+ "terminos": [
+  "arterias vertebrales",
+  "aneurismas",
+  "Tmax",
+  "seno transverso",
+  "estenosis significativa",
+  "saco aneurismático",
+  "hipoperfusión",
+  "vena de Galeno",
+  "colaterales",
+  "cuello aneurismático",
+  "perfusión",
+  "venas corticales",
+  "estenótico",
+  "malformación arteriovenosa",
+  "penumbra",
+  "trombosis venosa cerebral",
+  "polígono de Willis",
+  "infundíbulo",
+  "core",
+  "trombosis de seno venoso"
+ ],
+ "detalle": [
+  {
+   "termino": "arterias vertebrales",
+   "grupo": "Oclusión y estenosis",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "aneurismas",
+   "grupo": "Aneurismas y malformaciones",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "Tmax",
+   "grupo": "Perfusión por TAC",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "seno transverso",
+   "grupo": "Trombosis venosa cerebral",
+   "prioridad": "B",
+   "tecnico": true
+  },
+  {
+   "termino": "estenosis significativa",
+   "grupo": "Oclusión y estenosis",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "saco aneurismático",
+   "grupo": "Aneurismas y malformaciones",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "hipoperfusión",
+   "grupo": "Perfusión por TAC",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "vena de Galeno",
+   "grupo": "Trombosis venosa cerebral",
+   "prioridad": "B",
+   "tecnico": true
+  },
+  {
+   "termino": "colaterales",
+   "grupo": "Oclusión y estenosis",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "cuello aneurismático",
+   "grupo": "Aneurismas y malformaciones",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "perfusión",
+   "grupo": "Perfusión por TAC",
+   "prioridad": "A",
+   "tecnico": false
+  },
+  {
+   "termino": "venas corticales",
+   "grupo": "Trombosis venosa cerebral",
+   "prioridad": "B",
+   "tecnico": true
+  },
+  {
+   "termino": "estenótico",
+   "grupo": "Oclusión y estenosis",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "malformación arteriovenosa",
+   "grupo": "Aneurismas y malformaciones",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "penumbra",
+   "grupo": "Perfusión por TAC",
+   "prioridad": "A",
+   "tecnico": false
+  },
+  {
+   "termino": "trombosis venosa cerebral",
+   "grupo": "Trombosis venosa cerebral",
+   "prioridad": "B",
+   "tecnico": false
+  },
+  {
+   "termino": "polígono de Willis",
+   "grupo": "Oclusión y estenosis",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "infundíbulo",
+   "grupo": "Aneurismas y malformaciones",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "core",
+   "grupo": "Perfusión por TAC",
+   "prioridad": "A",
+   "tecnico": false
+  },
+  {
+   "termino": "trombosis de seno venoso",
+   "grupo": "Trombosis venosa cerebral",
+   "prioridad": "B",
+   "tecnico": false
+  }
+ ],
+ "omitidos_por_repeticion": [],
+ "hash": "c5f45db31641546f6c74ea7602f45d2796a6e13e04119f1341f86d17402ddb45"
+}

@@ -1,0 +1,160 @@
+{
+ "schema": "dicta-libre.glosario-demo.v1",
+ "examen": "pielotc-urotc",
+ "nombre": "PieloTC / UroTC",
+ "estado": "glosario de demostración, sin medir",
+ "regla": "Términos de las secciones del examen; sin lateralidad, negaciones, unidades ni lista PUC; variantes agrupadas; por grupo: prioridad A, técnicos (10+ letras, sigla o epónimo), conteo en plantillas como apoyo y orden de la fuente; grupos intercalados. Revisión del responsable pendiente.",
+ "secciones": [
+  "PIELOTAC, UROTAC Y RETROPERITONEO URINARIO"
+ ],
+ "fuente": {
+  "nombre": "Vocabulario_por_TAC_y_patologia.txt",
+  "sha256": "6fbd26a02da704236d9f2a6e3ee30ed9ab179be8d2f1de530ddba1e0ff48bb5d"
+ },
+ "terminos": [
+  "hidroureteronefrosis",
+  "quiste hemorrágico",
+  "residuo postmiccional",
+  "urolitiasis",
+  "nefropatía médica",
+  "sonda Foley",
+  "nefrolitiasis",
+  "trasplante renal",
+  "reflujo vesicoureteral",
+  "cálculo obstructivo",
+  "quistes corticales",
+  "engrosamiento parietal vesical",
+  "ureterolitiasis",
+  "quiste parapiélico",
+  "engrosamiento de las paredes vesicales",
+  "cálculo coraliforme",
+  "quiste complicado",
+  "trabeculación vesical",
+  "cálculo ureteral obstructivo",
+  "quiste Bosniak"
+ ],
+ "detalle": [
+  {
+   "termino": "hidroureteronefrosis",
+   "grupo": "Urolitiasis y obstrucción",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "quiste hemorrágico",
+   "grupo": "Riñón",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "residuo postmiccional",
+   "grupo": "Vía urinaria y vejiga",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "urolitiasis",
+   "grupo": "Urolitiasis y obstrucción",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "nefropatía médica",
+   "grupo": "Riñón",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "sonda Foley",
+   "grupo": "Vía urinaria y vejiga",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "nefrolitiasis",
+   "grupo": "Urolitiasis y obstrucción",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "trasplante renal",
+   "grupo": "Riñón",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "reflujo vesicoureteral",
+   "grupo": "Vía urinaria y vejiga",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "cálculo obstructivo",
+   "grupo": "Urolitiasis y obstrucción",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "quistes corticales",
+   "grupo": "Riñón",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "engrosamiento parietal vesical",
+   "grupo": "Vía urinaria y vejiga",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "ureterolitiasis",
+   "grupo": "Urolitiasis y obstrucción",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "quiste parapiélico",
+   "grupo": "Riñón",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "engrosamiento de las paredes vesicales",
+   "grupo": "Vía urinaria y vejiga",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "cálculo coraliforme",
+   "grupo": "Urolitiasis y obstrucción",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "quiste complicado",
+   "grupo": "Riñón",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "trabeculación vesical",
+   "grupo": "Vía urinaria y vejiga",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "cálculo ureteral obstructivo",
+   "grupo": "Urolitiasis y obstrucción",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "quiste Bosniak",
+   "grupo": "Riñón",
+   "prioridad": "A",
+   "tecnico": true
+  }
+ ],
+ "omitidos_por_repeticion": [],
+ "hash": "25446ad55682b733cdfe563c827bd5ab27f5d01876f7511a1d214d7fa13439c8"
+}

@@ -1,0 +1,165 @@
+{
+ "schema": "dicta-libre.glosario-demo.v1",
+ "examen": "tc-torax",
+ "nombre": "TC de tórax (incluye alta resolución)",
+ "estado": "glosario de demostración, sin medir",
+ "regla": "Términos de las secciones del examen; sin lateralidad, negaciones, unidades ni lista PUC; variantes agrupadas; por grupo: prioridad A, técnicos (10+ letras, sigla o epónimo), conteo en plantillas como apoyo y orden de la fuente; grupos intercalados. Revisión del responsable pendiente.",
+ "secciones": [
+  "TAC DE TÓRAX Y TAC DE ALTA RESOLUCIÓN"
+ ],
+ "fuente": {
+  "nombre": "Vocabulario_por_TAC_y_patologia.txt",
+  "sha256": "6fbd26a02da704236d9f2a6e3ee30ed9ab179be8d2f1de530ddba1e0ff48bb5d"
+ },
+ "terminos": [
+  "condensación",
+  "atelectasia",
+  "atrapamiento aéreo",
+  "adenopatías mediastínicas",
+  "cardiomegalia",
+  "sonda nasoenteral",
+  "enfermedad pulmonar intersticial",
+  "mastectomía",
+  "vidrio esmerilado",
+  "bandas atelectásicas",
+  "EPOC",
+  "adenopatías hiliares",
+  "aorta ascendente",
+  "reservorio",
+  "fibrosis pulmonar idiopática",
+  "ginecomastia",
+  "aspiración",
+  "banda parenquimatosa",
+  "mediastino",
+  "aorta descendente"
+ ],
+ "detalle": [
+  {
+   "termino": "condensación",
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "atelectasia",
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "atrapamiento aéreo",
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "adenopatías mediastínicas",
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "cardiomegalia",
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "sonda nasoenteral",
+   "grupo": "Dispositivos en tórax",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "enfermedad pulmonar intersticial",
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "tecnico": true
+  },
+  {
+   "termino": "mastectomía",
+   "grupo": "Pared torácica y mama",
+   "prioridad": "B",
+   "tecnico": true
+  },
+  {
+   "termino": "vidrio esmerilado",
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "bandas atelectásicas",
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "EPOC",
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "adenopatías hiliares",
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "aorta ascendente",
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "reservorio",
+   "grupo": "Dispositivos en tórax",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "fibrosis pulmonar idiopática",
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "tecnico": true
+  },
+  {
+   "termino": "ginecomastia",
+   "grupo": "Pared torácica y mama",
+   "prioridad": "B",
+   "tecnico": true
+  },
+  {
+   "termino": "aspiración",
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "banda parenquimatosa",
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "mediastino",
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "aorta descendente",
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "tecnico": true
+  }
+ ],
+ "omitidos_por_repeticion": [
+  {
+   "termino": "enfermedad pulmonar obstructiva crónica",
+   "repite": "EPOC"
+  }
+ ],
+ "hash": "cd51ec97bf6b90a0fb3cc2dca166faabac2eed443fa8d088c63d5395d0a29548"
+}

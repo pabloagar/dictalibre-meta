@@ -1,0 +1,165 @@
+{
+ "schema": "dicta-libre.glosario-demo.v1",
+ "examen": "tc-columna",
+ "nombre": "TC de columna",
+ "estado": "glosario de demostración, sin medir",
+ "regla": "Términos de las secciones del examen; sin lateralidad, negaciones, unidades ni lista PUC; variantes agrupadas; por grupo: prioridad A, técnicos (10+ letras, sigla o epónimo), conteo en plantillas como apoyo y orden de la fuente; grupos intercalados. Revisión del responsable pendiente.",
+ "secciones": [
+  "TAC DE COLUMNA"
+ ],
+ "fuente": {
+  "nombre": "Vocabulario_por_TAC_y_patologia.txt",
+  "sha256": "6fbd26a02da704236d9f2a6e3ee30ed9ab179be8d2f1de530ddba1e0ff48bb5d"
+ },
+ "terminos": [
+  "articulaciones facetarias",
+  "aplastamiento vertebral",
+  "raquiestenosis",
+  "acuñamiento vertebral",
+  "discopatía degenerativa",
+  "fractura por compresión",
+  "protrusión discal",
+  "retropulsión",
+  "uncoartrosis",
+  "apófisis transversa",
+  "compresión radicular",
+  "compresión medular",
+  "espondiloartrosis",
+  "espondilodiscitis",
+  "hemangioma vertebral",
+  "hernia paramediana",
+  "metástasis óseas",
+  "abombamiento discal",
+  "vertebroplastia",
+  "deshidratación discal"
+ ],
+ "detalle": [
+  {
+   "termino": "articulaciones facetarias",
+   "grupo": "Degenerativo",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "aplastamiento vertebral",
+   "grupo": "Fracturas, infección y tumores",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "raquiestenosis",
+   "grupo": "Degenerativo",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "acuñamiento vertebral",
+   "grupo": "Fracturas, infección y tumores",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "discopatía degenerativa",
+   "grupo": "Degenerativo",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "fractura por compresión",
+   "grupo": "Fracturas, infección y tumores",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "protrusión discal",
+   "grupo": "Degenerativo",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "retropulsión",
+   "grupo": "Fracturas, infección y tumores",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "uncoartrosis",
+   "grupo": "Degenerativo",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "apófisis transversa",
+   "grupo": "Fracturas, infección y tumores",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "compresión radicular",
+   "grupo": "Degenerativo",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "compresión medular",
+   "grupo": "Fracturas, infección y tumores",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "espondiloartrosis",
+   "grupo": "Degenerativo",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "espondilodiscitis",
+   "grupo": "Fracturas, infección y tumores",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "hemangioma vertebral",
+   "grupo": "Fracturas, infección y tumores",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "hernia paramediana",
+   "grupo": "Degenerativo",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "metástasis óseas",
+   "grupo": "Fracturas, infección y tumores",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "abombamiento discal",
+   "grupo": "Degenerativo",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "vertebroplastia",
+   "grupo": "Fracturas, infección y tumores",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "deshidratación discal",
+   "grupo": "Degenerativo",
+   "prioridad": "A",
+   "tecnico": true
+  }
+ ],
+ "omitidos_por_repeticion": [
+  {
+   "termino": "protrusión discal difusa",
+   "repite": "protrusión discal"
+  }
+ ],
+ "hash": "2602e6711650b01d7d443a8aa1dff3cf7712f4d52bbcf0849488aa6a86784ee3"
+}

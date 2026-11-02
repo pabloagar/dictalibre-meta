@@ -282,3 +282,46 @@ export function evaluateRun({referencia, hipotesis, objetivos, glosario = []}) {
   }
   return {aciertos: h.exactos, flexionados: h.flexionados, no_reconocidos: objetivos.filter(t => !h.exactos.includes(t) && !h.flexionados.includes(t)), no_dichos, errores_wer: s.substitutions + s.deletions + s.insertions, palabras_referencia: s.referenceWords, errores_otras_palabras: otras};
 }
+
+// Glosario de DEMOSTRACIÓN por examen (aprobado el 2-nov-2026): preselección automática, SIN MEDIR.
+// Regla: términos de las secciones del examen; sin lateralidad, negaciones, unidades ni términos de la lista PUC;
+// variantes agrupadas; dentro de cada grupo, prioridad A, luego técnicos (palabra de 10+ letras, sigla o epónimo),
+// luego conteo en plantillas como apoyo y orden de la fuente; los grupos se intercalan para repartir el examen.
+// Los conteos solo ordenan: no se incluyen en la salida.
+const tecnico = t => /\p{Lu}/u.test(t) || t.split(/\s+/).some(w => plain(w).replace(/[^a-z]/g, '').length >= 10);
+// Dos términos se repiten si uno está contenido en el otro (misma raíz, palabras contiguas) o si uno es la sigla del otro.
+const VACIAS = new Set(['de', 'del', 'la', 'las', 'el', 'los', 'y', 'en', 'a', 'por', 'con']);
+function repite(a, b) {
+  const [x, y] = [a, b].map(t => t.split(/\s+/).map(stem));
+  const [corto, largo] = x.length <= y.length ? [x, y] : [y, x];
+  for (let i = 0; i + corto.length <= largo.length; i++) if (corto.every((w, j) => largo[i + j] === w)) return true;
+  const sigla = [a, b].find(t => /^\p{Lu}{2,}$/u.test(t)), otro = sigla === a ? b : a;
+  return !!sigla && plain(sigla) === otro.split(/\s+/).filter(w => !VACIAS.has(plain(w))).map(w => plain(w)[0]).join('');
+}
+export function selectDemoGlossary(entries, {secciones, n = 20}) {
+  const byKey = new Map(), grupos = new Map();
+  entries.forEach((e, i) => {
+    if (!secciones.includes(e.section) || e.base) return;
+    const p = plain(e.term);
+    if ((!NEGACION_EXCEPCIONES.has(p) && LATERALIDAD_NEGACION.test(p)) || UNIDADES.has(p)) return;
+    const key = variantKey(e.term), prev = byKey.get(key);
+    if (prev) { prev.count = Math.max(prev.count, e.count ?? 0); if (e.prio === 'A') prev.prioridad = 'A'; return; }
+    const c = {termino: e.term, grupo: e.group, prioridad: e.prio, count: e.count ?? 0, orden: i, tecnico: tecnico(e.term)};
+    byKey.set(key, c);
+    if (!grupos.has(e.group)) grupos.set(e.group, {prioridad: e.prio, orden: i, items: []});
+    grupos.get(e.group).items.push(c);
+  });
+  const singles = new Set([...byKey.values()].filter(c => !/\s/.test(c.termino)).map(c => variantKey(c.termino)));
+  const ordenGrupos = [...grupos.values()].sort((a, b) => (a.prioridad === 'A' ? 0 : 1) - (b.prioridad === 'A' ? 0 : 1) || a.orden - b.orden);
+  const colas = ordenGrupos.map(g => g.items
+    .filter(c => !/\s/.test(c.termino) || !c.termino.split(/\s+/).some(w => singles.has(stem(w))))
+    .sort((a, b) => (a.prioridad === 'A' ? 0 : 1) - (b.prioridad === 'A' ? 0 : 1) || Number(b.tecnico) - Number(a.tecnico) || b.count - a.count || a.orden - b.orden));
+  const elegidos = [], omitidos_por_repeticion = [];
+  for (let ronda = 0; elegidos.length < n && colas.some(q => q.length > ronda); ronda++)
+    for (const q of colas) {
+      const c = q[ronda]; if (!c || elegidos.length >= n) continue;
+      const choque = elegidos.find(e => repite(e.termino, c.termino));
+      if (choque) omitidos_por_repeticion.push({termino: c.termino, repite: choque.termino}); else elegidos.push(c);
+    }
+  return {terminos: elegidos.map(c => c.termino), detalle: elegidos.map(({termino, grupo, prioridad, tecnico}) => ({termino, grupo, prioridad, tecnico})), omitidos_por_repeticion};
+}

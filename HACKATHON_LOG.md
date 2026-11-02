@@ -256,3 +256,6 @@ Con aprobación del responsable:
 - «neumonía intersticial no específica» deja de clasificarse como negación; sigue fuera, ahora por la regla de compuestos, porque «neumonía» es candidata.
 
 El vocabulario quedó en 334 candidatos. La propuesta de 60 y las frases no cambian. Pruebas nuevas vistas fallar antes de implementar.
+
+## 2026-11-02 · Glosarios de demostración por examen (sin medir)
+Con aprobación del responsable se generaron 10 glosarios de 20 términos, uno por examen de TC, de forma determinista desde su archivo de vocabulario. La regla prioriza términos técnicos, intercala los grupos del examen y omite repeticiones (sigla y forma completa, expresiones contenidas). Quedan marcados como «glosario de demostración, sin medir» y pendientes de la revisión del responsable (`data/vocabulario/glosarios-demo/revision.csv`). Pruebas nuevas vistas fallar antes de implementar. No se cambió todavía el comportamiento de `/live`.

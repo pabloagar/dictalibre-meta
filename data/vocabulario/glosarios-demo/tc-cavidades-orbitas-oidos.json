@@ -1,0 +1,160 @@
+{
+ "schema": "dicta-libre.glosario-demo.v1",
+ "examen": "tc-cavidades-orbitas-oidos",
+ "nombre": "TC de cavidades paranasales, órbitas y oídos",
+ "estado": "glosario de demostración, sin medir",
+ "regla": "Términos de las secciones del examen; sin lateralidad, negaciones, unidades ni lista PUC; variantes agrupadas; por grupo: prioridad A, técnicos (10+ letras, sigla o epónimo), conteo en plantillas como apoyo y orden de la fuente; grupos intercalados. Revisión del responsable pendiente.",
+ "secciones": [
+  "TAC DE CAVIDADES PARANASALES, ÓRBITAS Y OÍDOS"
+ ],
+ "fuente": {
+  "nombre": "Vocabulario_por_TAC_y_patologia.txt",
+  "sha256": "6fbd26a02da704236d9f2a6e3ee30ed9ab179be8d2f1de530ddba1e0ff48bb5d"
+ },
+ "terminos": [
+  "senos paranasales",
+  "absceso subperióstico",
+  "otomastoiditis",
+  "celdillas etmoidales",
+  "fractura de Le Fort",
+  "colesteatoma",
+  "seno esfenoidal",
+  "fractura mandibular",
+  "erosión de huesecillos",
+  "desviación del tabique nasal",
+  "fractura cigomática",
+  "otoesclerosis",
+  "desviación septal",
+  "oftalmopatía tiroidea",
+  "timpánica",
+  "cavidades paranasales",
+  "músculos extraoculares",
+  "otitis media",
+  "sinusopatía",
+  "articulación temporomandibular"
+ ],
+ "detalle": [
+  {
+   "termino": "senos paranasales",
+   "grupo": "Cavidades paranasales",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "absceso subperióstico",
+   "grupo": "Órbitas y macizo facial",
+   "prioridad": "B",
+   "tecnico": true
+  },
+  {
+   "termino": "otomastoiditis",
+   "grupo": "Oídos",
+   "prioridad": "B",
+   "tecnico": true
+  },
+  {
+   "termino": "celdillas etmoidales",
+   "grupo": "Cavidades paranasales",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "fractura de Le Fort",
+   "grupo": "Órbitas y macizo facial",
+   "prioridad": "B",
+   "tecnico": true
+  },
+  {
+   "termino": "colesteatoma",
+   "grupo": "Oídos",
+   "prioridad": "B",
+   "tecnico": true
+  },
+  {
+   "termino": "seno esfenoidal",
+   "grupo": "Cavidades paranasales",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "fractura mandibular",
+   "grupo": "Órbitas y macizo facial",
+   "prioridad": "B",
+   "tecnico": true
+  },
+  {
+   "termino": "erosión de huesecillos",
+   "grupo": "Oídos",
+   "prioridad": "B",
+   "tecnico": true
+  },
+  {
+   "termino": "desviación del tabique nasal",
+   "grupo": "Cavidades paranasales",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "fractura cigomática",
+   "grupo": "Órbitas y macizo facial",
+   "prioridad": "B",
+   "tecnico": true
+  },
+  {
+   "termino": "otoesclerosis",
+   "grupo": "Oídos",
+   "prioridad": "B",
+   "tecnico": true
+  },
+  {
+   "termino": "desviación septal",
+   "grupo": "Cavidades paranasales",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "oftalmopatía tiroidea",
+   "grupo": "Órbitas y macizo facial",
+   "prioridad": "B",
+   "tecnico": true
+  },
+  {
+   "termino": "timpánica",
+   "grupo": "Oídos",
+   "prioridad": "B",
+   "tecnico": false
+  },
+  {
+   "termino": "cavidades paranasales",
+   "grupo": "Cavidades paranasales",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "músculos extraoculares",
+   "grupo": "Órbitas y macizo facial",
+   "prioridad": "B",
+   "tecnico": true
+  },
+  {
+   "termino": "otitis media",
+   "grupo": "Oídos",
+   "prioridad": "B",
+   "tecnico": false
+  },
+  {
+   "termino": "sinusopatía",
+   "grupo": "Cavidades paranasales",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "articulación temporomandibular",
+   "grupo": "Órbitas y macizo facial",
+   "prioridad": "B",
+   "tecnico": true
+  }
+ ],
+ "omitidos_por_repeticion": [],
+ "hash": "ef86bf946136c8dfb37aa7a8a3991b9e90464a20eecf2c3557b260e54f80104c"
+}

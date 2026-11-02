@@ -1,0 +1,160 @@
+{
+ "schema": "dicta-libre.glosario-demo.v1",
+ "examen": "tc-cerebro",
+ "nombre": "TC de cerebro",
+ "estado": "glosario de demostración, sin medir",
+ "regla": "Términos de las secciones del examen; sin lateralidad, negaciones, unidades ni lista PUC; variantes agrupadas; por grupo: prioridad A, técnicos (10+ letras, sigla o epónimo), conteo en plantillas como apoyo y orden de la fuente; grupos intercalados. Revisión del responsable pendiente.",
+ "secciones": [
+  "TAC DE CEREBRO"
+ ],
+ "fuente": {
+  "nombre": "Vocabulario_por_TAC_y_patologia.txt",
+  "sha256": "6fbd26a02da704236d9f2a6e3ee30ed9ab179be8d2f1de530ddba1e0ff48bb5d"
+ },
+ "terminos": [
+  "supratentorial",
+  "hemorragia intracraneana",
+  "foco contusional",
+  "ateromatosis carotídea",
+  "lecho quirúrgico",
+  "accidente cerebrovascular isquémico",
+  "hemorragia intraparenquimatosa",
+  "neumoencéfalo",
+  "ventriculomegalia",
+  "adenoma hipofisiario",
+  "infarto cerebeloso",
+  "hematoma intraparenquimatoso",
+  "aumento de volumen epicraneano",
+  "cambios microangiopáticos",
+  "meningioma",
+  "territorio vascular",
+  "hemorragia subaracnoidea",
+  "cefalohematoma",
+  "atrofia corticosubcortical",
+  "metástasis cerebrales"
+ ],
+ "detalle": [
+  {
+   "termino": "supratentorial",
+   "grupo": "Infarto e isquemia",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "hemorragia intracraneana",
+   "grupo": "Hemorragia intracraneana",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "foco contusional",
+   "grupo": "Traumatismo encéfalo craneano",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "ateromatosis carotídea",
+   "grupo": "Cambios crónicos e involutivos",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "lecho quirúrgico",
+   "grupo": "Tumores e infección",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "accidente cerebrovascular isquémico",
+   "grupo": "Infarto e isquemia",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "hemorragia intraparenquimatosa",
+   "grupo": "Hemorragia intracraneana",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "neumoencéfalo",
+   "grupo": "Traumatismo encéfalo craneano",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "ventriculomegalia",
+   "grupo": "Cambios crónicos e involutivos",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "adenoma hipofisiario",
+   "grupo": "Tumores e infección",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "infarto cerebeloso",
+   "grupo": "Infarto e isquemia",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "hematoma intraparenquimatoso",
+   "grupo": "Hemorragia intracraneana",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "aumento de volumen epicraneano",
+   "grupo": "Traumatismo encéfalo craneano",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "cambios microangiopáticos",
+   "grupo": "Cambios crónicos e involutivos",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "meningioma",
+   "grupo": "Tumores e infección",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "territorio vascular",
+   "grupo": "Infarto e isquemia",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "hemorragia subaracnoidea",
+   "grupo": "Hemorragia intracraneana",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "cefalohematoma",
+   "grupo": "Traumatismo encéfalo craneano",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "atrofia corticosubcortical",
+   "grupo": "Cambios crónicos e involutivos",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "metástasis cerebrales",
+   "grupo": "Tumores e infección",
+   "prioridad": "A",
+   "tecnico": true
+  }
+ ],
+ "omitidos_por_repeticion": [],
+ "hash": "7d2e0c1fb5f735d3e79c8395c19df020c20e3d1f45029b00370ce7af535daddb"
+}

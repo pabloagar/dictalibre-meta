@@ -1,0 +1,160 @@
+{
+ "schema": "dicta-libre.glosario-demo.v1",
+ "examen": "tc-cuello",
+ "nombre": "TC de cuello",
+ "estado": "glosario de demostración, sin medir",
+ "regla": "Términos de las secciones del examen; sin lateralidad, negaciones, unidades ni lista PUC; variantes agrupadas; por grupo: prioridad A, técnicos (10+ letras, sigla o epónimo), conteo en plantillas como apoyo y orden de la fuente; grupos intercalados. Revisión del responsable pendiente.",
+ "secciones": [
+  "TAC DE CUELLO"
+ ],
+ "fuente": {
+  "nombre": "Vocabulario_por_TAC_y_patologia.txt",
+  "sha256": "6fbd26a02da704236d9f2a6e3ee30ed9ab179be8d2f1de530ddba1e0ff48bb5d"
+ },
+ "terminos": [
+  "adenopatías cervicales",
+  "tiroidectomía total",
+  "hipofaringe",
+  "tiroiditis",
+  "orofaringe",
+  "hipodensidad tiroidea",
+  "niveles ganglionares",
+  "tiroidectomía parcial",
+  "adenopatía necrótica",
+  "desviación traqueal",
+  "absceso periamigdalino",
+  "compresión traqueal",
+  "absceso retrofaríngeo",
+  "lóbulo tiroideo",
+  "amigdalitis",
+  "bocio",
+  "faringoamigdalitis",
+  "nódulo tiroideo",
+  "nasofaringe",
+  "istmo tiroideo"
+ ],
+ "detalle": [
+  {
+   "termino": "adenopatías cervicales",
+   "grupo": "Infección, adenopatías y tumores",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "tiroidectomía total",
+   "grupo": "Tiroides",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "hipofaringe",
+   "grupo": "Infección, adenopatías y tumores",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "tiroiditis",
+   "grupo": "Tiroides",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "orofaringe",
+   "grupo": "Infección, adenopatías y tumores",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "hipodensidad tiroidea",
+   "grupo": "Tiroides",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "niveles ganglionares",
+   "grupo": "Infección, adenopatías y tumores",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "tiroidectomía parcial",
+   "grupo": "Tiroides",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "adenopatía necrótica",
+   "grupo": "Infección, adenopatías y tumores",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "desviación traqueal",
+   "grupo": "Tiroides",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "absceso periamigdalino",
+   "grupo": "Infección, adenopatías y tumores",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "compresión traqueal",
+   "grupo": "Tiroides",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "absceso retrofaríngeo",
+   "grupo": "Infección, adenopatías y tumores",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "lóbulo tiroideo",
+   "grupo": "Tiroides",
+   "prioridad": "A",
+   "tecnico": false
+  },
+  {
+   "termino": "amigdalitis",
+   "grupo": "Infección, adenopatías y tumores",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "bocio",
+   "grupo": "Tiroides",
+   "prioridad": "A",
+   "tecnico": false
+  },
+  {
+   "termino": "faringoamigdalitis",
+   "grupo": "Infección, adenopatías y tumores",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "nódulo tiroideo",
+   "grupo": "Tiroides",
+   "prioridad": "A",
+   "tecnico": false
+  },
+  {
+   "termino": "nasofaringe",
+   "grupo": "Infección, adenopatías y tumores",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "istmo tiroideo",
+   "grupo": "Tiroides",
+   "prioridad": "A",
+   "tecnico": false
+  }
+ ],
+ "omitidos_por_repeticion": [],
+ "hash": "5f0366365135fdbaed43c99aeefce8e9544f449dda02ca13cf9a4728a7542544"
+}

@@ -51,3 +51,16 @@ Estado: **revisión profesional pendiente**. Nada de esto es validación clínic
 6. **Fase B.** `node scripts/vocab-preparar-corrida.mjs --fase B --actual <id config de 20 términos> --ranking <ranking.json> --ejecutar`, y luego la planilla de errores con la nueva corrida. El resumen aplica la regla de decisión registrada en `EXPERIMENTS.md`.
 
 Las salidas quedan en `data/local/vocabulario/`, fuera de Git. Al repositorio solo llegan el glosario aprobado y los totales agregados que el responsable autorice.
+
+## Glosarios de demostración (10 exámenes de TC) · sin medir
+
+En `glosarios-demo/` hay un JSON por examen con 20 términos, más `revision.csv` para la revisión del responsable (columnas `mantener (si/no)` y `reemplazo`). Los genera `scripts/vocab-glosarios-demo.mjs` a partir de la misma fuente, de forma determinista.
+
+- **Exámenes:** cerebro, angioTC de cerebro y cuello, cavidades paranasales, órbitas y oídos, cuello, columna, tórax, angioTC de tórax por tromboembolismo, abdomen y pelvis, PieloTC/UroTC y angioTC de aorta. Salen de las secciones del archivo; no están ordenados por volumen real de exámenes.
+- **Regla:**
+  - términos de la sección del examen, sin lateralidad, negaciones, unidades ni lista PUC;
+  - dentro de cada grupo, primero la prioridad A, luego los técnicos (palabra de 10 o más letras, sigla o epónimo), con el conteo en plantillas como apoyo;
+  - los grupos se intercalan;
+  - se omite una sigla junto a su forma completa y una expresión contenida en otra; queda la primera en el orden y la otra se registra.
+- **Estado:** **glosario de demostración, sin medir**. No se afirma que mejoren el reconocimiento. Pueden quedar sinónimos que la regla no detecta.
+- **Pendiente:** que `/live` los proponga al aplicar una plantilla; espera la revisión del responsable y su aprobación.

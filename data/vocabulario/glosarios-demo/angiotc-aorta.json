@@ -1,0 +1,160 @@
+{
+ "schema": "dicta-libre.glosario-demo.v1",
+ "examen": "angiotc-aorta",
+ "nombre": "AngioTC de aorta y vasos abdominales",
+ "estado": "glosario de demostración, sin medir",
+ "regla": "Términos de las secciones del examen; sin lateralidad, negaciones, unidades ni lista PUC; variantes agrupadas; por grupo: prioridad A, técnicos (10+ letras, sigla o epónimo), conteo en plantillas como apoyo y orden de la fuente; grupos intercalados. Revisión del responsable pendiente.",
+ "secciones": [
+  "ANGIOTAC DE AORTA Y VASOS ABDOMINALES"
+ ],
+ "fuente": {
+  "nombre": "Vocabulario_por_TAC_y_patologia.txt",
+  "sha256": "6fbd26a02da704236d9f2a6e3ee30ed9ab179be8d2f1de530ddba1e0ff48bb5d"
+ },
+ "terminos": [
+  "hematoma intramural",
+  "saco aneurismático",
+  "vena mesentérica superior",
+  "úlcera penetrante",
+  "endoprótesis",
+  "arteria mesentérica superior",
+  "úlcera aterosclerótica penetrante",
+  "pseudoaneurisma",
+  "arteria mesentérica inferior",
+  "Stanford A",
+  "AAA",
+  "isquemia mesentérica",
+  "Stanford B",
+  "aneurisma infrarrenal",
+  "arteria femoral superficial",
+  "troncos supraaórticos",
+  "aneurisma suprarrenal",
+  "isquemia intestinal",
+  "tronco braquiocefálico",
+  "aneurisma yuxtarrenal"
+ ],
+ "detalle": [
+  {
+   "termino": "hematoma intramural",
+   "grupo": "Síndrome aórtico agudo",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "saco aneurismático",
+   "grupo": "Aneurisma y enfermedad aterosclerótica",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "vena mesentérica superior",
+   "grupo": "Vasos viscerales y periféricos",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "úlcera penetrante",
+   "grupo": "Síndrome aórtico agudo",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "endoprótesis",
+   "grupo": "Aneurisma y enfermedad aterosclerótica",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "arteria mesentérica superior",
+   "grupo": "Vasos viscerales y periféricos",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "úlcera aterosclerótica penetrante",
+   "grupo": "Síndrome aórtico agudo",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "pseudoaneurisma",
+   "grupo": "Aneurisma y enfermedad aterosclerótica",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "arteria mesentérica inferior",
+   "grupo": "Vasos viscerales y periféricos",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "Stanford A",
+   "grupo": "Síndrome aórtico agudo",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "AAA",
+   "grupo": "Aneurisma y enfermedad aterosclerótica",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "isquemia mesentérica",
+   "grupo": "Vasos viscerales y periféricos",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "Stanford B",
+   "grupo": "Síndrome aórtico agudo",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "aneurisma infrarrenal",
+   "grupo": "Aneurisma y enfermedad aterosclerótica",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "arteria femoral superficial",
+   "grupo": "Vasos viscerales y periféricos",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "troncos supraaórticos",
+   "grupo": "Síndrome aórtico agudo",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "aneurisma suprarrenal",
+   "grupo": "Aneurisma y enfermedad aterosclerótica",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "isquemia intestinal",
+   "grupo": "Vasos viscerales y periféricos",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "tronco braquiocefálico",
+   "grupo": "Síndrome aórtico agudo",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "aneurisma yuxtarrenal",
+   "grupo": "Aneurisma y enfermedad aterosclerótica",
+   "prioridad": "A",
+   "tecnico": true
+  }
+ ],
+ "omitidos_por_repeticion": [],
+ "hash": "5227c2d493aaabf4ba61c1feb367e0108a3463845648b23305c000a751563204"
+}

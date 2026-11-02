@@ -1,0 +1,164 @@
+{
+ "schema": "dicta-libre.glosario-demo.v1",
+ "examen": "tc-abdomen-pelvis",
+ "nombre": "TC de abdomen y pelvis",
+ "estado": "glosario de demostración, sin medir",
+ "regla": "Términos de las secciones del examen; sin lateralidad, negaciones, unidades ni lista PUC; variantes agrupadas; por grupo: prioridad A, técnicos (10+ letras, sigla o epónimo), conteo en plantillas como apoyo y orden de la fuente; grupos intercalados. Revisión del responsable pendiente.",
+ "secciones": [
+  "TAC DE ABDOMEN Y PELVIS: ABDOMEN AGUDO",
+  "TAC DE ABDOMEN: HÍGADO, VÍA BILIAR Y PÁNCREAS",
+  "TAC DE ABDOMEN: BAZO, SUPRARRENALES Y TUBO DIGESTIVO",
+  "TAC DE ABDOMEN: RETROPERITONEO Y TRAUMA",
+  "TAC DE PELVIS"
+ ],
+ "fuente": {
+  "nombre": "Vocabulario_por_TAC_y_patologia.txt",
+  "sha256": "6fbd26a02da704236d9f2a6e3ee30ed9ab179be8d2f1de530ddba1e0ff48bb5d"
+ },
+ "terminos": [
+  "apendicitis",
+  "divertículo",
+  "obstrucción intestinal",
+  "perforación",
+  "hernia incisional",
+  "esteatosis hepática",
+  "hipertensión portal",
+  "colecistectomía",
+  "vía biliar extrahepática",
+  "conducto pancreático principal",
+  "calcificaciones esplénicas",
+  "nódulo suprarrenal",
+  "dehiscencia",
+  "adenopatías retroperitoneales",
+  "laceración",
+  "hiperplasia prostática",
+  "histerectomía",
+  "lesión osteolítica",
+  "apéndice distendido",
+  "colon transverso"
+ ],
+ "detalle": [
+  {
+   "termino": "apendicitis",
+   "grupo": "Apendicitis",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "divertículo",
+   "grupo": "Diverticulitis y colitis",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "obstrucción intestinal",
+   "grupo": "Obstrucción intestinal",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "perforación",
+   "grupo": "Perforación y peritonitis",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "hernia incisional",
+   "grupo": "Hernias y pared abdominal",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "esteatosis hepática",
+   "grupo": "Hígado",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "hipertensión portal",
+   "grupo": "Daño hepático crónico e hipertensión portal",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "colecistectomía",
+   "grupo": "Vesícula",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "vía biliar extrahepática",
+   "grupo": "Vía biliar",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "conducto pancreático principal",
+   "grupo": "Páncreas",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "calcificaciones esplénicas",
+   "grupo": "Bazo",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "nódulo suprarrenal",
+   "grupo": "Suprarrenales",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "dehiscencia",
+   "grupo": "Estómago, esófago e intestino",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "adenopatías retroperitoneales",
+   "grupo": "Retroperitoneo y adenopatías",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "laceración",
+   "grupo": "Trauma abdominal y pelviano",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "hiperplasia prostática",
+   "grupo": "Masculina",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "histerectomía",
+   "grupo": "Femenina",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "lesión osteolítica",
+   "grupo": "Hueso en TAC de cuerpo",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "apéndice distendido",
+   "grupo": "Apendicitis",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "colon transverso",
+   "grupo": "Diverticulitis y colitis",
+   "prioridad": "A",
+   "tecnico": true
+  }
+ ],
+ "omitidos_por_repeticion": [],
+ "hash": "eb40aa5c5c4cdabe455e9c91f9dffb3f2f5cd9e47c11e65c38d254b8be2a3a77"
+}

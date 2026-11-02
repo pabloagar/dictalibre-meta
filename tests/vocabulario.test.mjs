@@ -212,3 +212,51 @@ test('vocabulario del repo: lista base presente y fases de abdomen fuera',()=>{
  assert.equal(doc.excluidos.lateralidad_negacion.includes('neumonía intersticial no específica'),false);
  assert.ok(doc.candidatos.filter(c=>c.origen==='lista base del equipo').every(c=>!c.propuesta_medicion&&c.estado===ESTADO_PENDIENTE));
 });
+
+test('glosario de demostración: 20 por examen, técnicos primero, grupos intercalados, sin lateralidad ni PUC',async()=>{
+ const {selectDemoGlossary}=await import('../backend/vocabulary.mjs');
+ const src=`x
+======================================================================
+TAC DE CEREBRO
+======================================================================
+
+[A] Infarto
+infarto (9); infartos (0); hipodensidad corticosubcortical (0); ACM (0); hemisferio derecho (0); edema (12, base)
+
+[B] Tumores
+meningioma (0); glioblastoma multiforme (0); lesión (40)
+======================================================================
+TAC DE CUELLO
+======================================================================
+
+[A] Tiroides
+tiroides (3)
+`;
+ const r=selectDemoGlossary(parseVocabSource(src),{secciones:['TAC DE CEREBRO'],n:4});
+ assert.deepEqual(r.terminos,['hipodensidad corticosubcortical','meningioma','ACM','glioblastoma multiforme']);
+ assert.equal(r.terminos.includes('hemisferio derecho'),false);assert.equal(r.terminos.includes('edema'),false);assert.equal(r.terminos.includes('tiroides'),false);
+ assert.deepEqual(selectDemoGlossary(parseVocabSource(src),{secciones:['TAC DE CEREBRO'],n:4}),r,'determinista');
+ assert.equal(JSON.stringify(r).includes('40'),false,'no expone conteos de plantillas');
+ assert.equal(selectDemoGlossary(parseVocabSource(src),{secciones:['TAC DE CEREBRO'],n:20}).terminos.length,6);
+});
+
+test('glosario de demostración: sin pares sigla–forma completa ni expresiones contenidas en otras',async()=>{
+ const {selectDemoGlossary}=await import('../backend/vocabulary.mjs');
+ const src=`x
+======================================================================
+ANGIOTAC DE TÓRAX: TROMBOEMBOLISMO PULMONAR
+======================================================================
+
+[A] TEP
+TVP (0); trombosis venosa profunda (0); septum interventricular (0); rectificación del septum interventricular (0); joroba de Hampton (0); EPOC (0)
+
+[A] Otros
+enfermedad pulmonar obstructiva crónica (0); hipertensión pulmonar (0)
+`;
+ const r=selectDemoGlossary(parseVocabSource(src),{secciones:['ANGIOTAC DE TÓRAX: TROMBOEMBOLISMO PULMONAR'],n:20});
+ assert.equal(r.terminos.includes('TVP')&&r.terminos.includes('trombosis venosa profunda'),false);
+ assert.equal(r.terminos.includes('septum interventricular')&&r.terminos.includes('rectificación del septum interventricular'),false);
+ assert.equal(r.terminos.includes('EPOC')&&r.terminos.includes('enfermedad pulmonar obstructiva crónica'),false);
+ assert.ok(r.terminos.includes('joroba de Hampton')&&r.terminos.includes('hipertensión pulmonar'));
+ assert.deepEqual(r.omitidos_por_repeticion.map(x=>x.termino).sort(),['EPOC','rectificación del septum interventricular','trombosis venosa profunda'].sort(),'se queda el primero en el orden; el otro se registra');
+});

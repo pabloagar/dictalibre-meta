@@ -1,0 +1,173 @@
+{
+ "schema": "dicta-libre.glosario-demo.v1",
+ "examen": "angiotc-torax-tep",
+ "nombre": "AngioTC de tórax por tromboembolismo",
+ "estado": "glosario de demostración, sin medir",
+ "regla": "Términos de las secciones del examen; sin lateralidad, negaciones, unidades ni lista PUC; variantes agrupadas; por grupo: prioridad A, técnicos (10+ letras, sigla o epónimo), conteo en plantillas como apoyo y orden de la fuente; grupos intercalados. Revisión del responsable pendiente.",
+ "secciones": [
+  "ANGIOTAC DE TÓRAX: TROMBOEMBOLISMO PULMONAR"
+ ],
+ "fuente": {
+  "nombre": "Vocabulario_por_TAC_y_patologia.txt",
+  "sha256": "6fbd26a02da704236d9f2a6e3ee30ed9ab179be8d2f1de530ddba1e0ff48bb5d"
+ },
+ "terminos": [
+  "TVP",
+  "TEP",
+  "ramas segmentarias",
+  "ramas subsegmentarias",
+  "arterias segmentarias",
+  "arterias subsegmentarias",
+  "joroba de Hampton",
+  "rectificación del septum interventricular",
+  "septum paradójico",
+  "reflujo a venas suprahepáticas",
+  "hipertensión pulmonar",
+  "dilatación de la arteria pulmonar",
+  "atenuación en mosaico",
+  "opacificación subóptima",
+  "defecto de llene",
+  "trombo",
+  "ramas lobares",
+  "embolia pulmonar",
+  "defecto de repleción",
+  "embolia en silla de montar"
+ ],
+ "detalle": [
+  {
+   "termino": "TVP",
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "TEP",
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "ramas segmentarias",
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "ramas subsegmentarias",
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "arterias segmentarias",
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "arterias subsegmentarias",
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "joroba de Hampton",
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "rectificación del septum interventricular",
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "septum paradójico",
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "reflujo a venas suprahepáticas",
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "hipertensión pulmonar",
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "dilatación de la arteria pulmonar",
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "atenuación en mosaico",
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "opacificación subóptima",
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "tecnico": true
+  },
+  {
+   "termino": "defecto de llene",
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "tecnico": false
+  },
+  {
+   "termino": "trombo",
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "tecnico": false
+  },
+  {
+   "termino": "ramas lobares",
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "tecnico": false
+  },
+  {
+   "termino": "embolia pulmonar",
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "tecnico": false
+  },
+  {
+   "termino": "defecto de repleción",
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "tecnico": false
+  },
+  {
+   "termino": "embolia en silla de montar",
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "tecnico": false
+  }
+ ],
+ "omitidos_por_repeticion": [
+  {
+   "termino": "septum interventricular",
+   "repite": "rectificación del septum interventricular"
+  },
+  {
+   "termino": "hipertensión pulmonar tromboembólica crónica",
+   "repite": "hipertensión pulmonar"
+  },
+  {
+   "termino": "trombosis venosa profunda",
+   "repite": "TVP"
+  }
+ ],
+ "hash": "1f9b4ee0b9601b429ce888e134e03b304246032b3f59a1b3225cfee56a2cfe85"
+}
