@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {createHash,randomBytes,randomUUID,timingSafeEqual} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
+import {createReviewer,reviewWithMeta} from './meta-review.mjs';
 import {createRelay} from './server.mjs';
 import {attachMuseStream} from './muse-stream.mjs';
 import {applyFormatting} from './format-pipeline.mjs';
@@ -21,7 +22,7 @@ const sameSecret=(a,b)=>timingSafeEqual(digest(a),digest(b));
 // El proxy del proveedor agrega la IP real; una IP falsificada solo evade este límite, no el código de acceso.
 const clientIp=req=>String(req.headers['x-forwarded-for']??'').split(',')[0].trim()||req.socket.remoteAddress||'desconocida';
 
-export function createDemo({accessCode,metaKey='',publicOrigin,museEndpoint,maxAudioMinutesPerDay=60,visitorTtlMs=4*3600_000,maxVisitors=200,build=null,templateFile=path.join(ROOT,'data','demo','plantillas-sinteticas.json'),glossaryDir=path.join(ROOT,'data','vocabulario','glosarios'),now=()=>Date.now()}){
+export function createDemo({accessCode,metaKey='',reviewProvider=reviewWithMeta,publicOrigin,museEndpoint,maxAudioMinutesPerDay=60,visitorTtlMs=4*3600_000,maxVisitors=200,build=null,templateFile=path.join(ROOT,'data','demo','plantillas-sinteticas.json'),glossaryDir=path.join(ROOT,'data','vocabulario','glosarios'),now=()=>Date.now()}){
   if(!accessCode)throw Error('Falta DEMO_ACCESS_CODE: la demo no se expone sin código de acceso.');
   if(!publicOrigin)throw Error('Falta PUBLIC_ORIGIN.');
   const origin=new URL(publicOrigin).origin;
@@ -58,7 +59,7 @@ export function createDemo({accessCode,metaKey='',publicOrigin,museEndpoint,maxA
       const code=new URLSearchParams(Buffer.concat(chunks).toString('utf8')).get('code')??'';
       if(!sameSecret(code.trim(),accessCode))return accessPage(401,'<p class="status error" role="alert">Código incorrecto.</p>');
       if(visitors.size>=maxVisitors)return accessPage(503,'<p class="status error" role="alert">La demo está ocupada. Intenta más tarde.</p>');
-      const id=randomBytes(32).toString('hex');visitors.set(id,{id,seen:now(),runs:[]});
+      const id=randomBytes(32).toString('hex');const visitor={id,seen:now(),runs:[],reviews:[],reviewDocuments:[]}; visitor.reviewer=createReviewer({db:visitor,save:()=>{},getKey:()=>metaKey,build,sourceHash:null,provider:reviewProvider});visitors.set(id,visitor);
       res.writeHead(303,{...headers,Location:'/live','Set-Cookie':`${COOKIE}=${id}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${Math.floor(visitorTtlMs/1000)}${secure?'; Secure':''}`});res.end();return true;
     }
     const visitor=visitorOf(req);
@@ -67,14 +68,18 @@ export function createDemo({accessCode,metaKey='',publicOrigin,museEndpoint,maxA
     if(!p.startsWith('/api/'))return false;
     if(!visitor)return json({error:'Ingresa el código de la demostración.'},401);
     if(req.method==='GET'){
+      if(p.startsWith('/api/report-reviews/')){const r=visitor.reviews.find(r=>r.id===decodeURIComponent(p.slice('/api/report-reviews/'.length)));return r?json(r):json({error:'Revisión desconocida.'},404);}
       if(p==='/api/live-info')return json({mobileOrigin:origin});
       if(p==='/api/templates')return sendFile(path.relative(ROOT,templateFile),'application/json; charset=utf-8');
-      if(p==='/api/state')return json({demo:true,audios:[],configs,runs:visitor.runs,reviews:[],reviewDocuments:[],metaConfigured:!!metaKey,modelPresent:false,build,sourceHash:null});
+      if(p==='/api/state')return json({demo:true,audios:[],configs,runs:visitor.runs,reviews:visitor.reviews,reviewDocuments:[],reportReviewAvailable:!!metaKey,metaConfigured:!!metaKey,modelPresent:false,build,sourceHash:null});
       return json({error:'No disponible en la demostración.'},404);
     }
     if(req.method!=='POST'||!originOk(req))return json({error:'Origen no permitido.'},403);
     const chunks=[];let size=0;for await(const b of req){size+=b.length;if(size>100_000)return json({error:'Petición demasiado grande.'},413);chunks.push(b);}
-    const m=JSON.parse(Buffer.concat(chunks).toString('utf8')||'{}');
+    let m;try{m=JSON.parse(Buffer.concat(chunks).toString('utf8')||'{}');}catch{return json({error:'JSON inválido.'},400);}
+    if(!m||typeof m!=='object'||Array.isArray(m))return json({error:'Se esperaba un objeto JSON.'},400);
+    if(p==='/api/report-reviews'){if(!metaKey)return json({error:'Meta no está configurado.'},503);if(visitor.reviews.length>=30)return json({error:'Límite de revisiones de esta sesión alcanzado.'},429);try{return json(visitor.reviewer.enqueueReport(m),202);}catch(e){return json({error:e.message},400);}}
+    if(p==='/api/reviews/cancel'){try{return json(visitor.reviewer.cancel(m.id));}catch{return json({error:'Revisión desconocida.'},404);}}
     if(p==='/api/cancel'){const run=visitor.runs.find(r=>r.id===m.id);if(!run)return json({error:'Ejecución desconocida.'},404);if(run.status==='running')closeStream.cancel(run.id);return json({id:run.id,status:run.status});}
     if(p==='/api/live-measurements')return json({saved:false});
     return json({error:'No disponible en la demostración.'},404);
@@ -103,10 +108,10 @@ export function createDemo({accessCode,metaKey='',publicOrigin,museEndpoint,maxA
       return r;
     }});
   const sweep=setInterval(()=>{
-    for(const [id,visitor] of visitors)if(now()-visitor.seen>=visitorTtlMs)visitors.delete(id);
+    for(const [id,visitor] of visitors)if(now()-visitor.seen>=visitorTtlMs){visitor.reviewer.close();visitors.delete(id);}
     for(const [ip,bucket] of logins)if(now()-bucket.start>60_000)logins.delete(ip);
   },60_000);sweep.unref();
-  return {server:relay.server,visitors,usage,async close(){clearInterval(sweep);closeStream();await relay.close();}};
+  return {server:relay.server,visitors,usage,async close(){clearInterval(sweep);for(const v of visitors.values())v.reviewer.close();closeStream();await relay.close();}};
 }
 
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){

@@ -12,13 +12,13 @@ function setup(options={}){
  Object.defineProperty(globalThis,'navigator',{configurable:true,value:window.navigator});
  globalThis.fetch=async()=>({ok:true,json:async()=>({templates:[]})});
  document.body.innerHTML='<div id="parent"></div>';
- localStorage.setItem('dicta-report-v1','Informe antiguo sintético');
- localStorage.setItem('dicta-report-context-v1',JSON.stringify({name:'Anterior',text:'ANTERIOR'}));
+ localStorage.setItem('dicta-report-v1',options.savedDraft??'');
+ localStorage.setItem('dicta-report-context-v1',JSON.stringify(options.savedDraft?{name:'Anterior',text:'ANTERIOR'}:null));
  const editor=mountReport(document.querySelector('#parent'),{globalReview:false,...options});
  const button=text=>[...document.querySelectorAll('button')].find(b=>b.textContent===text);
  return {window,editor,button};
 }
-test('inicio vacío aun con borrador anterior; plantilla explícita, confirmación y deshacer',async()=>{
+test('inicio vacío sin borrador; plantilla explícita, confirmación y deshacer',async()=>{
  const {window,editor,button}=setup();
  assert.equal(editor.model.text,'');assert.equal(editor.context().templateName,'');
  const panel=document.querySelector('.template-library-panel');assert.equal(panel.open,false);
@@ -103,6 +103,7 @@ for(const savedTheme of [null,'sala'])test('montaje completo, controles y tema g
  assert.equal(document.querySelector('.template-library-panel summary').textContent,'Plantilla');
  assert.ok(document.querySelector('.clinical-notes .report-global-review'));
  const connection=document.querySelector('.connection-panel'),pairing=document.querySelector('.pairing');
+ const paired=document.querySelector('#paired');paired.hidden=false;paired.dataset.paused='true';await new Promise(r=>setTimeout(r,0));assert.equal(connection.querySelector('summary').textContent,'Teléfono en pausa');paired.dataset.paused='false';await new Promise(r=>setTimeout(r,0));assert.equal(connection.querySelector('summary').textContent,'Teléfono conectado');paired.hidden=true;
  let sessionRequests=0;const create=document.querySelector('#create');create.onclick=()=>{sessionRequests++;create.disabled=true;};
  connection.querySelector('summary').getBoundingClientRect=()=>({left:240,bottom:60});
  connection.open=true;connection.dispatchEvent(new window.Event('toggle'));
@@ -169,4 +170,14 @@ test('tomas consecutivas se insertan tras su predecesora sin sustituir texto',as
  const {window,editor}=setup();editor.begin('first');editor.preview('first','Primera provisional');
  await editor.finish('first','Primera definitiva.','run-1');editor.begin('second','first');editor.preview('second','Segunda provisional');await editor.finish('second','Segunda definitiva.','run-2');
  assert.equal(editor.model.text,'Primera definitiva. Segunda definitiva.');await window.happyDOM.close();
+});
+
+test('recupera borrador y contexto sin inventar historial de deshacer',async()=>{const {window,editor,button}=setup({savedDraft:'Texto sintético recuperable'});assert.equal(editor.model.text,'Texto sintético recuperable');assert.equal(editor.context().templateName,'Anterior');assert.equal(button('Deshacer').disabled,true);await window.happyDOM.close();});
+
+test('recarga conserva texto confirmado y sexo; no recupera el provisional como definitivo',async()=>{
+ const {window,editor}=setup();editor.element.textContent='Confirmado sintético.';editor.element.dispatchEvent(new window.Event('input'));editor.setSex('F');editor.begin('pending');editor.preview('pending','Provisional sintético');
+ const next=mountReport(document.querySelector('#parent'),{globalReview:false});assert.equal(next.model.text,'Confirmado sintético.');assert.equal(next.getSex(),'F');assert.equal(next.model.pending,false);assert.equal(next.model.history.length,0);
+ assert.ok(document.body.textContent.includes('Borrador recuperado'));
+ const metrics=JSON.parse(localStorage.getItem('dicta-editor-metrics-v1'));const restore=metrics.events.find(e=>e.type==='draft-restored');assert.equal(restore.restored,true);assert.ok(restore.elapsedMs>=0);assert.equal(restore.failed,false);
+ await window.happyDOM.close();
 });

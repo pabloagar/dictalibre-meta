@@ -145,8 +145,8 @@ function onMessage(m) {
     }
     case 'pending': clearInterval(pairingTimer); $('pairing').hidden = true; $('confirm-panel').hidden = false; $('confirm-code').textContent = m.confirm; status('Un teléfono solicita conexión. Comprueba el número antes de confirmar.'); break;
     case 'pairing_metrics': showPairing(m.pairing); break;
-    case 'mobile_suspended': status('Teléfono en pausa. Vuelve a Chrome antes de cinco minutos para reconectar.'); break;
-    case 'paired': showPairing(m.pairing); clearInterval(pairingTimer); $('pairing').hidden = true; $('confirm-panel').hidden = true; $('paired').hidden = false; status('Conectados. Prepara el micrófono en el teléfono.', 'success'); break;
+    case 'mobile_suspended': $('paired').dataset.paused='true'; status('Teléfono en pausa. Vuelve a Chrome antes de cinco minutos para reconectar.'); break;
+    case 'paired': $('paired').dataset.paused='false'; showPairing(m.pairing); clearInterval(pairingTimer); $('pairing').hidden = true; $('confirm-panel').hidden = true; $('paired').hidden = false; status('Conectados. Usa el botón de dictado del teléfono para empezar.', 'success'); break;
     case 'start':
       const receivedStart=performance.now();
       window.dispatchEvent(new CustomEvent('dicta-recording-start',{detail:m}));

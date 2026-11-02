@@ -71,7 +71,7 @@ test('demo: rutas del laboratorio y escritura de clave no existen',async()=>{
   try{
     const {cookie}=await d.login();
     for(const p of ['/api/export','/api/study','/api/reviews/export','/lab.js','/study.js','/style-lab.css'])assert.equal((await d.get(p,cookie)).status,404,p);
-    for(const p of ['/api/key','/api/audio','/api/runs','/api/configs','/api/references','/api/reviews','/api/report-reviews','/api/meta/check'])assert.equal((await d.post(p,cookie,{key:'otra'})).status,404,p);
+    for(const p of ['/api/key','/api/audio','/api/runs','/api/configs','/api/references','/api/reviews','/api/meta/check'])assert.equal((await d.post(p,cookie,{key:'otra'})).status,404,p);
     assert.equal((await fetch(d.origin+'/api/cancel',{method:'POST',headers:{Origin:'https://evil.invalid',Cookie:cookie},body:'{}'})).status,403);
   }finally{await d.stop();}
 });
@@ -136,4 +136,39 @@ test('demo: el contenedor incluye lo necesario y las plantillas son sintéticas'
     assert.match(t.text,/^EJEMPLO SINTÉTICO · SOLO DEMOSTRACIÓN/);
     for(const heading of ['TÉCNICA','HALLAZGOS','CONCLUSIÓN'])assert.ok(t.text.split(heading+'\n')[1]?.split('\n\n')[0].trim(),`${t.id}: ${heading} con contenido`);
   }
+});
+
+test('demo: revisión Spark aislada por visitante, validación y métricas',async()=>{
+ let calls=0;
+ const d=await start({reviewProvider:async()=>{calls++;return {content:'{"suggestions":[]}',providerModel:'fixture',usage:{total_tokens:5}};}});
+ try{
+  const a=(await d.login()).cookie,b=(await d.login()).cookie;
+  assert.equal((await d.get('/api/state',a)).status,200);
+  assert.equal((await (await d.get('/api/state',a)).json()).reportReviewAvailable,true);
+  assert.equal((await d.post('/api/report-reviews',a,{text:''})).status,400);
+  const r=await d.post('/api/report-reviews',a,{text:'Informe sintético coherente.'});assert.equal(r.status,202);const first=await r.json();
+  assert.equal((await d.get('/api/report-reviews/'+first.id,b)).status,404);
+  assert.equal((await d.post('/api/reviews/cancel',b,{id:first.id})).status,404);
+  let result;for(let i=0;i<50;i++){result=await (await d.get('/api/report-reviews/'+first.id,a)).json();if(result.status==='completed')break;await new Promise(r=>setTimeout(r,10));}
+  assert.equal(result.status,'completed');assert.ok(result.timings.totalMs>=0);assert.equal(calls,1);
+  const repeat=await (await d.post('/api/report-reviews',a,{text:'Informe sintético coherente.'})).json();assert.equal(repeat.id,first.id);
+ }finally{await d.stop();}
+});
+
+test('demo: revisor sin clave, cancelación y fallo del proveedor no alteran el informe',async()=>{
+ const unconfigured=await start({metaKey:''});
+ try{const a=(await unconfigured.login()).cookie;assert.equal((await (await unconfigured.get('/api/state',a)).json()).reportReviewAvailable,false);assert.equal((await unconfigured.post('/api/report-reviews',a,{text:'Sintético'})).status,503);}finally{await unconfigured.stop();}
+ let calls=0;
+ const d=await start({reviewProvider:async(input,key,signal)=>{calls++;if(input.formattedText==='Fallo sintético')throw Error('Proveedor no disponible');return new Promise((resolve,reject)=>signal.addEventListener('abort',()=>reject(Error('Cancelado')),{once:true}));}});
+ try{
+  const a=(await d.login()).cookie;
+  assert.equal((await d.post('/api/report-reviews',a,null)).status,400);
+  assert.equal((await d.get('/api/report-reviews/fake')).status,401);
+  const pending=await (await d.post('/api/report-reviews',a,{text:'Sintético pendiente'})).json();
+  for(let i=0;i<50&&calls===0;i++)await new Promise(r=>setTimeout(r,10));
+  const cancelled=await (await d.post('/api/reviews/cancel',a,{id:pending.id})).json();assert.equal(cancelled.status,'cancelled');
+  const failure=await (await d.post('/api/report-reviews',a,{text:'Fallo sintético'})).json();let result;
+  for(let i=0;i<50;i++){result=await (await d.get('/api/report-reviews/'+failure.id,a)).json();if(result.status==='error')break;await new Promise(r=>setTimeout(r,10));}
+  assert.equal(result.status,'error');assert.equal(result.baseText,'Fallo sintético');assert.equal(calls,2);assert.deepEqual(result.suggestions,[]);
+ }finally{await d.stop();}
 });

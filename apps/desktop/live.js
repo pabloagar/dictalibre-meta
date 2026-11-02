@@ -23,7 +23,7 @@ const commandsLabel=document.createElement('label'),commandsToggle=document.crea
 const segmentHelp=document.createElement('p');segmentHelp.className='tiny';segmentHelp.textContent='Automática: las pausas pueden consolidar segmentos; el micrófono sigue activo hasta detener. No crean párrafos. Números/comandos se aplican al final de la toma. Máximo 3 minutos.';segmentationLabel.append(segmentHelp);
 const commandHelp=document.createElement('p');commandHelp.className='tiny';commandHelp.textContent='Punto · coma · dos puntos · punto y coma · nueva línea · nuevo párrafo. Se aplican al terminar la toma; original conservado. Desactiva para dictar comandos literalmente. Las cantidades se muestran en cifras, conservando el original.';commandsLabel.after(commandHelp);
 engineSelect.value=initialState.metaConfigured?'muse-stream':'whisper';
-if(isDemo){engineSelect.replaceChildren(new Option('Muse-streaming','muse-stream'));engineSelect.value='muse-stream';reviewToggle.checked=false;reviewLabel.hidden=true;}
+if(isDemo){engineSelect.replaceChildren(new Option('Muse-streaming','muse-stream'));engineSelect.value='muse-stream';reviewToggle.checked=false;reviewLabel.hidden=true;segmentationSelect.replaceChildren(new Option('Cierre manual','manual'));segmentHelp.textContent='Detén la grabación para cerrar la toma. Máximo 3 minutos por toma.';}
 const updateEngine=()=>{segmentationLabel.hidden=engineSelect.value!=='muse-stream';glossaryLabel.hidden=engineSelect.value==='whisper';modelBadge.textContent=engineSelect.value==='muse-stream'?'MUSE · STREAMING':engineSelect.value==='muse'?'MUSE · POR TOMA':'WHISPER LOCAL · GPU';engineHint.textContent=engineSelect.value==='muse-stream'?'El audio se envía a Meta mientras hablas. El borrador puede cambiar; números y comandos se aplican al final. Las tomas siguientes se procesan en orden; espera «Grabando» antes de hablar.':engineSelect.value==='muse'?'Cada toma completa se envía a Meta para transcribir. Usa la clave configurada en el laboratorio.':'El audio se transcribe en la GPU de este PC. La primera toma puede tardar mientras carga el modelo.';};
 engineSelect.onchange=updateEngine;updateEngine();let recordingEngine=null;
 const reserveTake=createTakeQueue(),takeSlots=new Map();
@@ -42,10 +42,10 @@ window.addEventListener('dicta-pcm',e=>stream?.send(e.detail.bytes));
 window.addEventListener('dicta-recording-abort',()=>{stream?.cancel();stream=null;reportEditor.cancel(recordingAnchor);takeSlots.get(recordingAnchor)?.release();takeSlots.delete(recordingAnchor);recordingAnchor=null;});
 window.addEventListener('dicta-recording-stop',()=>{engineSelect.disabled=false;reviewToggle.disabled=false;recordingEngine=null;commandsToggle.disabled=false;glossary.disabled=false;segmentationSelect.disabled=false;});
 const notice=document.createElement('p');notice.className='live-notice';notice.textContent='Por toma: texto al terminar. Streaming: borrador mientras hablas y texto final al detener. Audio y resultados se guardan en el laboratorio local.';panel.append(notice);
-if(isDemo)notice.textContent='Demostración: borrador mientras hablas y texto final al detener. El audio se envía a Meta y este servidor no lo guarda.';
+if(isDemo)notice.textContent='Demostración: el audio se envía a Meta y este servidor no lo guarda. Al confirmar Revisar con IA, también envías el informe y su contexto a Meta. Las revisiones permanecen temporalmente en la sesión del servidor; el borrador se guarda en este navegador. Solo material sintético.';
 else{const link=document.createElement('a');link.href='/';link.target='_blank';link.rel='noopener';link.textContent='Abrir laboratorio y comparar tomas';notice.append(document.createElement('br'),link);}
 const jobs=new Set();let generation=0;
-const reportEditor=mountReport(panel,{build:initialState.build,sourceHash:initialState.sourceHash,globalReview:!isDemo});
+const reportEditor=mountReport(panel,{build:initialState.build,sourceHash:initialState.sourceHash,globalReview:!isDemo||initialState.reportReviewAvailable===true});
 const figureAlert=document.createElement('div');figureAlert.className='figure-alert';figureAlert.setAttribute('role','alert');figureAlert.hidden=true;reportEditor.element.before(figureAlert);
 function showFigureDoubts(warnings){
  const doubts=warnings.filter(w=>w.reason==='possible_sentence_boundary');
@@ -64,7 +64,7 @@ const header=document.querySelector('header'),brandArtwork=header.querySelector(
 const brand=make('div','clinical-brand');brand.append(brandArtwork??make('span','','dicta.'));brand.append(make('small','','prototipo · solo material sintético'));header.append(brand,controls);
 const templatePanel=report.querySelector('.template-library-panel')??controls.querySelector('.template-library-panel');
 const sex=make('div','sex-control');sex.setAttribute('role','group');sex.setAttribute('aria-label','Sexo del estudio');sex.append(make('span','','Sexo'));
-for(const value of ['F','M','—']){const button=make('button','',value);button.setAttribute('aria-pressed',String(value==='—'));button.onclick=()=>reportEditor.setSex(value);sex.append(button);}
+for(const value of ['F','M','—']){const button=make('button','',value);button.setAttribute('aria-pressed',String(value===reportEditor.getSex()));button.onclick=()=>reportEditor.setSex(value);sex.append(button);}
 reportEditor.element.addEventListener('editor-study-state',e=>{for(const b of sex.querySelectorAll('button')){b.setAttribute('aria-pressed',String(b.textContent===e.detail.sex));b.disabled=reportEditor.model.pending;}});
 reportEditor.element.addEventListener('report-new',()=>{figureAlert.hidden=true;});
 const connection=makeDetails('Conecta tu teléfono para empezar','connection-panel'),pairing=document.querySelector('.pairing');connection.append(pairing);
@@ -72,8 +72,8 @@ const closeConnection=make('button','connection-close','Cerrar');closeConnection
 const connectButton=pairing.querySelector('#create');connectButton.textContent='Mostrar QR';
 const strip=document.querySelector('.record-strip');strip.classList.add('clinical-record');
 controls.prepend(connection,strip);connection.addEventListener('toggle',()=>{if(connection.open&&document.querySelector('#paired').hidden&&document.querySelector('#pairing').hidden&&document.querySelector('#confirm-panel').hidden&&!connectButton.disabled)connectButton.click();});
-const syncConnection=()=>{const connected=!document.querySelector('#paired').hidden;connection.classList.toggle('is-connected',connected);connection.querySelector('summary').textContent=connected?'Teléfono conectado':'Conecta tu teléfono para empezar';if(connected)connection.open=false;};
-new MutationObserver(syncConnection).observe(document.querySelector('#paired'),{attributes:true,attributeFilter:['hidden']});syncConnection();
+const syncConnection=()=>{const connected=!document.querySelector('#paired').hidden;connection.classList.toggle('is-connected',connected);connection.querySelector('summary').textContent=connected?(document.querySelector('#paired').dataset.paused==='true'?'Teléfono en pausa':'Teléfono conectado'):'Conecta tu teléfono para empezar';if(connected)connection.open=false;};
+new MutationObserver(syncConnection).observe(document.querySelector('#paired'),{attributes:true,attributeFilter:['hidden','data-paused']});syncConnection();
 const settings=makeDetails('Ajustes','clinical-settings');const editbar=make('div','clinical-editbar');editbar.setAttribute('role','toolbar');editbar.setAttribute('aria-label','Edición del informe');report.prepend(editbar);editbar.append(controls.querySelector('.report-undo'),controls.querySelector('.report-redo'));
 const settingsBody=make('div','settings-body');settings.append(settingsBody);settingsBody.append(engineLabel,glossaryLabel,segmentationLabel,reviewLabel,commandsLabel,engineHint,commandHelp);
 const sizeControls=make('div','size-controls','Texto ');sizeControls.append(controls.querySelector('[aria-label="Reducir tamaño del informe"]'),controls.querySelector('.report-font-value'),controls.querySelector('[aria-label="Aumentar tamaño del informe"]'));editbar.append(sizeControls,controls.querySelector('.report-new'),templatePanel,settings);
@@ -120,7 +120,7 @@ setSwitchRow(commandsLabel,commandsToggle,'Aplicar comandos de dictado','«Punto
 setSwitchRow(reviewLabel,reviewToggle,'Revisar cada toma con IA','Envía la toma, el contexto del informe y la plantilla a Meta para su revisión.','dictation-review-help');
 const commandDetails=makeDetails('Ver comandos y formato de números','command-reference');commandDetails.append(commandHelp);
 textSettings.append(commandsLabel,commandDetails,reviewLabel);
-const advanced=makeDetails('Herramientas del laboratorio','advanced-settings');advanced.querySelector('summary').append(make('span','advanced-description','Tomas, audio recibido y diagnóstico'));
+const advanced=makeDetails(isDemo?'Detalles de la sesión':'Herramientas del laboratorio','advanced-settings');advanced.querySelector('summary').append(make('span','advanced-description','Tomas, audio recibido y diagnóstico'));
 for(const child of [labLink,recordings,takes,diagnostics,connectionNote])if(child)advanced.append(child);
 dictationSettings.append(transcriptionSettings,textSettings,advanced);
 const howTo=make('section','howto-panel');howTo.append(make('h3','','Cómo usar'));const steps=make('div','help-steps');

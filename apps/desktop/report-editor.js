@@ -10,6 +10,9 @@ export function mountReport(parent,{build=null,sourceHash=null,globalReview=true
 
  const context=()=>takeContext({template:model.templateContext,text:model.text,position:(readSelection()??selection).start});
  const model=new ReportModel(),section=node('section');let studySex='—';
+ const restoreStarted=performance.now();let restoreError=false;
+ try{const saved=localStorage.getItem(key);if(typeof saved==='string')model.text=saved;const context=JSON.parse(localStorage.getItem('dicta-report-context-v1')??'null');if(context&&typeof context.name==='string'&&typeof context.text==='string')model.templateContext=context;const sex=localStorage.getItem('dicta-report-sex-v1');if(['F','M','—'].includes(sex))studySex=sex;}catch{restoreError=true;}
+ const restoreMs=performance.now()-restoreStarted;
  const baseSnapshot=model.snapshot.bind(model),baseRestore=model.restore.bind(model);
  model.snapshot=()=>({...baseSnapshot(),studySex,reviewState:reportReview?.capture()??null});
  model.restore=snapshot=>{baseRestore(snapshot);studySex=snapshot.studySex??'—';reportReview?.restore(snapshot.reviewState??null);};section.className='report-workspace';parent.before(section);
@@ -35,11 +38,12 @@ export function mountReport(parent,{build=null,sourceHash=null,globalReview=true
  const saveTemplate=node('button','Guardar nueva plantilla');templateDetails.append(name,templateText,saveTemplate);section.append(templateDetails);
  const help=node('p','Haz clic para insertar o selecciona una frase para reemplazarla. El subrayado indica texto provisional. Mover el cursor no cambia el destino de una toma ya iniciada.');help.className='tiny';section.append(help);
  const editor=node('div');editor.contentEditable='plaintext-only';editor.setAttribute('role','textbox');editor.setAttribute('aria-label','Informe dictado');editor.setAttribute('aria-multiline','true');editor.className='dictation-report report-editor';editor.spellcheck=true;editor.dataset.empty='true';section.append(editor);
- const status=node('p','Borrador guardado solo en este navegador. Revisa también el contenido heredado de la plantilla.');status.setAttribute('role','status');status.className='tiny';section.append(status);
+ const status=node('p',model.text?'Borrador recuperado de este navegador. Comprueba que corresponde al estudio actual o usa Nuevo informe.':'Borrador guardado solo en este navegador. Revisa también el contenido heredado de la plantilla.');status.setAttribute('role','status');status.className='tiny';section.append(status);
  const exportButton=node('button','Exportar mediciones del editor');section.append(exportButton);
  const metrics={layoutVersion:'propuesta-b-rev3',version:EDITOR_VERSION,build,sourceHash,createdAt:new Date().toISOString(),environment:{browser:navigator.userAgent,network:null,device:null},events:[]};let selection={start:model.text.length,end:model.text.length},composing=false;
  function event(type,data={}){metrics.events.push({type,atMs:performance.now(),...data});if(metrics.events.length>1000)metrics.events.shift();try{localStorage.setItem('dicta-editor-metrics-v1',JSON.stringify(metrics));}catch{}}
- function persist(){try{localStorage.setItem(key,model.committed());localStorage.setItem('dicta-report-context-v1',JSON.stringify(model.templateContext));}catch{status.textContent='No se pudo guardar en este navegador. Copia el informe antes de salir.';}}
+ event('draft-restored',{restored:!!model.text,failed:restoreError,elapsedMs:restoreMs});
+ function persist(){try{localStorage.setItem(key,model.committed());localStorage.setItem('dicta-report-context-v1',JSON.stringify(model.templateContext));localStorage.setItem('dicta-report-sex-v1',studySex);}catch{status.textContent='No se pudo guardar en este navegador. Copia el informe antes de salir.';}}
  function readSelection(){if(document.activeElement!==editor)return null;const s=window.getSelection();if(!s?.rangeCount)return null;const r=s.getRangeAt(0);if(!editor.contains(r.startContainer)||!editor.contains(r.endContainer))return null;const a=r.cloneRange();a.selectNodeContents(editor);a.setEnd(r.startContainer,r.startOffset);const b=r.cloneRange();b.selectNodeContents(editor);b.setEnd(r.endContainer,r.endOffset);return {start:a.toString().length,end:b.toString().length};}
  document.addEventListener('selectionchange',()=>{const s=readSelection();if(s)selection=s;});
  function setSelection(s){const length=model.text.length;const locate=offset=>{const walk=document.createTreeWalker(editor,NodeFilter.SHOW_TEXT);let n;while((n=walk.nextNode())){if(offset<=n.length)return [n,offset];offset-=n.length;}return [editor,editor.childNodes.length];};const r=document.createRange();r.setStart(...locate(Math.min(s.start,length)));r.setEnd(...locate(Math.min(s.end,length)));const sel=window.getSelection();sel.removeAllRanges();sel.addRange(r);}
