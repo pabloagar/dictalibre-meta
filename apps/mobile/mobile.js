@@ -32,7 +32,15 @@ function haptic(r, edge) {
   } catch { outcome = 'error'; }
   const callMs = performance.now() - began;
   lifecycleEvent('haptic', { recordingId: r.id, edge, requestedMs: HAPTIC_MS, accepted, outcome, callMs, actualDurationMs: null, audibleInRecording: null });
+  return outcome;
 }
+$('test-haptics').onclick = () => {
+  if (recording) return;
+  const outcome = haptic({ id: null, hapticsEnabled: true }, 'test');
+  $('haptics-note').textContent = outcome === 'requested'
+    ? 'Pulso de 12 ms solicitado. ¿Lo sentiste? La aceptación del navegador no confirma vibración física. Revisa los ajustes de vibración del teléfono si no se siente.'
+    : outcome === 'unsupported' ? 'Este navegador no ofrece vibración.' : 'El navegador no aceptó la vibración. Puedes seguir grabando normalmente.';
+};
 function captureStarted(r) {
   if (r.state !== 'starting') return;
   r.state = 'recording'; haptic(r, 'start');
@@ -51,6 +59,7 @@ function refresh() {
   $('test-signal').hidden = prepared; $('test-signal').disabled = preparing;
   $('modes').disabled = !!recording;
   $('haptics').disabled = !!recording;
+  $('test-haptics').disabled = !!recording;
   $('record').classList.toggle('recording', !!recording && ['starting', 'recording'].includes(recording.state));
   $('record-label').textContent = recording ? (recording.state === 'finishing' ? 'Comprobando entrega…' : mode === 'hold' ? 'Suelta para detener' : 'Pulsa para detener') : mode === 'hold' ? 'Mantén pulsado para hablar' : 'Pulsa para empezar';
 }

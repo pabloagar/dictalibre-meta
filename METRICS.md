@@ -130,3 +130,5 @@ Disposición de dictado identificada focused-workspace-v2-connect; exportación 
 
 ## 2026-11-01 · Vibración móvil opcional
 Diagnóstico mobile-lifecycle.v1: capture-request guarda hapticsEnabled y requestedPulseMs por recordingId; haptic guarda edge, requestedMs=12, accepted, outcome y callMs. callMs mide con performance.now desde antes de llamar vibrate hasta su retorno/error, en ms; excluye guardar el evento. No mide respuesta mecánica: actualDurationMs y audibleInRecording son null. La API aceptada no garantiza pulso físico. Registro acotado a 100 eventos, sin audio/texto/secretos. Sobrecosto total del registro y precisión efectiva del reloj pendientes de medir en teléfono; no interpretar diferencias pequeñas como mejoras. Protocolo pareado en tests/HAPTICS_CHECKLIST.md.
+
+Retroalimentación de copia: elapsedMs continúa midiendo solicitud de portapapeles hasta respuesta; feedback identifica confirmación en botón y estado. Tiempo hasta percepción del usuario y render efectivo: null, pendientes de prueba física. Prueba de vibración directa: edge=test, recordingId=null; no representa una toma ni cambia hapticsEnabled.

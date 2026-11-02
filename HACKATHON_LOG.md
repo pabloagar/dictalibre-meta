@@ -217,3 +217,6 @@ A solicitud del responsable, repositorio renombrado a https://github.com/pabloag
 
 ## 2026-11-01 · Vibración opcional de grabación
 Implementada casilla móvil desactivada por defecto con persistencia por navegador/origen. Pulso solicitado de 12 ms tras confirmación de inicio y después de parada del AudioWorklet, antes de esperar hash/entrega/ASR. Preferencia fijada durante cada toma, API opcional con fallo tolerado y diagnóstico exportable. Sin retrasar captura ni añadir silencios. Validación: 72/72 pruebas Node y sintaxis aprobadas, incluyendo preferencia, confirmaciones, duplicados y API/almacenamiento fallidos. Pendiente percepción física y contaminación acústica en S25 según tests/HAPTICS_CHECKLIST.md.
+
+## 2026-11-01 · Retroalimentación de copia y diagnóstico háptico
+Tras prueba del responsable: copia muestra confirmación en el propio botón durante 3 s, solo tras éxito del portapapeles; fallo visible diferenciado. Métrica copy conserva duración y resultado, identifica feedback button-and-status. Botón móvil de prueba directa solicita 12 ms fuera de toma, informa resultado API y no cambia preferencia. 72 pruebas Node y sintaxis aprobadas; percepción física pendiente. No se reinició el servidor ni se modificó el prompt del revisor.
