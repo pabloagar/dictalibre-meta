@@ -4,7 +4,7 @@ Estado: **revisión profesional pendiente**. Nada de esto es validación clínic
 
 ## Dos capas
 
-- **Vocabulario candidato** (`candidatos-tc-torax.v1.json`): lista amplia y versionada (321 términos). **Nunca se envía completa a Muse.**
+- **Vocabulario candidato** (`candidatos-tc-torax.v1.json`): lista amplia y versionada (334 términos: 318 del archivo del responsable y 16 de una lista base del equipo). **Nunca se envía completa a Muse.**
 - **Glosario**: subconjunto corto elegido por medición, por tipo de examen. El máximo de 100 términos es un tope, no una meta. Los glosarios aprobados se publican en `glosarios/` y aparecen en `/live` como configuraciones de Muse **de solo lectura**, con su versión y su hash. La elección es manual: no cambia la configuración por defecto. Whisper queda fuera.
 
 ## Archivos
@@ -23,6 +23,8 @@ Estado: **revisión profesional pendiente**. Nada de esto es validación clínic
   - Lung-RADS y Fleischner.
 - Se agrupan las variantes de género y número y se conserva la primera forma de la fuente. Las omitidas quedan en `variantes_omitidas`.
 - Se excluyen la lateralidad, las negaciones y las unidades, y también las expresiones que contienen una palabra que ya es candidata por sí sola.
+- Se excluyen las fases de contraste de abdomen (nefrográfica, corticomedular, excretora). «no» dentro de un nombre de entidad (neumonía intersticial no específica) no se trata como negación.
+- Se agrega una lista base de 16 términos frecuentes de tórax escrita por el equipo (neumotórax, derrame pleural, nódulo, adenopatía, tromboembolismo pulmonar, aorta, tráquea, pericardio, etc.), con origen «lista base del equipo». Coinciden con palabras genéricas de la lista PUC; el responsable aprobó incluirlas el 2-nov-2026. No participan en la regla de compuestos. Si se seleccionan para medir, hay que agregarlas a las frases y revisar los controles (algunos contienen esas palabras).
 - Se omiten los términos de la lista PUC original, porque sus permisos de redistribución están pendientes. Solo se registra cuántos son (1).
 - La prioridad A/B es un **juicio editorial por grupo, no una frecuencia medida**.
 - `apariciones_plantillas`, `tasa_error_sin_glosario` e `impacto_clinico` quedan en `null` hasta que se midan o se asignen. **Los conteos en plantillas no se suben al repositorio**: se calculan en el PC del responsable.

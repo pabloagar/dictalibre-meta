@@ -248,3 +248,11 @@ Diseño aprobado por el responsable, con tres decisiones: frecuencia en escala 1
 - configuraciones de Muse de solo lectura cargadas desde `data/vocabulario/glosarios/` (hoy vacía), sin escribir en el catálogo.
 
 Pruebas nuevas en `tests/vocabulario.test.mjs`, vistas fallar antes de implementar. El flujo completo se verificó con un Muse simulado; no hubo medición real. Pendiente: el responsable revisa la planilla, graba con dos voces y ejecuta las fases A y B en su PC.
+
+## 2026-11-02 · Vocabulario de TC de tórax: lista base y dos correcciones
+Con aprobación del responsable:
+- se agregó una lista base de 16 términos de tórax escrita por el equipo (neumotórax, derrame pleural, nódulo, adenopatía, tromboembolismo pulmonar, aorta, tráquea, pericardio, entre otros), que coinciden con palabras genéricas de la lista PUC; se suman después de la regla de compuestos, para no sacar expresiones ya propuestas;
+- se excluyeron las fases de contraste de abdomen;
+- «neumonía intersticial no específica» deja de clasificarse como negación; sigue fuera, ahora por la regla de compuestos, porque «neumonía» es candidata.
+
+El vocabulario quedó en 334 candidatos. La propuesta de 60 y las frases no cambian. Pruebas nuevas vistas fallar antes de implementar.

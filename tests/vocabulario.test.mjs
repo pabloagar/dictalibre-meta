@@ -183,3 +183,32 @@ test('ranking de TC de tórax incluye los términos de angioTC por tromboembolis
  const r=rankGlossary({candidatos,mediciones,impactos:{atelectasia:2,'joroba de Hampton':2,'hígado':3},frecuencias:{},examen:['tc-torax','angiotc-torax-tep']});
  assert.deepEqual(r.ranking.map(x=>x.termino),['joroba de Hampton','atelectasia']);
 });
+
+test('términos base del equipo, exclusiones por examen y excepción de negación con nombre de entidad',()=>{
+ const src=`x
+======================================================================
+TAC DE TÓRAX Y TAC DE ALTA RESOLUCIÓN
+======================================================================
+
+[A] Nódulos
+nódulo subsólido (0); fase nefrográfica (0); neumonía intersticial no específica (0); neumonía (0); trombo no oclusivo (0)
+`;
+ const base=[{termino:'nódulo',grupo:'Términos base de tórax',examenes:['tc-torax']},{termino:'neumonía',grupo:'Términos base de tórax',examenes:['tc-torax']}];
+ const {candidatos,excluidos}=buildCandidates(parseVocabSource(src),{secciones:SECCIONES,terminosBase:base,excluirTerminos:{'fase nefrográfica':'fase de contraste de abdomen; no aplica a TC de tórax'},propuesta:['nódulo subsólido']});
+ const t=candidatos.map(c=>c.termino);
+ assert.ok(t.includes('nódulo subsólido'),'un término base no saca expresiones de la fuente por la regla de compuestos');
+ assert.ok(t.includes('nódulo'));assert.equal(candidatos.find(c=>c.termino==='nódulo').origen,'lista base del equipo');
+ assert.equal(t.filter(x=>x==='neumonía').length,1,'un término base que ya existe no se duplica');
+ assert.equal(t.includes('fase nefrográfica'),false);assert.deepEqual(excluidos.no_aplica_al_examen,[{termino:'fase nefrográfica',motivo:'fase de contraste de abdomen; no aplica a TC de tórax'}]);
+ assert.equal(excluidos.lateralidad_negacion.includes('neumonía intersticial no específica'),false,'«no específica» es nombre de entidad, no negación');
+ assert.ok(excluidos.compuestos_con_candidato.includes('neumonía intersticial no específica'));
+ assert.ok(excluidos.lateralidad_negacion.includes('trombo no oclusivo'));
+});
+
+test('vocabulario del repo: lista base presente y fases de abdomen fuera',()=>{
+ const doc=JSON.parse(fs.readFileSync('data/vocabulario/candidatos-tc-torax.v1.json','utf8'));const t=new Set(doc.candidatos.map(c=>c.termino));
+ for(const x of ['neumotórax','derrame pleural','nódulo','adenopatía','tromboembolismo pulmonar','aorta','tráquea','pericardio'])assert.ok(t.has(x),x);
+ for(const x of ['fase nefrográfica','fase corticomedular','fase excretora'])assert.equal(t.has(x),false,x);
+ assert.equal(doc.excluidos.lateralidad_negacion.includes('neumonía intersticial no específica'),false);
+ assert.ok(doc.candidatos.filter(c=>c.origen==='lista base del equipo').every(c=>!c.propuesta_medicion&&c.estado===ESTADO_PENDIENTE));
+});

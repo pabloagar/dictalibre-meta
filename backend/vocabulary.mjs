@@ -29,6 +29,8 @@ function stem(word) {
 export const variantKey = term => term.split(/\s+/).filter(Boolean).map(stem).join(' ');
 
 const LATERALIDAD_NEGACION = /(^|\s)(derech[oa]s?|izquierd[oa]s?|bilateral(es)?|unilateral(es)?|contralateral(es)?|ipsilateral(es)?|no|sin|ni)(\s|$)/;
+// «no» dentro del nombre de una entidad no es negación (p. ej., neumonía intersticial no específica).
+const NEGACION_EXCEPCIONES = new Set(['neumonia intersticial no especifica']);
 const UNIDADES = new Set(['milimetro', 'milimetros', 'centimetro', 'centimetros', 'mm', 'cm', 'ml', 'mililitros']);
 
 // Lee el formato «[A] Grupo» + «término (conteo); …» bajo títulos de sección entre líneas de «=».
@@ -49,8 +51,10 @@ export function parseVocabSource(text) {
 }
 
 // Reglas deterministas. Los conteos de plantillas NO se copian: quedan solo en el PC del responsable.
-export function buildCandidates(entries, {secciones, gruposTransversales = {}, terminosExtra = {}, propuesta = []}) {
-  const byKey = new Map(), excluidos = {lateralidad_negacion: [], unidades: [], compuestos_con_candidato: [], origen_puc_omitidos: 0};
+// terminosBase: lista corta escrita por el equipo; se agrega DESPUÉS de la regla de compuestos y no participa en ella.
+// excluirTerminos: {término: motivo} para términos de la fuente que no aplican al examen.
+export function buildCandidates(entries, {secciones, gruposTransversales = {}, terminosExtra = {}, propuesta = [], terminosBase = [], excluirTerminos = {}}) {
+  const byKey = new Map(), excluidos = {lateralidad_negacion: [], unidades: [], compuestos_con_candidato: [], no_aplica_al_examen: [], origen_puc_omitidos: 0};
   const puc = new Set();
   for (const e of entries) {
     const examenes = secciones[e.section] ?? gruposTransversales[e.group] ?? terminosExtra[e.term];
@@ -58,7 +62,8 @@ export function buildCandidates(entries, {secciones, gruposTransversales = {}, t
     // Términos de la lista PUC original: permisos de redistribución pendientes; se omiten y solo se cuentan.
     if (e.base) { puc.add(plain(e.term)); excluidos.origen_puc_omitidos = puc.size; continue; }
     const p = plain(e.term);
-    if (LATERALIDAD_NEGACION.test(p)) { if (!excluidos.lateralidad_negacion.includes(e.term)) excluidos.lateralidad_negacion.push(e.term); continue; }
+    if (excluirTerminos[e.term]) { if (!excluidos.no_aplica_al_examen.some(x => x.termino === e.term)) excluidos.no_aplica_al_examen.push({termino: e.term, motivo: excluirTerminos[e.term]}); continue; }
+    if (!NEGACION_EXCEPCIONES.has(p) && LATERALIDAD_NEGACION.test(p)) { if (!excluidos.lateralidad_negacion.includes(e.term)) excluidos.lateralidad_negacion.push(e.term); continue; }
     if (UNIDADES.has(p)) { if (!excluidos.unidades.includes(e.term)) excluidos.unidades.push(e.term); continue; }
     const key = variantKey(e.term), prev = byKey.get(key);
     if (prev) {
@@ -67,13 +72,17 @@ export function buildCandidates(entries, {secciones, gruposTransversales = {}, t
       if (e.term !== prev.termino && !prev.variantes_omitidas.includes(e.term)) prev.variantes_omitidas.push(e.term);
       continue;
     }
-    byKey.set(key, {termino: e.term, forma: /\s/.test(e.term) ? 'expresion' : 'palabra', examenes: [...examenes], grupo: e.group, prioridad: e.prio, apariciones_plantillas: null, fuente_frecuencia: null, tasa_error_sin_glosario: null, impacto_clinico: null, estado: ESTADO_PENDIENTE, propuesta_medicion: false, variantes_omitidas: []});
+    byKey.set(key, {termino: e.term, forma: /\s/.test(e.term) ? 'expresion' : 'palabra', examenes: [...examenes], grupo: e.group, prioridad: e.prio, origen: 'archivo del responsable', apariciones_plantillas: null, fuente_frecuencia: null, tasa_error_sin_glosario: null, impacto_clinico: null, estado: ESTADO_PENDIENTE, propuesta_medicion: false, variantes_omitidas: []});
   }
   const singles = new Set([...byKey.values()].filter(c => c.forma === 'palabra').map(c => variantKey(c.termino)));
   const candidatos = [];
   for (const c of byKey.values()) {
     if (c.forma === 'expresion' && c.termino.split(/\s+/).some(w => singles.has(stem(w)))) { excluidos.compuestos_con_candidato.push(c.termino); continue; }
     candidatos.push(c);
+  }
+  for (const b of terminosBase) {
+    if (candidatos.some(c => variantKey(c.termino) === variantKey(b.termino))) continue;
+    candidatos.push({termino: b.termino, forma: /\s/.test(b.termino) ? 'expresion' : 'palabra', examenes: [...b.examenes], grupo: b.grupo, prioridad: 'A', origen: 'lista base del equipo', apariciones_plantillas: null, fuente_frecuencia: null, tasa_error_sin_glosario: null, impacto_clinico: null, estado: ESTADO_PENDIENTE, propuesta_medicion: false, variantes_omitidas: []});
   }
   const wanted = new Set(propuesta.map(plain));
   for (const c of candidatos) c.propuesta_medicion = wanted.has(plain(c.termino));
