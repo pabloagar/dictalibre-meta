@@ -24,3 +24,17 @@ Las primeras URLs construidas con identificadores de pantalla quedaron sin conte
 Verificación manual de una secuencia: A pasa a «Informe vacío», sin encabezados ni avisos, y vuelve a «Con avisos»; en B el cierre del panel deja los subrayados y amplía el área del informe. Se guardaron capturas de A y B en el directorio local de visualizaciones de esta sesión. No se verificaron reconocimiento de avisos, conexión, copia ni todas las interacciones entre fragmentos y notas. No es una medición de rendimiento ni una prueba clínica.
 
 No hay cambios en el código de la aplicación ni despliegue como parte de estas propuestas. Metodología de evaluación pendiente en EXPERIMENTS.md, sección «Revisión al margen».
+
+## A · Inicio y dictado interactivo · revisión solicitada
+
+El responsable eligió A y autorizó únicamente destacar la conexión del teléfono, añadir barras de audio y permitir probar el flujo. [Prompt exacto y corrección posterior](STITCH_A_INTERACTIVO_PROMPT.txt). Se conserva el proyecto y B; esta revisión parte de la A clara seleccionada, sin rediseñar la paleta.
+
+Primera revisión interactiva: pantalla `1d61c540403f42c39a4bc8bc0b4202b5`. Botón «Conecta tu teléfono para empezar», diálogo de conexión simulada, indicador de barras junto al reloj, estados de escucha/pausa y control externo «Simular dictado». No usa micrófono ni backend real. El editor empieza vacío y permite escritura manual; Plantilla incluye una opción sintética a demanda.
+
+Comprobación manual en Chrome/Windows con texto sintético: inicio vacío; escritura; selector de plantilla; confirmación antes de reemplazar; Deshacer recupera el texto previo; «Probar conexión» actualiza el estado; dictado simulado añade una frase, muestra barras y avanza reloj; Pausar muestra «Pausado» y deja el reloj fijo. «Es correcto» retira un aviso, reduce el contador y conserva su prosa. Copia de texto simple confirmada leyendo el portapapeles después de la acción.
+
+Fallos conservados: la primera revisión copiaba números de aviso y la etiqueta [PROVISIONAL]; además, Deshacer permanecía deshabilitado después de escribir manualmente desde el vacío. Se solicitó una corrección limitada a estos dos comportamientos. No se midió latencia, volumen, ergonomía o facilidad de descubrimiento; no se comprobó conexión telefónica real. No se afirma que las barras respondan a voz real: en esta demo son simuladas.
+
+**[Abrir A interactiva corregida](https://stitch.withgoogle.com/preview/11339747648494305787?node-id=f7e13918a58a4e428cc2f596ff26fe3a).** Pantalla `f7e13918a58a4e428cc2f596ff26fe3a`, etiqueta «A · Inicio y dictado interactivo». Verificación de la corrección: escribir «Prueba sintética» activa Deshacer y pulsarlo recupera el vacío; Con avisos → Copiar devuelve prosa sin sufijos 1/2 ni [PROVISIONAL], con separación normal de párrafos, comprobado en el portapapeles. Una secuencia final de cada comprobación, sin pruebas clínicas. La pestaña se deja en Vacío. La captura local muestra el estado de ejemplo con avisos, no el inicio real.
+
+Solo propuesta interactiva en Stitch y documentación en GitHub. No se modifica ni despliega Dicta Libre. La conexión real por QR y las barras dependientes del volumen quedan para una implementación posterior autorizada.
