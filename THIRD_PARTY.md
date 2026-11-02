@@ -80,3 +80,7 @@ Colección PLANTILLAS GENERALES PUC aportada por el responsable, importada solo 
 
 ## Fuentes de Hoja clínica
 Public Sans (400, 600, 700), Source Serif 4 (400) y Atkinson Hyperlegible Mono (400), descargadas de Google Fonts el 02-11-2026. Se sirven desde el propio servidor, sin llamadas del navegador a Google. Licencias SIL Open Font License 1.1 conservadas junto a los archivos en `apps/shared/fonts/*-OFL.txt`. Fuentes: https://github.com/google/fonts/tree/main/ofl/publicsans, https://github.com/google/fonts/tree/main/ofl/sourceserif4, https://github.com/google/fonts/tree/main/ofl/atkinsonhyperlegiblemono.
+
+## Lector QR integrado · 02-11-2026
+
+jsQR 1.4.0, Apache-2.0, dependencia fijada en pnpm-lock.yaml. Fuente: https://github.com/cozmo/jsQR. Biblioteca y licencia servidas desde el mismo servidor (/jsqr.js y /jsqr.LICENSE), sin CDN ni envío de imágenes. Lectura de fotogramas en memoria del navegador; no atribuir compatibilidad física iPhone/Samsung sin prueba de cámara real.

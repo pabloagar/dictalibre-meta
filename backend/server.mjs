@@ -10,6 +10,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const paths = new Map([
   ['/', 'apps/desktop/index.html'], ['/mobile', 'apps/mobile/index.html'],
   ['/startup.js', 'apps/desktop/startup.js'], ['/desktop.js', 'apps/desktop/desktop.js'], ['/mobile.js', 'apps/mobile/mobile.js'],
+  ['/qr-scanner.js', 'apps/mobile/qr-scanner.js'], ['/jsqr.js', 'node_modules/jsqr/dist/jsQR.js'], ['/jsqr.LICENSE', 'node_modules/jsqr/LICENSE'],
   ['/capture-worklet.js', 'apps/mobile/capture-worklet.js'],
   ['/shared/protocol.js', 'apps/shared/protocol.js'], ['/shared/client.js', 'apps/shared/client.js'],
   ['/shared/metrics.js', 'apps/shared/metrics.js'],
@@ -26,13 +27,14 @@ const nowMs = () => performance.timeOrigin + performance.now();
 export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL = 120_000,
   sessionTTL = 30 * 60_000, maxSessions = 30, resumeTTL = 300_000, route = null, canCreate = null, clientIp = null, passUpgrade = null } = {}) {
   const sessions = new Map(), codes = new Map(), tokens = new Map(), attempts = new Map(), resumes = new Map();
-  const headers = {
+  const securityHeaders = {
     'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer',
     'Permissions-Policy': 'microphone=(self), camera=()',
     'Content-Security-Policy': "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self' blob:; connect-src 'self'; worker-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
   };
   const server = http.createServer(async (req, res) => {
     const url = new URL(req.url, 'http://localhost');
+    const headers={...securityHeaders,'Permissions-Policy':url.pathname==='/mobile'?'microphone=(self), camera=(self)':securityHeaders['Permissions-Policy']};
     if (route) {
       try { if (await route(req, res, headers)) return; }
       catch { if (!res.headersSent) res.writeHead(400, { ...headers, 'Content-Type': 'application/json' }); res.end('{"error":"Petición inválida."}'); return; }
@@ -45,7 +47,7 @@ export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL 
     if (!file) { res.writeHead(404, headers).end('No encontrado'); return; }
     try {
       const content = await readFile(resolve(ROOT, file));
-      res.writeHead(200, { ...headers, 'Content-Type': MIME[file.split('.').pop()] }).end(content);
+      res.writeHead(200, { ...headers, 'Content-Type': MIME[file.split('.').pop()] ?? 'text/plain; charset=utf-8' }).end(content);
     } catch { res.writeHead(500, headers).end('Recurso no disponible. Revisa la instalación.'); }
   });
   const wss = new WebSocketServer({ noServer: true, maxPayload: 32768, perMessageDeflate: false });

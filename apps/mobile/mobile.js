@@ -1,6 +1,7 @@
 import { $, RelayClient, status, clock } from '/shared/client.js';
 import { encodeChunk, sha256 } from '/shared/protocol.js';
 
+let qrReader=null;
 let resumeToken=null, resumeUntil=0, retryTimer=null;
 let client, stream, context, source, worklet, silent, wakeLock;
 let paired = false, prepared = false, preparing = false, epoch = 0, recording = null, counter = 0, heldPointer = null;
@@ -58,6 +59,7 @@ if (/^[a-f0-9]{10}$/i.test(initialCode)) $('join-code').value = initialCode;
 history.replaceState(null, '', location.pathname);
 function refresh() {
   $('join').disabled = !!client;
+  $('scan-qr').disabled = !!client;
   $('record').disabled = document.hidden || !paired || !!(recording && !['starting', 'recording'].includes(recording.state));
   $('test-signal').hidden = prepared; $('test-signal').disabled = preparing;
   $('modes').disabled = !!recording || preparing;
@@ -215,6 +217,7 @@ function openConnection(request){
 }
 $('join').onclick=()=>{
   if(client)return;
+  qrReader?.stop('connecting');
   if(resumeToken){reconnect();return;}
   if(!qrToken&&!/^[a-f0-9]{10}$/i.test($('join-code').value.replace(/[\s-]/g,''))){status('Introduce los 10 caracteres del código.','error');return;}
   const request=qrToken?{type:'join_qr',token:qrToken}:{type:'join',code:$('join-code').value};qrToken=null;openConnection(request);
@@ -245,3 +248,12 @@ window.addEventListener('pagehide', () => { if (recording) client?.send({ type: 
 refresh();
 
 if (qrToken) $('join').click();
+
+$('scan-qr').onclick=async()=>{
+ if(client||recording)return;
+ try{
+  const {createQrScanner}=await import('/qr-scanner.js');
+  qrReader??=createQrScanner({video:$('qr-video'),panel:$('qr-reader'),message:$('qr-message'),cancel:$('qr-cancel'),onEvent:(type,data)=>lifecycleEvent(type,data),onResult:token=>{forgetResume();qrToken=token;$('join').click();}});
+  await qrReader.start();
+ }catch{status('No se pudo abrir el lector. Puedes usar el código manual.','error');}
+};

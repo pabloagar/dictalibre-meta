@@ -1,0 +1,9 @@
+# Escáner QR móvil · protocolo y límites
+
+Implementado, pendiente de despliegue coordinado y prueba física. Botón Escanear QR junto al código manual, lectura local jsQR 1.4.0 y cámara trasera preferida. Solo acepta URL del origen actual, ruta /mobile, sin consulta y token QR de 64 caracteres hexadecimales; no navega a enlaces arbitrarios. Verifica validez/vencimiento real el servidor. Cámara permitida por Permissions-Policy solo en documento /mobile; CSP sin relajación. No inicia captura de audio ni solicita cámara al cargar página.
+
+Al cancelar, ocultar página, finalizar lectura o fallar se liberan pistas de cámara. Una concesión tardía tras cancelar también se libera. Timeout 60 s, muestreo nominal cada 150 ms, tamaño máximo 640 px de ancho. Código manual permanece como alternativa cuando permiso/cámara falla. Sin imagen, token o URL en telemetría: qr-scan-start/stop conserva razón, frames y elapsedMs con performance.now. Precisión efectiva/sobrecosto y duración física null. Los eventos están en diagnóstico móvil existente, sin analítica externa.
+
+Hipótesis: reconectar mediante QR dentro de dicta elimina cambio a cámara externa. Criterio: leer QR válido conecta una vez, QR ajeno no navega, cancelar/denegar no bloquea código manual, cámara se apaga al terminar. Test reproducible tests/qr-scanner.test.mjs genera QR sintético y lo decodifica con biblioteca real; comprueba validación de origen, política HTTP/rutas y cancelación con permiso tardío. No sustituye prueba real de enfoque/permiso en Samsung o iPhone.
+
+Prueba física pendiente: nueva sesión en PC → Escanear QR en móvil → permitir cámara → apuntar → confirmar conexión; cancelar y revisar indicador de cámara; repetir con permiso denegado y código manual. Registrar dispositivo/SO/navegador/red/versiones/repeticiones, tiempo apertura→lectura si se exporta, datos ausentes null. No publicar QR ni credenciales. No se realiza captura física desde el agente.

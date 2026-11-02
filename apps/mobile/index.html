@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="es">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#1c2a2e"><title>Dicta Libre · Micrófono</title><link rel="stylesheet" href="/style.css"><script type="module" src="/mobile.js"></script></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#1c2a2e"><title>Dicta Libre · Micrófono</title><link rel="stylesheet" href="/style.css"><script src="/jsqr.js" defer></script><script type="module" src="/mobile.js"></script></head>
 <body class="mobile-body"><div class="phone-shell">
 <header><a class="brand" href="/mobile"><span class="brand-mark">d.</span> dicta libre</a><span class="tag">MICRÓFONO · PROTOTIPO</span></header>
 <main>
@@ -10,7 +10,8 @@
   <div class="visor-live"><div id="duration" class="timer">00:00</div><meter id="level" min="0" max="1" value="0" aria-label="Nivel del micrófono"></meter></div>
   <p id="verified" class="verification" role="status"></p>
 </section>
-<section id="join-panel" class="card"><label for="join-code" class="input-label">Código del computador</label><input id="join-code" class="code-input" placeholder="Ej. A12B34C56D" maxlength="14" autocomplete="off" autocapitalize="characters" spellcheck="false"><button id="join" class="primary">Conectar con el PC</button></section>
+<section id="join-panel" class="card"><button id="scan-qr" class="primary" type="button">Escanear QR del computador</button><p class="tiny">También puedes introducir el código:</p><label for="join-code" class="input-label">Código del computador</label><input id="join-code" class="code-input" placeholder="Ej. A12B34C56D" maxlength="14" autocomplete="off" autocapitalize="characters" spellcheck="false"><button id="join" class="primary">Conectar con el PC</button></section>
+<section id="qr-reader" class="card" hidden aria-label="Lector QR"><video id="qr-video" autoplay muted playsinline width="280" height="280" aria-label="Vista de cámara para QR"></video><p id="qr-message" role="status">Apunta al QR del computador.</p><button id="qr-cancel" type="button">Cancelar escaneo</button></section>
 <div id="confirm-panel" class="confirm" hidden><p>Confirma este número en el computador:</p><strong id="confirm-code"></strong></div>
 <section id="controls" class="control-card" hidden>
   <p class="tiny prepare-note">El botón de dictado prepara el micrófono. Espera «Grabando» antes de hablar. Entre tomas, el audio se descarta.</p>
