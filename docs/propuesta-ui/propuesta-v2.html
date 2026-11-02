@@ -1,0 +1,366 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>
+<title>Dicta Libre · Dos direcciones</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;500;700&family=Atkinson+Hyperlegible+Mono:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: documento de propuesta de una columna; cada dirección trae sus propias maquetas con su paleta fija (A oscura, B papel),
+   dentro de contenedores con desplazamiento horizontal propio. La página en sí sigue el tema del visor. */
+:root{
+  --bg:#f2f4f3; --surface:#ffffff; --fg:#1b2422; --muted:#56635f; --line:#d2d9d6; --accent:#1d5a52; --warn:#8a4b00; --warn-bg:#f7ead8;
+  --ui:'Public Sans',system-ui,sans-serif; --mono:'Atkinson Hyperlegible Mono',ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#161918;--surface:#1e2221;--fg:#d6dcd8;--muted:#9ba6a1;--line:#343c39;--accent:#7cc0b4;--warn:#f0a74e;--warn-bg:#3a2d1c;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#161918;--surface:#1e2221;--fg:#d6dcd8;--muted:#9ba6a1;--line:#343c39;--accent:#7cc0b4;--warn:#f0a74e;--warn-bg:#3a2d1c;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:16px/1.55 var(--ui)}
+.wrap{max-width:1180px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:44px}
+h1{font-size:30px;line-height:1.15;margin:0;text-wrap:balance;letter-spacing:-.3px}
+h2{font-size:22px;margin:0;text-wrap:balance}
+h3{font-size:17px;margin:0}
+p{margin:0;max-width:70ch}
+.lead{color:var(--muted)}
+.meta{font:13px var(--mono);color:var(--muted)}
+section{display:grid;gap:16px;min-width:0}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:16px;display:grid;gap:8px;align-content:start}
+.card p,.card li{font-size:15px}
+ul.plain{margin:0;padding-left:18px;display:grid;gap:4px}
+.dir-head{display:grid;gap:8px;border-top:3px solid var(--fg);padding-top:14px}
+.dir-tag{font:600 13px var(--mono);color:var(--muted)}
+.swatches{display:flex;flex-wrap:wrap;gap:8px}
+.sw{display:grid;grid-template-columns:28px auto;gap:2px 8px;align-items:center;font-size:12px}
+.sw i{grid-row:span 2;width:28px;height:28px;border-radius:3px;border:1px solid var(--line)}
+.sw b{font:600 12px var(--mono)}
+.sw span{color:var(--muted)}
+.stage{overflow-x:auto;border:1px solid var(--line);border-radius:4px;background:var(--surface);padding:16px}
+.stage-row{display:flex;gap:20px;align-items:flex-start;width:max-content}
+.cap{font:12px var(--mono);color:var(--muted);margin-bottom:6px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;color:var(--muted);font-weight:600}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:4px;background:var(--surface)}
+.pill{display:inline-block;font:600 11px var(--mono);padding:2px 7px;border-radius:3px;background:var(--warn-bg);color:var(--warn)}
+
+/* ===== Dirección A · Consola de lectura (oscura, fija) ===== */
+.A{--a-bg:#1a1d1c;--a-sf:#212524;--a-el:#2a2f2d;--a-ln:#3a403e;--a-tx:#d5dad6;--a-t2:#a3aca7;--a-t3:#8a948f;--a-rec:#e8665f;--a-recbg:#3a2322;--a-draft:#9cc0e6;--a-alert:#f0a74e;--a-alertbg:#3a2d1c;--a-ok:#8cc49a;
+  font-family:'Atkinson Hyperlegible Next',system-ui,sans-serif;color:var(--a-tx)}
+.A .desk{width:1080px;height:640px;background:var(--a-bg);display:grid;grid-template-rows:44px 1fr 34px;border:1px solid #000;font-size:14px}
+.A .top{display:flex;align-items:center;gap:12px;padding:0 14px;background:var(--a-sf);border-bottom:1px solid var(--a-ln)}
+.A .brand{font-weight:700}
+.A .brand small{color:var(--a-t3);font-weight:400;margin-left:6px}
+.A .chip,.A .btn,.B .btn,.B .live{white-space:nowrap}
+.A .chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--a-ln);padding:3px 8px;border-radius:3px;font-size:13px;background:var(--a-el)}
+.A .chip b{font-weight:700}
+.A .chip.demo{border-color:#6b5a3a;color:var(--a-alert);background:var(--a-alertbg)}
+.A .sp{flex:1}
+.A .btn{border:1px solid var(--a-ln);background:var(--a-el);color:var(--a-tx);padding:5px 10px;border-radius:3px;font:inherit;font-size:13px;display:inline-flex;gap:6px;align-items:center}
+.A .btn.pri{background:var(--a-tx);color:var(--a-bg);border-color:var(--a-tx);font-weight:700}
+.A kbd{font:11px 'Atkinson Hyperlegible Mono',monospace;border:1px solid var(--a-ln);border-bottom-width:2px;padding:0 4px;border-radius:3px;color:var(--a-t2)}
+.A .btn.pri kbd{color:inherit;border-color:currentColor;opacity:.65}
+.A .zones{display:grid;grid-template-columns:230px 1fr 290px;min-height:0}
+.A .rail{border-right:1px solid var(--a-ln);padding:12px;display:grid;gap:10px;align-content:start}
+.A .search{border:1px solid var(--a-ln);background:var(--a-el);border-radius:3px;padding:6px 8px;color:var(--a-t3);font-size:13px;display:flex;gap:6px}
+.A .rail h4{margin:4px 0 0;font-size:12px;color:var(--a-t3);font-weight:500}
+.A .tpl{display:flex;justify-content:space-between;padding:5px 7px;border-radius:3px;font-size:13px}
+.A .tpl.on{background:var(--a-el);outline:1px solid var(--a-ln)}
+.A .tpl small{font:11px 'Atkinson Hyperlegible Mono',monospace;color:var(--a-t3)}
+.A .editor{padding:18px 36px;overflow:hidden}
+.A .sheet{max-width:66ch;font-size:16.5px;line-height:1.6;font-variant-numeric:tabular-nums}
+.A .sheet h5{font-size:12px;color:var(--a-t2);margin:16px 0 3px;font-weight:700;letter-spacing:.3px}
+.A .sheet p{margin:0 0 6px}
+.A .dest{position:relative;padding-left:12px;border-left:3px solid var(--a-rec)}
+.A .destlab{display:block;font-size:11px;color:var(--a-rec);font-weight:700;margin-bottom:2px}
+.A .draft{color:var(--a-draft);text-decoration:underline dotted 2px;text-underline-offset:4px}
+.A .sens{background:var(--a-alertbg);box-shadow:inset 0 -2px 0 var(--a-alert);padding:0 2px}
+.A .sens sup{font:600 10px 'Atkinson Hyperlegible Mono',monospace;color:var(--a-alert)}
+.A .queue{border-left:1px solid var(--a-ln);background:var(--a-sf);padding:12px;display:grid;gap:10px;align-content:start}
+.A .queue h4{margin:0;font-size:13px;display:flex;justify-content:space-between}
+.A .queue h4 span{color:var(--a-alert);font-family:'Atkinson Hyperlegible Mono',monospace}
+.A .dec{border:1px solid var(--a-ln);border-left:3px solid var(--a-alert);background:var(--a-bg);padding:9px 10px;border-radius:3px;display:grid;gap:6px;font-size:13px}
+.A .dec .k{font-size:11px;color:var(--a-alert);font-weight:700}
+.A .dec.prop{border-left-color:var(--a-draft)} .A .dec.prop .k{color:var(--a-draft)}
+.A .dec dl{display:grid;grid-template-columns:62px 1fr;gap:2px 6px;margin:0}
+.A .dec dt{color:var(--a-t3)} .A .dec dd{margin:0}
+.A .row{display:flex;gap:6px;flex-wrap:wrap}
+.A .status{display:flex;align-items:stretch;background:var(--a-sf);border-top:1px solid var(--a-ln);font-size:12.5px}
+.A .status>div{display:flex;align-items:center;gap:7px;padding:0 12px;border-right:1px solid var(--a-ln)}
+.A .status .rec{background:var(--a-recbg);color:var(--a-rec);font-weight:700}
+.A .status .rec i{width:9px;height:9px;border-radius:50%;background:var(--a-rec)}
+.A .status .t{font-family:'Atkinson Hyperlegible Mono',monospace}
+.A .status .grow{flex:1;border:0}
+.A .phone{width:330px;height:690px;background:#141716;border:1px solid #000;display:grid;grid-template-rows:auto auto 1fr auto;font-size:14px}
+.A .ph-top{display:flex;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--a-ln);font-size:13px}
+.A .ph-top i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--a-ok);margin-right:6px}
+.A .ph-info{padding:14px}
+.A .ph-state{font-size:28px;font-weight:700;margin:0}
+.A .ph-sub{color:var(--a-t2);font-size:13px;margin-top:4px}
+.A .ph-time{font:600 44px/1 'Atkinson Hyperlegible Mono',monospace;margin-top:12px}
+.A .ph-lim{font-size:12px;color:var(--a-t3);margin-top:4px}
+.A .vu{display:flex;gap:3px;height:22px;align-items:flex-end;margin-top:12px}
+.A .vu b{flex:1;background:var(--a-ln)}
+.A .mode{display:grid;grid-template-columns:1fr 1fr;margin:0 14px 10px;border:1px solid var(--a-ln);border-radius:5px;overflow:hidden;font-size:13px}
+.A .mode span{padding:12px 6px;text-align:center;color:var(--a-t2)}
+.A .mode span.on{background:var(--a-sf);color:var(--a-tx);font-weight:700;box-shadow:inset 0 -3px 0 var(--a-tx)}
+.A .key{margin:0 14px 12px;height:250px;border:2px solid var(--a-ln);border-radius:10px;background:var(--a-sf);display:grid;place-content:center;text-align:center;gap:6px;font-size:19px;font-weight:700}
+.A .key small{font-size:13px;font-weight:400;color:var(--a-t2)}
+.A .ph-foot{padding:0 14px 12px;font-size:11px;color:var(--a-t3)}
+.A .phone.rec{background:#2b1514;box-shadow:inset 0 0 0 5px #c7362f}
+.A .phone.rec .ph-state{color:var(--a-rec)}
+.A .phone.rec .vu b{background:var(--a-rec)}
+.A .phone.rec .key{background:#c7362f;border-color:#c7362f;color:#fff}
+.A .phone.rec .key small{color:#fbe3e1}
+
+/* ===== Dirección B · Hoja clínica (papel, fija; variante sala abajo) ===== */
+.B{--b-desk:#e4e8e7;--b-sheet:#ffffff;--b-bar:#f4f6f5;--b-ln:#c9d0ce;--b-ink:#1c2a2e;--b-ink2:#4f5f64;--b-ink3:#55646a;--b-inst:#1d5a52;--b-rec:#b3261e;--b-recbg:#fbe4e2;--b-draft:#fff2c2;--b-draftln:#a37a00;--b-alert:#8f4700;--b-alertbg:#fcecd9;
+  font-family:'Public Sans',system-ui,sans-serif;color:var(--b-ink)}
+.B.sala{--b-desk:#171a1b;--b-sheet:#22272a;--b-bar:#1d2123;--b-ln:#3a4245;--b-ink:#d3d9d8;--b-ink2:#a6b0b0;--b-ink3:#8e9899;--b-inst:#7cc0b4;--b-rec:#ef7a72;--b-recbg:#3b2221;--b-draft:#3b3420;--b-draftln:#d9b44a;--b-alert:#f2a65a;--b-alertbg:#3a2c1d}
+.B .desk{width:1080px;height:640px;background:var(--b-desk);display:grid;grid-template-rows:50px 1fr;border:1px solid var(--b-ln);font-size:14px}
+.B .bar{display:flex;align-items:center;gap:10px;padding:0 16px;background:var(--b-bar);border-bottom:1px solid var(--b-ln)}
+.B .bar .name{font-weight:700}
+.B .bar .name small{font-weight:400;color:var(--b-ink3);margin-left:6px}
+.B .sp{flex:1}
+.B .live{display:flex;align-items:center;gap:8px;border:2px solid var(--b-rec);background:var(--b-recbg);color:var(--b-rec);padding:4px 10px;border-radius:4px;font-weight:600;font-size:13px}
+.B .live i{width:9px;height:9px;border-radius:50%;background:var(--b-rec)}
+.B .live span{color:var(--b-ink);font-weight:500}
+.B .btn{border:1px solid var(--b-ln);background:var(--b-sheet);color:var(--b-ink);padding:6px 11px;border-radius:4px;font:inherit;font-size:13px}
+.B .btn.fin{background:var(--b-inst);border-color:var(--b-inst);color:#fff;font-weight:600}
+.B.sala .btn.fin{color:#10201d}
+.B .mesa{display:grid;grid-template-columns:220px 1fr 250px;gap:18px;padding:16px 18px;min-height:0}
+.B .lat h4{margin:0 0 6px;font-size:12px}
+.B .inp{border:1px solid var(--b-ln);background:var(--b-sheet);padding:7px 9px;border-radius:4px;color:var(--b-ink3);font-size:13px}
+.B .chips{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}
+.B .chips span{border:1px solid var(--b-ln);padding:2px 7px;border-radius:3px;font-size:11.5px;color:var(--b-ink2);background:var(--b-sheet)}
+.B .chips span.on{border-color:var(--b-ink);color:var(--b-ink);font-weight:600}
+.B .list{border-top:1px solid var(--b-ln)}
+.B .list div{padding:7px 2px;border-bottom:1px solid var(--b-ln);font-size:13px}
+.B .list div small{display:block;color:var(--b-ink3);font-size:11.5px}
+.B .list .on{box-shadow:inset 3px 0 0 var(--b-inst);padding-left:9px}
+.B .sheet{background:var(--b-sheet);border:1px solid var(--b-ln);padding:26px 40px;overflow:hidden}
+.B .shead{display:flex;justify-content:space-between;gap:10px;font-size:11.5px;color:var(--b-ink3);border-bottom:1px solid var(--b-ln);padding-bottom:8px;margin-bottom:14px}
+.B .shead b{color:var(--b-inst);font-weight:600}
+.B .txt{font:17.5px/1.62 'Source Serif 4',Georgia,serif;font-variant-numeric:lining-nums tabular-nums;max-width:60ch}
+.B .txt h5{font:600 13px 'Public Sans',sans-serif;color:var(--b-ink2);margin:14px 0 3px}
+.B .txt p{margin:0 0 8px}
+.B .draft{background:var(--b-draft);box-shadow:inset 0 -2px 0 var(--b-draftln);font-style:italic}
+.B .caret{display:inline-block;width:2px;height:1.05em;background:var(--b-rec);vertical-align:-2px}
+.B .sens{box-shadow:inset 0 -3px 0 var(--b-alert);background:var(--b-alertbg)}
+.B .ref{font:700 10px 'Public Sans',sans-serif;color:var(--b-alert);vertical-align:super}
+.B .margin{position:relative}
+.B .note{position:absolute;left:0;right:0;background:var(--b-sheet);border:1px solid var(--b-ln);border-left:4px solid var(--b-alert);padding:9px 10px;border-radius:3px;font-size:12.5px;display:grid;gap:6px}
+.B .note h6{margin:0;font-size:11.5px;color:var(--b-alert)}
+.B .note q{quotes:"«" "»";font-family:'Source Serif 4',Georgia,serif;font-size:13.5px}
+.B .note .row{display:flex;gap:5px;flex-wrap:wrap}
+.B .note .btn{font-size:11.5px;padding:3px 7px}
+.B .note.gl{border-left-color:var(--b-inst)} .B .note.gl h6{color:var(--b-inst)}
+.B .phone{width:330px;height:690px;background:var(--b-desk);display:flex;flex-direction:column;border:1px solid var(--b-ln);font-size:14px}
+.B .ph-top{display:flex;justify-content:space-between;padding:12px 14px;font-size:13px;color:var(--b-ink2)}
+.B .visor{margin:0 14px;background:#1c2a2e;color:#e9efed;border-radius:6px;padding:14px 16px;display:grid;gap:8px}
+.B.sala .visor{background:#0d0f10}
+.B .visor .l1{display:flex;justify-content:space-between;font-size:13px}
+.B .visor .l1 b{font-size:14px}
+.B .visor .t{font:700 46px/1 'Public Sans',sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-1px}
+.B .visor .vu{height:5px;background:#3a474b;border-radius:3px;overflow:hidden}
+.B .visor .vu i{display:block;height:100%;background:#a9b7b6}
+.B .visor .d{font-size:12.5px;color:#a9b7b6;border-top:1px solid #3a474b;padding-top:8px;display:grid;gap:2px}
+.B .grow{flex:1}
+.B .key{margin:0 14px;height:290px;border:2px solid var(--b-ln);border-radius:14px;background:var(--b-sheet);display:grid;place-content:center;text-align:center;gap:6px}
+.B .key b{font-size:20px}
+.B .key small{color:var(--b-ink2);font-size:13px}
+.B .ph-mode{display:flex;justify-content:space-between;align-items:center;margin:10px 14px 14px;font-size:12.5px;color:var(--b-ink2)}
+.B .ph-mode span:last-child{border:1px solid var(--b-ln);padding:8px 10px;border-radius:4px;color:var(--b-ink)}
+.B .phone.rec{box-shadow:inset 0 0 0 6px var(--b-rec)}
+.B .phone.rec .visor .l1 b{color:#ff9d96}
+.B .phone.rec .visor .vu i{background:#ff6b61}
+.B .phone.rec .key{background:#c4433b;border-color:#c4433b;color:#fff}
+.B .phone.rec .key small{color:#ffe5e2}
+@media (max-width:560px){h1{font-size:25px}}
+</style>
+
+<div class="wrap">
+<header style="display:grid;gap:10px">
+  <div class="meta">Dicta Libre · propuesta de interfaz v2 · 2 de noviembre de 2026 · maquetas con texto sintético, nada implementado</div>
+  <h1>Dos direcciones para una herramienta de dictado radiológico</h1>
+  <p class="lead">Para radiólogos que informan en el computador, a menudo en una sala de lectura con poca luz, con prisa y acostumbrados al dictáfono, usando el teléfono como micrófono con una mano. El recorrido es el de la demo: conectar el teléfono, aplicar la plantilla (que propone el glosario del examen), dictar en el lugar elegido, decidir las alertas y copiar para el RIS.</p>
+</header>
+
+<section>
+  <h2>Lo que tiene que resolver cualquiera de las dos</h2>
+  <div class="cols">
+    <div class="card"><h3>Saber siempre si está grabando</h3><p>Hoy el teléfono cambia solo el botón; el estado se ve igual en espera y grabando. Grabar debe cambiar toda la pantalla del teléfono y un indicador fijo en el PC.</p></div>
+    <div class="card"><h3>Ver dónde cae el dictado</h3><p>El destino (sección y párrafo) debe estar a la vista antes y durante la toma, en el PC y en el teléfono.</p></div>
+    <div class="card"><h3>El informe manda</h3><p>Hoy el editor queda bajo el pliegue a 1440×900. Plantillas, ajustes y diagnóstico pasan a un costado o a demanda.</p></div>
+    <div class="card"><h3>Decisiones sensibles explícitas</h3><p>Cifras, unidades, negaciones y lateralidad no se aceptan con un clic genérico: el botón dice el resultado («Mantener 5 mm»).</p></div>
+    <div class="card"><h3>Examen y glosario visibles</h3><p>Al aplicar la plantilla se ve el examen detectado y el glosario propuesto, marcado <span class="pill">demo · sin medir</span>, y se puede cambiar.</p></div>
+    <div class="card"><h3>Sobria y honesta</h3><p>Sin degradados, emojis ni sombras decorativas. «Prototipo de investigación» y «solo material sintético» siempre visibles. Nada de afirmar precisión.</p></div>
+  </div>
+</section>
+
+<!-- ================= DIRECCIÓN A ================= -->
+<section>
+  <div class="dir-head">
+    <div class="dir-tag">Dirección A</div>
+    <h2>Consola de lectura</h2>
+    <p class="lead">Se siente como parte de la estación de diagnóstico: grafito oscuro, densa, manejable con teclado y con una barra de estado como la de un visor PACS. El único color fuerte aparece al grabar. Pensada para la sala oscura y para quien dicta muchos estudios seguidos.</p>
+  </div>
+  <div class="cols">
+    <div class="card"><h3>Dirección artística</h3><ul class="plain"><li>Referente: el visor PACS y el panel de un instrumento, no una app de consumo.</li><li>Palabras clave: preciso, silencioso, de turno.</li><li>Riesgo elegido: oscura por defecto en escritorio y teléfono.</li></ul></div>
+    <div class="card"><h3>Tipografía</h3><ul class="plain"><li>Atkinson Hyperlegible Next para todo, incluido el informe (17 px, 66 caracteres).</li><li>Atkinson Hyperlegible Mono para tiempo, siglas y atajos.</li><li>Elegida por distinguir 1/l/I y 0/O: importa en medidas.</li></ul></div>
+    <div class="card"><h3>Paleta</h3>
+      <div class="swatches">
+        <div class="sw"><i style="background:#1a1d1c"></i><b>#1a1d1c</b><span>fondo</span></div>
+        <div class="sw"><i style="background:#d5dad6"></i><b>#d5dad6</b><span>texto 11,9:1</span></div>
+        <div class="sw"><i style="background:#e8665f"></i><b>#e8665f</b><span>grabando</span></div>
+        <div class="sw"><i style="background:#9cc0e6"></i><b>#9cc0e6</b><span>borrador</span></div>
+        <div class="sw"><i style="background:#f0a74e"></i><b>#f0a74e</b><span>alerta y demo</span></div>
+      </div></div>
+  </div>
+  <div class="stage"><div class="stage-row A">
+    <div><div class="cap">Escritorio · grabando en Hallazgos · 1 alerta y 1 propuesta</div>
+    <div class="desk">
+      <div class="top">
+        <span class="brand">Dicta Libre<small>prototipo · material sintético</small></span>
+        <span class="chip">Examen <b>TC de cerebro</b></span>
+        <span class="chip demo">Glosario demo · 20 términos · sin medir</span>
+        <span class="sp"></span>
+        <button class="btn">Revisar <kbd>Ctrl</kbd><kbd>⇧</kbd><kbd>R</kbd></button>
+        <button class="btn pri">Copiar para RIS <kbd>Ctrl</kbd><kbd>⇧</kbd><kbd>C</kbd></button>
+      </div>
+      <div class="zones">
+        <div class="rail">
+          <div class="search"><kbd>Ctrl</kbd><kbd>K</kbd> Buscar plantilla</div>
+          <h4>Más usadas</h4>
+          <div class="tpl on">TC de cerebro<small>demo</small></div>
+          <div class="tpl">TC de abdomen y pelvis<small>demo</small></div>
+          <div class="tpl">TC de tórax<small>demo</small></div>
+          <div class="tpl">AngioTC de tórax (TEP)<small>demo</small></div>
+          <h4>Otras</h4>
+          <div class="tpl">Informe en blanco<small>vacío</small></div>
+          <p style="font-size:11.5px;color:var(--a-t3);margin-top:6px">Aplicar una plantilla se puede deshacer y no borra el informe al reconectar el teléfono.</p>
+        </div>
+        <div class="editor"><div class="sheet">
+          <h5>TÉCNICA</h5><p>Tomografía computada de cerebro sin contraste.</p>
+          <h5>HALLAZGOS</h5>
+          <p>Hipodensidad corticosubcortical en territorio de la arteria cerebral media <span class="sens">izquierda<sup>1</sup></span>, sin transformación hemorrágica.</p>
+          <p class="dest"><span class="destlab">Destino de la toma 4 · Hallazgos, párrafo 2</span>Sistema ventricular de tamaño normal. <span class="draft">Sin desviación de la línea media</span></p>
+          <h5>IMPRESIÓN</h5><p>Infarto isquémico agudo en territorio de la arteria cerebral media derecha.</p>
+        </div></div>
+        <div class="queue">
+          <h4>Decisiones <span>2</span></h4>
+          <div class="dec"><span class="k">1 · Lateralidad en conflicto</span><span>Hallazgos dice «izquierda» e Impresión «derecha».</span><div class="row"><button class="btn">Ir al texto <kbd>Alt</kbd><kbd>↓</kbd></button><button class="btn">Marcar revisado</button></div><span style="color:var(--a-t3);font-size:11.5px">No se cambia nada sin tu decisión. El revisor no escuchó el audio.</span></div>
+          <div class="dec prop"><span class="k">2 · Propuesta de redacción</span><dl><dt>Original</dt><dd>sin transformación hemorrágica</dd><dt>Propuesta</dt><dd>sin signos de transformación hemorrágica</dd></dl><div class="row"><button class="btn">Aceptar</button><button class="btn">Rechazar</button><button class="btn">Editar</button></div></div>
+        </div>
+      </div>
+      <div class="status">
+        <div class="rec"><i></i>Grabando <span class="t">00:04</span></div>
+        <div>Teléfono conectado</div>
+        <div>Muse-streaming · envía audio a Meta</div>
+        <div>Destino: Hallazgos, párrafo 2</div>
+        <div class="grow"></div>
+        <div style="color:var(--a-t3);gap:12px"><span><kbd>Esc</kbd> cancelar toma</span><span><kbd>Ctrl</kbd><kbd>Z</kbd> deshacer</span></div>
+      </div>
+    </div></div>
+    <div><div class="cap">Teléfono · listo</div>
+      <div class="phone"><div class="ph-top"><span><i></i>Conectado al PC</span><span>Más opciones</span></div>
+        <div class="ph-info"><p class="ph-state">Listo para dictar</p><p class="ph-sub">TC de cerebro · Hallazgos, párrafo 2</p><div class="ph-time">00:00</div><div class="ph-lim">Hasta 3 min por toma · pantalla encendida</div><div class="vu"><b style="height:12%"></b><b style="height:9%"></b><b style="height:11%"></b><b style="height:8%"></b><b style="height:12%"></b><b style="height:9%"></b><b style="height:10%"></b><b style="height:8%"></b><b style="height:11%"></b><b style="height:9%"></b></div></div>
+        <div></div>
+        <div><div class="mode"><span class="on">Mantener pulsado</span><span>Pulsar y soltar</span></div><div class="key">Mantén pulsado para dictar<small>Suelta para terminar la toma</small></div><div class="ph-foot">Fuera de una toma el audio se descarta. Solo material sintético.</div></div>
+      </div></div>
+    <div><div class="cap">Teléfono · grabando</div>
+      <div class="phone rec"><div class="ph-top"><span><i></i>Conectado al PC</span><span>Más opciones</span></div>
+        <div class="ph-info"><p class="ph-state">Grabando</p><p class="ph-sub">El PC recibe audio · 41 bloques confirmados</p><div class="ph-time">00:04</div><div class="ph-lim">Quedan 2:56 de esta toma</div><div class="vu"><b style="height:35%"></b><b style="height:70%"></b><b style="height:90%"></b><b style="height:50%"></b><b style="height:75%"></b><b style="height:95%"></b><b style="height:60%"></b><b style="height:40%"></b><b style="height:68%"></b><b style="height:30%"></b></div></div>
+        <div></div>
+        <div><div class="mode"><span class="on">Mantener pulsado</span><span>Pulsar y soltar</span></div><div class="key">Suelta para terminar<small>Mientras mantengas pulsado se graba</small></div><div class="ph-foot">No se puede cambiar el modo durante una toma.</div></div>
+      </div></div>
+  </div></div>
+</section>
+
+<!-- ================= DIRECCIÓN B ================= -->
+<section>
+  <div class="dir-head">
+    <div class="dir-tag">Dirección B</div>
+    <h2>Hoja clínica</h2>
+    <p class="lead">El informe es una hoja en serif, igual al texto que llegará al RIS, sobre una mesa neutra. Las alertas y el glosario son notas al margen junto al párrafo, como en un procesador de texto. El teléfono es un dictáfono: un visor fijo arriba y una tecla grande abajo. Clara de día, con una variante «sala» de bajo brillo.</p>
+  </div>
+  <div class="cols">
+    <div class="card"><h3>Dirección artística</h3><ul class="plain"><li>Referente: el informe impreso y el dictáfono de mano.</li><li>Palabras clave: documento, revisión, firma.</li><li>Riesgo elegido: serif para el texto clínico y visor oscuro incluso de día.</li></ul></div>
+    <div class="card"><h3>Tipografía</h3><ul class="plain"><li>Source Serif 4 para el informe (17,5 px, 60 caracteres, cifras tabulares).</li><li>Public Sans para la interfaz y el visor.</li><li>Separa con claridad lo que se copia de lo que es control.</li></ul></div>
+    <div class="card"><h3>Paleta</h3>
+      <div class="swatches">
+        <div class="sw"><i style="background:#ffffff"></i><b>#ffffff</b><span>hoja</span></div>
+        <div class="sw"><i style="background:#1c2a2e"></i><b>#1c2a2e</b><span>tinta 14,8:1</span></div>
+        <div class="sw"><i style="background:#1d5a52"></i><b>#1d5a52</b><span>institucional</span></div>
+        <div class="sw"><i style="background:#b3261e"></i><b>#b3261e</b><span>grabando</span></div>
+        <div class="sw"><i style="background:#fff2c2"></i><b>#fff2c2</b><span>borrador</span></div>
+      </div></div>
+  </div>
+  <div class="stage"><div class="stage-row B">
+    <div><div class="cap">Escritorio · día · dictando en Hallazgos</div>
+    <div class="desk">
+      <div class="bar"><span class="name">Dicta Libre<small>prototipo · sin validación clínica</small></span><span class="sp"></span>
+        <span class="live"><i></i>Grabando 00:04 <span>en Hallazgos, párrafo 2</span></span>
+        <button class="btn">Revisar informe</button><button class="btn fin">Copiar para RIS · 1 alerta sin decidir</button></div>
+      <div class="mesa">
+        <div class="lat"><h4>Plantillas</h4><div class="inp">Buscar estudio o frase ( / )</div>
+          <div class="chips"><span class="on">Más usadas</span><span>TC</span><span>Angio</span><span>Propias</span></div>
+          <div class="list"><div class="on">TC de cerebro<small>Aplicada · glosario demo propuesto</small></div><div>TC de abdomen y pelvis<small>Glosario demo disponible</small></div><div>TC de tórax<small>Glosario demo disponible</small></div><div>Informe en blanco<small>Sin glosario</small></div></div></div>
+        <div class="sheet"><div class="shead"><span>Informe en edición · no enviado a ningún sistema</span><span>Examen: <b>TC de cerebro</b></span></div>
+          <div class="txt"><h5>Técnica</h5><p>Tomografía computada de cerebro sin contraste.</p>
+            <h5>Hallazgos</h5><p>Hipodensidad corticosubcortical en territorio de la arteria cerebral media <span class="sens">izquierda</span><span class="ref">1</span>, sin transformación hemorrágica.</p>
+            <p>Sistema ventricular de tamaño normal. <span class="draft">Sin desviación de la línea media</span><span class="caret"></span></p>
+            <h5>Impresión</h5><p>Infarto isquémico agudo en territorio de la arteria cerebral media derecha.</p></div></div>
+        <div class="margin">
+          <div class="note gl" style="top:0"><h6>Glosario de esta plantilla</h6><span>Demo · TC de cerebro · 20 términos. <b>Sin medir</b>: no garantiza mejor reconocimiento.</span><div class="row"><button class="btn">Cambiar</button><button class="btn">Sin glosario</button></div></div>
+          <div class="note" style="top:150px"><h6>1 · Lateralidad en conflicto</h6><span>Hallazgos: <q>izquierda</q>. Impresión: <q>derecha</q>.</span><div class="row"><button class="btn">Ir al texto</button><button class="btn">Marcar revisado</button></div></div>
+        </div>
+      </div>
+    </div></div>
+    <div><div class="cap">Teléfono · día · listo</div>
+      <div class="phone"><div class="ph-top"><span><b>Conectado</b> al PC</span><span>Opciones</span></div>
+        <div class="visor"><div class="l1"><b>Listo</b><span>Toma 4</span></div><div class="t">0:00</div><div class="vu"><i style="width:6%"></i></div><div class="d"><span>TC de cerebro · glosario demo</span><span>Escribirá en: Hallazgos, párrafo 2</span></div></div>
+        <div class="grow"></div><div class="key"><b>Mantén pulsado para dictar</b><small>Suelta para terminar</small></div>
+        <div class="ph-mode"><span>Modo: mantener pulsado</span><span>Cambiar a pulsar y soltar</span></div></div></div>
+    <div class="B sala"><div class="cap">Teléfono · sala · grabando</div>
+      <div class="phone rec"><div class="ph-top"><span><b>Conectado</b> al PC</span><span>Opciones</span></div>
+        <div class="visor"><div class="l1"><b>Grabando</b><span>Toma 4</span></div><div class="t">0:04</div><div class="vu"><i style="width:68%"></i></div><div class="d"><span>TC de cerebro · glosario demo</span><span>Escribiendo en: Hallazgos, párrafo 2</span></div></div>
+        <div class="grow"></div><div class="key"><b>Suelta para terminar</b><small>El PC muestra el borrador mientras hablas</small></div>
+        <div class="ph-mode"><span>Modo: mantener pulsado</span><span>Cambiar a pulsar y soltar</span></div></div></div>
+  </div></div>
+  <div class="stage B sala"><div class="cap">Escritorio · variante sala (bajo brillo) · mismo momento</div>
+    <div class="desk" style="height:360px;grid-template-rows:50px 1fr">
+      <div class="bar"><span class="name">Dicta Libre<small>prototipo de investigación · solo material sintético</small></span><span class="sp"></span><span class="live"><i></i>Grabando 00:04 <span>en Hallazgos, párrafo 2</span></span><button class="btn fin">Copiar para RIS · 1 alerta sin decidir</button></div>
+      <div class="mesa" style="grid-template-columns:1fr 250px"><div class="sheet"><div class="shead"><span>Informe en edición</span><span>Examen: <b>TC de cerebro</b></span></div><div class="txt"><h5>Hallazgos</h5><p>Hipodensidad corticosubcortical en territorio de la arteria cerebral media <span class="sens">izquierda</span><span class="ref">1</span>.</p><p>Sistema ventricular de tamaño normal. <span class="draft">Sin desviación de la línea media</span><span class="caret"></span></p></div></div>
+      <div class="margin"><div class="note" style="top:0"><h6>1 · Lateralidad en conflicto</h6><span>Hallazgos: <q>izquierda</q>. Impresión: <q>derecha</q>.</span></div></div></div>
+    </div></div>
+</section>
+
+<section>
+  <h2>Estados del dictado (iguales en ambas)</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Estado</th><th>Teléfono</th><th>PC</th><th>Texto exacto</th></tr></thead>
+    <tbody>
+      <tr><td>Listo</td><td>Control neutro, destino y examen visibles</td><td>Indicador gris «Teléfono conectado»</td><td>«Listo para dictar»</td></tr>
+      <tr><td>Grabando</td><td>Toda la pantalla roja, tiempo restante, nivel</td><td>Indicador rojo con tiempo y destino; margen rojo en el párrafo</td><td>«Grabando» · «Quedan 2:56»</td></tr>
+      <tr><td>Procesando</td><td>Solo después de que el PC confirma los bytes</td><td>Borrador en su estilo, sin copiar ni editar</td><td>«Recibida · el PC transcribe»</td></tr>
+      <tr><td>Consolidado</td><td>«Toma 4 recibida»</td><td>Texto normal; deshacer disponible</td><td>«Toma incorporada. Puedes deshacer (Ctrl+Z)»</td></tr>
+      <tr><td>Sin texto</td><td>—</td><td>La selección queda intacta</td><td>«La toma no produjo texto»</td></tr>
+      <tr><td>Error</td><td>Causa concreta y una sola acción</td><td>Informe restaurado y explicado</td><td>«Se perdió la conexión. Escanea el QR nuevo.»</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>Cuál conviene</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Criterio</th><th>A · Consola de lectura</th><th>B · Hoja clínica</th></tr></thead>
+    <tbody>
+      <tr><td>Sala con poca luz</td><td>Oscura por defecto</td><td>Requiere elegir «sala»</td></tr>
+      <tr><td>Ver dónde cae el dictado</td><td>Margen rojo y barra de estado</td><td>Indicador en la barra y cursor rojo</td></tr>
+      <tr><td>Decidir alertas</td><td>Cola rápida con teclado</td><td>Notas junto al texto</td></tr>
+      <tr><td>Parecido con lo que llega al RIS</td><td>Medio (sans)</td><td>Alto (serif, hoja)</td></tr>
+      <tr><td>Demo para Meta</td><td>Se ve como herramienta profesional de turno</td><td>Se entiende de inmediato: un informe que se escribe solo</td></tr>
+      <tr><td>Costo sobre el código actual</td><td>Medio: tres zonas y barra de estado</td><td>Medio-alto: notas alineadas al párrafo</td></tr>
+    </tbody>
+  </table></div>
+  <p>Recomendación: A en escritorio y el visor de B en el teléfono. Antes del 4-nov solo es seguro lo que no toca la lógica: aviso «solo material sintético», marca de prototipo, contraste, tema oscuro por <code>prefers-color-scheme</code>, opciones secundarias del teléfono en «Más opciones» y pantalla completa roja al grabar. El resto, después del hackathon.</p>
+</section>
+</div>
+</body></html>

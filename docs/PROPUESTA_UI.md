@@ -294,3 +294,14 @@ Esto se registrará en EXPERIMENTS.md antes de comparar. Por ahora no hay medici
   - contraste AA medido.
 
   La reducción mínima de tiempo la define el responsable. Se conservan los resultados favorables y los desfavorables.
+
+## Versión 2 (2-nov-2026, después del glosario por examen)
+
+Maquetas en vivo en `docs/propuesta-ui/propuesta-v2.html`, también publicadas como página privada del responsable. Mantiene las dos direcciones, renombradas «Consola de lectura» (A) y «Hoja clínica» (B), e incorpora:
+
+- el examen detectado al aplicar la plantilla y el glosario de demostración propuesto, marcado «sin medir»;
+- el aviso «solo material sintético» y la marca de prototipo, siempre visibles;
+- conflictos de lateralidad presentados como «Ir al texto» y «Marcar revisado» (la revisión global no sustituye texto);
+- el estado «La toma no produjo texto».
+
+Todo el texto es sintético. **Nada está implementado.** La recomendación no cambia: A en escritorio y el visor de B en el teléfono; antes del 4-nov solo los cambios de §9 que no tocan la lógica.
