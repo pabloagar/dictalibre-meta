@@ -1,0 +1,39 @@
+/* Dicta Libre · Propuesta B «Hoja clínica» · variables de diseño (propuesta, sin implementar).
+   Día por defecto; «sala» (bajo brillo) con prefers-color-scheme: dark o data-theme="sala".
+   Contrastes calculados con la fórmula WCAG 2.x (docs/propuesta-ui/contraste.py); hay que repetir la medición
+   sobre los colores que calcula el navegador. Fuentes: Source Serif 4 y Public Sans (licencia OFL), a alojar en local. */
+:root {
+  --mesa: #e4e8e7;          /* fondo alrededor de la hoja */
+  --hoja: #ffffff;          /* superficie del informe */
+  --barra: #f4f6f5;
+  --linea: #c9d0ce;
+  --tinta: #1c2a2e;         /* 14,79:1 sobre hoja */
+  --tinta-2: #4f5f64;       /* 6,66:1 sobre hoja */
+  --tinta-3: #55646a;       /* 4,97:1 sobre mesa */
+  --institucional: #1d5a52; /* blanco encima: 7,96:1 · acción final «Copiar para RIS» */
+  --grabando: #b3261e;      /* 5,38:1 sobre --grabando-suave */
+  --grabando-suave: #fbe4e2;
+  --tecla-grabando: #b3261e;/* blanco encima: 6,54:1 */
+  --borrador: #fff2c2;      /* fondo del texto provisional, cursiva */
+  --borrador-borde: #a37a00;
+  --alerta: #8f4700;        /* 5,91:1 sobre --alerta-suave */
+  --alerta-suave: #fcecd9;
+  --visor: #1c2a2e;         /* visor del teléfono, oscuro también de día */
+  --visor-texto: #e9efed;
+  --visor-2: #a9b7b6;       /* 7,14:1 sobre visor */
+  --foco: #0b57d0;
+  --serif: 'Source Serif 4', Georgia, serif;       /* texto del informe: 17,5–19 px, 60–64 caracteres */
+  --ui: 'Public Sans', system-ui, sans-serif;      /* interfaz y visor */
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="dia"]) {
+  --mesa: #171a1b; --hoja: #22272a; --barra: #1d2123; --linea: #3a4245;
+  --tinta: #d3d9d8; --tinta-2: #a6b0b0; --tinta-3: #8e9899;
+  --institucional: #7cc0b4; --grabando: #ef7a72; --grabando-suave: #3b2221; --tecla-grabando: #c4433b;
+  --borrador: #3b3420; --borrador-borde: #d9b44a; --alerta: #f2a65a; --alerta-suave: #3a2c1d;
+  --visor: #0d0f10; --visor-texto: #d3d9d8; --visor-2: #8e9899; --foco: #ffd27a; color-scheme: dark } }
+:root[data-theme="sala"] {
+  --mesa: #171a1b; --hoja: #22272a; --barra: #1d2123; --linea: #3a4245;
+  --tinta: #d3d9d8; --tinta-2: #a6b0b0; --tinta-3: #8e9899;
+  --institucional: #7cc0b4; --grabando: #ef7a72; --grabando-suave: #3b2221; --tecla-grabando: #c4433b;
+  --borrador: #3b3420; --borrador-borde: #d9b44a; --alerta: #f2a65a; --alerta-suave: #3a2c1d;
+  --visor: #0d0f10; --visor-texto: #d3d9d8; --visor-2: #8e9899; --foco: #ffd27a; color-scheme: dark }

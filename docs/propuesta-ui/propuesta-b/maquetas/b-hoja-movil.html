@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maqueta B · Hoja de informe · móvil</title>
+<!-- Maqueta estática: estados del teléfono a 412×915 px CSS (S25 Ultra), tema día y sala. No es la aplicación. -->
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ui:'Public Sans',system-ui,sans-serif}
+.dia{--fondo:#f4f6f5;--visor:#1c2a2e;--visor-texto:#e9efed;--visor-2:#a9b7b6;--linea:#c9d0ce;--tinta:#1c2a2e;--tinta-2:#4f5f64;--tecla:#ffffff;--grabando:#b3261e;--proc:#1d5a52;--error:#9b1c13}
+.sala{--fondo:#151819;--visor:#0d0f10;--visor-texto:#d3d9d8;--visor-2:#8e9899;--linea:#343c3f;--tinta:#d3d9d8;--tinta-2:#a6b0b0;--tecla:#22272a;--grabando:#c4433b;--proc:#7cc0b4;--error:#f08a7e}
+*{box-sizing:border-box}
+body{margin:0;background:#9aa3a2;font:16px/1.4 var(--ui);display:flex;gap:28px;padding:30px 24px;align-items:flex-start}
+.wrap{position:relative}.cap{position:absolute;top:-24px;font-size:13px;color:#1c2a2e}
+.tel{width:412px;height:915px;background:var(--fondo);color:var(--tinta);display:flex;flex-direction:column;overflow:hidden}
+.sup{display:flex;justify-content:space-between;padding:14px 16px;font-size:14px;color:var(--tinta-2)}
+.sup b{color:var(--tinta);font-weight:600}
+/* Visor: zona fija tipo dictáfono, con estado, tiempo y destino */
+.visor{margin:0 16px;background:var(--visor);color:var(--visor-texto);border-radius:6px;padding:16px 18px}
+.visor .linea1{display:flex;justify-content:space-between;align-items:baseline}
+.visor .est{font-size:15px;font-weight:700;letter-spacing:.2px}
+.visor .t{font:700 54px/1 var(--ui);font-variant-numeric:tabular-nums;letter-spacing:-1px;margin-top:10px}
+.visor .dest{font-size:14px;color:var(--visor-2);margin-top:10px;border-top:1px solid #3a474b;padding-top:10px}
+.visor .vu{height:6px;background:#3a474b;margin-top:12px;border-radius:3px;overflow:hidden}
+.visor .vu i{display:block;height:100%;background:var(--visor-2)}
+.esp{flex:1}
+.tecla{margin:0 16px;height:380px;border:2px solid var(--linea);border-radius:14px;background:var(--tecla);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;text-align:center;padding:16px}
+.tecla b{font-size:24px}
+.tecla small{font-size:15px;color:var(--tinta-2)}
+.modo{margin:12px 16px 0;display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--tinta-2)}
+.modo button{font:inherit;color:var(--tinta);border:1px solid var(--linea);background:transparent;padding:10px 12px;border-radius:4px;min-height:44px}
+.pie{padding:12px 16px 16px;font-size:12px;color:var(--tinta-2)}
+.rec .visor .est{color:#ff9d96}
+.rec .visor .vu i{background:#ff6b61}
+.rec .tecla{background:var(--grabando);border-color:var(--grabando);color:#fff}
+.rec .tecla small{color:#ffe5e2}
+.rec{box-shadow:inset 0 0 0 8px var(--grabando)}
+.proc .visor .est{color:var(--visor-texto)}
+.proc .tecla{border-style:dashed}
+.err .visor{background:var(--error);color:#fff}
+.err .visor .dest{color:#ffe1dd;border-color:#ffffff55}
+.err .tecla{opacity:.6}
+.accion{display:block;margin:12px 16px 0;padding:16px;border-radius:6px;background:var(--tinta);color:var(--fondo);text-align:center;font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="wrap"><div class="cap">Día · listo</div>
+<section class="tel dia">
+  <div class="sup"><span><b>Conectado</b> a PC de lectura</span><span>Opciones</span></div>
+  <div class="visor" role="status"><div class="linea1"><span class="est">Listo</span><span>Toma 7</span></div><div class="t">0:00</div><div class="vu"><i style="width:6%"></i></div><div class="dest">Escribirá en: Hallazgos, párrafo 2</div></div>
+  <div class="esp"></div>
+  <div class="tecla" role="button" tabindex="0"><b>Mantén pulsado para dictar</b><small>Suelta para terminar</small></div>
+  <div class="modo"><span>Modo: mantener pulsado</span><button>Cambiar a pulsar y soltar</button></div>
+  <div class="pie">Máximo 3 min por toma. Mantén la pantalla encendida.</div>
+</section></div>
+
+<div class="wrap"><div class="cap">Sala · grabando</div>
+<section class="tel sala rec">
+  <div class="sup"><span><b>Conectado</b> a PC de lectura</span><span>Opciones</span></div>
+  <div class="visor" role="status" aria-live="assertive"><div class="linea1"><span class="est">Grabando</span><span>Toma 7</span></div><div class="t">0:04</div><div class="vu"><i style="width:68%"></i></div><div class="dest">Escribiendo en: Hallazgos, párrafo 2</div></div>
+  <div class="esp"></div>
+  <div class="tecla" role="button" aria-pressed="true"><b>Suelta para terminar</b><small>El PC muestra el borrador mientras hablas</small></div>
+  <div class="modo"><span>Modo: mantener pulsado</span><button disabled>Cambiar a pulsar y soltar</button></div>
+  <div class="pie">No se puede cambiar el modo durante una toma.</div>
+</section></div>
+
+<div class="wrap"><div class="cap">Sala · procesando en el PC</div>
+<section class="tel sala proc">
+  <div class="sup"><span><b>Conectado</b> a PC de lectura</span><span>Opciones</span></div>
+  <div class="visor" role="status"><div class="linea1"><span class="est">Recibida · el PC transcribe</span><span>Toma 7</span></div><div class="t">0:05</div><div class="dest">Revisa el texto en el PC antes de copiarlo.</div></div>
+  <div class="esp"></div>
+  <div class="tecla" role="button" tabindex="0"><b>Mantén pulsado para dictar</b><small>Puedes dictar la siguiente toma</small></div>
+  <div class="modo"><span>Modo: mantener pulsado</span><button>Cambiar a pulsar y soltar</button></div>
+  <div class="pie">«Recibida» confirma la integridad de los bytes, no la exactitud del texto.</div>
+</section></div>
+
+<div class="wrap"><div class="cap">Día · error de micrófono</div>
+<section class="tel dia err">
+  <div class="sup"><span><b>Conectado</b> a PC de lectura</span><span>Opciones</span></div>
+  <div class="visor" role="alert"><div class="linea1"><span class="est">Micrófono liberado</span><span>Toma 8</span></div><div class="dest">La página dejó de estar visible y la toma se interrumpió. No se envió audio después de ese momento.</div></div>
+  <a class="accion" href="#">Reactivar micrófono</a>
+  <div class="esp"></div>
+  <div class="tecla" aria-disabled="true"><b>Grabación desactivada</b><small>Reactiva el micrófono para continuar</small></div>
+  <div class="pie">El navegador puede volver a pedir permiso.</div>
+</section></div>
+
+</body>
+</html>
