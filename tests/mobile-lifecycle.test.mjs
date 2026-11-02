@@ -9,7 +9,7 @@ test('ocultar interrumpe captura, volver exige gesto y reset no reutiliza token'
  const box={$,document,window:{addEventListener(){}},location:{hash:'',pathname:'/mobile'},history:{replaceState(){}},performance:{now:()=>100},status:t=>lastStatus=t,console,setTimeout,clearTimeout};
  vm.createContext(box);vm.runInContext(fs.readFileSync('apps/mobile/mobile.js','utf8').replace(/^import .*;\r?\n/gm,''),box);
  box.fakeClient={send:m=>sent.push(m),close:()=>closed++};box.fakeStream={getTracks:()=>[{stop:()=>stopped++}]};
- vm.runInContext("paired=true;prepared=true;client=fakeClient;stream=fakeStream;recording={id:7,state:'recording'};",box);
+ vm.runInContext("paired=true;prepared=true;microphoneInitialized=true;client=fakeClient;stream=fakeStream;recording={id:7,state:'recording'};",box);
  document.hidden=true;listeners.visibilitychange();assert.equal(sent[0].type,'abort');assert.equal(stopped,1);assert.equal($('record').disabled,true);
  document.hidden=false;listeners.visibilitychange();assert.match(lastStatus,/botón de dictado/);assert.equal($('record').disabled,false);
  $('restart').onclick();assert.equal(sent.at(-1).type,'close');assert.equal(closed,1);assert.equal($('join-code').value,'');assert.equal($('duration').textContent,'00:00');
@@ -22,7 +22,7 @@ test('aborted rezagado de otra toma no anula la toma en curso; el de la toma act
  const box={$,document,window:{addEventListener(){}},location:{hash:'',pathname:'/mobile'},history:{replaceState(){}},performance:{now:()=>100},status(){},console,setTimeout,clearTimeout};
  vm.createContext(box);vm.runInContext(fs.readFileSync('apps/mobile/mobile.js','utf8').replace(/^import .*;\r?\n/gm,''),box);
  box.fakeClient={send:m=>{sent.push(m);return true;},close(){}};box.fakeWorklet={port:{postMessage:m=>worklet.push(m)},disconnect(){}};
- vm.runInContext("paired=true;prepared=true;client=fakeClient;worklet=fakeWorklet;recording={id:2,state:'starting',sequence:0,samples:0,parts:[],sentTimes:new Map()};",box);
+ vm.runInContext("paired=true;prepared=true;microphoneInitialized=true;client=fakeClient;worklet=fakeWorklet;recording={id:2,state:'starting',sequence:0,samples:0,parts:[],sentTimes:new Map()};",box);
  vm.runInContext("onMessage({type:'aborted',id:1,reason:'Grabación interrumpida.'})",box);
  assert.equal(vm.runInContext('recording?.id',box),2);assert.deepEqual(worklet,[]);assert.equal(sent.length,0);
  vm.runInContext("onMessage({type:'aborted',id:2,reason:'Grabación interrumpida.'})",box);

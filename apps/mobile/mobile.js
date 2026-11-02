@@ -5,7 +5,7 @@ let qrReader=null;
 let resumeToken=null, resumeUntil=0, retryTimer=null;
 let client, stream, context, source, worklet, silent, wakeLock;
 let paired = false, prepared = false, preparing = false, epoch = 0, recording = null, counter = 0, heldPointer = null;
-let startIntent=0;
+let startIntent=0, microphoneInitialized=false;
 let mode = 'hold';
 let synthetic = false;
 let prepareMs = null, connectStarted = null;
@@ -60,7 +60,8 @@ history.replaceState(null, '', location.pathname);
 function refresh() {
   $('join').disabled = !!client;
   $('scan-qr').disabled = !!client;
-  $('record').disabled = document.hidden || !paired || !!(recording && !['starting', 'recording'].includes(recording.state));
+  $('prepare').hidden = microphoneInitialized || prepared; $('prepare').disabled = preparing;
+  $('record').disabled = document.hidden || !paired || (!prepared&&!microphoneInitialized) || !!(recording && !['starting', 'recording'].includes(recording.state));
   $('test-signal').hidden = prepared; $('test-signal').disabled = preparing;
   $('modes').disabled = !!recording || preparing;
   $('haptics').disabled = !!recording;
@@ -142,7 +143,7 @@ async function prepare(useSynthetic = false) {
     context.onstatechange = () => {
       if (prepared && context && context.state !== 'running') { abort('La captura se suspendió. Usa el botón de dictado para volver a empezar.'); releaseMicrophone(); }
     };
-    prepared = true; preparing = false;lifecycleEvent('microphone-ready',{prepareMs:performance.now()-prepareStart});
+    prepared = true; preparing = false;if(!synthetic)microphoneInitialized=true;lifecycleEvent('microphone-ready',{prepareMs:performance.now()-prepareStart});
     prepareMs = performance.now() - prepareStart;
     const settings = stream?.getAudioTracks()[0].getSettings() ?? {};
     const flag = value => value === undefined ? 'no informado' : value ? 'sí' : 'no';
@@ -156,7 +157,7 @@ async function prepare(useSynthetic = false) {
   }
 }
 async function requestStart(){
- if(!paired||recording||preparing)return;
+ if(!paired||recording||preparing||(!prepared&&!microphoneInitialized))return;
  const intent=++startIntent;lifecycleEvent('capture-intent');
  if(!prepared)await prepare(false);
  if(intent!==startIntent||document.hidden||!paired)return;
@@ -179,7 +180,7 @@ function stop() {
 function onMessage(m) {
   switch (m.type) {
     case 'pending': $('join-panel').hidden = true; $('confirm-panel').hidden = false; $('confirm-code').textContent = m.confirm; status('Espera la confirmación en el computador.'); break;
-    case 'paired': if(m.resumeToken){resumeToken=m.resumeToken;resumeUntil=0;}lifecycleEvent('connection-ready',{resumed:!!m.resumed});client.send({ type: 'pairing_metrics', connectToPairedMs: performance.now() - connectStarted }); $('join-panel').hidden = true; paired = true; $('confirm-panel').hidden = true; $('controls').hidden = false; status('Conectado. Pulsa el botón de dictado; espera Grabando para hablar.', 'success'); refresh(); break;
+    case 'paired': if(m.resumeToken){resumeToken=m.resumeToken;resumeUntil=0;}lifecycleEvent('connection-ready',{resumed:!!m.resumed});client.send({ type: 'pairing_metrics', connectToPairedMs: performance.now() - connectStarted }); $('join-panel').hidden = true; paired = true; $('confirm-panel').hidden = true; $('controls').hidden = false; status(microphoneInitialized?'Conectado. Usa el botón de dictado; espera Grabando para hablar.':'Conectado. Pulsa Preparar micrófono para autorizarlo antes de dictar.', 'success'); refresh(); break;
     case 'receipt':
       if (recording?.id === m.id) {
         $('received').textContent = m.sequence + 1;
@@ -222,6 +223,7 @@ $('join').onclick=()=>{
   if(!qrToken&&!/^[a-f0-9]{10}$/i.test($('join-code').value.replace(/[\s-]/g,''))){status('Introduce los 10 caracteres del código.','error');return;}
   const request=qrToken?{type:'join_qr',token:qrToken}:{type:'join',code:$('join-code').value};qrToken=null;openConnection(request);
 };
+$('prepare').onclick=()=>prepare(false);
 $('test-signal').onclick = () => prepare(true);
 document.querySelectorAll('[name="mode"]').forEach(input => { input.onchange = () => { if (!recording) { mode = input.value; refresh(); } }; });
 const button = $('record');

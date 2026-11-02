@@ -14,7 +14,8 @@
 <section id="qr-reader" class="card" hidden aria-label="Lector QR"><video id="qr-video" autoplay muted playsinline width="280" height="280" aria-label="Vista de cámara para QR"></video><p id="qr-message" role="status">Apunta al QR del computador.</p><button id="qr-cancel" type="button">Cancelar escaneo</button></section>
 <div id="confirm-panel" class="confirm" hidden><p>Confirma este número en el computador:</p><strong id="confirm-code"></strong></div>
 <section id="controls" class="control-card" hidden>
-  <p class="tiny prepare-note">El botón de dictado prepara el micrófono. Espera «Grabando» antes de hablar. Entre tomas, el audio se descarta.</p>
+  <button id="prepare" class="primary" type="button">Preparar micrófono</button>
+  <p class="tiny prepare-note">Prepara el micrófono al iniciar para autorizar el acceso. Al volver a esta pestaña, usa directamente el botón de dictado y espera «Grabando». Entre tomas, el audio se descarta.</p>
   <button id="record" class="record-button" disabled><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="12" y="4" width="8" height="16" rx="4"></rect><path d="M8 15v2a8 8 0 0 0 16 0v-2M16 25v4M11 29h10"></path></svg><span id="record-label">Mantén pulsado para hablar</span></button>
   <fieldset id="modes" class="mode-selector"><legend>Forma de grabar</legend><label><input type="radio" name="mode" value="hold" checked><span>Mantener pulsado</span></label><label><input type="radio" name="mode" value="toggle"><span>Inicio / parada</span></label></fieldset>
 </section>

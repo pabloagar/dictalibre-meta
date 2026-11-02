@@ -18,7 +18,7 @@ function phone(saved, vibrate = () => true, storageFails = false) {
     sha256: async () => 'hash', posts };
   vm.createContext(box);
   vm.runInContext(fs.readFileSync('apps/mobile/mobile.js', 'utf8').replace(/^import .*;\r?\n/gm, ''), box);
-  vm.runInContext("paired=true;prepared=true;context={state:'running',sampleRate:48000};worklet={port:{postMessage:m=>posts.push(m)}};client={send:()=>true,clock:{stamp:()=>({})}};", box);
+  vm.runInContext("paired=true;prepared=true;microphoneInitialized=true;context={state:'running',sampleRate:48000};worklet={port:{postMessage:m=>posts.push(m)}};client={send:()=>true,clock:{stamp:()=>({})}};", box);
   return { $, box, pulses, values, statuses, run: code => vm.runInContext(code, box) };
 }
 
@@ -94,4 +94,9 @@ test('un gesto prepara e inicia; soltar antes de preparación evita inicio tard�
  p.box.prepare=()=>new Promise(resolve=>{ready=()=>{p.run('prepared=true;');resolve();};});
  const pending=p.run('requestStart()');if(cancel)p.run('releaseStart()');ready();await pending;
  assert.equal(p.run('recording!==null'),!cancel);if(!cancel)assert.equal(p.run('recording.state'),'starting');assert.deepEqual(p.pulses,[]);}
+});
+
+test('primera preparación separada; al volver basta botón de dictado',()=>{
+ const p=phone();p.run('microphoneInitialized=false;prepared=false;refresh();');assert.equal(p.$('prepare').hidden,false);assert.equal(p.$('record').disabled,true);
+ p.run('microphoneInitialized=true;refresh();');assert.equal(p.$('prepare').hidden,true);assert.equal(p.$('record').disabled,false);
 });

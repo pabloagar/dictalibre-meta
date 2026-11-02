@@ -19,4 +19,4 @@ test('el control de grabar queda en la vista principal y lo técnico en Más opc
   assert.match(html.slice(html.indexOf('</details>')), /sin validación clínica/);
 });
 
- test('sin botón separado de preparación ni acceso JS a elemento eliminado',()=>{assert.doesNotMatch(fs.readFileSync('apps/mobile/index.html','utf8'),/id="prepare"/);assert.doesNotMatch(fs.readFileSync('apps/mobile/mobile.js','utf8'),/\$\('prepare'\)/);});
+ test('preparación inicial disponible con ayuda que distingue retorno',()=>{assert.match(html,/id="prepare"/);assert.match(html,/Al volver a esta pestaña/);});
