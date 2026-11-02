@@ -38,3 +38,15 @@ Fallos conservados: la primera revisión copiaba números de aviso y la etiqueta
 **[Abrir A interactiva corregida](https://stitch.withgoogle.com/preview/11339747648494305787?node-id=f7e13918a58a4e428cc2f596ff26fe3a).** Pantalla `f7e13918a58a4e428cc2f596ff26fe3a`, etiqueta «A · Inicio y dictado interactivo». Verificación de la corrección: escribir «Prueba sintética» activa Deshacer y pulsarlo recupera el vacío; Con avisos → Copiar devuelve prosa sin sufijos 1/2 ni [PROVISIONAL], con separación normal de párrafos, comprobado en el portapapeles. Una secuencia final de cada comprobación, sin pruebas clínicas. La pestaña se deja en Vacío. La captura local muestra el estado de ejemplo con avisos, no el inicio real.
 
 Solo propuesta interactiva en Stitch y documentación en GitHub. No se modifica ni despliega Dicta Libre. La conexión real por QR y las barras dependientes del volumen quedan para una implementación posterior autorizada.
+
+## A · Edición compacta
+
+Al solicitar implementación, el responsable aclaró expresamente «Ajustar primero la propuesta en Stitch». [Prompt de esta revisión](STITCH_A_COMPACTA_PROMPT.txt). Alcance: reducir margen izquierdo interior, franja secundaria fina con Deshacer/Rehacer textuales, tamaño de letra y Ajustes; destacar «Revisar con IA» en la barra principal. No se añade columna izquierda ni herramientas de formato enriquecido. Se mantiene la paleta de la A seleccionada.
+
+Decisión de nomenclatura: la acción describe la tarea («Revisar con IA»); el panel identifica «Revisión con IA · Meta» e informa que la integración es prevista y los avisos son simulados. No presenta ejecución real ni aval comercial de Meta. El informe no se envía a IA desde Stitch. Criterios de comprobación definidos en EXPERIMENTS.md antes de probar esta revisión.
+
+**Nueva base de diseño: [A · Edición compacta](https://stitch.withgoogle.com/preview/11339747648494305787?node-id=ba13eb772ad045a6b0410d08948f7034).** Es una propuesta interactiva en Stitch, no una implementación en Dicta Libre. Revisiones anteriores conservadas.
+
+Verificación manual con texto sintético en Chrome/Windows: abrió vacío; escribir → Deshacer → Rehacer recuperó exactamente «Prueba sintética de Rehacer.»; después de deshacer y escribir «Nueva edición sintética.», Rehacer quedó deshabilitado. A+ cambió 19 a 20 px y el estilo calculado del editor confirmó 20px; A− devolvió 19 px. «Revisar con IA» abrió el panel de Meta como proveedor previsto y «Ver avisos de ejemplo» mostró dos fragmentos y notas. Una secuencia final por comprobación. No se probaron todos los límites de tamaño, atajos ni combinaciones del historial con dictado. Sin llamadas IA, audio real ni medición de ergonomía. Captura de la composición con avisos guardada localmente; Preview se deja vacío y a 19 px.
+
+Se publicó únicamente documentación/prompt. La aplicación y su despliegue no cambian por esta revisión.
