@@ -1,8 +1,10 @@
 export function reviewContext(value) {
   if (value == null) return null;
   if (typeof value !== 'object' || Array.isArray(value)) throw Error('Contexto inválido.');
-  const result = {version:'report-context-v1', provenance:'Informe editable: mezcla de dictado y ediciones; plantilla base NO es evidencia clínica.'};
-  for (const [key, max] of Object.entries({templateName:200, templateCategory:200, templateText:3000, reportText:10000})) {
+  // v2: el texto de la plantilla nunca se reenvía (se descarta aunque venga de tomas antiguas del catálogo).
+  const result = {version:'report-context-v2', provenance:'Informe editable: mezcla de dictado y ediciones; plantilla base NO es evidencia clínica.'};
+  if (!['', 'importada', 'propia', 'en blanco', 'sin dato'].includes(value.templateOrigin ?? '')) throw Error('Contexto inválido: templateOrigin');
+  for (const [key, max] of Object.entries({templateName:200, templateCategory:200, templateOrigin:20, sectionTitle:200, sectionText:3000, reportText:10000})) {
     const text = value[key] ?? '';
     if (typeof text !== 'string' || text.length > max) throw Error('Contexto demasiado extenso o inválido: '+key);
     result[key] = text;

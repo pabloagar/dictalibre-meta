@@ -8,6 +8,22 @@ Al comenzar se fija el nombre/categoría de la plantilla realmente aplicada, has
 
 El snapshot viaja con la toma en Muse-streaming, Muse-Normal y Whisper local; solo el Revisor habilitado lo envía a Meta. Se conserva en el catálogo local para reproducir la revisión. La revisión manual posterior de esa toma conserva el snapshot original; la revisión global usa el informe actual. Prompt radiology-review-v2-context pide abstención si una palabra puede ocultar una negación fusionada; no es garantía exhaustiva.
 
+## Actualización 2026-11-02 · ficha y sección de destino (report-context-v2)
+
+Por decisión del responsable, el contexto por toma ya **no** incluye el texto de la plantilla ni el informe completo:
+
+- **Qué se envía:** una ficha del estudio (nombre y categoría de la plantilla aplicada, y su origen: importada, propia, en blanco o sin dato) más el título y el texto de la sección del informe donde cae la toma, con un máximo de 3000 caracteres y una ventana alrededor del cursor si la sección es más larga.
+- **Cómo se detectan las secciones:** líneas en mayúsculas (TÉCNICA, HALLAZGOS) o rótulos conocidos seguidos de dos puntos («Hallazgos: …»). Sin títulos, se usa el texto completo hasta el primer título.
+- **Revisión global:** envía el informe completo y la ficha, sin texto de plantilla.
+- **Límite del servidor:** `backend/review-context.mjs` descarta `templateText` aunque llegue de tomas antiguas del catálogo.
+- **Prompt:** `radiology-review-v3-section`.
+
+**Limitación:** si el informe se creó desde una plantilla importada, la sección enviada puede contener frases heredadas de ella, porque ya forman parte del informe. No se envía la plantilla completa, pero el contenido heredado no es cero.
+
+**Pruebas:** `tests/report-model.test.mjs` (sección y ficha) y `tests/report-review.test.mjs` (contexto v2). La conexión del editor se verificó en Chromium con lo que se enviaría interceptado.
+
+**Pendiente:** el efecto sobre la calidad de la revisión no está medido (ver EXPERIMENTS.md, 2026-11-02).
+
 ## Revisión global
 
 Botón Revisar informe junto a Copiar informe. Requiere texto consolidado y admite hasta 20000 caracteres sin truncar el documento; si excede el límite, muestra error. Envía el informe y contexto de plantilla a Meta con prompt report-consistency-v1. No se ejecuta por pausas ni por entrar a Impresión/Conclusión. No se pregunta repetidamente por contexto: usa la plantilla aplicada; en blanco no inventa modalidad.

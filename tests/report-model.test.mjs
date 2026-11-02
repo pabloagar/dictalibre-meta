@@ -8,3 +8,30 @@ test('bloquea solapamiento, copia provisional/undo y cambio plantilla',()=>{cons
 test('Unicode, saltos y reemplazo vacío no alteran resto del informe',()=>{const m=new ReportModel('Hígado\nNódulo de 2,5 cm.\nFin');const a=m.text.indexOf('Nódulo'),b=m.text.indexOf('\nFin');m.begin('a',a,b);m.finish('a','');assert.equal(m.text,'Hígado\n\nFin');m.undo();assert.equal(m.text,'Hígado\nNódulo de 2,5 cm.\nFin');});
 
 test('tomas sucesivas al final separan palabras y revisión conserva el separador',()=>{const m=new ReportModel('Primera.');m.begin('a',8,8);m.preview('a','Segunda');m.finish('a','Segunda.');assert.equal(m.text,'Primera. Segunda.');assert.ok(m.review('a','Segunda.','Tercera.'));assert.equal(m.text,'Primera. Tercera.');m.undo();m.undo();assert.equal(m.text,'Primera.');});
+test('sección de destino: títulos en mayúsculas, rótulo con dos puntos y sin títulos',async()=>{
+ const {sectionAt}=await import('../apps/shared/report-model.js');
+ const report='TÉCNICA\nTC de tórax sin contraste.\n\nHALLAZGOS\nNo se observa derrame pleural.\nSin adenopatías.\n\nCONCLUSIÓN\nSin hallazgos agudos.\n';
+ const inFindings=report.indexOf('Sin adenopatías');
+ assert.deepEqual(sectionAt(report,inFindings),{title:'HALLAZGOS',text:'No se observa derrame pleural.\nSin adenopatías.',truncated:false});
+ assert.equal(sectionAt(report,report.length).title,'CONCLUSIÓN');
+ assert.equal(sectionAt(report,report.indexOf('HALLAZGOS')+3).title,'HALLAZGOS');
+ const inline='Técnica: TC sin contraste.\nHallazgos: nódulo de 5 mm en lóbulo superior derecho.\nImpresión: nódulo pulmonar.';
+ assert.deepEqual(sectionAt(inline,inline.indexOf('5 mm')),{title:'Hallazgos',text:'nódulo de 5 mm en lóbulo superior derecho.',truncated:false});
+ assert.deepEqual(sectionAt('Texto libre sin títulos.',5),{title:'',text:'Texto libre sin títulos.',truncated:false});
+ assert.deepEqual(sectionAt('',0),{title:'',text:'',truncated:false});
+ const long='HALLAZGOS\n'+'a'.repeat(5000)+'X'+'b'.repeat(5000);const s=sectionAt(long,long.indexOf('X'),3000);
+ assert.equal(s.truncated,true);assert.ok(s.text.length<=3000);assert.ok(s.text.includes('X'));
+});
+test('contexto por toma: ficha y sección, sin texto de plantilla ni informe completo',async()=>{
+ const {takeContext,reportContext}=await import('../apps/shared/report-model.js');
+ const template={name:'TC de tórax',category:'TC',text:'PLANTILLA PRIVADA COMPLETA',imported:true};
+ const report='HALLAZGOS\nSin derrame.\n\nCONCLUSIÓN\nNormal.';
+ const c=takeContext({template,text:report,position:report.indexOf('Sin derrame')});
+ assert.deepEqual(c,{templateName:'TC de tórax',templateCategory:'TC',templateOrigin:'importada',sectionTitle:'HALLAZGOS',sectionText:'Sin derrame.',truncated:false});
+ assert.equal(JSON.stringify(c).includes('PLANTILLA PRIVADA'),false);assert.equal(JSON.stringify(c).includes('Normal.'),false);
+ assert.equal(takeContext({template:null,text:'',position:0}).templateOrigin,'en blanco');
+ assert.equal(takeContext({template:{name:'Propia',text:'x',imported:false},text:'',position:0}).templateOrigin,'propia');
+ assert.equal(takeContext({template:{name:'Guardada antes',text:'x'},text:'',position:0}).templateOrigin,'sin dato');
+ const g=reportContext({template});
+ assert.deepEqual(g,{templateName:'TC de tórax',templateCategory:'TC',templateOrigin:'importada'});
+});

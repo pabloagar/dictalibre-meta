@@ -248,3 +248,21 @@ Datos originales, hashes, selección de ejecuciones y análisis reproducible loc
 Plan guardado antes de ejecutar en data/local/lab/reports/2026-11-01-context-review/plan.json. Tres textos sintéticos, una repetición cada uno, mismo modelo muse-spark-1.3, sin audio ni navegador; red no medida, build null y hash de fuentes guardado. Criterios: JSON válido, detectar lateralidad explícitamente contradictoria, no alertar en control consistente, no sustituir posible negación fusionada. Resultados: 3 respuestas válidas. Contradicción derecha/izquierda: aviso con ambas citas, petición 3778,98 ms, 954 tokens; control consistente: cero avisos, 1750,89 ms, 841 tokens; toma con palabra deformada: aviso sensible sin sustitución, 3787,95 ms, 1267 tokens. Cola registrada por separado; ejecución serial. Todos los resultados y respuestas conservados localmente. No constituye comparación controlada de superioridad contra v1 ni validación clínica; falso negativo/falso positivo general y coste facturado desconocidos. Suite completa: 76/76 pruebas Node y sintaxis aprobadas. Interfaz física y persistencia contextual desde S25 aún pendientes.
 
 Verificación de interfaz tras activación de de09560: pestaña temporal de navegador con informe sintético; Copiar mostró elección Revisar antes de copiar/Copiar sin revisar. Revisión real mostró aviso de lateralidad con dos citas; editar la conclusión marcó Desactualizada. Borrador inicialmente vacío restaurado y pestaña de prueba cerrada. Captura local .runtime/revisor-global.png excluida de Git. La revisión sintética de interfaz permanece identificable por texto/scope report en catálogo; no es toma del usuario. Prueba física S25 sigue pendiente.
+
+## 2026-11-02 · Pendiente: efecto de enviar ficha y sección en vez de plantilla e informe completo
+
+Protocolo definido antes de medir. **Todavía no hay ejecución**, así que todos los resultados son `null`.
+
+- **Hipótesis:** con `report-context-v2` (ficha y sección de destino) el Revisor por toma mantiene la detección de discrepancias sensibles de `report-context-v1` (plantilla e informe completo), y envía menos texto a Meta.
+- **Métricas:**
+  - avisos sensibles correctos, falsas alarmas y omisiones por caso (conteos);
+  - caracteres enviados en `context` (conteo);
+  - tiempo de petición (ms).
+- **Unidad:** caso sintético × variante de contexto.
+- **Intervalo de tiempo:** desde el envío de la petición hasta la respuesta validada.
+- **Condiciones:** los mismos casos sintéticos de `scripts/evaluate-meta-review.mjs`, más casos con contradicción entre la sección y la toma y casos cuya evidencia está en otra sección (el límite esperado de v2). Mismo modelo `muse-spark-1.3`, `reasoning_effort` low, 3 repeticiones por caso en orden alternado v1/v2.
+- **Criterio de aceptación:**
+  - ninguna pérdida de avisos sensibles en los casos dentro de la sección;
+  - las omisiones de casos que dependen de otra sección se registran como costo conocido, no como fallo oculto.
+- **Registro:** build, `promptHash`, `inputHash`, red y fecha. Se conservan los resultados favorables y desfavorables.
+- **Estado:** requiere una credencial Meta en el PC de referencia. En la nube no se pudo ejecutar. `resultados: null`.

@@ -50,3 +50,10 @@ test('UI: copiar ofrece revisar o continuar; edición invalida avisos y respuest
  assert.ok(elements.some(n=>String(n.textContent).includes('Puedes revisar')));
  snapshot={...snapshot,pending:true};ui.changed();elements.find(n=>n.textContent==='Copiar sin revisar').onclick();assert.equal(copies,1);
 });
+test('contexto v2: descarta texto de plantilla y acepta ficha y sección acotadas',()=>{
+ const c=reviewContext({templateName:'TC tórax',templateOrigin:'importada',templateText:'PLANTILLA PRIVADA',sectionTitle:'HALLAZGOS',sectionText:'Sin derrame.'});
+ assert.equal(c.version,'report-context-v2');assert.equal(c.templateText,undefined);assert.equal(JSON.stringify(c).includes('PLANTILLA PRIVADA'),false);
+ assert.equal(c.templateOrigin,'importada');assert.equal(c.sectionTitle,'HALLAZGOS');assert.equal(c.sectionText,'Sin derrame.');
+ assert.throws(()=>reviewContext({sectionText:'x'.repeat(3001)}));assert.throws(()=>reviewContext({sectionTitle:'x'.repeat(201)}));
+ assert.throws(()=>reviewContext({templateOrigin:'otra'}));
+});

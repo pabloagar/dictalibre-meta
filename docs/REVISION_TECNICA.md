@@ -139,6 +139,8 @@ Formato: **ID · título**, seguido de evidencia, impacto, riesgo de corregirlo,
 
 #### A4 · El Revisor Meta está activado por defecto y envía a Meta la plantilla aplicada, también con Whisper local [Leído]
 
+> **Estado (2-nov, después de la revisión):** se resolvió en parte con un diseño aprobado por el responsable. El texto de la plantilla ya no se envía; cada toma envía la ficha y la sección de destino, y la revisión global envía el informe completo con la ficha (`report-context-v2`). Sigue activado por defecto. La sección enviada puede contener frases heredadas de una plantilla importada. Detalle en `REPORT_REVIEW.md`.
+
 - **Evidencia:** `apps/desktop/live.js:13` (`reviewToggle.checked=true`) y `apps/lab/index.html:8`. El contexto incluye hasta 3000 caracteres de la plantilla y hasta 10 000 del informe (`backend/review-context.mjs`). Ver `revision/seguridad.md` A1 y `revision/reconocimiento.md` M7.
 - **Impacto:**
   - La plantilla aplicada puede pertenecer a la colección de 285 plantillas **con permisos de redistribución pendientes**: el texto sale del equipo sin que el usuario lo haya decidido de forma explícita.
