@@ -2,7 +2,9 @@
 
 **Fecha:** 2 de noviembre de 2026 (America/Santiago).
 **Código observado:** rama `claude/dazzling-hamilton-k0apsq` sobre `654bed8`. Las capturas del estado actual corresponden a ese código servido en local, en la nube, sin teléfono físico.
-**Naturaleza:** es una propuesta. **Nada de esto está implementado.** Las maquetas de `docs/propuesta-ui/` son HTML estático con texto sintético. No se conectan al relay, al laboratorio ni a ningún motor de reconocimiento.
+**Naturaleza:** es una propuesta. Las maquetas de `docs/propuesta-ui/` son HTML estático con texto sintético. No se conectan al relay, al laboratorio ni a ningún motor de reconocimiento.
+
+**Estado de implementación (actualizado el 02-11-2026):** se implementaron los cambios de la §9 marcados como seguros, con la dirección recomendada en la §7: celular con visor fijo y tecla grande, opciones secundarias en «Más opciones», pantalla completa al grabar y tema por `prefers-color-scheme`; `/live` con tema oscuro por defecto, opción de tema día y estado en una barra inferior. **Sigue sin implementar:** cola de decisiones, destino visible, atajos de teclado, fuentes alojadas, alertas con acciones nombradas y el arreglo de A1 (conectar vacía el informe). No hay prueba física en S25 ni comparación medida.
 
 ## 0. Encargo, en una nota
 

@@ -1,4 +1,5 @@
-param([int]$Port = 8788)
+param([int]$Port = 8788, [string]$TunnelName, [string]$PublicHostname)
+if ([bool]$TunnelName -ne [bool]$PublicHostname) { throw 'Para un enlace fijo indica -TunnelName y -PublicHostname juntos. Revisa RUNNING.md.' }
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $runtimeDir = Join-Path $projectRoot '.runtime'
@@ -25,9 +26,10 @@ if ((Get-FileHash -LiteralPath $binary -Algorithm SHA256).Hash.ToLowerInvariant(
 $tunnelLog = Join-Path $runtimeDir 'tunnel.stderr.log'
 $tunnel = $null; $relayProcess = $null
 try {
-    $tunnel = Start-Process -FilePath $binary -ArgumentList @('tunnel','--no-autoupdate','--url',"http://127.0.0.1:$Port",'--protocol','http2') -WorkingDirectory $projectRoot -WindowStyle Hidden -PassThru -RedirectStandardError $tunnelLog -RedirectStandardOutput (Join-Path $runtimeDir 'tunnel.stdout.log')
-    $publicUrl = $null
-    for ($i = 0; $i -lt 100; $i++) {
+    $tunnelArgs = if ($TunnelName) { @('tunnel','--no-autoupdate','--protocol','http2','run','--url',"http://127.0.0.1:$Port",$TunnelName) } else { @('tunnel','--no-autoupdate','--url',"http://127.0.0.1:$Port",'--protocol','http2') }
+    $tunnel = Start-Process -FilePath $binary -ArgumentList $tunnelArgs -WorkingDirectory $projectRoot -WindowStyle Hidden -PassThru -RedirectStandardError $tunnelLog -RedirectStandardOutput (Join-Path $runtimeDir 'tunnel.stdout.log')
+    $publicUrl = if ($PublicHostname) { "https://$PublicHostname" } else { $null }
+    for ($i = 0; (-not $publicUrl) -and $i -lt 100; $i++) {
         if ($tunnel.HasExited) { throw "No se pudo iniciar el tunel. Revisa $tunnelLog" }
         $log = Get-Content -LiteralPath $tunnelLog -Raw -ErrorAction SilentlyContinue
         if ($log -match 'https://[a-z0-9-]+\.trycloudflare\.com') { $publicUrl = $Matches[0]; break }
@@ -49,7 +51,7 @@ try {
     @{ url=$publicUrl; port=$Port; relayPid=$relayProcess.Id; tunnelPid=$tunnel.Id; root=$projectRoot; startedUtc=[DateTime]::UtcNow.ToString('o') } | ConvertTo-Json | Set-Content -LiteralPath $statePath -Encoding utf8
     Write-Host "Dicta Libre listo: $publicUrl"
     Write-Host 'Abre esa misma URL en el PC; crea una sesion y escanea el QR con el telefono.'
-    Write-Host 'El tunel es temporal. Manten este computador encendido. Solo datos sinteticos.'
+    Write-Host $(if ($TunnelName) { 'Enlace fijo activo. Manten este computador encendido. Solo datos sinteticos.' } else { 'El tunel es temporal. Manten este computador encendido. Solo datos sinteticos.' })
     Write-Host 'Para detener: powershell -File scripts/Stop-Demo.ps1'
 } catch {
     if ($relayProcess -and -not $relayProcess.HasExited) { Stop-Process -Id $relayProcess.Id }

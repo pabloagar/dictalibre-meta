@@ -9,5 +9,6 @@ Recordatorios breves:
 - No cambiar captura, transporte ni reconocimiento sin pruebas y aprobación del responsable.
 - El recorrido acordado termina en copiar y pegar al RIS.
 - Textos en español de Chile.
+- Regla permanente: los cambios grandes se publican en GitHub y se activan en la web. Ver «Publicar los cambios grandes» en `AGENTS.md`.
 - Pruebas: `pnpm install --frozen-lockfile`, `pnpm check`, `pnpm test`, `python3 -m unittest discover -s tests -p 'test_*.py'`.
 - Revisión técnica vigente: `docs/REVISION_TECNICA.md`. Propuesta de interfaz: `docs/PROPUESTA_UI.md`.

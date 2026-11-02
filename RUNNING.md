@@ -47,6 +47,24 @@ Al soltar se detiene la captura nueva, pero se entrega el bloque final ya captur
 
 Este comando detiene exclusivamente los procesos registrados de esta demo. La URL deja de funcionar al detener el túnel, apagar/suspender el equipo o perder conexión. La siguiente ejecución puede generar otra URL.
 
+## Enlace fijo para el teléfono
+
+El túnel temporal cambia de dirección al renovarse. Para un enlace que no cambie, con el servidor en este PC, hace falta un dominio propio administrado en Cloudflare. **Este modo aún no se ha probado con un dominio real.** Por única vez:
+
+```powershell
+.\.tools\cloudflared.exe tunnel login
+.\.tools\cloudflared.exe tunnel create dictalibre
+.\.tools\cloudflared.exe tunnel route dns dictalibre dictado.TU-DOMINIO
+```
+
+Después, en cada inicio:
+
+```powershell
+.\scripts\Start-Demo.ps1 -TunnelName dictalibre -PublicHostname dictado.TU-DOMINIO
+```
+
+El PC debe seguir encendido. Las credenciales quedan en `%USERPROFILE%\.cloudflared`, fuera del repositorio. El laboratorio sigue local y no se expone por el túnel.
+
 ## Ejecución local y alojamiento posterior
 
 ```powershell

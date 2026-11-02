@@ -20,6 +20,10 @@ Se conservan los 19 commits anteriores y sus fechas originales. Los cambios acum
 
 Revisión adicional de 16 JSON públicos: controles sintéticos y métricas; sin valores de credenciales detectados. Validación del árbol candidato: 70 pruebas Node y 5 pruebas Python del importador aprobadas; comprobación de sintaxis JavaScript aprobada. No son pruebas de precisión clínica ni validación visual de la última interfaz.
 
+## Dónde queda publicado cada cambio
+
+Un cambio tiene dos destinos independientes. GitHub guarda el código, en la rama principal `codex/capture-transport`. La web real corre en el PC del responsable: laboratorio y dictado en `127.0.0.1:8789`, enlace del teléfono en `127.0.0.1:8788`, accesible desde fuera por un túnel de Cloudflare. **Subir a GitHub no actualiza la web:** no hay despliegue automático. El procedimiento obligatorio está en AGENTS.md, «Publicar los cambios grandes», y el enlace fijo en RUNNING.md.
+
 ## Bases del evento y licencia
 
 Actualización del 2 de noviembre de 2026: leídas las bases completas del [reglamento/waiver oficial](https://cerebralvalley.ai/e/meta-ai-developer-hackathon/waiver) en navegador y contrastadas con [PolyForm Noncommercial 1.0.0](https://polyformproject.org/licenses/noncommercial/1.0.0). No se encontró obligación de adoptar una licencia abierta específica. No se identifica conflicto en las bases públicas entre PolyForm para el público y los permisos contractuales separados del concurso, sujetos a disponer de los derechos necesarios; no es aprobación del organizador. El formulario de entrega no fue accesible en la sesión sin autenticar: sus instrucciones y posibles actualizaciones siguen pendientes de comprobación.

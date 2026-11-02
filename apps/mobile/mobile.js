@@ -38,7 +38,7 @@ $('test-haptics').onclick = () => {
   if (recording) return;
   const outcome = haptic({ id: null, hapticsEnabled: true }, 'test');
   $('haptics-note').textContent = outcome === 'requested'
-    ? 'Pulso de 12 ms solicitado. ¿Lo sentiste? La aceptación del navegador no confirma vibración física. Revisa los ajustes de vibración del teléfono si no se siente.'
+    ? 'Pulso de 12 ms solicitado. ¿Lo sentiste? La aceptación del navegador no confirma vibración física. Si no se siente, comprueba que el teléfono no esté en silencio y revisa sus ajustes de vibración.'
     : outcome === 'unsupported' ? 'Este navegador no ofrece vibración.' : 'El navegador no aceptó la vibración. Puedes seguir grabando normalmente.';
 };
 function captureStarted(r) {

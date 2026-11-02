@@ -61,7 +61,13 @@ const reportEditor=mountReport(panel,{build:initialState.build,sourceHash:initia
  new MutationObserver(syncConnection).observe(document.querySelector('#paired'),{attributes:true,attributeFilter:['hidden']});syncConnection();
  const labLink=document.createElement('a');labLink.href='/';labLink.target='_blank';labLink.rel='noopener';labLink.textContent='Laboratorio';head.append(labLink);
  document.querySelector('#record-help').classList.add('compact-help');
- const layoutMetrics={version:'focused-workspace-v2-connect',createdAt:new Date().toISOString(),browser:navigator.userAgent,network:null,events:[]};
+ document.querySelector('header .tag').textContent='PROTOTIPO DE INVESTIGACIÓN · SIN VALIDACIÓN CLÍNICA';
+ let theme='sala';try{if(localStorage.getItem('dicta-theme-v1')==='dia')theme='dia';}catch{}
+ const themeButton=document.createElement('button');themeButton.type='button';themeButton.className='theme-toggle';
+ const applyTheme=()=>{document.body.dataset.theme=theme;themeButton.textContent=theme==='sala'?'Usar tema día':'Usar tema sala';};applyTheme();
+ themeButton.onclick=()=>{theme=theme==='sala'?'dia':'sala';applyTheme();try{localStorage.setItem('dicta-theme-v1',theme);}catch{}track('theme',{theme});};
+ document.querySelector('header').append(themeButton);
+ const layoutMetrics={version:'focused-workspace-v3-sala',createdAt:new Date().toISOString(),browser:navigator.userAgent,network:null,theme,events:[]};
  const track=(type,data={})=>{layoutMetrics.events.push({type,atMs:performance.now(),...data});if(layoutMetrics.events.length>500)layoutMetrics.events.shift();};
  for(const [name,element] of [['connection',connection],['settings',settings],['takes-review',takes],['diagnostics',diagnostics]])element.addEventListener('toggle',()=>track('panel-toggle',{panel:name,open:element.open}));
  let lastScroll=0;reportEditor.element.addEventListener('scroll',()=>{const now=performance.now();if(now-lastScroll>200){track('editor-scroll');lastScroll=now;}},{passive:true});
