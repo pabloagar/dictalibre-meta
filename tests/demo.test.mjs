@@ -130,11 +130,16 @@ test('demo: el contenedor incluye lo necesario y las plantillas públicas son in
   for(const need of ['COPY apps','COPY backend','COPY data/vocabulario','COPY data/demo','backend/demo.mjs'])assert.ok(docker.includes(need),need);
   assert.match(ignore,/^\.env\*/m);assert.match(ignore,/^data\/local/m);assert.match(ignore,/^data\/private/m);assert.doesNotMatch(ignore,/^data$/m);
   const templates=JSON.parse(fs.readFileSync(new URL('../data/demo/plantillas-sinteticas.json',import.meta.url),'utf8')).templates;
-  assert.equal(templates.length,5);
+  assert.equal(templates.length,15);
+  assert.equal(new Set(templates.map(t=>t.id)).size,15);
+  assert.deepEqual(templates.filter(t=>t.defaultFavorite).map(t=>t.id),['demo-rx-torax','demo-tc-torax','demo-tc-abdomen','demo-pielotc','demo-eco-abdominal']);
+  assert.match(templates.find(t=>t.id==='demo-pielotc').text,/sin contraste endovenoso/);
+  assert.match(templates.find(t=>t.id==='demo-urotc').text,/con fase excretora/);
   for(const t of templates){
     assert.doesNotMatch(t.name,/sintético|ejemplo|completo/i);assert.deepEqual(t.sources,[]);
     assert.ok(t.text.startsWith(t.name.toUpperCase()+'\n\n'));
-    for(const heading of ['TÉCNICA','HALLAZGOS','CONCLUSIÓN'])assert.ok(t.text.split(heading+'\n')[1]?.split('\n\n')[0].trim(),`${t.id}: ${heading} con contenido`);
+    assert.ok(t.text.includes('ANTECEDENTES\n[Completar antecedentes clínicos.]\n\n'));
+    for(const heading of ['ANTECEDENTES','TÉCNICA','HALLAZGOS','CONCLUSIÓN'])assert.ok(t.text.split(heading+'\n')[1]?.split('\n\n')[0].trim(),`${t.id}: ${heading} con contenido`);
     assert.doesNotMatch(t.text,/\d|\b(?:mm|cm|milímetros|centímetros)\b/iu);
     assert.ok(t.text.trim().split(/\s+/u).length<=100,`${t.id}: informe breve`);
   }

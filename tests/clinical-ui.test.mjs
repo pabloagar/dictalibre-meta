@@ -300,3 +300,42 @@ test('accesos rápidos: catálogo pequeño, cambios de favoritas y guardas de te
  button('Deshacer').click();editor.quickTemplates.firstChild.click();assert.equal(editor.model.text,'Texto dos');
  await window.happyDOM.close();
 });
+
+test('catálogo público: cinco favoritas iniciales, quince informes e inserción con antecedentes',async()=>{
+ const library=JSON.parse(fs.readFileSync(new URL('../data/demo/plantillas-sinteticas.json',import.meta.url),'utf8')).templates;
+ const {window,editor,button}=setup({library});await new Promise(r=>setTimeout(r,0));
+ const defaults=library.filter(t=>t.defaultFavorite);
+ assert.deepEqual([...editor.quickTemplates.children].map(b=>b.textContent),defaults.map(t=>t.name));
+ assert.equal(document.querySelectorAll('.template-star[aria-pressed="true"]').length,5);
+ for(const t of defaults){
+  [...editor.quickTemplates.children].find(b=>b.textContent===t.name).click();
+  assert.equal(editor.model.text,t.text);assert.equal(editor.element.querySelectorAll('.report-heading').length,4);
+  button('Deshacer').click();assert.equal(editor.model.text,'');
+ }
+ const event=JSON.parse(localStorage.getItem('dicta-editor-metrics-v1')).events.find(e=>e.type==='template-library-loaded');
+ assert.equal(event.count,15);assert.equal(event.defaultFavoritesApplied,5);
+ document.querySelector('[aria-label="Favorita: RX de tórax"]').click();
+ assert.deepEqual(JSON.parse(localStorage.getItem('dicta-template-favorites-v1')),defaults.slice(1).map(t=>t.id));
+ await window.happyDOM.close();
+});
+
+test('favoritas iniciales respetan preferencias guardadas, incluso ninguna',async()=>{
+ const library=JSON.parse(fs.readFileSync(new URL('../data/demo/plantillas-sinteticas.json',import.meta.url),'utf8')).templates;
+ for(const favorites of [[],['demo-urotc']]){
+  const {window,editor}=setup({library,favorites});await new Promise(r=>setTimeout(r,0));
+  assert.equal(document.querySelectorAll('.template-star[aria-pressed="true"]').length,favorites.length);
+  if(favorites.length)assert.equal(editor.quickTemplates.firstChild.textContent,'UroTC');
+  const event=JSON.parse(localStorage.getItem('dicta-editor-metrics-v1')).events.find(e=>e.type==='template-library-loaded');
+  assert.equal(event.defaultFavoritesApplied,0);
+  await window.happyDOM.close();
+ }
+});
+
+test('preferencia elegida antes de cargar catálogo no se mezcla con favoritas iniciales',async()=>{
+ const {window}=setup({ownTemplates:[{name:'Propia',text:'Texto de prueba'}],library:[{id:'later',name:'Posterior',text:'Prueba',defaultFavorite:true}]});
+ document.querySelector('[aria-label="Favorita: Propia"]').click();
+ await new Promise(r=>setTimeout(r,0));
+ assert.equal(document.querySelector('[aria-label="Favorita: Propia"]').getAttribute('aria-pressed'),'true');
+ assert.equal(document.querySelector('[aria-label="Favorita: Posterior"]').getAttribute('aria-pressed'),'false');
+ await window.happyDOM.close();
+});
