@@ -176,7 +176,7 @@ test('demo: revisor sin clave, cancelación y fallo del proveedor no alteran el 
  test('demo: default evaluated glossary reaches provider and no-glossary remains selectable',async()=>{
  const d=await start();try{
  const {cookie}=await d.login();const state=await (await d.get('/api/state',cookie)).json();
- const expected=JSON.parse(fs.readFileSync('tests/fixtures/human-glossary-plan.json','utf8')).keywords;
+ const expected=[...JSON.parse(fs.readFileSync('tests/fixtures/human-glossary-plan.json','utf8')).keywords,'punto','coma','dos puntos','nueva línea','nuevo párrafo','punto y coma'];
  assert.equal(state.configs[0].id,'demo-muse');assert.deepEqual(state.configs[0].keywords,expected);
  const first=await d.dictate(cookie);await first.closed;
  const second=await d.dictate(cookie,{configId:'demo-muse-no-glossary'});await second.closed;
