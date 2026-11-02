@@ -433,3 +433,5 @@ Activación recuperación comprobada: Render Live 8d3507bb66d34497c6f0441d211e50
 02-11-2026 · Usuario confirma recuperación breve Samsung sin código y entrega correcta después de preparar micrófono. Registrado resultado comunicado sin publicar texto/captura de informe. Pendientes pruebas de expiración/cierre/iPhone; anotada fricción de preparación adicional. Solo documentación, sin despliegue ni interrupciones.
 
 02-11-2026 · Implementado cambio solicitado a cinco minutos de recuperación en lugar de dos. Mensajes y pruebas coherentes; 147/147 pruebas, sintaxis aprobada. Micrófono sigue requiriendo preparación explícita, sin grabación automática. Prueba física nueva pendiente. Publicación/activación se registra tras coordinar reinicio con responsable.
+
+Activación de cinco minutos autorizada y comprobada: Render Live 168c708962a5ec1e6b136c1ec7ef114ea59e1902, dep-dbkd11ajnfac7381nou0. Recursos móvil/escritorio HTTP 200 coincidentes con código publicado. Sin nueva prueba física. Laboratorio local no reiniciado; código en GitHub, Render actualizado. Registro posterior skip render.
