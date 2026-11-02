@@ -18,3 +18,14 @@ El primer conector no conectó. El conector privado listaba proyectos pero gener
 Hipótesis: Hoja continua ofrece más superficie útil; Mesa compacta reduce aperturas para acceder a controles. Antes de decidir: mismo viewport/zoom/tema/tamaño de texto, mismo informe sintético; medir ancho/alto útil del editor en px, clics para plantilla y conexión, tiempo desde abrir selector hasta aplicarlo en ms, y valoración comunicada por el responsable de brillo/lectura. Criterio funcional: inicio vacío, plantilla solo a demanda, sin controles ocultos por desbordamiento. Umbral de preferencia humana pendiente. Medidas actuales de área, latencia, luminancia física y sobrecosto: null; ejecuciones de comparación: 0. Las capturas son evidencia de diseño, no prueba de mejora ni de comodidad visual.
 
 Los artboards resultantes son 1280×1024 según Stitch (se solicitaron idealmente 1440×900). Falta evaluar adaptación a las pantallas reales y verificar cada interacción antes de integrar. Estas propuestas no heredan automáticamente las garantías del editor funcional.
+
+## Revisión v3 · primer uso más claro
+
+Feedback del responsable: faltaban controles visibles de tamaño, más presencia de Revisar y un inicio evidente para quien desconoce el producto, especialmente en B.
+
+- [Hoja continua · Inicio claro v3](https://stitch.withgoogle.com/preview/15414574200694645001?node-id=ff1372a40b454de18032783c0ff9e7e3).
+- [Mesa compacta · Inicio claro v3](https://stitch.withgoogle.com/preview/15414574200694645001?node-id=295ce475853c4a859b5b1cc7c9fbf077).
+
+Cambios visuales: franja con acción única «1. Conectar tu teléfono», explicación de escanear QR y alternativa de escribir directamente; A− / 19 px / A+ visibles sobre la hoja; «Revisar informe» con etiqueta completa antes de copiar. Se mantienen hueso, informe vacío y plantilla opcional. Versiones anteriores conservadas en Stitch.
+
+Verificación: contenido de las dos pantallas comprobado por árbol accesible y vista B revisada gráficamente. Intento de A+ en B no modificó el valor visible 19 px, tanto con control accesible como con localizador de botón. No se afirma interacción funcional, conexión ni revisión clínica. Los controles son propuesta visual, pendientes de implementación/prueba real. Sin medición de facilidad de descubrimiento ni brillo; valores null. No cambia la web activa.

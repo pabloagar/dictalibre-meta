@@ -306,3 +306,8 @@ Verificación local: pnpm check y 125/125 pruebas aprobadas. Sin inferencias nue
 ## 02-11-2026 · Dos direcciones en Stitch, sin cambiar la aplicación
 
 A petición del responsable se crearon y corrigieron Hoja continua y Mesa compacta en Stitch, partiendo del contexto existente y cambiando el claro a hueso atenuado. Conexión conseguida mediante navegador autenticado después de fallos del conector; vistas previas recuperadas posteriormente por get_screen. Enlaces, paleta, versiones y límites en design/STITCH_DIRECCIONES.md. No hay cambio de código ni despliegue; no se atribuye mejora ergonómica medida.
+
+
+## 02-11-2026 · Stitch v3: primer uso visible
+
+Revisadas ambas direcciones con «1. Conectar tu teléfono», ayuda QR, tamaño visible y etiqueta completa Revisar informe. Enlaces en design/STITCH_DIRECCIONES.md. El conector de edición no devolvió pantalla; se completó mediante navegador Stitch. Verificación visual/DOM sin atribuir funcionalidad a controles: A+ no cambió el valor en la vista previa. Solo propuestas, sin cambios de aplicación ni despliegue.
