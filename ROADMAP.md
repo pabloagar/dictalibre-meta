@@ -97,3 +97,11 @@ Aceptación real completada: seis transcripciones/tres pares, una revisión Meta
 ## Ideas después del cierre del MVP · comandos de aplicación
 
 - [ ] **Insertar plantillas por voz:** «Inserta la plantilla TC de tórax». Idea solicitada por el responsable el 02-11-2026 para reducir la interacción con el computador. Con informe vacío y una coincidencia inequívoca, aplicar la plantilla y no insertar las palabras del comando en el informe. Si ya hay texto o varias coincidencias, pedir confirmación o selección antes de modificarlo. Si no existe la plantilla, avisar sin cambiar el informe. Conservar deshacer y distinguir comandos de contenido dictado literal. Antes de implementar, definir activación y pruebas de falsos comandos, ambigüedad y recuperación; medir éxito de selección, activaciones involuntarias y tiempo frente a selección manual. **Idea guardada, no implementada; posterior al MVP y sin bloquear su cierre.**
+
+## Cierre MVP · recuperación al volver al teléfono
+
+- [ ] **Recuperar emparejamiento durante una ausencia breve (objetivo: dos minutos).** Fallo de usabilidad comunicado en Samsung S25 Ultra/Chrome/Wi-Fi al volver de WhatsApp. Informe conservado; exige introducir código otra vez. Probar reconexión autenticada del mismo teléfono, sin reanudar grabación automáticamente; sesión cerrada explícitamente o caducada no recuperable. Si expira, explicar cómo escanear nuevo QR sin imponer código manual. Abrir cámara desde la página es una alternativa a evaluar, no implementada. Evidencia y límites en tests/PHONE_SMOKE_RENDER.md. Prioridad de cierre, distinta de mejoras visuales posteriores.
+
+## Ideas después del MVP · acceso a Tonos
+
+- [ ] **Selector «Tonos» bajo EN ESPERA/reloj/nivel**, visible para cambiar apariencia sin entrar a Ajustes. Presentación cuidada, nombres vinculados a medicina o personal de salud: ejemplos propuestos por el responsable «Sala nocturna», «Natural» y un tercer nombre pendiente. Reutilizar los temas existentes (Día, Penumbra, Ámbar), mantener bajo deslumbramiento y preferencia persistente; no dar nombres por aprobados ni añadir temas todavía. Evaluar que no reste claridad al estado de grabación ni espacio al informe. Idea solicitada el 02-11-2026, no implementada, posterior al MVP.
