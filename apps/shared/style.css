@@ -227,3 +227,8 @@ body.clinical-workspace{padding-bottom:0}.clinical-workspace header{min-height:5
   font-display: swap;
   src: url(/fonts/atkinsonhyperlegiblemono-400.ttf) format('truetype');
 }
+
+/* Persistent planilla action beside settings, independent of selected template. */
+.clinical-editbar>.template-library-panel{margin-left:auto;flex-shrink:0}
+.clinical-editbar>.clinical-settings{margin-left:0;flex-shrink:0}
+.clinical-workspace .clinical-editbar>.template-library-panel>summary{max-width:none;white-space:nowrap;font-size:12px;padding:5px 10px;min-height:28px}

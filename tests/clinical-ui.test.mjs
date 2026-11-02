@@ -24,6 +24,7 @@ test('inicio vacío aun con borrador anterior; plantilla explícita, confirmaci�
  const select=document.querySelector('[aria-label="Plantilla para el informe"]');select.value='0';
  panel.open=true;button('Aplicar plantilla').click();
  assert.match(editor.model.text,/TÉCNICA/);assert.equal(panel.open,false);
+ assert.equal(panel.querySelector('summary').textContent,'Planilla');assert.equal(panel.hidden,false);
  assert.equal(editor.element.textContent,editor.model.text);assert.equal(editor.element.querySelectorAll('.report-heading').length,3);
  editor.element.textContent='Texto sintético propio';editor.element.dispatchEvent(new window.Event('input'));
  panel.open=true;select.value='';button('Aplicar plantilla').click();
@@ -86,7 +87,7 @@ test('montaje completo mantiene controles, hoja y ajustes accesibles',async()=>{
  live=live.replace(/^import .*;\r?\n/gm,'');
  live="const {state}=globalThis.__clinicalTest;const mountReport=(p,o)=>globalThis.__clinicalTest.mountReport(p,{...o,globalReview:false});const sharedState=async()=>state;\n"+live;
  await import('data:text/javascript;base64,'+Buffer.from(live+'\n//# sourceURL=clinical-live-test.js').toString('base64'));
- assert.equal(document.querySelector('header .template-library-panel').open,false);
+ assert.equal(document.querySelector('.clinical-editbar .template-library-panel').open,false);
  assert.equal(document.querySelector('.clinical-sheet .report-editor').textContent,'');
  assert.equal(document.querySelectorAll('#create').length,1);
  assert.ok(document.querySelector('.clinical-settings #metrics-export'));
@@ -94,6 +95,8 @@ test('montaje completo mantiene controles, hoja y ajustes accesibles',async()=>{
  assert.equal(document.querySelectorAll('.clinical-record').length,1);
  assert.equal(document.querySelector('.clinical-settings').open,false);
  assert.ok(document.querySelector('.clinical-editbar .report-redo'));
+ assert.equal(document.querySelector('.template-library-panel').nextElementSibling,document.querySelector('.clinical-settings'));
+ assert.equal(document.querySelector('.template-library-panel summary').textContent,'Planilla');
  assert.ok(document.querySelector('.clinical-notes .report-global-review'));
  const connection=document.querySelector('.connection-panel'),pairing=document.querySelector('.pairing');
  connection.querySelector('summary').getBoundingClientRect=()=>({left:240,bottom:60});

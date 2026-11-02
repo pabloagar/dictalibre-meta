@@ -54,7 +54,7 @@ function showFigureDoubts(warnings){
 }
 // Hoja clínica: preserve the mounted editor, transport controls and listeners.
 document.body.classList.add('live-workspace','clinical-workspace');
-const layoutMetrics={version:'a-compacta-v2',serverBuild:initialState.build??null,serverSourceHash:initialState.sourceHash??null,createdAt:new Date().toISOString(),browser:navigator.userAgent,device:null,network:null,audioSource:null,clockResolutionMs:null,instrumentationOverheadMs:null,audioMeter:{updates:0,totalPaintMs:0,maxPaintMs:0,source:'received-pcm-rms'},events:[]};
+const layoutMetrics={version:'a-compacta-v3',serverBuild:initialState.build??null,serverSourceHash:initialState.sourceHash??null,createdAt:new Date().toISOString(),browser:navigator.userAgent,device:null,network:null,audioSource:null,clockResolutionMs:null,instrumentationOverheadMs:null,audioMeter:{updates:0,totalPaintMs:0,maxPaintMs:0,source:'received-pcm-rms'},events:[]};
 const track=(type,data={})=>{layoutMetrics.events.push({type,atMs:performance.now(),...data});if(layoutMetrics.events.length>500)layoutMetrics.events.shift();};
 const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text)n.textContent=text;return n;};
 const makeDetails=(label,cls)=>{const d=make('details',cls);d.append(make('summary','',label));return d;};
@@ -75,7 +75,7 @@ const syncConnection=()=>{const connected=!document.querySelector('#paired').hid
 new MutationObserver(syncConnection).observe(document.querySelector('#paired'),{attributes:true,attributeFilter:['hidden']});syncConnection();
 const settings=makeDetails('Ajustes','clinical-settings');const editbar=make('div','clinical-editbar');editbar.setAttribute('role','toolbar');editbar.setAttribute('aria-label','Edición del informe');report.prepend(editbar);editbar.append(controls.querySelector('.report-undo'),controls.querySelector('.report-redo'));
 const settingsBody=make('div','settings-body');settings.append(settingsBody);settingsBody.append(engineLabel,glossaryLabel,segmentationLabel,reviewLabel,commandsLabel,engineHint,commandHelp);
-const sizeControls=make('div','size-controls','Texto ');sizeControls.append(controls.querySelector('[aria-label="Reducir tamaño del informe"]'),controls.querySelector('.report-font-value'),controls.querySelector('[aria-label="Aumentar tamaño del informe"]'));editbar.append(sizeControls,settings);
+const sizeControls=make('div','size-controls','Texto ');sizeControls.append(controls.querySelector('[aria-label="Reducir tamaño del informe"]'),controls.querySelector('.report-font-value'),controls.querySelector('[aria-label="Aumentar tamaño del informe"]'));editbar.append(sizeControls,templatePanel,settings);
 let theme='dia';try{const saved=localStorage.getItem('dicta-theme-v1');if(['sala','dia'].includes(saved))theme=saved;}catch{}
 const themeButton=make('button','theme-toggle');const applyTheme=()=>{document.body.dataset.theme=theme;themeButton.textContent=theme==='sala'?'Tema: Sala · cambiar a Día':'Tema: Día · cambiar a Sala';};applyTheme();
 themeButton.onclick=()=>{theme=theme==='sala'?'dia':'sala';applyTheme();try{localStorage.setItem('dicta-theme-v1',theme);}catch{}track('theme',{theme});};settingsBody.append(themeButton);
