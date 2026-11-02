@@ -276,3 +276,5 @@ Comprobación gráfica adicional: una recarga y una revisión real con muse-spar
 ## Lector QR integrado · 02-11-2026
 
 Hipótesis, criterio y prueba reproducible en tests/QR_SCANNER_CHECKLIST.md. Eventos locales qr-scan-start/stop miden elapsedMs y número de fotogramas sin imágenes/URL/tokens. Precisión/sobrecosto null; 150 ms es intervalo solicitado, no frecuencia garantizada. Pruebas de decodificación sintética y rutas/permiso/cancelación aprobadas; tiempo real de emparejamiento y compatibilidad física pendientes. Sin analítica externa ni exportación de imágenes.
+
+Comprobación posterior de producción: Render ecf0da79ba76dac272eadf721bf01adeed316999, una recarga y una revisión real con el mismo informe sintético de lateralidad; aviso devuelto y original conservado. Misma interfaz de navegador integrado en Windows, versión/red/latencia/precisión/sobrecosto null, sin audio. Total de esta entrega: una revisión real local y una en Render; no son un conjunto de evaluación clínica. Tres recursos servidos coinciden con el commit activo tras normalizar CRLF.
