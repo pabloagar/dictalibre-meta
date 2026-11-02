@@ -122,6 +122,7 @@ const commandDetails=makeDetails('Ver comandos y formato de números','command-r
 textSettings.append(commandsLabel,commandDetails,reviewLabel);
 const advanced=makeDetails(isDemo?'Detalles de la sesión':'Herramientas del laboratorio','advanced-settings');advanced.querySelector('summary').append(make('span','advanced-description','Tomas, audio recibido y diagnóstico'));
 for(const child of [labLink,recordings,takes,diagnostics,connectionNote])if(child)advanced.append(child);
+advanced.hidden=isDemo;
 dictationSettings.append(transcriptionSettings,textSettings,advanced);
 const howTo=make('section','howto-panel');howTo.append(make('h3','','Cómo usar'));const steps=make('div','help-steps');
 for(const [title,description] of [['1 · Conectar','Conecta tu teléfono con el QR o código. También puedes escribir directamente sin teléfono.'],['2 · Dictar','Inicia y detén la grabación desde el teléfono. Espera a que termine el texto provisional.'],['3 · Revisar','Lee el informe y sus medidas. Si está disponible, usa Revisar con IA y comprueba cada aviso.'],['4 · Copiar','Copia el texto para pegarlo en el RIS. Usa Nuevo informe para empezar el siguiente estudio.']]){const step=make('article','help-step');step.append(make('h4','',title),make('p','',description));steps.append(step);}howTo.append(steps,editorHelp);

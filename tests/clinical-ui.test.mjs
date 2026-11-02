@@ -195,3 +195,19 @@ test('aceptar propuesta global conserva el resto y permite deshacer',async()=>{
  assert.equal(editor.model.text,original);
  await window.happyDOM.close();
 });
+
+test('demo oculta detalles técnicos de sesión y mantiene controles de dictado',async()=>{
+ const {window}=setup();
+ document.body.innerHTML=fs.readFileSync(new URL('../apps/desktop/index.html',import.meta.url),'utf8').split('<body>')[1].split('</body>')[0];
+ globalThis.requestAnimationFrame=()=>0;
+ const state={demo:true,configs:[{id:'demo-muse',engine:'muse-stream',keywords:[],name:'Prueba'}],metaConfigured:false};
+ globalThis.__clinicalDemoTest={mountReport,state,createTakeQueue};
+ let live=fs.readFileSync(new URL('../apps/desktop/live.js',import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'');
+ live="const {state,createTakeQueue}=globalThis.__clinicalDemoTest;const mountReport=(p,o)=>globalThis.__clinicalDemoTest.mountReport(p,{...o,globalReview:false});const sharedState=async()=>state;\n"+live;
+ await import('data:text/javascript;base64,'+Buffer.from(live+'\n//# sourceURL=clinical-demo-hidden-details.js').toString('base64'));
+ assert.equal(document.querySelector('.advanced-settings').hidden,true);
+ assert.ok(document.querySelector('#metrics-export').closest('[hidden]'));
+ assert.ok(document.querySelector('#recordings').closest('[hidden]'));
+ assert.equal(document.querySelector('.text-settings').hidden,false);
+ await window.happyDOM.close();delete globalThis.__clinicalDemoTest;
+});
