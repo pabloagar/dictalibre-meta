@@ -72,21 +72,23 @@ test('A compacta: rehacer contexto, letra y copia limpia de anotaciones; edicion
  globalThis.fetch=async()=>({ok:true,json:async()=>({id:'synthetic-review',status:'completed',suggestions:[{original:'izquierdo',reason:'Comprobar lateralidad.',evidence:['derecho','izquierdo']}]})});
  button('Revisar con IA').click();await button('Enviar a Meta y revisar').onclick();
  assert.equal(editor.element.querySelector('.report-annotation').textContent,'izquierdo');assert.equal(editor.element.textContent,editor.model.text);
+ button('Nuevo informe').click();button('Vaciar y empezar').click();assert.equal(editor.model.text,'');assert.equal(editor.reviewPanel.hidden,true);button('Deshacer').click();assert.equal(editor.element.querySelector('.report-annotation').textContent,'izquierdo');assert.equal(editor.reviewPanel.hidden,false);
  await button('Copiar para RIS').onclick();assert.equal(copied,'Hallazgo derecho. Resumen izquierdo.');
  button('Es correcto').click();assert.equal(editor.element.querySelector('.report-annotation'),null);assert.equal(editor.model.text,copied);
  await button('Enviar a Meta y revisar').onclick();assert.ok(editor.element.querySelector('.report-annotation'));
  input('Edición nueva');assert.equal(editor.element.querySelector('.report-annotation'),null);assert.equal(document.querySelector('.report-global-review').dataset.stale,'true');
  await window.happyDOM.close();
 });
-test('montaje completo mantiene controles, hoja y ajustes accesibles',async()=>{
+for(const savedTheme of [null,'sala'])test('montaje completo, controles y tema guardado '+savedTheme,async()=>{
  const {window}=setup();document.body.innerHTML=fs.readFileSync(new URL('../apps/desktop/index.html',import.meta.url),'utf8').split('<body>')[1].split('</body>')[0];
  globalThis.requestAnimationFrame=()=>0;
  const state={configs:[{id:'synthetic',engine:'muse',keywords:[],name:'Prueba'}],metaConfigured:false};
- globalThis.__clinicalTest={mountReport,state};
+ globalThis.__clinicalTest={mountReport,state};if(savedTheme)localStorage.setItem('dicta-theme-v1',savedTheme);
  let live=fs.readFileSync(new URL('../apps/desktop/live.js',import.meta.url),'utf8');
  live=live.replace(/^import .*;\r?\n/gm,'');
  live="const {state}=globalThis.__clinicalTest;const mountReport=(p,o)=>globalThis.__clinicalTest.mountReport(p,{...o,globalReview:false});const sharedState=async()=>state;\n"+live;
- await import('data:text/javascript;base64,'+Buffer.from(live+'\n//# sourceURL=clinical-live-test.js').toString('base64'));
+ await import('data:text/javascript;base64,'+Buffer.from(live+'\n//# sourceURL=clinical-live-test-'+savedTheme+'.js').toString('base64'));
+ assert.equal(document.body.dataset.theme,savedTheme==='sala'?'ambar':'dia');if(savedTheme==='sala')assert.equal(localStorage.getItem('dicta-theme-v1'),'ambar');
  assert.equal(document.querySelector('.clinical-editbar .template-library-panel').open,false);
  assert.equal(document.querySelector('.clinical-sheet .report-editor').textContent,'');
  assert.equal(document.querySelectorAll('#create').length,1);
@@ -127,7 +129,8 @@ test('paleta: favorita por fila y guardar el informe actual como plantilla',asyn
  button('Guardar el informe actual como plantilla').click();assert.equal(document.querySelector('[aria-label="Contenido de plantilla"]').value,editor.model.text);
  document.querySelector('[aria-label="Nombre de plantilla"]').value='Mi estructura';button('Guardar nueva plantilla').click();
  assert.equal(JSON.parse(localStorage.getItem('dicta-templates-v1')).at(-1).text,editor.model.text);
- const star=[...document.querySelectorAll('.template-star')].find(b=>b.getAttribute('aria-label')==='Favorita: Mi estructura');star.click();assert.equal(JSON.parse(localStorage.getItem('dicta-template-favorites-v1')).length,1);
+ const palette=document.querySelector('.template-library-panel');palette.open=true;document.querySelector('.template-choice').click();assert.equal(palette.open,true);
+ const star=[...document.querySelectorAll('.template-star')].find(b=>b.getAttribute('aria-label')==='Favorita: Mi estructura');star.click();assert.equal(palette.open,true);assert.equal(JSON.parse(localStorage.getItem('dicta-template-favorites-v1')).length,1);
  assert.equal(editor.model.text,'Texto sintético de plantilla propia');await window.happyDOM.close();
 });
 

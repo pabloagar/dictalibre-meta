@@ -427,3 +427,46 @@ body.clinical-workspace, .clinical-workspace .workspace,.clinical-workspace .mai
 .clinical-workspace .report-global-review button{font-size:13px;min-height:36px;padding:6px 10px}
 .clinical-workspace .report-annotation{background:var(--dl-accent-bg);text-decoration-color:var(--dl-accent)}
 .clinical-workspace .figure-alert,.clinical-workspace[data-theme] .figure-alert{background:var(--dl-accent-bg);color:var(--dl-ink);border-color:var(--dl-accent)}
+
+/* B: reduced-width layouts, after all legacy responsive rules. */
+@media(max-width:900px){
+ body.clinical-workspace header{padding:12px 16px;gap:12px;flex-wrap:wrap}
+ .clinical-workspace .clinical-brand{width:auto}
+ .clinical-workspace .report-controls{flex-wrap:wrap;gap:10px}
+ .clinical-workspace .clinical-editbar{padding:6px 16px;flex-wrap:wrap}
+ .clinical-workspace .clinical-desk{margin:18px 16px 0;padding:0;grid-template-columns:minmax(0,1fr)}
+ .clinical-workspace .clinical-desk:has(.clinical-notes>:not([hidden])){grid-template-columns:minmax(0,1fr)}
+ .clinical-workspace .clinical-sheet{padding:20px 22px 32px;min-height:520px}
+ .clinical-workspace .sheet-head{margin:-20px -22px 0;padding:12px 22px 10px}
+ .clinical-workspace .report-editor{height:48dvh;min-height:300px}
+ .clinical-workspace .clinical-notes:has(>:not([hidden])){border:1px solid var(--dl-line)}
+ .clinical-workspace .template-picker{grid-template-columns:minmax(0,1fr);height:auto;max-height:calc(100dvh - 120px);overflow:auto}
+ .clinical-workspace .template-left{max-height:300px;border-right:0;border-bottom:1px solid var(--dl-line)}
+ .clinical-workspace .template-list{min-height:100px}
+ .clinical-workspace .template-right{min-height:330px}
+ .clinical-workspace .template-right>details:first-of-type{max-height:260px}
+ .clinical-workspace .clinical-settings[open]>.settings-body{top:24px;transform:translateX(-50%);flex-direction:column;min-height:0;max-height:calc(100dvh - 48px)}
+ .clinical-workspace .settings-nav{flex:0 0 auto;flex-direction:row;flex-wrap:wrap;border-right:0;border-bottom:1px solid var(--dl-line)}
+ .clinical-workspace .settings-nav h2{width:100%}
+ .clinical-workspace .settings-main{overflow:visible;padding:20px}
+ .clinical-workspace .theme-cards,.clinical-workspace .help-steps{grid-template-columns:minmax(0,1fr)}
+ .clinical-workspace .new-report-feedback{flex-wrap:wrap;width:max-content}
+}
+@media(max-width:520px){.clinical-workspace .connection-panel>summary{font-size:13px;white-space:normal;max-width:calc(100vw - 32px)}.clinical-workspace .clinical-record{margin-right:0}.clinical-workspace .report-review-button{margin-left:0}.clinical-workspace .clinical-editbar>.report-new{margin-left:0}.clinical-workspace .sheet-head{padding-left:14px;padding-right:14px}.clinical-workspace .clinical-sheet{padding-left:14px;padding-right:14px}.clinical-workspace .sheet-head{margin-left:-14px;margin-right:-14px}}
+
+/* Corrections from rendered fixture: compact filters, contextual help, modal stacking. */
+.clinical-workspace .template-left>.report-controls{flex:0 0 auto;align-items:stretch;gap:12px}
+.clinical-workspace .clinical-sheet{position:relative}
+.clinical-workspace .empty-guide{position:absolute;top:146px;left:44px;right:44px;font-size:13px;color:var(--dl-muted)}
+.clinical-workspace .empty-guide p{margin:0 0 16px;line-height:1.5}
+.clinical-workspace .clinical-editbar:has(.clinical-settings[open]){z-index:100}
+.clinical-workspace .template-picker .template-row button:hover{background:var(--dl-soft)}
+@media(max-width:900px){.clinical-workspace .empty-guide{left:22px;right:22px;top:140px}}
+
+body.clinical-workspace{min-height:100dvh}
+.clinical-workspace .primary-actions{display:flex;gap:12px;align-items:center;margin-left:auto;flex-shrink:0}
+.clinical-workspace .primary-actions>.report-review-button{margin-left:0}
+.clinical-workspace .primary-actions>.report-copy{margin-left:0}
+
+.clinical-workspace .connection-panel.is-connected>summary{border-color:var(--dl-ok)}
+@media(max-width:900px){.clinical-workspace .clinical-desk:has(.clinical-notes>:not([hidden])){margin:18px 16px 0}}
