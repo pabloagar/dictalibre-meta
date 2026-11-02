@@ -5,7 +5,7 @@ let mobileOrigin=location.origin;
 if(location.pathname==='/live'){
   $('create').disabled=true;
   try{const response=await fetch('/api/live-info');if(!response.ok)throw Error();mobileOrigin=(await response.json()).mobileOrigin;await import('/live.js');$('create').disabled=false;}
-  catch{status('No se pudo preparar dictado local. Inicia la demo y el laboratorio.','error');}
+  catch{window.dispatchEvent(new Event('dicta-startup-error'));status('No se pudo preparar el dictado. Comprueba la conexión y recarga.','error');}
 }
 
 let client, current, sessionEpoch = 0, pairingTimer, clipCount = 0;

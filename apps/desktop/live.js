@@ -225,3 +225,7 @@ window.addEventListener('dicta-take',async event=>{
  }catch(error){if(epoch===generation){reportEditor.cancel(reportAnchor);text.textContent=controller.signal.aborted?'Transcripción cancelada.':`No se pudo transcribir: ${error.message}`;take.trace.asr={status:controller.signal.aborted?'cancelled':'error',runId:job.runId,engine,uiRevision:'commands-live-v1'};timing.textContent=`Fin recibido en PC → error/cancelación: ${seconds(performance.now()-take.receivedEnd)}`;take.renderMetrics();}}
  finally{if(streamTake){streams.delete(streamTake);if(!streamTake.done)streamTake.cancel();}jobs.delete(job);cancel.remove();delete card.dataset.pending;trimTakeCards(panel);}
 });
+
+// Reveal only after the complete workspace has mounted successfully.
+window.dispatchEvent(new window.Event('dicta-ready'));
+

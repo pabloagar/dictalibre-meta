@@ -399,3 +399,13 @@ El responsable solicita preparar la prueba de teléfono y poder advertir un toqu
 140/140 pruebas y sintaxis aprobadas; pruebas nuevas cubren entrada vacía/silenciosa, estados, opt-out y falta de vibración. Actualizados métricas/protocolo y preparada tests/PHONE_SMOKE_RENDER.md para tres tomas sintéticas con el usuario. Cambios limitados a móvil/capturador, pruebas y documentación; sin cambios de motor, backend ni transporte de mensajes. Activación y resultados físicos se registran por separado.
 
 Activación comprobada: `fa26e4d3cffa2619fa4ea142683ace2f967d25c3` en GitHub/codex/capture-transport y Live en Render, despliegue dep-dbkc6n3bc2fs73ef2s30 (22,2 s comunicados por Render). /mobile, /mobile.js y /capture-worklet.js HTTP 200, idénticos por bytes a ese commit. No se iniciaron tomas ni se activó un micrófono del usuario durante esta comprobación. Percepción de vibración, ruido y recorrido físico siguen pendientes del ensayo del teléfono; no se presentan como validados por tests VM. El usuario debe recargar antes de probar. Este registro documental usa `[skip render]` para no reiniciar otra vez el servicio. No se reinició el laboratorio local.
+
+## 02-11-2026 · Inicio sin interfaz heredada y corpus sintético
+
+Corregido arranque /live: el HTML antiguo permanece oculto desde el head hasta el montaje completo. Pantalla de espera hueso (o tema oscuro guardado), error/reintento sin revelar controles antiguos, timeout de 20 s. Acceso conserva contraseña y adopta marca/paleta dicta. Medición local PerformanceEntry dicta-startup, sin analítica externa. 142/142 pruebas aprobadas; primera ejecución detectó Event de distinto entorno en simulador, corregido usando window.Event. Vista aislada 8796 abre interfaz definitiva en Chrome; no prueba de red lenta ni Render actualizado todavía.
+
+Usuario informa primera prueba completa Samsung correcta, incluidos vibración, comandos y copia. Observación comunicada, sin exportación: versión del navegador/red/repeticiones exactas y tiempos null. Informa interrupción al bloquear o abrir WhatsApp; recuperación por comprobar. iPhone pendiente del día siguiente.
+
+Agente autorizado generó 15 WAV locales con System.Speech: cinco frases por Microsoft Helena Desktop, Laura y Pablo (es-ES). Verificación independiente 15/15 hashes y PCM mono 16 kHz/16 bits, duración 2,47–8,635 s. Referencias provisionales, sin escucha ni ASR. Audios/manifiestos en data/local ignorados; script y protocolo publicables. No se intervino en servidores. Detalles tests/SYNTHETIC_MVP.md.
+
+Publicación de esta corrección con [skip render] para preservar las pruebas activas del responsable. Render mantiene fa26e4d; despliegue de corrección pendiente de coordinar fin de tomas conforme AGENTS.md. No reinicios locales.
