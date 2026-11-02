@@ -26,3 +26,5 @@ Los resultados se guardan en reviews con scope=report, sin crear tomas ni result
 6. Exportar JSON del laboratorio y métricas del editor. Registrar ayudas, falsas alarmas y omisiones. Conservar informes consistentes como controles y casos nuevos no usados para ajustar el prompt.
 
 Pruebas automatizadas: tests/report-review.test.mjs, además de la suite existente. Prueba física de interfaz pendiente. Activación en el servidor principal requiere reinicio coordinado para no interrumpir grabaciones.
+
+Activado en el servidor principal el 1 de noviembre tras autorización y exportación de la sesión. Recargar /live y volver a emparejar teléfono.

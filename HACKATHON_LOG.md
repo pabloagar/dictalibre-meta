@@ -226,3 +226,7 @@ Analizadas seis exportaciones locales y cruzadas con catálogo por runId. Preser
 
 ## 2026-11-01 · Revisor contextual y revisión global
 Acordado botón junto a Copiar y aviso al copiar, sin revisión por pausas. Implementados snapshots acotados de plantilla aplicada/informe previo por toma, revisión global con evidencia literal sin sustituciones, estados desactualizados/cancelación y copia sin revisión. Contexto/prompt/tokens/tiempos persistidos; documentación en REPORT_REVIEW.md. 76 pruebas y tres controles sintéticos reales completados; detalle y limitaciones en EXPERIMENTS.md. Servidor principal no reiniciado mientras el responsable prueba vibración; activación pendiente de terminar y exportar sesión.
+
+Activación autorizada por el responsable: laboratorio reiniciado y build de095608b3ff3e7d840da2481ab62f2fc2ba3a23 comprobado por API. Módulo de interfaz global respondió HTTP 200. Catálogo conservado (182 ejecuciones ASR, 53 revisiones al reiniciar).
+
+Verificado recorrido visual en navegador: aviso al copiar, revisión real de contradicción y marcado de desactualizado tras edición. Sin cambios automáticos al informe; prueba sintética en pestaña temporal, restaurada al estado vacío inicial.
