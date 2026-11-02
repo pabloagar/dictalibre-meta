@@ -351,3 +351,10 @@ Activación de Planilla: commit 9812ce5 subido a codex/capture-transport. Servid
 
 ## 2026-11-02 · Paquete de contexto para Claude Design
 A solicitud del responsable, creados [brief Markdown](design/claude-design/DICTALIBRE_BRIEF_CLAUDE_DESIGN.md) y [referencia HTML anotada](design/claude-design/dictalibre-referencia-anotada.html). Base 9812ce5 / a-compacta-v3, reglas de inicio vacío y Planilla persistente junto a Ajustes, paleta, controles, estados, alcance laboratorio/demo y prompt de entrega. HTML autónomo explicativo, sin servicios, audio ni datos privados; no es interfaz implementada. Comprobación estructural HTML y ausencia de recursos externos; sin prueba gráfica ni medición de usabilidad. Solo documentación; no cambia ni requiere desplegar la aplicación.
+
+
+## 2026-11-02 · Propuesta B rev3 implementada en rama separada
+
+Tras aprobación explícita de fase 0, rama codex/ui-propuesta-b desde codex/capture-transport. Implementados temas exactos, migración Sala→Ámbar, barras, sexo en cabecera fija, Plantilla en dos columnas, Ajustes por secciones, Cómo usar, favoritas por fila, guardar informe como plantilla y Nuevo informe reversible con contexto. No se modificaron backend, transporte, motores ni móvil. Commits de fase: 44f1ef3, f692ad3, ba6a372, e0bc0db, 427960c, 3bb8e6b; versión de instrumentación ed5ec14. Sintaxis y 137/137 pruebas finales (Node v24.22.1, Windows). [Entrega, metodología y límites](design/PROPUESTA_B_IMPLEMENTACION.md).
+
+Verificación gráfica con fixture sintético aislado: tres temas y tres anchos sin desbordamiento horizontal; tonos comprobados contra tokens. Sin audio ni Meta real. Detectados y corregidos cierre de paleta al redibujar y favorita deshabilitada tras seleccionar Informe en blanco. Se conservan los fallos del control de navegador y la distinción entre capturas intermedias y código final. Por instrucción específica del responsable no hay merge, push a ramas existentes ni despliegue Render. La publicación se limita a la rama nueva; las capturas quedan locales.

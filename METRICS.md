@@ -206,3 +206,10 @@ Evidencia: Windows, Node v24.22.1, pnpm 11.25.0; check y suite final 129/129. Un
 
 ## 2026-11-02 · Acceso persistente a Planilla
 Versión visual a-compacta-v3. Etiqueta estable antes/después de aplicar plantilla y ubicación antes de Ajustes verificadas en DOM sintético. Eventos panel-toggle existentes conservados, sin contenido clínico. Sin comparación de usabilidad: tiempo de localización, dispositivo, red y sobrecosto medido null; pendiente prueba física de descubrimiento y distribución visual.
+
+
+## 2026-11-02 · Propuesta B rev. 3
+
+Criterios de aceptación definidos por el encargo antes de editar: temas exactos, contraste ≥4,5:1, nueve combinaciones de tema/ancho y conservación del flujo. Método y límites en [implementación B](design/PROPUESTA_B_IMPLEMENTACION.md). Eventos locales existentes panel-toggle, template-filter, template-favorite, theme, undo/redo y copy conservados. Se registran settings-page, template-save-current-open, new-report-confirm y new-report, sin contenido del informe; layoutVersion propuesta-b-rev3. Eventos acotados por los límites existentes (500 disposición / 1000 editor), reloj performance.now. Precisión de reloj y sobrecosto null: pendiente medición física, sin atribuir mejora de velocidad o ergonomía.
+
+Nueve combinaciones observadas sin desbordamiento horizontal; contraste validado mediante tests y colores calculados del DOM. No se midió latencia de audio, precisión ASR ni comodidad clínica. Repeticiones: una pasada completa; hubo intentos posteriores de captura fallidos. Se conservan fallos de paleta/favorita y sus correcciones en el documento. La revisión visual corresponde a un árbol integrado en desarrollo, no a los commits intermedios individualmente.
