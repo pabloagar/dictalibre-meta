@@ -1,6 +1,6 @@
 export function startStream({rate,configId,commandsEnabled,reviewEnabled=false,reviewContext=null,segmentation='manual',onSegments,onPartial,onDraft}){
  const item={started:performance.now(),firstPartialMs:null,runId:null,error:null,pending:[],buffered:0,done:false};
- const ws=new WebSocket(`ws://${location.host}/asr-stream`);item.ws=ws;
+ const ws=new WebSocket(`${location.protocol==='https:'?'wss':'ws'}://${location.host}/asr-stream`);item.ws=ws;
  item.fail=message=>{item.error=message;onPartial(message);ws.close();};
  item.send=m=>{if(item.error)return;if(ws.readyState===WebSocket.OPEN){if(ws.bufferedAmount>1048576)return item.fail('Cola local de streaming demasiado grande.');ws.send(m);}else if(ws.readyState===WebSocket.CONNECTING){item.pending.push(m);item.buffered+=typeof m==='string'?m.length:m.byteLength;if(item.buffered>1048576)item.fail('Muse no conectó a tiempo.');}else item.fail('Streaming desconectado.');};
  ws.onopen=()=>{ws.send(JSON.stringify({type:'start',rate,configId,commandsEnabled,reviewEnabled,reviewContext,segmentation,numbersEnabled:true,termsEnabled:true}));for(const m of item.pending)ws.send(m);item.pending=[];};

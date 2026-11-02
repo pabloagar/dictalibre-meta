@@ -23,7 +23,7 @@ const fingerprint = data => createHash('sha256').update(data).digest('hex');
 const nowMs = () => performance.timeOrigin + performance.now();
 
 export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL = 120_000,
-  sessionTTL = 30 * 60_000, maxSessions = 30 } = {}) {
+  sessionTTL = 30 * 60_000, maxSessions = 30, route = null, canCreate = null, clientIp = null, passUpgrade = null } = {}) {
   const sessions = new Map(), codes = new Map(), tokens = new Map(), attempts = new Map();
   const headers = {
     'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer',
@@ -32,6 +32,10 @@ export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL 
   };
   const server = http.createServer(async (req, res) => {
     const url = new URL(req.url, 'http://localhost');
+    if (route) {
+      try { if (await route(req, res, headers)) return; }
+      catch { if (!res.headersSent) res.writeHead(400, { ...headers, 'Content-Type': 'application/json' }); res.end('{"error":"Petición inválida."}'); return; }
+    }
     if (req.method !== 'GET') { res.writeHead(405, headers).end(); return; }
     if (url.pathname === '/health') {
       res.writeHead(200, { ...headers, 'Content-Type': 'application/json' }).end('{"status":"ok","phase":"capture-transport"}'); return;
@@ -45,6 +49,7 @@ export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL 
   });
   const wss = new WebSocketServer({ noServer: true, maxPayload: 32768, perMessageDeflate: false });
   server.on('upgrade', (req, socket, head) => {
+    if (passUpgrade?.(req)) return;
     let origin;
     try { origin = new URL(req.headers.origin); } catch { socket.destroy(); return; }
     const allowed = publicOrigin ? origin.origin === publicOrigin :
@@ -123,8 +128,9 @@ export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL 
         if (!m || typeof m.type !== 'string') throw new Error('Mensaje inválido.');
         if (m.type === 'ping') { send(ws, { type: 'pong', echo: m.echo, serverReceive: receivedAt, serverSend: nowMs() }); return; }
         if (!session) {
-          if (!limit(req.socket.remoteAddress)) throw new Error('Demasiados intentos. Espera un minuto.');
+          if (!limit(clientIp ? clientIp(req) : req.socket.remoteAddress)) throw new Error('Demasiados intentos. Espera un minuto.');
           if (m.type === 'create') {
+            if (canCreate && !canCreate(req)) throw new Error('Ingresa el código de la demostración.');
             if (sessions.size >= maxSessions) throw new Error('Servidor ocupado.');
             let code;
             do { code = randomBytes(5).toString('hex').toUpperCase(); } while (codes.has(code));

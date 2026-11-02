@@ -129,3 +129,7 @@ body.live-workspace[data-theme="dia"]{--paper:#eceeed;--surface:#f8f9f8;--field:
 .live-workspace .connection-panel[open]>.pairing{background:var(--surface);color:var(--ink)}.live-workspace .qr-wrap svg{background:#fff;padding:8px;border-radius:6px}
 .live-workspace :focus-visible{outline-color:var(--focus)}.live-workspace footer{display:none}
 @media(max-width:800px){.live-workspace .report-editor{height:auto;padding:16px}}
+.live-workspace .figure-alert{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:10px;padding:10px 14px;border:1px solid #f0a74e;border-left-width:5px;border-radius:6px;background:#3a2d1c;color:#ffd9a8;font-size:15px;line-height:1.4}
+.live-workspace[data-theme="dia"] .figure-alert{background:#f7ead8;color:#6f3c00;border-color:#8a4b00}
+.live-workspace .figure-alert[hidden]{display:none}.live-workspace .figure-alert button{flex:none}
+.mobile-body h1{font-size:22px;margin:0}.mobile-body form .primary{margin-top:2px}

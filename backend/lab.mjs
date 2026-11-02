@@ -8,9 +8,10 @@ import { createInterface } from 'node:readline';
 import os from 'node:os';
 import {attachLiveBridge,demoConnection} from './live-bridge.mjs';
 import {loadMetaKey,saveMetaKey,checkMetaKey} from './meta-key.mjs';
-import {formatDictation,COMMAND_VERSION} from './dictation-commands.mjs';
-import {formatNumbers,NUMBER_VERSION} from './number-format.mjs';
-import {formatTerms,TERM_VERSION} from './term-format.mjs';
+import {COMMAND_VERSION} from './dictation-commands.mjs';
+import {NUMBER_VERSION} from './number-format.mjs';
+import {TERM_VERSION} from './term-format.mjs';
+import {applyFormatting} from './format-pipeline.mjs';
 import {attachMuseStream} from './muse-stream.mjs';
 import {createReviewer,reviewWithMeta} from './meta-review.mjs';
 import {reviewContext} from './review-context.mjs';
@@ -20,14 +21,6 @@ import { wavInfo, hash, configuration, score, csv } from './lab-core.mjs';
 import {validateGlossary,glossaryToConfig} from './vocabulary.mjs';
 const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 export const MODEL_REVISION='220761e60602a5ca694c409d5f424563b75d6820';
-function applyFormatting(r){
-  r.numberFormatting=r.numbersEnabled?formatNumbers(r.text):null;
-  r.termFormatting=r.termsEnabled?formatTerms(r.numberFormatting?.text??r.text):null;
-  if(r.termFormatting)r.termFormatting.input=r.numberFormatting?'numberFormatting.text':'text';
-  r.formatting=r.commandsEnabled?formatDictation(r.termFormatting?.text??r.numberFormatting?.text??r.text):null;
-  if(r.formatting)r.formatting.input=r.termFormatting?'termFormatting.text':r.numberFormatting?'numberFormatting.text':'text';
-  r.timings.numberFormatMs=r.numberFormatting?.elapsedMs??0;r.timings.termFormatMs=r.termFormatting?.elapsedMs??0;
-}
 function modelReady(){
   const dir=path.join(ROOT,'models','whisper-large-v3-fp16-ov');
   try{return JSON.parse(fs.readFileSync(path.join(dir,'dicta-manifest.json'),'utf8')).revision===MODEL_REVISION&&['encoder_model','decoder_model','tokenizer','detokenizer'].every(name=>['xml','bin'].every(ext=>fs.statSync(path.join(dir,`openvino_${name}.${ext}`)).size>0));}catch{return false;}
@@ -78,7 +71,7 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
   for(const r of db.runs) if(['queued','running'].includes(r.status)){r.status='interrupted';r.error='Servidor reiniciado antes de terminar.';}
   save();
   let build='unknown';try{build=execFileSync('git',['rev-parse','HEAD'],{cwd:ROOT,encoding:'utf8'}).trim();}catch{}
-  const sourceHash=hash(Buffer.concat(['backend/lab.mjs','backend/lab-study.mjs','apps/lab/study.js','apps/shared/lab-timing.js','backend/meta-key.mjs','backend/meta-review.mjs','backend/review-context.mjs','backend/vocabulary.mjs','backend/term-format.mjs','data/vocabulario/formas-dictadas.v1.json','apps/desktop/report-review.js','apps/shared/review-ui.js','backend/dictation-commands.mjs','backend/number-format.mjs','backend/muse-stream.mjs','backend/speech-turns.mjs','backend/stream-audio.mjs','backend/lab-core.mjs','backend/lab-worker.py','backend/live-bridge.mjs','apps/desktop/live.js','apps/desktop/report-editor.js','apps/shared/report-model.js','apps/desktop/stream-client.js','apps/desktop/desktop.js','apps/mobile/mobile.js','apps/shared/metrics.js'].map(f=>fs.readFileSync(path.join(ROOT,f)))));
+  const sourceHash=hash(Buffer.concat(['backend/lab.mjs','backend/lab-study.mjs','apps/lab/study.js','apps/shared/lab-timing.js','backend/meta-key.mjs','backend/meta-review.mjs','backend/review-context.mjs','backend/vocabulary.mjs','backend/format-pipeline.mjs','backend/term-format.mjs','data/vocabulario/formas-dictadas.v1.json','apps/desktop/report-review.js','apps/shared/review-ui.js','backend/dictation-commands.mjs','backend/number-format.mjs','backend/muse-stream.mjs','backend/speech-turns.mjs','backend/stream-audio.mjs','backend/lab-core.mjs','backend/lab-worker.py','backend/live-bridge.mjs','apps/desktop/live.js','apps/desktop/report-editor.js','apps/shared/report-model.js','apps/desktop/stream-client.js','apps/desktop/desktop.js','apps/mobile/mobile.js','apps/shared/metrics.js'].map(f=>fs.readFileSync(path.join(ROOT,f)))));
   let apiKey=loadMetaKey(keyFile),active=null,closed=false;
   const reviewer=createReviewer({db,save,getKey:()=>apiKey,sourceHash,build,provider:reviewProvider});
   const study=createStudy({db,save,build,sourceHash});

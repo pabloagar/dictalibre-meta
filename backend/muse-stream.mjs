@@ -3,16 +3,17 @@ import {StreamResampler,pcmWav} from './stream-audio.mjs';
 import {hash} from './lab-core.mjs';
 import {SpeechTurns} from './speech-turns.mjs';
 
-export function attachMuseStream(server,{getKey,getConfig,start,finish,endpoint='wss://api.meta.ai/v1/asr/realtime'}){
+export function attachMuseStream(server,{getKey,getConfig,start,finish,endpoint='wss://api.meta.ai/v1/asr/realtime',allowRequest=null,maxClients=1}){
   const cancellations=new Map();
   const wss=new WebSocketServer({noServer:true,maxPayload:65536,perMessageDeflate:false});
   server.on('upgrade',(req,socket,head)=>{
     if(req.url!=='/asr-stream')return;
     const origin=`http://127.0.0.1:${server.address().port}`;
-    if(req.headers.origin!==origin||req.headers.host!==new URL(origin).host||wss.clients.size>=1){socket.destroy();return;}
-    wss.handleUpgrade(req,socket,head,client=>{wss.emit('connection',client);session(client);});
+    const allowed=allowRequest?allowRequest(req):req.headers.origin===origin&&req.headers.host===new URL(origin).host;
+    if(!allowed||wss.clients.size>=maxClients){socket.destroy();return;}
+    wss.handleUpgrade(req,socket,head,client=>{wss.emit('connection',client);session(client,req);});
   });
-  function session(client){
+  function session(client,req){
     let run,up,resampler,rate,done=false,ended=false,ack=false,endSent=false,verified=false,handshakeTimer,finalTimer;
     let pending=Buffer.alloc(0),sent=0,started=performance.now(),sendStart=null,endAt=null,endSentAt=null,previous='';
     const original=[],derived=[],events=[];const turns=new SpeechTurns();let segmentation='manual';
@@ -57,7 +58,7 @@ export function attachMuseStream(server,{getKey,getConfig,start,finish,endpoint=
           segmentation=m.segmentation??'manual';if(!['manual','automatic'].includes(segmentation))throw Error('Segmentación desconocida.');m.segmentation=segmentation;
           rate=m.rate;resampler=new StreamResampler(rate);const config=getConfig(m.configId),key=getKey();
           if(!config||config.engine!=='muse'||!key)throw Error('Muse requiere configuración y clave disponibles.');
-          started=performance.now();run=start(config,m);cancellations.set(run.id,()=>complete('cancelled','Streaming cancelado.'));emit({type:'started',runId:run.id});
+          started=performance.now();run=start(config,m,req);cancellations.set(run.id,()=>complete('cancelled','Streaming cancelado.'));emit({type:'started',runId:run.id});
           up=new WebSocket(endpoint,{handshakeTimeout:10000,maxPayload:1024*1024});
           handshakeTimer=setTimeout(()=>complete('timeout','Muse no confirmó la conexión en diez segundos.'),10000);
           up.on('open',()=>up.send(JSON.stringify({authorization:{accessToken:`Bearer ${key}`},model:config.model,mode:segmentation==='automatic'?'ENDPOINTING':'PUSH_TO_TALK',audioEncoding:'PCM_24KHZ',partialMode:'CUMULATIVE',languageBias:['Spanish'],keywords:config.keywords,emitAudioProgress:true})));

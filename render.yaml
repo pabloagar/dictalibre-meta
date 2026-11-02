@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: dictalibre-demo
+    runtime: docker
+    plan: starter
+    region: virginia
+    branch: codex/capture-transport
+    autoDeploy: true
+    healthCheckPath: /health
+    envVars:
+      - key: META_API_KEY
+        sync: false
+      - key: DEMO_ACCESS_CODE
+        sync: false
+      - key: DEMO_MAX_AUDIO_MINUTES_PER_DAY
+        value: "60"

@@ -47,6 +47,29 @@ Al soltar se detiene la captura nueva, pero se entrega el bloque final ya captur
 
 Este comando detiene exclusivamente los procesos registrados de esta demo. La URL deja de funcionar al detener el túnel, apagar/suspender el equipo o perder conexión. La siguiente ejecución puede generar otra URL.
 
+## Demostración pública, sin depender de este PC
+
+`backend/demo.mjs` es un servidor aparte para que cualquiera con el código haga la demostración. Incluye dictado con Muse-streaming, informe, plantillas sintéticas y copiar. **No incluye** laboratorio, Whisper, Revisor Meta ni la biblioteca privada. El audio y los textos no se escriben en disco: los textos quedan en memoria hasta 4 horas, separados por visitante, y el audio se descarta al terminar cada toma. Sin `DEMO_ACCESS_CODE` no arranca.
+
+**Publicar en Render (una vez, con la cuenta y la tarjeta del responsable):**
+
+1. En Render, **New → Blueprint**, conectar `pabloagar/dictalibre-meta`. `render.yaml` crea el servicio con la rama `codex/capture-transport`.
+2. Cargar en Render los secretos `META_API_KEY` y `DEMO_ACCESS_CODE`. No van al repositorio ni a un chat. Elegir un código largo, porque es lo que protege la clave.
+3. Abrir `https://<servicio>.onrender.com/live`, entrar con el código, pulsar **Conectar teléfono** y escanear el QR con el celular.
+
+Cada push a esa rama vuelve a desplegar y corta las sesiones en curso: no publicar durante una demostración.
+
+**Pautas de uso:**
+
+- Solo datos sintéticos, nunca datos de pacientes.
+- Una persona dicta a la vez; quien llega después ve «Otra persona está dictando».
+- Límite de audio diario: `DEMO_MAX_AUDIO_MINUTES_PER_DAY`, 60 minutos por defecto, con reinicio diario en UTC. Al reiniciarse el servidor, el contador también vuelve a cero.
+- Esperar el texto antes de la siguiente toma y evitar decir «punto» seguido de un número al terminar una frase: la cifra se convierte igual, pero queda un aviso para confirmarla.
+- No proyectar el QR ni difundir el código: el QR empareja sin confirmación durante 2 minutos.
+- Ante un fallo, usar el video de respaldo o el PC.
+
+Local, sin clave real no transcribe: `DEMO_ACCESS_CODE=... PUBLIC_ORIGIN=http://127.0.0.1:8787 HOST=127.0.0.1 pnpm demo`. La imagen Docker y el despliegue en Render aún no se han probado; este PC no tiene Docker.
+
 ## Enlace fijo para el teléfono
 
 El túnel temporal cambia de dirección al renovarse. Para un enlace que no cambie, con el servidor en este PC, hace falta un dominio propio administrado en Cloudflare. **Este modo aún no se ha probado con un dominio real.** Por única vez:

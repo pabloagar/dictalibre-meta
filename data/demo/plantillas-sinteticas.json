@@ -1,0 +1,13 @@
+{
+  "schema": "dicta-libre.plantillas-demo.v1",
+  "nota": "Estructuras sintéticas escritas para la demostración, sin hallazgos predefinidos. No provienen de la biblioteca privada ni tienen validación clínica.",
+  "summary": null,
+  "references": [],
+  "templates": [
+    {"id": "demo-tc-torax", "name": "TC de tórax · estructura de ejemplo", "category": "Tomografía", "sources": [], "text": "TÉCNICA\nTomografía computada de tórax.\n\nHALLAZGOS\n\nCONCLUSIÓN\n"},
+    {"id": "demo-angiotc-tep", "name": "AngioTC de tórax · estructura de ejemplo", "category": "Tomografía", "sources": [], "text": "TÉCNICA\nAngiotomografía computada de tórax con contraste endovenoso.\n\nHALLAZGOS\n\nCONCLUSIÓN\n"},
+    {"id": "demo-tc-abdomen", "name": "TC de abdomen y pelvis · estructura de ejemplo", "category": "Tomografía", "sources": [], "text": "TÉCNICA\nTomografía computada de abdomen y pelvis.\n\nHALLAZGOS\n\nCONCLUSIÓN\n"},
+    {"id": "demo-eco-tiroides", "name": "Ecografía de tiroides · estructura de ejemplo", "category": "Ecografía", "sources": [], "text": "TÉCNICA\nEcografía de tiroides.\n\nHALLAZGOS\n\nCONCLUSIÓN\n"},
+    {"id": "demo-mamografia", "name": "Mamografía · estructura de ejemplo", "category": "Mamografía", "sources": [], "text": "TÉCNICA\nMamografía bilateral.\n\nHALLAZGOS\n\nCONCLUSIÓN\n"}
+  ]
+}

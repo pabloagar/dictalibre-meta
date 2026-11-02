@@ -9,6 +9,7 @@
   "engines": { "node": ">=22" },
   "scripts": {
     "lab": "node backend/lab.mjs",
+    "demo": "node backend/demo.mjs",
     "start": "node backend/server.mjs",
     "test": "node --test tests/*.test.mjs",
     "check": "node scripts/check.mjs"

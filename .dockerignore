@@ -3,6 +3,7 @@ node_modules
 .env*
 .tools
 .runtime
-data
+data/local
+data/private
 runs
 logs
