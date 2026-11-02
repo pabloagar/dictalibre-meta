@@ -1,0 +1,9 @@
+:root{
+  --dicta-tinta: #2b2823; /* Logotipo y símbolo sobre fondos claros. */
+  --dicta-hueso: #ebe7dd; /* Fondo claro de marca; logotipo sobre fondos oscuros. */
+  --dicta-rojo-grabacion: #b3261e; /* El punto sobre fondos claros. Estado: grabando. */
+  --dicta-coral-grabacion: #e08a7e; /* El punto sobre fondos oscuros. Estado: grabando. */
+  --dicta-noche: #15171a; /* Fondo oscuro de marca (tema Penumbra). */
+  --dicta-punto-en-espera-claro: #9a9286; /* El punto en espera sobre fondos claros (solo en la interfaz). */
+  --dicta-punto-en-espera-oscuro: #5d646c; /* El punto en espera sobre fondos oscuros (solo en la interfaz). */
+}

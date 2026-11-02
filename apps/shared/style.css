@@ -470,3 +470,13 @@ body.clinical-workspace{min-height:100dvh}
 
 .clinical-workspace .connection-panel.is-connected>summary{border-color:var(--dl-ok)}
 @media(max-width:900px){.clinical-workspace .clinical-desk:has(.clinical-notes>:not([hidden])){margin:18px 16px 0}}
+
+/* dicta brand kit v1: original outlined wordmarks, no font recreation. */
+.dicta-wordmark{display:inline-block;width:80px;line-height:0;flex:none;vertical-align:middle}
+.dicta-wordmark>img{display:block;width:80px;height:auto;max-width:none;filter:none;box-shadow:none}
+.dicta-wordmark>.dicta-logo-dark{display:none}
+body.clinical-workspace[data-theme="penumbra"] .dicta-wordmark>.dicta-logo-light,
+body.clinical-workspace[data-theme="ambar"] .dicta-wordmark>.dicta-logo-light{display:none}
+body.clinical-workspace[data-theme="penumbra"] .dicta-wordmark>.dicta-logo-dark,
+body.clinical-workspace[data-theme="ambar"] .dicta-wordmark>.dicta-logo-dark{display:block}
+.clinical-workspace .clinical-brand{display:flex;align-items:center;min-height:40px;padding:5px 0;flex-shrink:0}

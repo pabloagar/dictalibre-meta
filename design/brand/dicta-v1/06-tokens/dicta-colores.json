@@ -1,0 +1,30 @@
+{
+  "tinta": {
+    "hex": "#2b2823",
+    "uso": "Logotipo y símbolo sobre fondos claros."
+  },
+  "hueso": {
+    "hex": "#ebe7dd",
+    "uso": "Fondo claro de marca; logotipo sobre fondos oscuros."
+  },
+  "rojo-grabacion": {
+    "hex": "#b3261e",
+    "uso": "El punto sobre fondos claros. Estado: grabando."
+  },
+  "coral-grabacion": {
+    "hex": "#e08a7e",
+    "uso": "El punto sobre fondos oscuros. Estado: grabando."
+  },
+  "noche": {
+    "hex": "#15171a",
+    "uso": "Fondo oscuro de marca (tema Penumbra)."
+  },
+  "punto-en-espera-claro": {
+    "hex": "#9a9286",
+    "uso": "El punto en espera sobre fondos claros (solo en la interfaz)."
+  },
+  "punto-en-espera-oscuro": {
+    "hex": "#5d646c",
+    "uso": "El punto en espera sobre fondos oscuros (solo en la interfaz)."
+  }
+}

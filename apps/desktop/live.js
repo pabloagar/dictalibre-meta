@@ -5,7 +5,7 @@ import {arrivalEstimate} from '/shared/metrics.js';
 import {startStream} from '/stream-client.js';
 const panel=document.querySelector('.transcript-paper');
 document.querySelector('header .tag').textContent='DICTADO · MUSE / WHISPER';
-document.querySelector('footer').textContent='DICTA LIBRE · CAPTURA → MOTOR ELEGIDO → TEXTO';
+document.querySelector('footer').textContent='dicta · CAPTURA → MOTOR ELEGIDO → TEXTO';
 for(const p of document.querySelectorAll('.diagnostics p'))if(p.textContent.startsWith('Por integrar:'))p.textContent='Por toma: cola y procesamiento. Streaming: conexión, primer borrador, revisiones y final. Revisor Meta opcional con aprobación humana.';
 panel.replaceChildren();panel.setAttribute('aria-label','Transcripciones por toma');
 const modelBadge=document.querySelector('.section-head .tag');
@@ -59,8 +59,8 @@ const track=(type,data={})=>{layoutMetrics.events.push({type,atMs:performance.no
 const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text)n.textContent=text;return n;};
 const makeDetails=(label,cls)=>{const d=make('details',cls);d.append(make('summary','',label));return d;};
 const report=reportEditor.element.closest('.report-workspace'),controls=report.querySelector('.report-controls');
-const header=document.querySelector('header');header.replaceChildren();
-const brand=make('div','clinical-brand','Dicta Libre');brand.append(make('small','','prototipo · solo material sintético'));header.append(brand,controls);
+const header=document.querySelector('header'),brandArtwork=header.querySelector('.dicta-wordmark');header.replaceChildren();
+const brand=make('div','clinical-brand');brand.append(brandArtwork??make('span','','dicta.'));brand.append(make('small','','prototipo · solo material sintético'));header.append(brand,controls);
 const templatePanel=report.querySelector('.template-library-panel')??controls.querySelector('.template-library-panel');
 const sex=make('div','sex-control');sex.setAttribute('role','group');sex.setAttribute('aria-label','Sexo del estudio');sex.append(make('span','','Sexo'));
 for(const value of ['F','M','—']){const button=make('button','',value);button.setAttribute('aria-pressed',String(value==='—'));button.onclick=()=>reportEditor.setSex(value);sex.append(button);}

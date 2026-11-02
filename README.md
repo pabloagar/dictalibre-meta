@@ -1,4 +1,4 @@
-# Dicta Libre
+# dicta
 
 Repositorio público: [pabloagar/dictalibre-meta](https://github.com/pabloagar/dictalibre-meta).
 
@@ -6,7 +6,7 @@ Repositorio público: [pabloagar/dictalibre-meta](https://github.com/pabloagar/d
 
 **Estado funcional al 1 de noviembre de 2026:** captura y transporte, Muse-Normal/Muse-streaming, Whisper local con OpenVINO, laboratorio comparativo, segmentación opcional, números/comandos, glosario, Revisor Meta experimental y editor con plantillas implementados en piloto. 285 plantillas importadas localmente; contenido excluido del repositorio por permisos de redistribución pendientes. Validación física/clínica y entrega aún abiertas. Código preparado para publicación pública; datos privados excluidos. Alcance, auditoría y actualización de licencia del 02-11-2026 en [PUBLICATION.md](PUBLICATION.md).
 
-Dicta Libre es un proyecto de dictado médico cuya idea y exploración conceptual precedieron al Meta AI Developer Hackathon 2026. La implementación presentada para el concurso comenzó desde cero el 28 de octubre de 2026, dentro del período oficial del evento.
+dicta (antes Dicta Libre) es un proyecto de dictado médico cuya idea y exploración conceptual precedieron al Meta AI Developer Hackathon 2026. La implementación presentada para el concurso comenzó desde cero el 28 de octubre de 2026, dentro del período oficial del evento.
 
 La investigación y las exploraciones técnicas previas informan el problema; no se presentan como contribuciones implementadas durante el concurso. Esta declaración no implica que nunca hayan existido prototipos o experimentos anteriores. La bitácora distingue avances efectivos de propuestas.
 
@@ -86,3 +86,6 @@ En /live puedes crear un informe desde una plantilla propia, dictar sobre cursor
 
 ### Estudios del laboratorio
 La ampliación del laboratorio incorpora comparación pareada, WER/CER/S-D-I, anotación clínica humana, edición cronometrada, evaluación del revisor y tareas de usabilidad independientes. Instrucciones y corpus sintético reproducible: [LAB_STUDIES.md](LAB_STUDIES.md). Implementación técnica no equivale a validación clínica. Requiere reiniciar el backend al actualizar; Start-Lab.ps1 reutiliza servidores activos.
+
+
+Identidad visual actual: **dicta.**, logotipo trazado y kit v1 aportados por el responsable. [Integración y archivos de marca](design/brand/README.md).
