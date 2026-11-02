@@ -1,6 +1,6 @@
 {
   "schema": "dicta-libre.plantillas-demo.v1",
-  "nota": "Estructuras generales redactadas para dicta, con secciones vacías. Sin hallazgos, medidas ni conclusiones predefinidos. No se reutiliza contenido de la biblioteca privada. El prototipo sigue limitado a pruebas con material sintético.",
+  "nota": "Informes normales breves redactados para la demostración de dicta, sin medidas ni contenido tomado de la biblioteca privada. Son puntos de partida editables, no resultados de pacientes. Revisar y adaptar todo el contenido al estudio. El prototipo sigue limitado a pruebas con material sintético.",
   "summary": null,
   "references": [],
   "templates": [
@@ -9,36 +9,36 @@
       "name": "TC de tórax",
       "category": "Tomografía",
       "sources": [],
-      "text": "TC DE TÓRAX\n\nTÉCNICA\n\nHALLAZGOS\n\nCONCLUSIÓN\n"
+      "text": "TC DE TÓRAX\n\nTÉCNICA\nAdquisición tomográfica de tórax con reconstrucciones multiplanares.\n\nHALLAZGOS\nPulmones sin alteraciones focales evidentes.\nVía aérea central permeable.\nSin derrame pleural.\nSin adenopatías torácicas evidentes.\n\nCONCLUSIÓN\nSin alteraciones torácicas significativas.\n"
     },
     {
       "id": "demo-angiotc-tep",
       "name": "AngioTC de tórax",
       "category": "Tomografía",
       "sources": [],
-      "text": "ANGIOTC DE TÓRAX\n\nTÉCNICA\n\nHALLAZGOS\n\nCONCLUSIÓN\n"
+      "text": "ANGIOTC DE TÓRAX\n\nTÉCNICA\nAdquisición tomográfica de tórax con contraste endovenoso en fase arterial pulmonar.\n\nHALLAZGOS\nArterias pulmonares opacificadas, sin defectos de llenado evidentes.\nPulmones sin alteraciones focales evidentes.\nSin derrame pleural.\n\nCONCLUSIÓN\nSin signos de tromboembolismo pulmonar.\n"
     },
     {
       "id": "demo-tc-abdomen",
       "name": "TC de abdomen y pelvis",
       "category": "Tomografía",
       "sources": [],
-      "text": "TC DE ABDOMEN Y PELVIS\n\nTÉCNICA\n\nHALLAZGOS\n\nCONCLUSIÓN\n"
+      "text": "TC DE ABDOMEN Y PELVIS\n\nTÉCNICA\nAdquisición tomográfica de abdomen y pelvis con reconstrucciones multiplanares.\n\nHALLAZGOS\nÓrganos abdominales sin alteraciones evidentes.\nSin dilatación de la vía biliar ni de las vías urinarias.\nAsas intestinales sin dilatación.\nSin líquido libre ni colecciones.\n\nCONCLUSIÓN\nSin alteraciones abdominopelvianas significativas.\n"
     },
     {
       "id": "demo-eco-tiroides",
       "name": "Ecografía de tiroides",
       "category": "Ecografía",
       "sources": [],
-      "text": "ECOGRAFÍA DE TIROIDES\n\nTÉCNICA\n\nHALLAZGOS\n\nCONCLUSIÓN\n"
+      "text": "ECOGRAFÍA DE TIROIDES\n\nTÉCNICA\nEvaluación ecográfica de la glándula tiroides.\n\nHALLAZGOS\nTiroides de contornos regulares y ecotextura homogénea.\nSin nódulos evidentes.\nSin adenopatías cervicales sospechosas en las regiones evaluadas.\n\nCONCLUSIÓN\nSin alteraciones ecográficas tiroideas significativas.\n"
     },
     {
       "id": "demo-mamografia",
       "name": "Mamografía",
       "category": "Mamografía",
       "sources": [],
-      "text": "MAMOGRAFÍA\n\nTÉCNICA\n\nHALLAZGOS\n\nCONCLUSIÓN\n"
+      "text": "MAMOGRAFÍA\n\nTÉCNICA\nMamografía bilateral en proyecciones habituales.\n\nHALLAZGOS\nSin masas, distorsiones ni calcificaciones sospechosas.\nPiel y complejos areola-pezón sin alteraciones evidentes.\n\nCONCLUSIÓN\nSin hallazgos mamográficos sospechosos.\n"
     }
   ],
-  "version": "demo-estructuras-v3"
+  "version": "demo-informes-basicos-v4"
 }

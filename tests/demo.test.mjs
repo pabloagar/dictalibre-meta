@@ -125,7 +125,7 @@ test('demo: una persona dicta a la vez y respeta el límite diario',async()=>{
   }finally{await d.stop();}
 });
 
-test('demo: el contenedor incluye lo necesario y las plantillas públicas son estructuras generales sin hallazgos',()=>{
+test('demo: el contenedor incluye lo necesario y las plantillas públicas son informes normales breves sin medidas',()=>{
   const docker=fs.readFileSync(new URL('../Dockerfile',import.meta.url),'utf8'),ignore=fs.readFileSync(new URL('../.dockerignore',import.meta.url),'utf8');
   for(const need of ['COPY apps','COPY backend','COPY data/vocabulario','COPY data/demo','backend/demo.mjs'])assert.ok(docker.includes(need),need);
   assert.match(ignore,/^\.env\*/m);assert.match(ignore,/^data\/local/m);assert.match(ignore,/^data\/private/m);assert.doesNotMatch(ignore,/^data$/m);
@@ -133,7 +133,10 @@ test('demo: el contenedor incluye lo necesario y las plantillas públicas son es
   assert.equal(templates.length,5);
   for(const t of templates){
     assert.doesNotMatch(t.name,/sintético|ejemplo|completo/i);assert.deepEqual(t.sources,[]);
-    assert.equal(t.text,t.name.toUpperCase()+'\n\nTÉCNICA\n\nHALLAZGOS\n\nCONCLUSIÓN\n');
+    assert.ok(t.text.startsWith(t.name.toUpperCase()+'\n\n'));
+    for(const heading of ['TÉCNICA','HALLAZGOS','CONCLUSIÓN'])assert.ok(t.text.split(heading+'\n')[1]?.split('\n\n')[0].trim(),`${t.id}: ${heading} con contenido`);
+    assert.doesNotMatch(t.text,/\d|\b(?:mm|cm|milímetros|centímetros)\b/iu);
+    assert.ok(t.text.trim().split(/\s+/u).length<=100,`${t.id}: informe breve`);
   }
 });
 
