@@ -492,3 +492,13 @@ Código candidato `72f25f05d7c051ada039f28ae00a51fa7c6e3302`: alias contextual d
 285 plantillas privadas pasan pruebas del modelo local; una plantilla tiroidea comprobada en navegador con reemplazo, deshacer y rehacer exactos. No enviadas a Meta. Servidor aislado 8797; fallo inicial de arranque debido a ausencia de configuración de transporte en el snapshot, resuelto solo en runtime de prueba. Sin cambios ni reinicio del laboratorio habitual. Se solicita coordinación para activar backend sin interrumpir dictado; iPhone queda a cargo del responsable.
 
 Verificación adicional de interfaz: revisión real de un informe nuevo enteramente sintético, sin contexto de la plantilla privada, en servidor aislado 8797. Spark devolvió un aviso «Contradicción entre fragmentos» con dos citas de lateralidad opuesta; el texto quedó intacto. Evidencia visual local: revision-corregida-local.png. Código y resumen publicados en GitHub hasta fa809069ad342610c5cbd8f19eba934a8af9f29e. Render y laboratorio habitual no reiniciados: pendiente respuesta a la coordinación solicitada.
+
+## 02-11-2026 · Activación coordinada confirmada
+
+El responsable confirmó el reinicio de Render y laboratorio. Versión activa en ambos: 16b62fffda7df1dfd5cd1a341e4c971f1a5cd9cd. Commit de activación sin cambios de aplicación respecto a la candidata 72f25f0 evaluada con 161/161 pruebas y pnpm check. GitHub actualizado en codex/capture-transport, sin fuerza.
+
+Render: despliegue automático dep-dbkdo4ajnfac73bgrk30, estado Deploy succeeded | Live, 02-11-2026 15:53 America/Santiago. Recursos /report-review.js y /mobile.js respondieron 200 y coincidieron con el código local. Tras renovar la sesión por el reinicio, una revisión real de informe sintético devolvió un aviso tipado de contradicción con dos citas de lados opuestos; texto original conservado. Evidencia visual local correcciones-activas-render.png.
+
+Laboratorio: se comprobó el PID registrado y su comando antes de detenerlo; scripts/Start-Lab.ps1 inició el backend actualizado. /api/state confirmó build 16b62fffda7df1dfd5cd1a341e4c971f1a5cd9cd, sourceHash 77e0bd27cb7592b10c9400b34260714be1d1c47c9cf17bb8960069d11b4101cf y Meta configurada. /live abrió correctamente en navegador. Datos privados permanecen locales; no se reinició el relay de transporte, sin cambios necesarios para estas correcciones.
+
+No queda código de estas correcciones solo local. Evidencias completas y catálogo privado permanecen excluidos de Git. Siguen pendientes iPhone a cargo del responsable, escucha humana de referencias y resolver/medir el riesgo de sustituciones médicas plausibles no detectadas por revisión textual. Esta activación no cierra la calidad clínica del MVP.
