@@ -377,3 +377,5 @@ Publicado el código en GitHub como `93515a470991124cd70b5c3c5e699625252f36c1`, 
 ## 2026-11-02 · Enlace Plantilla en la hoja vacía
 
 «Plantilla» en la ayuda inicial es ahora un botón con aspecto de hipervínculo subrayado que abre el selector existente a la derecha, enfoca la búsqueda y no inserta contenido. El acceso de la barra permanece. Conserva cierre, selección explícita y estado aria-expanded. Verificado en Chrome/fixture sintético, pnpm check y 137/137 pruebas. No se modifica conexión: se comprobó el disparador automático al abrir el panel y que desktop.js presenta el QR cuando el servidor crea la sesión. 8796 continúa siendo una vista sin transporte ni QR real; no se probó emparejamiento físico. Instrumentación y límites en METRICS.md.
+
+Código publicado en `93de50ed0e33fd93f4ed9b3d97da745e33c8ef28`, codex/ui-propuesta-b. Vista 8796 recargada: /live.js y /receiver.css HTTP 200 y bytes idénticos a la carpeta de trabajo, coincidentes con el commit al normalizar finales de línea. Sin despliegue Render, unión de ramas ni reinicio del laboratorio. Captura local dicta-plantilla-enlace.png; ningún cambio de código queda solo en local.
