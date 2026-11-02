@@ -545,3 +545,16 @@ body.clinical-workspace[data-theme="ambar"] .dicta-wordmark>.dicta-logo-dark{dis
  .clinical-workspace .engine-setting .settings-segments{grid-template-columns:minmax(0,1fr)}
  .clinical-workspace .settings-main .settings-intro{margin-right:0}
 }
+
+
+html[data-boot] {background:#e2ded4;color:#2b2823}
+html[data-boot] body {margin:0;background:inherit;color:inherit}
+html[data-boot] body>.shell {display:none!important}
+#dicta-boot {display:none}
+html[data-boot] #dicta-boot {display:grid;min-height:100vh;place-content:center;gap:16px;padding:24px;box-sizing:border-box;font:16px system-ui;text-align:center}
+#dicta-boot a {color:inherit}
+html[data-boot-theme="penumbra"] {background:#0e0f10;color:#c4c9ce}
+html[data-boot-theme="ambar"] {background:#110e0a;color:#d8c9b0}
+
+
+body.dicta-access{background:#e2ded4;color:#2b2823} .dicta-access .phone-shell{max-width:480px;margin:6vh auto;padding:24px}.dicta-access header{border-color:#c9c1b3}.dicta-access .card{background:#ebe7dd;border-color:#c9c1b3}.dicta-access h1{font-size:26px;line-height:1.25}.dicta-access .code-input{background:#e5e1d7;color:#2b2823;border-color:#c9c1b3}.dicta-access .primary{background:#45403a;color:#ebe7dd}.dicta-access .tiny,.dicta-access .tag{color:#5b554b}

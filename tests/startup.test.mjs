@@ -4,9 +4,9 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import {Window} from 'happy-dom';
 const html=fs.readFileSync('apps/desktop/index.html','utf8');
-const boot=html.match(/<script>([\s\S]*?)<\/script>/)[1];
+const boot=fs.readFileSync('apps/desktop/startup.js','utf8');
 function setup(theme){
- const window=new Window({url:'https://example.test/live'});window.document.write(html.replace(/<script[\s\S]*?<\/script>/g,''));
+ const window=new Window({url:'https://example.test/live'});window.document.write(('<style>'+fs.readFileSync('apps/shared/style.css','utf8')+'</style>'+html).replace(/<script[\s\S]*?<\/script>/g,''));
  if(theme)window.localStorage.setItem('dicta-theme-v1',theme);
  let timeout;const measures=[];
  vm.runInNewContext(boot,{window,document:window.document,location:window.location,localStorage:window.localStorage,performance:{now:()=>10,measure:(...args)=>measures.push(args)},setTimeout:fn=>{timeout=fn;return 1;},clearTimeout:()=>{timeout=null;}});
@@ -24,3 +24,5 @@ test('error o espera agotada ofrece reintento sin mostrar interfaz antigua',asyn
  assert.equal(s.window.document.documentElement.dataset.boot,'error');assert.match(s.window.document.querySelector('#dicta-boot-message').textContent,/No se pudo/);
  assert.equal(s.window.getComputedStyle(s.window.document.querySelector('.shell')).display,'none');assert.equal(s.window.document.querySelector('#dicta-boot a').getAttribute('href'),'/live');await s.window.happyDOM.close();}
 });
+
+test('arranque compatible con CSP sin scripts ni estilos inline',()=>{assert.ok(html.includes('src="/startup.js"'));assert.doesNotMatch(html,/<script>/);assert.doesNotMatch(html,/<style>/);});

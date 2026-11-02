@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 const root=fileURLToPath(new URL('../',import.meta.url));
-const files=new Map([['/live','apps/desktop/index.html'],['/receiver.css','apps/shared/style.css'],['/live.js','apps/desktop/live.js'],['/report-editor.js','apps/desktop/report-editor.js'],['/report-review.js','apps/desktop/report-review.js'],['/stream-client.js','apps/desktop/stream-client.js'],['/review-ui.js','apps/shared/review-ui.js'],['/qr.js','node_modules/qrcode-generator/dist/qrcode.js']]);
+const files=new Map([['/startup.js','apps/desktop/startup.js'],['/live','apps/desktop/index.html'],['/receiver.css','apps/shared/style.css'],['/live.js','apps/desktop/live.js'],['/report-editor.js','apps/desktop/report-editor.js'],['/report-review.js','apps/desktop/report-review.js'],['/stream-client.js','apps/desktop/stream-client.js'],['/review-ui.js','apps/shared/review-ui.js'],['/qr.js','node_modules/qrcode-generator/dist/qrcode.js']]);
 for(const file of ['report-model.js','lab-timing.js','metrics.js','client.js','protocol.js'])files.set('/shared/'+file,'apps/shared/'+file);
 for(const file of fs.readdirSync(path.join(root,'apps/shared/fonts')).filter(f=>f.endsWith('.ttf')))files.set('/shared/fonts/'+file,'apps/shared/fonts/'+file);
 const state={demo:false,metaConfigured:true,build:'SYNTHETIC-UI-FIXTURE',sourceHash:null,configs:[{id:'fixture-muse',engine:'muse',name:'Sin glosario',keywords:[]}],runs:[],reviews:[],reviewDocuments:[]};

@@ -9,7 +9,7 @@ import { decodeChunk, MAX_SECONDS } from '../apps/shared/protocol.js';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const paths = new Map([
   ['/', 'apps/desktop/index.html'], ['/mobile', 'apps/mobile/index.html'],
-  ['/desktop.js', 'apps/desktop/desktop.js'], ['/mobile.js', 'apps/mobile/mobile.js'],
+  ['/startup.js', 'apps/desktop/startup.js'], ['/desktop.js', 'apps/desktop/desktop.js'], ['/mobile.js', 'apps/mobile/mobile.js'],
   ['/capture-worklet.js', 'apps/mobile/capture-worklet.js'],
   ['/shared/protocol.js', 'apps/shared/protocol.js'], ['/shared/client.js', 'apps/shared/client.js'],
   ['/shared/metrics.js', 'apps/shared/metrics.js'],
