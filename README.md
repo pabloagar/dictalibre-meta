@@ -1,5 +1,7 @@
 # Dicta Libre
 
+Repositorio público: [pabloagar/dicta-libre](https://github.com/pabloagar/dicta-libre).
+
 **Estado al 1 de noviembre de 2026:** captura y transporte, Muse-Normal/Muse-streaming, Whisper local con OpenVINO, laboratorio comparativo, segmentación opcional, números/comandos, glosario, Revisor Meta experimental y editor con plantillas implementados en piloto. 285 plantillas importadas localmente; contenido excluido del repositorio por permisos de redistribución pendientes. Validación física/clínica y entrega aún abiertas. Código preparado para publicación pública; datos privados excluidos. Alcance, auditoría y licencia pendiente en [PUBLICATION.md](PUBLICATION.md).
 
 Dicta Libre es un proyecto de dictado médico cuya idea y exploración conceptual precedieron al Meta AI Developer Hackathon 2026. La implementación presentada para el concurso comenzó desde cero el 28 de octubre de 2026, dentro del período oficial del evento.
