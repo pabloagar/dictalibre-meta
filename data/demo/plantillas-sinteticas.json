@@ -1,44 +1,44 @@
 {
   "schema": "dicta-libre.plantillas-demo.v1",
-  "nota": "Informes sintéticos completos para probar edición y dictado. No representan pacientes ni provienen de la biblioteca privada. Sin validación clínica.",
+  "nota": "Estructuras generales redactadas para dicta, con secciones vacías. Sin hallazgos, medidas ni conclusiones predefinidos. No se reutiliza contenido de la biblioteca privada. El prototipo sigue limitado a pruebas con material sintético.",
   "summary": null,
   "references": [],
   "templates": [
     {
       "id": "demo-tc-torax",
-      "name": "TC de tórax · ejemplo sintético completo",
+      "name": "TC de tórax",
       "category": "Tomografía",
       "sources": [],
-      "text": "EJEMPLO SINTÉTICO · SOLO DEMOSTRACIÓN\n\nTÉCNICA\nTomografía computada de tórax sin contraste endovenoso, con reconstrucciones multiplanares.\n\nHALLAZGOS\nTráquea y bronquios principales permeables.\nNo se identifican consolidaciones ni nódulos pulmonares.\nSin derrame pleural ni neumotórax.\nSin adenopatías mediastínicas aumentadas de tamaño.\nCorazón de tamaño conservado. Sin derrame pericárdico.\nAorta torácica de calibre conservado.\nSin lesiones óseas focales evidentes en las estructuras incluidas.\n\nCONCLUSIÓN\nSin hallazgos torácicos agudos en este caso ficticio.\n"
+      "text": "TC DE TÓRAX\n\nTÉCNICA\n\nHALLAZGOS\n\nCONCLUSIÓN\n"
     },
     {
       "id": "demo-angiotc-tep",
-      "name": "AngioTC de tórax · ejemplo sintético completo",
+      "name": "AngioTC de tórax",
       "category": "Tomografía",
       "sources": [],
-      "text": "EJEMPLO SINTÉTICO · SOLO DEMOSTRACIÓN\n\nTÉCNICA\nAngiotomografía computada de tórax con contraste endovenoso en fase arterial pulmonar y reconstrucciones multiplanares.\n\nHALLAZGOS\nOpacificación adecuada del árbol arterial pulmonar hasta sus ramas segmentarias.\nNo se identifican defectos de llenado en las arterias pulmonares evaluables.\nTronco de la arteria pulmonar de calibre conservado.\nSin dilatación de cavidades cardíacas derechas.\nNo se observan consolidaciones pulmonares.\nSin derrame pleural ni pericárdico.\nSin adenopatías mediastínicas aumentadas de tamaño.\n\nCONCLUSIÓN\nSin signos de tromboembolismo pulmonar hasta el nivel segmentario en este caso ficticio.\n"
+      "text": "ANGIOTC DE TÓRAX\n\nTÉCNICA\n\nHALLAZGOS\n\nCONCLUSIÓN\n"
     },
     {
       "id": "demo-tc-abdomen",
-      "name": "TC de abdomen y pelvis · ejemplo sintético completo",
+      "name": "TC de abdomen y pelvis",
       "category": "Tomografía",
       "sources": [],
-      "text": "EJEMPLO SINTÉTICO · SOLO DEMOSTRACIÓN\n\nTÉCNICA\nTomografía computada de abdomen y pelvis con contraste endovenoso en fase venosa y reconstrucciones multiplanares.\n\nHALLAZGOS\nHígado de tamaño conservado y realce homogéneo, sin lesiones focales evidentes.\nVesícula biliar sin distensión. Vías biliares no dilatadas.\nPáncreas, bazo y glándulas suprarrenales sin alteraciones evidentes.\nRiñones con realce simétrico, sin dilatación de los sistemas colectores.\nVejiga moderadamente distendida, de paredes finas.\nAsas intestinales sin dilatación. Apéndice de calibre conservado, sin cambios inflamatorios adyacentes.\nSin líquido libre ni colecciones abdominopelvianas.\nAorta abdominal de calibre conservado. Sin adenopatías aumentadas de tamaño.\nSin lesiones óseas focales evidentes en las estructuras incluidas.\n\nCONCLUSIÓN\nSin hallazgos abdominopelvianos agudos en este caso ficticio.\n"
+      "text": "TC DE ABDOMEN Y PELVIS\n\nTÉCNICA\n\nHALLAZGOS\n\nCONCLUSIÓN\n"
     },
     {
       "id": "demo-eco-tiroides",
-      "name": "Ecografía de tiroides · ejemplo sintético completo",
+      "name": "Ecografía de tiroides",
       "category": "Ecografía",
       "sources": [],
-      "text": "EJEMPLO SINTÉTICO · SOLO DEMOSTRACIÓN\n\nTÉCNICA\nEcografía tiroidea con transductor lineal de alta frecuencia y evaluación Doppler color.\n\nHALLAZGOS\nTiroides de contornos regulares y ecotextura homogénea.\nLóbulo derecho de 42 × 14 × 15 mm.\nLóbulo izquierdo de 40 × 13 × 14 mm.\nIstmo de 2 mm de espesor.\nNo se identifican nódulos tiroideos.\nVascularización sin aumento evidente al Doppler color.\nNo se observan adenopatías sospechosas en las cadenas cervicales evaluadas.\n\nCONCLUSIÓN\nTiroides sin alteraciones ecográficas significativas en este caso ficticio.\n"
+      "text": "ECOGRAFÍA DE TIROIDES\n\nTÉCNICA\n\nHALLAZGOS\n\nCONCLUSIÓN\n"
     },
     {
       "id": "demo-mamografia",
-      "name": "Mamografía · ejemplo sintético completo",
+      "name": "Mamografía",
       "category": "Mamografía",
       "sources": [],
-      "text": "EJEMPLO SINTÉTICO · SOLO DEMOSTRACIÓN\n\nTÉCNICA\nMamografía bilateral en proyecciones craneocaudal y mediolateral oblicua. Sin estudios previos para comparación en este caso ficticio.\n\nHALLAZGOS\nMamas con áreas dispersas de densidad fibroglandular.\nNo se identifican masas, distorsiones arquitecturales ni agrupaciones de calcificaciones sospechosas.\nPiel y complejos areola-pezón sin alteraciones evidentes.\nGanglios axilares incluidos de morfología conservada.\n\nCONCLUSIÓN\nSin hallazgos mamográficos sospechosos en este caso ficticio.\nCategoría BI-RADS 1, utilizada únicamente como contenido de demostración.\n"
+      "text": "MAMOGRAFÍA\n\nTÉCNICA\n\nHALLAZGOS\n\nCONCLUSIÓN\n"
     }
   ],
-  "version": "demo-completa-v2"
+  "version": "demo-estructuras-v3"
 }

@@ -125,16 +125,15 @@ test('demo: una persona dicta a la vez y respeta el límite diario',async()=>{
   }finally{await d.stop();}
 });
 
-test('demo: el contenedor incluye lo necesario y las plantillas son sintéticas',()=>{
+test('demo: el contenedor incluye lo necesario y las plantillas públicas son estructuras generales sin hallazgos',()=>{
   const docker=fs.readFileSync(new URL('../Dockerfile',import.meta.url),'utf8'),ignore=fs.readFileSync(new URL('../.dockerignore',import.meta.url),'utf8');
   for(const need of ['COPY apps','COPY backend','COPY data/vocabulario','COPY data/demo','backend/demo.mjs'])assert.ok(docker.includes(need),need);
   assert.match(ignore,/^\.env\*/m);assert.match(ignore,/^data\/local/m);assert.match(ignore,/^data\/private/m);assert.doesNotMatch(ignore,/^data$/m);
   const templates=JSON.parse(fs.readFileSync(new URL('../data/demo/plantillas-sinteticas.json',import.meta.url),'utf8')).templates;
   assert.equal(templates.length,5);
   for(const t of templates){
-    assert.match(t.name,/ejemplo sintético completo/);assert.deepEqual(t.sources,[]);
-    assert.match(t.text,/^EJEMPLO SINTÉTICO · SOLO DEMOSTRACIÓN/);
-    for(const heading of ['TÉCNICA','HALLAZGOS','CONCLUSIÓN'])assert.ok(t.text.split(heading+'\n')[1]?.split('\n\n')[0].trim(),`${t.id}: ${heading} con contenido`);
+    assert.doesNotMatch(t.name,/sintético|ejemplo|completo/i);assert.deepEqual(t.sources,[]);
+    assert.equal(t.text,t.name.toUpperCase()+'\n\nTÉCNICA\n\nHALLAZGOS\n\nCONCLUSIÓN\n');
   }
 });
 

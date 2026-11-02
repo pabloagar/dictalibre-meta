@@ -4,8 +4,8 @@ const node=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)
 export function mountReport(parent,{build=null,sourceHash=null,globalReview=true}={}){
  const key='dicta-report-v1',templatesKey='dicta-templates-v1';let templates=[];
  try{templates=JSON.parse(localStorage.getItem(templatesKey)??'[]');if(!Array.isArray(templates))templates=[];}catch{}
- if(!templates.length)templates=[{name:'Estructura de prueba · sin hallazgos predefinidos',text:'TÉCNICA\n\nHALLAZGOS\n\nCONCLUSIÓN\n'}];
- templates=templates.filter(t=>typeof t.name==='string'&&typeof t.text==='string');
+ if(!templates.length)templates=[{name:'Informe general',text:'TÉCNICA\n\nHALLAZGOS\n\nCONCLUSIÓN\n'}];
+ templates=templates.filter(t=>typeof t.name==='string'&&typeof t.text==='string').map(t=>t.name==='Estructura de prueba · sin hallazgos predefinidos'&&t.text==='TÉCNICA\n\nHALLAZGOS\n\nCONCLUSIÓN\n'?{...t,name:'Informe general'}:t);
  const quickTemplates=node('div');quickTemplates.className='quick-templates';quickTemplates.setAttribute('role','group');quickTemplates.setAttribute('aria-label','Empezar desde una plantilla');
  let reportReview=null,annotationRanges=[],lastInputAt=-Infinity,lastInputDepth=-1;
 
@@ -30,7 +30,7 @@ export function mountReport(parent,{build=null,sourceHash=null,globalReview=true
  function showPreview(){const t=select.value===''?null:templates[Number(select.value)];previewText.textContent=t?.text??'';provenance.textContent=t?(t.imported?'Importada · revisión profesional pendiente. '+(t.sources??[]).map(x=>x.path).join(' · ')+(t.warnings?.length?' · '+t.warnings.join(' '):''):'Plantilla propia, guardada en este navegador.'):'Informe en blanco';favorite.disabled=!t;favorite.textContent=t&&favorites.has(identity(t))?'Quitar favorita':'Marcar favorita';drawTemplateList();}
  function refreshQuickTemplates(){
   quickTemplates.replaceChildren();
-  const choices=templates.map((template,index)=>({template,index})).filter(({template})=>template.text.trim()).sort((a,b)=>Number(favorites.has(identity(b.template)))-Number(favorites.has(identity(a.template)))||Number(a.template.name==='Estructura de prueba · sin hallazgos predefinidos')-Number(b.template.name==='Estructura de prueba · sin hallazgos predefinidos')||a.index-b.index).slice(0,5);
+  const choices=templates.map((template,index)=>({template,index})).filter(({template})=>template.text.trim()).sort((a,b)=>Number(favorites.has(identity(b.template)))-Number(favorites.has(identity(a.template)))||Number(a.template.name==='Informe general')-Number(b.template.name==='Informe general')||a.index-b.index).slice(0,5);
   quickTemplates.hidden=!choices.length;
   for(const {template,index} of choices){const button=node('button',template.name);button.type='button';button.className='quick-template';button.disabled=model.pending||!!model.text;button.onclick=()=>{
    if(model.pending||model.text)return;
