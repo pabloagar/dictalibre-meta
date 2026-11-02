@@ -63,14 +63,14 @@ const header=document.querySelector('header');header.replaceChildren();
 const brand=make('div','clinical-brand','Dicta Libre');brand.append(make('small','','prototipo · solo material sintético'));header.append(brand,controls);
 const templatePanel=report.querySelector('.template-library-panel')??controls.querySelector('.template-library-panel');
 const sex=make('div','sex-control');sex.setAttribute('role','group');sex.setAttribute('aria-label','Sexo del estudio');sex.append(make('span','','Sexo'));let selectedSex='—';
-for(const value of ['F','M','—']){const button=make('button','',value);button.setAttribute('aria-pressed',String(value===selectedSex));button.onclick=()=>{selectedSex=value;for(const b of sex.querySelectorAll('button'))b.setAttribute('aria-pressed',String(b===button));sheetSex.textContent='Sexo '+value;track('study-sex',{value});};sex.append(button);}
-templatePanel.after(sex);
-reportEditor.element.addEventListener('template-applied',()=>{selectedSex='—';sheetSex.textContent='Sexo —';for(const b of sex.querySelectorAll('button'))b.setAttribute('aria-pressed',String(b.textContent==='—'));});
+for(const value of ['F','M','—']){const button=make('button','',value);button.setAttribute('aria-pressed',String(value===selectedSex));button.onclick=()=>{selectedSex=value;for(const b of sex.querySelectorAll('button'))b.setAttribute('aria-pressed',String(b===button));track('study-sex',{value});};sex.append(button);}
+
+reportEditor.element.addEventListener('template-applied',()=>{selectedSex='—';for(const b of sex.querySelectorAll('button'))b.setAttribute('aria-pressed',String(b.textContent==='—'));});
 const connection=makeDetails('Conecta tu teléfono para empezar','connection-panel'),pairing=document.querySelector('.pairing');connection.append(pairing);
 const closeConnection=make('button','connection-close','Cerrar');closeConnection.setAttribute('aria-label','Cerrar conexión');pairing.prepend(closeConnection);closeConnection.onclick=()=>{connection.open=false;connection.querySelector('summary').focus();};
 const connectButton=pairing.querySelector('#create');connectButton.textContent='Mostrar QR';
 const strip=document.querySelector('.record-strip');strip.classList.add('clinical-record');
-sex.after(connection,strip);connection.addEventListener('toggle',()=>{if(connection.open&&document.querySelector('#paired').hidden&&document.querySelector('#pairing').hidden&&document.querySelector('#confirm-panel').hidden&&!connectButton.disabled)connectButton.click();});
+controls.prepend(connection,strip);connection.addEventListener('toggle',()=>{if(connection.open&&document.querySelector('#paired').hidden&&document.querySelector('#pairing').hidden&&document.querySelector('#confirm-panel').hidden&&!connectButton.disabled)connectButton.click();});
 const syncConnection=()=>{const connected=!document.querySelector('#paired').hidden;connection.querySelector('summary').textContent=connected?'Teléfono conectado':'Conecta tu teléfono para empezar';if(connected)connection.open=false;};
 new MutationObserver(syncConnection).observe(document.querySelector('#paired'),{attributes:true,attributeFilter:['hidden']});syncConnection();
 const settings=makeDetails('Ajustes','clinical-settings');const editbar=make('div','clinical-editbar');editbar.setAttribute('role','toolbar');editbar.setAttribute('aria-label','Edición del informe');report.prepend(editbar);editbar.append(controls.querySelector('.report-undo'),controls.querySelector('.report-redo'));
@@ -95,7 +95,7 @@ const diagnostics=document.querySelector('.diagnostics');diagnostics.prepend(doc
 settingsBody.append(takes,document.querySelector('#recordings').closest('details'),diagnostics);
 const transcript=document.querySelector('.transcript');document.querySelector('.section-head').remove();
 const desk=make('div','clinical-desk'),sheet=make('div','clinical-sheet'),sheetHead=make('div','sheet-head');
-const sheetSex=make('span','','Sexo —');sheetHead.append(make('span','','Informe radiológico · documento en curso'),sheetSex);
+sheetHead.append(make('span','','Informe radiológico · documento en curso'),sex);
 reportEditor.element.before(desk);desk.append(sheet);sheet.append(sheetHead,reportEditor.element);
 const margin=make('aside','clinical-notes');margin.setAttribute('aria-label','Notas del estudio');desk.append(margin);
 const connectionNote=make('section','clinical-note neutral');connectionNote.append(make('h2','','DICTADO'),document.querySelector('#record-help'));settingsBody.append(connectionNote);

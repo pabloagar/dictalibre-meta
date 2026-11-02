@@ -93,6 +93,7 @@ test('montaje completo mantiene controles, hoja y ajustes accesibles',async()=>{
  assert.ok(document.querySelector('.clinical-settings #metrics-export'));
  assert.ok(document.querySelector('.clinical-status'));
  assert.equal(document.querySelectorAll('.clinical-record').length,1);
+ assert.equal(document.querySelectorAll('.sex-control').length,1);assert.ok(document.querySelector('.sheet-head .sex-control'));assert.equal(document.querySelector('header .sex-control'),null);
  assert.equal(document.querySelector('.clinical-settings').open,false);
  assert.ok(document.querySelector('.clinical-editbar .report-redo'));
  assert.equal(document.querySelector('.template-library-panel').nextElementSibling,document.querySelector('.clinical-settings'));

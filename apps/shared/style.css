@@ -345,3 +345,18 @@ body.clinical-workspace header{height:auto;min-height:76px;padding:12px 24px;gap
 .clinical-workspace .report-font-value{font:400 14px var(--dl-font-num);min-width:52px}
 .clinical-workspace .clinical-editbar>.template-library-panel>summary{font-size:14px;font-weight:600;min-height:40px;padding:10px 14px}
 .clinical-workspace .clinical-settings>summary{min-height:40px;font-size:14px;padding:10px 14px}
+
+/* B: document header owns the study sex, remains visible on long reports. */
+body.clinical-workspace, .clinical-workspace .workspace,.clinical-workspace .main-column,.clinical-workspace .transcript,.clinical-workspace .report-workspace{overflow:visible}
+.clinical-workspace .clinical-desk{margin:18px 24px 0;gap:16px;background:transparent;border:0;align-items:stretch}
+.clinical-workspace .clinical-sheet{padding:26px 44px 40px;border:1px solid var(--dl-line);background:var(--dl-sheet);min-height:calc(100dvh - 160px);min-width:0;overflow:visible}
+.clinical-workspace .sheet-head{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:-26px -44px 0;padding:14px 44px 12px;background:var(--dl-sheet);border-bottom:1px solid var(--dl-line);font-size:12px;color:var(--dl-muted)}
+.clinical-workspace .sheet-head .sex-control{display:flex;align-items:center;gap:0;border:1px solid var(--dl-line);border-radius:5px;overflow:clip}
+.clinical-workspace .sex-control>span{padding:0 10px;font-size:13px;color:var(--dl-muted)}
+.clinical-workspace .sex-control button{min-width:40px;min-height:34px;padding:0 12px;font-size:13px;border:0;border-left:1px solid var(--dl-line);border-radius:0;background:transparent;color:var(--dl-ink)}
+.clinical-workspace .sex-control button[aria-pressed=true]{background:var(--dl-act);color:var(--dl-act-ink)}
+.clinical-workspace .sex-control button:last-child[aria-pressed=true]{background:var(--dl-soft);color:var(--dl-muted)}
+.clinical-workspace .report-editor{height:calc(100dvh - 285px);min-height:340px;margin:24px 0 0;padding:0;font:400 19px/1.6 var(--dl-font-doc);color:var(--dl-ink);background:transparent;border:0;border-radius:0}
+.clinical-workspace .report-editor[data-empty=true]::before{font:italic 400 26px/1.5 var(--dl-font-doc);color:var(--dl-muted)}
+.clinical-workspace .dictation-provisional{background:transparent;color:var(--dl-muted);font-style:italic;text-decoration:underline dotted;text-underline-offset:5px;border:0}
+.clinical-workspace .report-heading{font:600 13px var(--dl-font-ui);letter-spacing:.08em;color:var(--dl-muted)}
