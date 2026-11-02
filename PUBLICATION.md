@@ -24,7 +24,7 @@ Revisión adicional de 16 JSON públicos: controles sintéticos y métricas; sin
 
 Un cambio tiene dos destinos independientes. GitHub guarda el código, en la rama principal `codex/capture-transport`. La web real corre en el PC del responsable: laboratorio y dictado en `127.0.0.1:8789`, enlace del teléfono en `127.0.0.1:8788`, accesible desde fuera por un túnel de Cloudflare. **Subir a GitHub no actualiza esa web:** no hay despliegue automático al PC. El procedimiento obligatorio está en AGENTS.md, «Publicar los cambios grandes», y el enlace fijo en RUNNING.md.
 
-La demostración pública (`backend/demo.mjs`) es un tercer destino, separado del laboratorio y sin sus datos. Con `render.yaml`, Render se despliega desde esa misma rama en cada push, una vez que el responsable cree el servicio. Hasta entonces no hay demostración pública activa.
+La demostración pública (`backend/demo.mjs`) es un tercer destino, separado del laboratorio y sin sus datos. Desde el 02-11-2026 está activa en https://dictalibre-demo.onrender.com/live, protegida con el código de acceso existente. Render despliega automáticamente desde `codex/capture-transport` en cada push. La activación de A compacta se comprobó con el commit `5fa3ab9`; evidencia y límites en HACKATHON_LOG.md. La demo permite dictado con Muse; el revisor global de informes continúa disponible solo en el laboratorio.
 
 ## Bases del evento y licencia
 
