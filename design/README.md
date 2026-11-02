@@ -11,3 +11,5 @@ Stitch: primer conector falló conexión; alternativo permitió listar proyectos
 Verificación: navegador local mostró simulación pasando Escuchando→Toma finalizada y texto Sin derrame pleural. Controles de copia/deshacer rehabilitados al consolidar. Apertura/cierre de revisión lateral comprobada y capturas guardadas en design/. No se ensayó teléfono ni motor real con esta propuesta.
 
 Antes de comparar UX integrada: hipótesis reducir desplazamientos y tiempo para localizar/revisar dictado sin empeorar inserción. Misma pantalla/navegador/zoom/plantilla/audio, versión cliente explícita, orden alternado, cinco tareas por variante. Medir scrolls y clics hasta editor (conteos), tarea desde indicación hasta selección/copia correctas (ms), preview/final DOM y coste de persistencia por separado. Criterio: cero pérdidas/cambios fuera de selección, cero saltos de foco, editor visible al cargar en 1366x768 y 1920x1080, menor necesidad de scroll; umbral humano de comodidad pendiente. No hay comparación medida aún. Guardar resultados favorables y desfavorables, condiciones desconocidas null.
+
+Implementación de la referencia Hoja clínica: [estado y límites](HOJA_CLINICA.md).

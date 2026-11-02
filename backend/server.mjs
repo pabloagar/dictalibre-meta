@@ -16,7 +16,8 @@ const paths = new Map([
   ['/style.css', 'apps/shared/style.css'], ['/qr.js', 'node_modules/qrcode-generator/dist/qrcode.js'],
   ['/receiver.css','apps/shared/style.css'],
 ]);
-const MIME = { html: 'text/html; charset=utf-8', js: 'text/javascript; charset=utf-8', css: 'text/css; charset=utf-8' };
+for(const font of ['publicsans-400.ttf', 'publicsans-600.ttf', 'publicsans-700.ttf', 'sourceserif4-400.ttf', 'atkinsonhyperlegiblemono-400.ttf'])paths.set('/fonts/'+font,'apps/shared/fonts/'+font);
+const MIME = { ttf:'font/ttf', html: 'text/html; charset=utf-8', js: 'text/javascript; charset=utf-8', css: 'text/css; charset=utf-8' };
 const ready = ws => ws?.readyState === WebSocket.OPEN;
 const send = (ws, data) => { if (ready(ws)) ws.send(JSON.stringify(data)); };
 const fingerprint = data => createHash('sha256').update(data).digest('hex');

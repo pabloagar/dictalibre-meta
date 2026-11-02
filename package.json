@@ -6,7 +6,9 @@
   "packageManager": "pnpm@11.25.0",
   "type": "module",
   "description": "Dictado radiológico experimental con Muse, Whisper local, laboratorio comparativo y editor revisable",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "lab": "node backend/lab.mjs",
     "demo": "node backend/demo.mjs",
@@ -14,5 +16,11 @@
     "test": "node --test tests/*.test.mjs",
     "check": "node scripts/check.mjs"
   },
-  "dependencies": { "qrcode-generator": "2.0.4", "ws": "8.22.0" }
+  "dependencies": {
+    "qrcode-generator": "2.0.4",
+    "ws": "8.22.0"
+  },
+  "devDependencies": {
+    "happy-dom": "^21.0.4"
+  }
 }

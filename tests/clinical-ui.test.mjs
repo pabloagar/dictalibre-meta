@@ -1,0 +1,61 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {Window} from 'happy-dom';
+const source=fs.readFileSync(new URL('../apps/desktop/report-editor.js',import.meta.url),'utf8').replace("'/shared/report-model.js'",JSON.stringify(new URL('../apps/shared/report-model.js',import.meta.url).href));
+const {mountReport}=await import('data:text/javascript;base64,'+Buffer.from(source+'\n//# sourceURL=clinical-editor-test.js').toString('base64'));
+function setup(){
+ const window=new Window({url:'http://127.0.0.1:8799'});
+ for(const key of ['window','document','localStorage','NodeFilter','Option','MutationObserver','CustomEvent'])globalThis[key]=key==='window'?window:window[key];
+ globalThis.Option=function(text,value){const option=document.createElement('option');option.textContent=text;option.value=value;return option;};
+ Object.defineProperty(globalThis,'navigator',{configurable:true,value:window.navigator});
+ globalThis.fetch=async()=>({ok:true,json:async()=>({templates:[]})});
+ document.body.innerHTML='<div id="parent"></div>';
+ localStorage.setItem('dicta-report-v1','Informe antiguo sintético');
+ localStorage.setItem('dicta-report-context-v1',JSON.stringify({name:'Anterior',text:'ANTERIOR'}));
+ const editor=mountReport(document.querySelector('#parent'),{globalReview:false});
+ const button=text=>[...document.querySelectorAll('button')].find(b=>b.textContent===text);
+ return {window,editor,button};
+}
+test('inicio vacío aun con borrador anterior; plantilla explícita, confirmación y deshacer',async()=>{
+ const {window,editor,button}=setup();
+ assert.equal(editor.model.text,'');assert.equal(editor.context().templateName,'');
+ const panel=document.querySelector('.template-library-panel');assert.equal(panel.open,false);
+ const select=document.querySelector('[aria-label="Plantilla para el informe"]');select.value='0';
+ panel.open=true;button('Aplicar plantilla').click();
+ assert.match(editor.model.text,/TÉCNICA/);assert.equal(panel.open,false);
+ assert.equal(editor.element.textContent,editor.model.text);assert.equal(editor.element.querySelectorAll('.report-heading').length,3);
+ editor.element.textContent='Texto sintético propio';editor.element.dispatchEvent(new window.Event('input'));
+ panel.open=true;select.value='';button('Aplicar plantilla').click();
+ assert.equal(editor.model.text,'Texto sintético propio');
+ button('Reemplazar informe actual').click();assert.equal(editor.model.text,'');
+ button('Deshacer').click();assert.equal(editor.model.text,'Texto sintético propio');
+ await window.happyDOM.close();
+});
+test('encabezados conservan offsets de dictado y el texto plano',async()=>{
+ const {window,editor}=setup();
+ editor.element.textContent='HALLAZGOS\n';editor.element.dispatchEvent(new window.Event('input'));
+ editor.begin('synthetic');editor.preview('synthetic','Sin hallazgos de prueba.');
+ assert.equal(editor.element.textContent,editor.model.text);assert.equal(editor.element.querySelectorAll('.dictation-provisional').length,1);
+ await editor.finish('synthetic','Texto final sintético.','synthetic-run');
+ assert.equal(editor.element.textContent,editor.model.text);assert.equal(editor.model.pending,false);
+ await window.happyDOM.close();
+});
+test('montaje completo mantiene controles, hoja y ajustes accesibles',async()=>{
+ const {window}=setup();document.body.innerHTML=fs.readFileSync(new URL('../apps/desktop/index.html',import.meta.url),'utf8').split('<body>')[1].split('</body>')[0];
+ globalThis.requestAnimationFrame=()=>0;
+ const state={configs:[{id:'synthetic',engine:'muse',keywords:[],name:'Prueba'}],metaConfigured:false};
+ globalThis.__clinicalTest={mountReport,state};
+ let live=fs.readFileSync(new URL('../apps/desktop/live.js',import.meta.url),'utf8');
+ live=live.replace(/^import .*;\r?\n/gm,'');
+ live="const {state}=globalThis.__clinicalTest;const mountReport=(p,o)=>globalThis.__clinicalTest.mountReport(p,{...o,globalReview:false});const sharedState=async()=>state;\n"+live;
+ await import('data:text/javascript;base64,'+Buffer.from(live+'\n//# sourceURL=clinical-live-test.js').toString('base64'));
+ assert.equal(document.querySelector('header .template-library-panel').open,false);
+ assert.equal(document.querySelector('.clinical-sheet .report-editor').textContent,'');
+ assert.equal(document.querySelectorAll('#create').length,1);
+ assert.ok(document.querySelector('.clinical-settings #metrics-export'));
+ assert.ok(document.querySelector('.clinical-notes #status'));
+ assert.equal(document.querySelectorAll('.clinical-record').length,1);
+ assert.equal(document.querySelector('.clinical-settings').open,false);
+ await window.happyDOM.close();delete globalThis.__clinicalTest;
+});

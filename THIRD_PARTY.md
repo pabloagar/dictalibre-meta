@@ -77,3 +77,6 @@ muse-spark-1.3 vía Meta Model API, servicio remoto propietario; no se descargan
 
 ## Colección externa de plantillas
 Colección PLANTILLAS GENERALES PUC aportada por el responsable, importada solo en data/local/templates (ignorado por Git). No es código ni autoría nueva del hackathon; fuente y hashes conservados. Permisos de redistribución no acreditados; no se incorpora el contenido al repositorio público. PDF/presentaciones se registran como referencia y no como plantillas del producto.
+
+## Fuentes de Hoja clínica
+Public Sans (400, 600, 700), Source Serif 4 (400) y Atkinson Hyperlegible Mono (400), descargadas de Google Fonts el 02-11-2026. Se sirven desde el propio servidor, sin llamadas del navegador a Google. Licencias SIL Open Font License 1.1 conservadas junto a los archivos en `apps/shared/fonts/*-OFL.txt`. Fuentes: https://github.com/google/fonts/tree/main/ofl/publicsans, https://github.com/google/fonts/tree/main/ofl/sourceserif4, https://github.com/google/fonts/tree/main/ofl/atkinsonhyperlegiblemono.

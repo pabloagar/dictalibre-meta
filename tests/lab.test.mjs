@@ -41,6 +41,7 @@ test('API: origen, deduplicación, versiones, cola, exportación, cancelación y
  let base=await start();const post=async(p,data,headers={})=>fetch(base+p,{method:'POST',headers:{Origin:base,'Content-Type':'application/json',...headers},body:Buffer.isBuffer(data)?data:JSON.stringify(data)});const state=async()=> (await fetch(base+'/api/state')).json();
  async function finished(){for(let i=0;i<100;i++){const s=await state();if(s.runs.every(r=>!['queued','running'].includes(r.status)))return s;await new Promise(r=>setTimeout(r,10));}throw Error('timeout');}
  try{
+  const font=await fetch(base+'/fonts/publicsans-400.ttf');assert.equal(font.status,200);assert.equal(font.headers.get('content-type'),'font/ttf');assert.ok((await font.arrayBuffer()).byteLength>1000);
   assert.equal((await post('/api/key',{key:'test-secret'},{Origin:'https://evil.invalid'})).status,403);
   await post('/api/key',{key:'test-secret'});
   const a=await (await post('/api/audio',wav())).json();assert.equal((await (await post('/api/audio',wav())).json()).id,a.id);

@@ -52,38 +52,54 @@ function showFigureDoubts(warnings){
  const message=document.createElement('span');message.textContent=`Confirma ${doubts.length===1?'la cifra':'las cifras'}: ${doubts.map(w=>`«${w.spoken}» se escribió «${w.replacement}»`).join('; ')}. Si eran dos frases, corrígelo en el informe.`;
  const ok=document.createElement('button');ok.type='button';ok.textContent='Entendido';ok.onclick=()=>{figureAlert.hidden=true;};figureAlert.append(message,ok);
 }
-// Move existing controls rather than replace editor/model/event handlers.
- document.body.classList.add('live-workspace');
- const makeDetails=(label,cls)=>{const d=document.createElement('details');d.className=cls;const h=document.createElement('summary');h.textContent=label;d.append(h);return d;};
- const connection=makeDetails('Teléfono','connection-panel'),pairing=document.querySelector('.pairing');pairing.before(connection);connection.append(pairing);
- const settings=makeDetails('Ajustes de dictado','dictation-settings');settings.append(glossaryLabel,segmentationLabel,reviewLabel,commandsLabel,engineHint,commandHelp);
- const transcript=document.querySelector('.transcript'),head=document.querySelector('.section-head');head.querySelector('h1').textContent='Dictado';head.append(engineLabel,settings);
- const report=reportEditor.element.closest('.report-workspace');
- const takes=makeDetails('Tomas y Revisor Meta · últimas 5','takes-panel');panel.before(takes);takes.append(panel);
- const diagnostics=document.querySelector('.diagnostics');diagnostics.prepend(document.querySelector('.live-metrics'));diagnostics.append(report.querySelector('.editor-export'));
- const aux=document.createElement('div');aux.className='auxiliary-panels';transcript.after(aux);aux.append(takes,document.querySelector('#recordings').closest('details'),diagnostics);
- const connectionHost=document.createElement('div');connectionHost.className='connection-host';head.insertBefore(connectionHost,head.firstChild);connectionHost.append(connection);
- const onboarding=document.createElement('div');onboarding.className='connection-onboarding';
- const onboardingText=document.createElement('div'),onboardingTitle=document.createElement('strong'),onboardingHelp=document.createElement('p');onboardingTitle.textContent='1. Conecta tu teléfono para empezar';onboardingHelp.textContent='Pulsa Conectar teléfono y escanea el QR con la cámara de tu celular.';onboardingText.append(onboardingTitle,onboardingHelp);
- const connectButton=document.querySelector('#create');connectButton.textContent='Conectar teléfono · mostrar QR';onboarding.append(onboardingText,connectButton);document.querySelector('.workspace').before(onboarding);
- connectButton.addEventListener('click',()=>{connection.open=true;});
- const syncConnection=()=>{const connected=!document.querySelector('#paired').hidden;connection.querySelector('summary').textContent=connected?'● Teléfono conectado':'Conectar teléfono';onboarding.hidden=connected;connectionHost.classList.toggle('is-connected',connected);if(connected)connection.open=false;};
- new MutationObserver(syncConnection).observe(document.querySelector('#paired'),{attributes:true,attributeFilter:['hidden']});syncConnection();
- if(!isDemo){const labLink=document.createElement('a');labLink.href='/';labLink.target='_blank';labLink.rel='noopener';labLink.textContent='Laboratorio';head.append(labLink);}
- else onboardingHelp.textContent+=' Usa solo datos sintéticos: no dictes datos de pacientes.';
- document.querySelector('#record-help').classList.add('compact-help');
- document.querySelector('header .tag').textContent=isDemo?'DEMOSTRACIÓN · PROTOTIPO · SIN VALIDACIÓN CLÍNICA':'PROTOTIPO DE INVESTIGACIÓN · SIN VALIDACIÓN CLÍNICA';
- let theme='sala';try{if(localStorage.getItem('dicta-theme-v1')==='dia')theme='dia';}catch{}
- const themeButton=document.createElement('button');themeButton.type='button';themeButton.className='theme-toggle';
- const applyTheme=()=>{document.body.dataset.theme=theme;themeButton.textContent=theme==='sala'?'Usar tema día':'Usar tema sala';};applyTheme();
- themeButton.onclick=()=>{theme=theme==='sala'?'dia':'sala';applyTheme();try{localStorage.setItem('dicta-theme-v1',theme);}catch{}track('theme',{theme});};
- document.querySelector('header').append(themeButton);
- const layoutMetrics={version:'focused-workspace-v3-sala',createdAt:new Date().toISOString(),browser:navigator.userAgent,network:null,theme,events:[]};
- const track=(type,data={})=>{layoutMetrics.events.push({type,atMs:performance.now(),...data});if(layoutMetrics.events.length>500)layoutMetrics.events.shift();};
- for(const [name,element] of [['connection',connection],['settings',settings],['takes-review',takes],['diagnostics',diagnostics]])element.addEventListener('toggle',()=>track('panel-toggle',{panel:name,open:element.open}));
- let lastScroll=0;reportEditor.element.addEventListener('scroll',()=>{const now=performance.now();if(now-lastScroll>200){track('editor-scroll');lastScroll=now;}},{passive:true});
- const layoutExport=document.createElement('button');layoutExport.textContent='Exportar mediciones de disposición';diagnostics.append(layoutExport);layoutExport.onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(layoutMetrics,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='dicta-disposicion-metricas.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
- requestAnimationFrame(()=>{const r=reportEditor.element.getBoundingClientRect();track('editor-visible',{viewportWidth:innerWidth,viewportHeight:innerHeight,top:r.top,height:r.height,visibleHeight:Math.max(0,Math.min(r.bottom,innerHeight)-Math.max(0,r.top))});});
+// Hoja clínica: preserve the mounted editor, transport controls and listeners.
+document.body.classList.add('live-workspace','clinical-workspace');
+const layoutMetrics={version:'hoja-clinica-v4',serverBuild:initialState.build??null,serverSourceHash:initialState.sourceHash??null,createdAt:new Date().toISOString(),browser:navigator.userAgent,device:null,network:null,audioSource:null,clockResolutionMs:null,instrumentationOverheadMs:null,events:[]};
+const track=(type,data={})=>{layoutMetrics.events.push({type,atMs:performance.now(),...data});if(layoutMetrics.events.length>500)layoutMetrics.events.shift();};
+const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text)n.textContent=text;return n;};
+const makeDetails=(label,cls)=>{const d=make('details',cls);d.append(make('summary','',label));return d;};
+const report=reportEditor.element.closest('.report-workspace'),controls=report.querySelector('.report-controls');
+const header=document.querySelector('header');header.replaceChildren();
+const brand=make('div','clinical-brand','Dicta Libre');brand.append(make('small','','prototipo · solo material sintético'));header.append(brand,controls);
+const templatePanel=report.querySelector('.template-library-panel')??controls.querySelector('.template-library-panel');
+const sex=make('div','sex-control');sex.setAttribute('role','group');sex.setAttribute('aria-label','Sexo del estudio');sex.append(make('span','','Sexo'));let selectedSex='—';
+for(const value of ['F','M','—']){const button=make('button','',value);button.setAttribute('aria-pressed',String(value===selectedSex));button.onclick=()=>{selectedSex=value;for(const b of sex.querySelectorAll('button'))b.setAttribute('aria-pressed',String(b===button));sheetSex.textContent='Sexo '+value;track('study-sex',{value});};sex.append(button);}
+templatePanel.after(sex);
+reportEditor.element.addEventListener('template-applied',()=>{selectedSex='—';sheetSex.textContent='Sexo —';for(const b of sex.querySelectorAll('button'))b.setAttribute('aria-pressed',String(b.textContent==='—'));});
+const connection=makeDetails('Conectar teléfono','connection-panel'),pairing=document.querySelector('.pairing');connection.append(pairing);
+const connectButton=pairing.querySelector('#create');connectButton.textContent='Mostrar QR';
+const strip=document.querySelector('.record-strip');strip.classList.add('clinical-record');
+sex.after(connection,strip);
+const syncConnection=()=>{const connected=!document.querySelector('#paired').hidden;connection.querySelector('summary').textContent=connected?'Teléfono conectado':'Conectar teléfono';if(connected)connection.open=false;};
+new MutationObserver(syncConnection).observe(document.querySelector('#paired'),{attributes:true,attributeFilter:['hidden']});syncConnection();
+const settings=makeDetails('Ajustes','clinical-settings');controls.append(settings);
+const settingsBody=make('div','settings-body');settings.append(settingsBody);settingsBody.append(engineLabel,glossaryLabel,segmentationLabel,reviewLabel,commandsLabel,engineHint,commandHelp);
+const sizeControls=make('div','size-controls','Tamaño del informe ');for(const label of ['Reducir tamaño del informe','Aumentar tamaño del informe'])sizeControls.append(controls.querySelector(`[aria-label="${label}"]`));settingsBody.append(sizeControls);
+let theme='sala';try{if(localStorage.getItem('dicta-theme-v1')==='dia')theme='dia';}catch{}
+const themeButton=make('button','theme-toggle');const applyTheme=()=>{document.body.dataset.theme=theme;themeButton.textContent=theme==='sala'?'Tema: Sala · cambiar a Día':'Tema: Día · cambiar a Sala';};applyTheme();
+themeButton.onclick=()=>{theme=theme==='sala'?'dia':'sala';applyTheme();try{localStorage.setItem('dicta-theme-v1',theme);}catch{}track('theme',{theme});};settingsBody.append(themeButton);
+if(!isDemo){const link=make('a','','Abrir laboratorio');link.href='/';link.target='_blank';link.rel='noopener';settingsBody.append(link);}
+const takes=makeDetails('Tomas y Revisor Meta · últimas 5','takes-panel');takes.append(panel);
+const diagnostics=document.querySelector('.diagnostics');diagnostics.prepend(document.querySelector('.live-metrics'));diagnostics.append(report.querySelector('.editor-export'));
+settingsBody.append(takes,document.querySelector('#recordings').closest('details'),diagnostics);
+const transcript=document.querySelector('.transcript');document.querySelector('.section-head').remove();
+const desk=make('div','clinical-desk'),sheet=make('div','clinical-sheet'),sheetHead=make('div','sheet-head');
+const sheetSex=make('span','','Sexo —');sheetHead.append(make('span','','Informe en edición · no enviado a ningún sistema'),sheetSex);
+reportEditor.element.before(desk);desk.append(sheet);sheet.append(sheetHead,reportEditor.element);
+const margin=make('aside','clinical-notes');margin.setAttribute('aria-label','Notas del estudio');desk.append(margin);
+const connectionNote=make('section','clinical-note neutral');connectionNote.append(make('h2','','DICTADO'),document.querySelector('#record-help'));margin.append(connectionNote);
+const glossaryNote=make('section','clinical-note neutral');glossaryNote.append(make('h2','','GLOSARIO DE ESTE ESTUDIO'));const glossaryText=make('p','');const glossaryChange=make('button','','Cambiar');glossaryChange.onclick=()=>{settings.open=true;glossary.focus();};glossaryNote.append(glossaryText,glossaryChange);margin.append(glossaryNote);
+const syncGlossary=()=>{const c=initialState.configs.find(c=>c.id===glossary.value);glossaryText.textContent=engineSelect.value==='whisper'?'Whisper local · no utiliza este glosario.':c?.keywords?.length?`${c.name} · ${c.keywords.length} términos. Mejora de reconocimiento sin medir.`:'Sin glosario. Puedes elegir uno en Ajustes.';};syncGlossary();glossary.addEventListener('change',syncGlossary);engineSelect.addEventListener('change',syncGlossary);
+margin.append(figureAlert);
+const note=make('section','clinical-note editing-note');note.append(make('h2','','TU INFORME'),make('p','','Empieza a dictar o escribe en la hoja. Usa Plantilla cuando quieras partir de una estructura.'));margin.append(note);
+const help=report.querySelector('.report-help');const editorHelp=makeDetails('Ayuda del editor','editor-help');editorHelp.append(help);settingsBody.append(editorHelp);
+const status=document.querySelector('#status');connectionNote.append(status);
+const layoutExport=make('button','','Exportar mediciones de disposición');diagnostics.append(layoutExport);layoutExport.onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(layoutMetrics,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='dicta-disposicion-metricas.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+for(const [name,element] of [['connection',connection],['settings',settings],['templates',templatePanel],['takes-review',takes],['diagnostics',diagnostics]])element.addEventListener('toggle',()=>track('panel-toggle',{panel:name,open:element.open}));
+for(const popup of [connection,settings,templatePanel])popup.addEventListener('toggle',()=>{if(popup.open)for(const other of [connection,settings,templatePanel])if(other!==popup)other.open=false;});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')for(const popup of [connection,settings,templatePanel])if(popup.open){popup.open=false;popup.querySelector('summary').focus();}});
+let lastScroll=0;reportEditor.element.addEventListener('scroll',()=>{const now=performance.now();if(now-lastScroll>200){track('editor-scroll');lastScroll=now;}},{passive:true});
+requestAnimationFrame(()=>{const r=reportEditor.element.getBoundingClientRect();track('editor-visible',{viewportWidth:innerWidth,viewportHeight:innerHeight,top:r.top,height:r.height,visibleHeight:Math.max(0,Math.min(r.bottom,innerHeight)-Math.max(0,r.top)),initialCharacters:reportEditor.model.text.length});});
  const seconds=v=>v==null?'sin medición':`${(v/1000).toFixed(2)} s`;
 async function api(path,data,signal){if(path==='/api/state'&&data===undefined)return sharedState();const response=await fetch(path,{signal,...(data===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})});const value=await response.json();if(!response.ok)throw Error(value.error);return value;}
 window.addEventListener('dicta-new-session',()=>{generation++;if(recordingAnchor)reportEditor.cancel(recordingAnchor);for(const job of jobs)if(job.anchor)reportEditor.cancel(job.anchor);recordingAnchor=null;commandsToggle.disabled=false;engineSelect.disabled=false;reviewToggle.disabled=false;glossary.disabled=false;segmentationSelect.disabled=false;recordingEngine=null;stream=null;for(const s of streams)s.cancel();streams.clear();for(const job of jobs){job.controller.abort();if(job.runId)void api('/api/cancel',{id:job.runId}).catch(()=>{});}jobs.clear();for(const card of panel.querySelectorAll('article'))card.remove();});
