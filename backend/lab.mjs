@@ -10,6 +10,7 @@ import {attachLiveBridge,demoConnection} from './live-bridge.mjs';
 import {loadMetaKey,saveMetaKey,checkMetaKey} from './meta-key.mjs';
 import {formatDictation,COMMAND_VERSION} from './dictation-commands.mjs';
 import {formatNumbers,NUMBER_VERSION} from './number-format.mjs';
+import {formatTerms,TERM_VERSION} from './term-format.mjs';
 import {attachMuseStream} from './muse-stream.mjs';
 import {createReviewer,reviewWithMeta} from './meta-review.mjs';
 import {reviewContext} from './review-context.mjs';
@@ -18,6 +19,14 @@ import { wavInfo, hash, configuration, score, csv } from './lab-core.mjs';
 import {validateGlossary,glossaryToConfig} from './vocabulary.mjs';
 const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 export const MODEL_REVISION='220761e60602a5ca694c409d5f424563b75d6820';
+function applyFormatting(r){
+  r.numberFormatting=r.numbersEnabled?formatNumbers(r.text):null;
+  r.termFormatting=r.termsEnabled?formatTerms(r.numberFormatting?.text??r.text):null;
+  if(r.termFormatting)r.termFormatting.input=r.numberFormatting?'numberFormatting.text':'text';
+  r.formatting=r.commandsEnabled?formatDictation(r.termFormatting?.text??r.numberFormatting?.text??r.text):null;
+  if(r.formatting)r.formatting.input=r.termFormatting?'termFormatting.text':r.numberFormatting?'numberFormatting.text':'text';
+  r.timings.numberFormatMs=r.numberFormatting?.elapsedMs??0;r.timings.termFormatMs=r.termFormatting?.elapsedMs??0;
+}
 function modelReady(){
   const dir=path.join(ROOT,'models','whisper-large-v3-fp16-ov');
   try{return JSON.parse(fs.readFileSync(path.join(dir,'dicta-manifest.json'),'utf8')).revision===MODEL_REVISION&&['encoder_model','decoder_model','tokenizer','detokenizer'].every(name=>['xml','bin'].every(ext=>fs.statSync(path.join(dir,`openvino_${name}.${ext}`)).size>0));}catch{return false;}
@@ -93,10 +102,7 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
       r.timings.requestMs=performance.now()-requestStart;r.timings.loadMs=result.loadMs??null;r.timings.generateMs=result.generateMs??null;
       r.timings.requestRtf=r.timings.requestMs/audio.durationMs;
       r.result=result;r.text=result.text;
-      r.numberFormatting=r.numbersEnabled?formatNumbers(r.text):null;
-      r.formatting=r.commandsEnabled?formatDictation(r.numberFormatting?.text??r.text):null;
-      if(r.formatting)r.formatting.input=r.numberFormatting?'numberFormatting.text':'text';
-      r.timings.numberFormatMs=r.numberFormatting?.elapsedMs??0;
+      applyFormatting(r);
       r.timings.commandMs=r.formatting?.elapsedMs??0;r.status='completed';
       r.cost={currency:'USD',estimated:config.engine==='muse'?Math.floor(audio.durationMs/1000)*.18/3600:null,actual:null,rateDate:'2026-10-28',note:'Estimación del audio original; no factura. Coste local no medido.'};
     } catch(e){if(r.status!=='cancelled'){r.status=controller.signal.aborted?'timeout':'error';r.error=String(e.message).slice(0,1000);}}
@@ -171,7 +177,7 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
         if(db.runs.filter(r=>['queued','running'].includes(r.status)).length+aids.length*cids.length*repeats>100)throw new Error('Cola llena.');
         const batchId=randomUUID(),created=[];
         for(let rep=0;rep<repeats;rep++)for(let ai=0;ai<audios.length;ai++)for(const c of ((rep+ai)%2?[...configs].reverse():configs)){
-          const a=audios[ai],r={id:randomUUID(),batchId,audioId:a.id,audioHash:a.sha256,configId:c.id,configuration:structuredClone(c),referenceAtRun:structuredClone(a.references.at(-1)??null),repeat:rep+1,reviewEnabled:m.reviewEnabled===true,reviewContext:reviewContext(m.reviewContext),commandsEnabled:m.commandsEnabled!==false,numbersEnabled:m.numbersEnabled!==false,numberVersion:NUMBER_VERSION,commandVersion:COMMAND_VERSION,build,sourceHash,modelRevision:c.engine==='whisper'?MODEL_REVISION:null,createdAt:new Date().toISOString(),status:'queued',text:null,error:null,timings:{queueMs:null,prepareMs:null,loadMs:null,generateMs:null,requestMs:null,totalMs:null,firstTextMs:null}};
+          const a=audios[ai],r={id:randomUUID(),batchId,audioId:a.id,audioHash:a.sha256,configId:c.id,configuration:structuredClone(c),referenceAtRun:structuredClone(a.references.at(-1)??null),repeat:rep+1,reviewEnabled:m.reviewEnabled===true,reviewContext:reviewContext(m.reviewContext),commandsEnabled:m.commandsEnabled!==false,numbersEnabled:m.numbersEnabled!==false,termsEnabled:m.termsEnabled!==false,numberVersion:NUMBER_VERSION,termVersion:TERM_VERSION,commandVersion:COMMAND_VERSION,build,sourceHash,modelRevision:c.engine==='whisper'?MODEL_REVISION:null,createdAt:new Date().toISOString(),status:'queued',text:null,error:null,timings:{queueMs:null,prepareMs:null,loadMs:null,generateMs:null,requestMs:null,totalMs:null,firstTextMs:null}};
           r.environment={os:os.platform(),osRelease:os.release(),cpu:os.cpus()[0]?.model??null,totalRamBytes:os.totalmem(),node:process.version,network:null,source:'uploaded-file'};
           r.audioDurationMs=a.durationMs;
           db.runs.push(r);queuedAt.set(r.id,performance.now());created.push(r.id);
@@ -184,7 +190,7 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
   const closeBridge=attachLiveBridge(server,()=>demoConnection(ROOT));
   const closeStream=attachMuseStream(server,{endpoint:streamEndpoint,getKey:()=>apiKey,getConfig:findConfig,
     start(config,m){
-      const r={id:randomUUID(),batchId:randomUUID(),audioId:null,configId:config.id,configuration:{...structuredClone(config),mode:'streaming',segmentation:m.segmentation,providerMode:m.segmentation==='automatic'?'ENDPOINTING':'PUSH_TO_TALK',preparation:STREAM_PREPARATION},repeat:1,reviewEnabled:m.reviewEnabled===true,reviewContext:reviewContext(m.reviewContext),build,sourceHash,createdAt:new Date().toISOString(),status:'running',text:null,error:null,commandsEnabled:m.commandsEnabled!==false,numbersEnabled:m.numbersEnabled!==false,commandVersion:COMMAND_VERSION,numberVersion:NUMBER_VERSION,
+      const r={id:randomUUID(),batchId:randomUUID(),audioId:null,configId:config.id,configuration:{...structuredClone(config),mode:'streaming',segmentation:m.segmentation,providerMode:m.segmentation==='automatic'?'ENDPOINTING':'PUSH_TO_TALK',preparation:STREAM_PREPARATION},repeat:1,reviewEnabled:m.reviewEnabled===true,reviewContext:reviewContext(m.reviewContext),build,sourceHash,createdAt:new Date().toISOString(),status:'running',text:null,error:null,commandsEnabled:m.commandsEnabled!==false,numbersEnabled:m.numbersEnabled!==false,termsEnabled:m.termsEnabled!==false,commandVersion:COMMAND_VERSION,numberVersion:NUMBER_VERSION,termVersion:TERM_VERSION,
         environment:{os:os.platform(),node:process.version,source:'live-stream',network:null},timings:{queueMs:0,prepareMs:null,requestMs:null,totalMs:null,loadMs:null,generateMs:null}};
       db.runs.push(r);save();return r;
     },
@@ -197,11 +203,8 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
       if(result.derived){fs.writeFileSync(path.join(dataDir,'derived',r.id+'.wav'),result.derived);r.derived={sha256:hash(result.derived),originalSha256:r.audioHash,sampleRate:24000,channels:1,format:'PCM16'};}
       r.status=result.status;r.error=result.error;r.text=result.text;r.stream={...result.metrics,events:result.events};
       r.result={text:r.text,device:'Meta API realtime',modelRevision:null,cold:null};
-      if(r.status==='completed'){
-        r.numberFormatting=r.numbersEnabled?formatNumbers(r.text):null;r.formatting=r.commandsEnabled?formatDictation(r.numberFormatting?.text??r.text):null;
-        if(r.formatting)r.formatting.input=r.numberFormatting?'numberFormatting.text':'text';
-      }
-      r.timings.numberFormatMs=r.numberFormatting?.elapsedMs??0;r.timings.commandMs=r.formatting?.elapsedMs??0;
+      if(r.status==='completed')applyFormatting(r);
+      r.timings.numberFormatMs??=0;r.timings.termFormatMs??=0;r.timings.commandMs=r.formatting?.elapsedMs??0;
       // Session duration includes dictation; not comparable with file processing time.
       r.timings.streamSessionMs=result.metrics.streamSessionMs;r.finishedAt=new Date().toISOString();save();if(r.status==='completed'&&r.reviewEnabled)reviewer.enqueue(r.id);return r;
     }});

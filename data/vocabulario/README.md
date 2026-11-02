@@ -13,6 +13,7 @@ Estado: **revisión profesional pendiente**. Nada de esto es validación clínic
 | --- | --- |
 | `candidatos-tc-torax.v1.json` | Vocabulario candidato. Lo genera `scripts/vocab-candidatos.mjs` a partir de `Vocabulario_por_TAC_y_patologia.txt` (responsable, 2-nov-2026). Es determinista y guarda el SHA-256 de la fuente. |
 | `candidatos-tc-torax.v1.csv` | Planilla para el responsable (separador `;`, UTF-8). Columnas a completar: `seleccionado (si/no)` y `impacto_clinico (1-3)`. Columna `propuesta_medicion`: propuesta editorial de 60 términos, a confirmar o cambiar. |
+| `formas-dictadas.v1.json` | Tabla de forma dictada a forma escrita («biurads» → «BI-RADS», «unidades de Hounsfield» → «UH»), para todos los exámenes. La aplica `backend/term-format.mjs` después de los números y antes de los comandos, y conserva el texto original. Las formas dictadas son hipótesis fonéticas sin medir en Muse. Las corridas de vocabulario la desactivan. |
 | `frases-tc-torax.v1.json` | Frases sintéticas con referencia. Fase A: 50 frases; cada candidato propuesto aparece en al menos 3 frases. Fase B: 29 frases objetivo distintas de las de la fase A y 13 controles con palabras que suenan parecido. |
 
 ## Reglas del vocabulario candidato

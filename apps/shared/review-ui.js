@@ -33,7 +33,7 @@ export function mountReview(parent,run,{onChange,initialState}={}){
  const save=el('button','Guardar edición'),undo=el('button','Deshacer último cambio');details.append(save,undo);box.append(details);
  const notice=el('p');notice.className='tiny';box.append(notice);
  const audio=el('audio');audio.controls=true;audio.preload='none';audio.src=`/api/audio/${run.audioId}`;const listen=el('details');listen.append(el('summary','Escuchar toma completa'),audio);box.append(listen);
- const base=run.formatting?.text??run.numberFormatting?.text??run.text??'';
+ const base=run.formatting?.text??run.termFormatting?.text??run.numberFormatting?.text??run.text??'';
  let doc={revision:0,text:base,history:[]},latest=null,dirty=false,busy=false,lastSignature='',shown=new Set(),seenAt=performance.now(),timer;
  editor.value=base;editor.oninput=()=>{dirty=true;box.dataset.dirty='true';notice.textContent='Edición pendiente de guardar. Las propuestas conservan su texto base.';};
  const perform=async fn=>{if(busy)return;busy=true;try{await fn();}catch(e){notice.textContent=e.message;}finally{busy=false;await poll(true);trimTakeCards(parent.parentElement);}};

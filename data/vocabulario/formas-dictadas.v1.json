@@ -1,0 +1,669 @@
+{
+ "schema": "dicta-libre.formas-dictadas-borrador.v1",
+ "version": 1,
+ "estado": "hipótesis fonéticas sin medir; revisión profesional pendiente",
+ "reglas": [
+  "Normaliza solo lo que se muestra; el texto original del motor se conserva.",
+  "Sin distinguir mayúsculas ni tildes, solo palabras completas y la forma más larga primero.",
+  "Las siglas de solo_con_contexto no se reemplazan automáticamente.",
+  "No se aplica a negaciones, lateralidad ni cifras."
+ ],
+ "reemplazos": [
+  {
+   "escrito": "BI-RADS",
+   "dichos": [
+    "birads",
+    "bi rads",
+    "biurads",
+    "bi urads",
+    "bairads",
+    "birad"
+   ]
+  },
+  {
+   "escrito": "TI-RADS",
+   "dichos": [
+    "tirads",
+    "ti rads",
+    "tairads"
+   ]
+  },
+  {
+   "escrito": "LI-RADS",
+   "dichos": [
+    "lirads",
+    "li rads",
+    "lairads"
+   ]
+  },
+  {
+   "escrito": "PI-RADS",
+   "dichos": [
+    "pirads",
+    "pi rads",
+    "pairads"
+   ]
+  },
+  {
+   "escrito": "O-RADS",
+   "dichos": [
+    "orads",
+    "o rads"
+   ]
+  },
+  {
+   "escrito": "C-RADS",
+   "dichos": [
+    "crads",
+    "c rads",
+    "ce rads",
+    "si rads",
+    "sirads"
+   ]
+  },
+  {
+   "escrito": "Lung-RADS",
+   "dichos": [
+    "lung rads",
+    "lungrads",
+    "lang rads",
+    "lan rads"
+   ]
+  },
+  {
+   "escrito": "PI-QUAL",
+   "dichos": [
+    "pi qual",
+    "pi cual",
+    "picual"
+   ]
+  },
+  {
+   "escrito": "UH",
+   "dichos": [
+    "unidades de hounsfield",
+    "unidades hounsfield",
+    "unidades de hunsfield",
+    "unidades hunsfield",
+    "unidades de hansfield",
+    "unidades de jaunsfil",
+    "unidades jaunsfil",
+    "unidades de jaunsfield",
+    "u hache"
+   ]
+  },
+  {
+   "escrito": "Bosniak",
+   "dichos": [
+    "bosniak",
+    "bosniac",
+    "bosñak",
+    "bosniaq"
+   ]
+  },
+  {
+   "escrito": "Fleischner",
+   "dichos": [
+    "fleischner",
+    "fleisner",
+    "fleishner",
+    "flaisner",
+    "flaishner"
+   ]
+  },
+  {
+   "escrito": "segmentos de Couinaud",
+   "dichos": [
+    "segmentos de couinaud",
+    "segmentos de cuino",
+    "segmentos de coino"
+   ]
+  },
+  {
+   "escrito": "signo de Murphy",
+   "dichos": [
+    "signo de murphy",
+    "signo de morfi",
+    "signo de murfi"
+   ]
+  },
+  {
+   "escrito": "Hashimoto",
+   "dichos": [
+    "hashimoto",
+    "jashimoto",
+    "asimoto"
+   ]
+  },
+  {
+   "escrito": "Hinchey",
+   "dichos": [
+    "hinchey",
+    "hinchi",
+    "jinchi"
+   ]
+  },
+  {
+   "escrito": "Balthazar",
+   "dichos": [
+    "balthazar",
+    "baltazar"
+   ]
+  },
+  {
+   "escrito": "enfermedad de Crohn",
+   "dichos": [
+    "enfermedad de crohn",
+    "enfermedad de cron",
+    "enfermedad de kron"
+   ]
+  },
+  {
+   "escrito": "columna de Bertin",
+   "dichos": [
+    "columna de bertin"
+   ]
+  },
+  {
+   "escrito": "Fazekas",
+   "dichos": [
+    "fazekas",
+    "fasekas",
+    "fazecas",
+    "fasecas"
+   ]
+  },
+  {
+   "escrito": "Fisher modificada",
+   "dichos": [
+    "fisher modificada",
+    "fisher modificado",
+    "fischer modificada"
+   ]
+  },
+  {
+   "escrito": "índice de Evans",
+   "dichos": [
+    "indice de evans",
+    "indice de evan"
+   ]
+  },
+  {
+   "escrito": "Scheltens",
+   "dichos": [
+    "scheltens",
+    "sheltens",
+    "eskeltens"
+   ]
+  },
+  {
+   "escrito": "polígono de Willis",
+   "dichos": [
+    "poligono de willis",
+    "poligono de wilis",
+    "poligono de uilis"
+   ]
+  },
+  {
+   "escrito": "Virchow-Robin",
+   "dichos": [
+    "virchow robin",
+    "virchou robin",
+    "birchou robin"
+   ]
+  },
+  {
+   "escrito": "quiste de Baker",
+   "dichos": [
+    "quiste de baker",
+    "quiste de beiker",
+    "quiste de baquer"
+   ]
+  },
+  {
+   "escrito": "De Quervain",
+   "dichos": [
+    "de quervain",
+    "de kervan",
+    "de kervain",
+    "de kerven"
+   ]
+  },
+  {
+   "escrito": "Modic",
+   "dichos": [
+    "modic",
+    "modik"
+   ]
+  },
+  {
+   "escrito": "Meyerding",
+   "dichos": [
+    "meyerding",
+    "mayerding",
+    "maierding"
+   ]
+  },
+  {
+   "escrito": "nódulos de Schmorl",
+   "dichos": [
+    "nodulos de schmorl",
+    "nodulos de esmorl",
+    "nodulos de smorl"
+   ]
+  },
+  {
+   "escrito": "saco de Douglas",
+   "dichos": [
+    "saco de douglas",
+    "saco de duglas"
+   ]
+  },
+  {
+   "escrito": "quistes de Naboth",
+   "dichos": [
+    "quistes de naboth",
+    "quistes de nabot"
+   ]
+  },
+  {
+   "escrito": "cola de Spence",
+   "dichos": [
+    "cola de spence",
+    "cola de spens",
+    "cola de espens"
+   ]
+  },
+  {
+   "escrito": "ASPECTS",
+   "dichos": [
+    "aspects",
+    "aspeks"
+   ]
+  },
+  {
+   "escrito": "FLAIR",
+   "dichos": [
+    "flair",
+    "fler",
+    "flear"
+   ]
+  },
+  {
+   "escrito": "mapa ADC",
+   "dichos": [
+    "mapa adc",
+    "mapa a de ce"
+   ]
+  },
+  {
+   "escrito": "RECIST",
+   "dichos": [
+    "recist",
+    "resist"
+   ]
+  },
+  {
+   "escrito": "PAAF",
+   "dichos": [
+    "paaf",
+    "paf"
+   ]
+  },
+  {
+   "escrito": "TEP",
+   "dichos": [
+    "tep"
+   ]
+  },
+  {
+   "escrito": "TVP",
+   "dichos": [
+    "tvp",
+    "te ve pe"
+   ]
+  },
+  {
+   "escrito": "PSA",
+   "dichos": [
+    "psa",
+    "pe ese a"
+   ]
+  },
+  {
+   "escrito": "DIU",
+   "dichos": [
+    "diu"
+   ]
+  },
+  {
+   "escrito": "FIGO",
+   "dichos": [
+    "figo"
+   ]
+  },
+  {
+   "escrito": "CEAP",
+   "dichos": [
+    "ceap"
+   ]
+  },
+  {
+   "escrito": "TNM",
+   "dichos": [
+    "tnm",
+    "te ene eme"
+   ]
+  },
+  {
+   "escrito": "SWI",
+   "dichos": [
+    "swi"
+   ]
+  },
+  {
+   "escrito": "CHC",
+   "dichos": [
+    "chc",
+    "ce hache ce"
+   ]
+  },
+  {
+   "escrito": "HNF",
+   "dichos": [
+    "hnf",
+    "hache ene efe"
+   ]
+  },
+  {
+   "escrito": "CPRM",
+   "dichos": [
+    "cprm",
+    "ce pe erre eme"
+   ]
+  },
+  {
+   "escrito": "OGV",
+   "dichos": [
+    "ogv",
+    "o ge ve"
+   ]
+  },
+  {
+   "escrito": "CCR",
+   "dichos": [
+    "ccr",
+    "ce ce erre"
+   ]
+  },
+  {
+   "escrito": "CUGM",
+   "dichos": [
+    "cugm",
+    "ce u ge eme"
+   ]
+  },
+  {
+   "escrito": "MLO",
+   "dichos": [
+    "mlo",
+    "eme ele o"
+   ]
+  },
+  {
+   "escrito": "DCE",
+   "dichos": [
+    "dce",
+    "de ce e"
+   ]
+  },
+  {
+   "escrito": "uro-TC",
+   "dichos": [
+    "uro tc",
+    "uro te ce",
+    "uro tac"
+   ]
+  },
+  {
+   "escrito": "colangio-RM",
+   "dichos": [
+    "colangio rm",
+    "colangio erre eme"
+   ]
+  },
+  {
+   "escrito": "washout",
+   "dichos": [
+    "washout",
+    "guashout",
+    "uashaut"
+   ]
+  },
+  {
+   "escrito": "twinkling",
+   "dichos": [
+    "twinkling",
+    "tuinkling"
+   ]
+  },
+  {
+   "escrito": "LOE",
+   "dichos": [
+    "loe"
+   ]
+  },
+  {
+   "escrito": "BI-RADS 4A",
+   "dichos": [
+    "birads cuatro a",
+    "bi rads cuatro a",
+    "biurads cuatro a",
+    "bi urads cuatro a",
+    "bairads cuatro a",
+    "birad cuatro a",
+    "birads 4 a",
+    "bi rads 4 a",
+    "biurads 4 a",
+    "bi urads 4 a",
+    "bairads 4 a",
+    "birad 4 a"
+   ]
+  },
+  {
+   "escrito": "BI-RADS 4B",
+   "dichos": [
+    "birads cuatro b",
+    "birads cuatro be",
+    "bi rads cuatro b",
+    "bi rads cuatro be",
+    "biurads cuatro b",
+    "biurads cuatro be",
+    "bi urads cuatro b",
+    "bi urads cuatro be",
+    "bairads cuatro b",
+    "bairads cuatro be",
+    "birad cuatro b",
+    "birad cuatro be",
+    "birads 4 b",
+    "birads 4 be",
+    "bi rads 4 b",
+    "bi rads 4 be",
+    "biurads 4 b",
+    "biurads 4 be",
+    "bi urads 4 b",
+    "bi urads 4 be",
+    "bairads 4 b",
+    "bairads 4 be",
+    "birad 4 b",
+    "birad 4 be"
+   ]
+  },
+  {
+   "escrito": "BI-RADS 4C",
+   "dichos": [
+    "birads cuatro c",
+    "birads cuatro ce",
+    "bi rads cuatro c",
+    "bi rads cuatro ce",
+    "biurads cuatro c",
+    "biurads cuatro ce",
+    "bi urads cuatro c",
+    "bi urads cuatro ce",
+    "bairads cuatro c",
+    "bairads cuatro ce",
+    "birad cuatro c",
+    "birad cuatro ce",
+    "birads 4 c",
+    "birads 4 ce",
+    "bi rads 4 c",
+    "bi rads 4 ce",
+    "biurads 4 c",
+    "biurads 4 ce",
+    "bi urads 4 c",
+    "bi urads 4 ce",
+    "bairads 4 c",
+    "bairads 4 ce",
+    "birad 4 c",
+    "birad 4 ce"
+   ]
+  },
+  {
+   "escrito": "Bosniak IIF",
+   "dichos": [
+    "bosniak dos efe",
+    "bosniak dos f",
+    "bosniak 2 efe",
+    "bosniak 2 f",
+    "bosniak 2f",
+    "bosniac dos efe",
+    "bosniac dos f",
+    "bosniac 2 efe",
+    "bosniac 2 f",
+    "bosniac 2f",
+    "bosñak dos efe",
+    "bosñak dos f",
+    "bosñak 2 efe",
+    "bosñak 2 f",
+    "bosñak 2f",
+    "bosniaq dos efe",
+    "bosniaq dos f",
+    "bosniaq 2 efe",
+    "bosniaq 2 f",
+    "bosniaq 2f"
+   ]
+  },
+  {
+   "escrito": "Bosniak I",
+   "dichos": [
+    "bosniak uno",
+    "bosniak 1",
+    "bosniac uno",
+    "bosniac 1",
+    "bosñak uno",
+    "bosñak 1",
+    "bosniaq uno",
+    "bosniaq 1"
+   ]
+  },
+  {
+   "escrito": "Bosniak II",
+   "dichos": [
+    "bosniak dos",
+    "bosniak 2",
+    "bosniac dos",
+    "bosniac 2",
+    "bosñak dos",
+    "bosñak 2",
+    "bosniaq dos",
+    "bosniaq 2"
+   ]
+  },
+  {
+   "escrito": "Bosniak III",
+   "dichos": [
+    "bosniak tres",
+    "bosniak 3",
+    "bosniac tres",
+    "bosniac 3",
+    "bosñak tres",
+    "bosñak 3",
+    "bosniaq tres",
+    "bosniaq 3"
+   ]
+  },
+  {
+   "escrito": "Bosniak IV",
+   "dichos": [
+    "bosniak cuatro",
+    "bosniak 4",
+    "bosniac cuatro",
+    "bosniac 4",
+    "bosñak cuatro",
+    "bosñak 4",
+    "bosniaq cuatro",
+    "bosniaq 4"
+   ]
+  }
+ ],
+ "solo_con_contexto": [
+  "CC",
+  "IR",
+  "MTA",
+  "EPE",
+  "NIU",
+  "WON",
+  "APHE",
+  "CTSI"
+ ],
+ "pruebas": [
+  {
+   "entrada": "Categoría biurads cuatro a.",
+   "esperado": "Categoría BI-RADS 4A."
+  },
+  {
+   "entrada": "Hallazgo birads 4 ce.",
+   "esperado": "Hallazgo BI-RADS 4C."
+  },
+  {
+   "entrada": "Densidad de 35 unidades de Hounsfield.",
+   "esperado": "Densidad de 35 UH."
+  },
+  {
+   "entrada": "Quiste renal bosniak dos efe.",
+   "esperado": "Quiste renal Bosniak IIF."
+  },
+  {
+   "entrada": "Quiste renal bosniak 3.",
+   "esperado": "Quiste renal Bosniak III."
+  },
+  {
+   "entrada": "Nódulo tirads cinco y control según flaisner.",
+   "esperado": "Nódulo TI-RADS cinco y control según Fleischner."
+  },
+  {
+   "entrada": "Signo de Murfi negativo.",
+   "esperado": "Signo de Murphy negativo."
+  },
+  {
+   "entrada": "Imagen compatible con loe hepática.",
+   "esperado": "Imagen compatible con LOE hepática."
+  },
+  {
+   "entrada": "BI-RADS 3 sin cambios.",
+   "esperado": "BI-RADS 3 sin cambios."
+  },
+  {
+   "entrada": "No hay sangrado activo ni lesión focal.",
+   "esperado": "No hay sangrado activo ni lesión focal."
+  },
+  {
+   "entrada": "Volumen de 20 cc, radiografía y resistencia conservadas.",
+   "esperado": "Volumen de 20 cc, radiografía y resistencia conservadas."
+  },
+  {
+   "entrada": "Figura de pi en el tiroides.",
+   "esperado": "Figura de pi en el tiroides."
+  }
+ ]
+}

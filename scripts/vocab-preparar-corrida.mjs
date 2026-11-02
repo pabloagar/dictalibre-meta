@@ -56,7 +56,7 @@ const objetivos = Object.fromEntries(esperadas.map(f => [f.id, findTerms(f.texto
 const total = audios.length * variantes.reduce((s, v) => s + v.repeticiones, 0);
 console.log(`Ejecuciones previstas: ${total}. Condiciones: comandos, números y Revisor desactivados; se evalúa el texto original.`);
 
-const plan = {schema: 'dicta-libre.corrida-vocabulario.v1', fase, creadoEn: new Date().toISOString(), lab, build: state.runs?.[0]?.build ?? null, seleccion, ranking_hash: ranking?.hash ?? null, voces, faltantes, audios, variantes, omitidos, objetivos, condiciones: {commandsEnabled: false, numbersEnabled: false, reviewEnabled: false}, lotes: []};
+const plan = {schema: 'dicta-libre.corrida-vocabulario.v1', fase, creadoEn: new Date().toISOString(), lab, build: state.runs?.[0]?.build ?? null, seleccion, ranking_hash: ranking?.hash ?? null, voces, faltantes, audios, variantes, omitidos, objetivos, condiciones: {commandsEnabled: false, numbersEnabled: false, termsEnabled: false, reviewEnabled: false}, lotes: []};
 if (!ejecutar) { console.log('\nPlan sin ejecutar. Repite con --ejecutar para crear configuraciones y lanzar las ejecuciones.'); process.exit(0); }
 if (!state.metaConfigured) { console.error('El laboratorio no tiene clave de Meta configurada.'); process.exit(2); }
 if (faltantes.length) { console.error('Faltan audios: completa las grabaciones antes de ejecutar.'); process.exit(2); }

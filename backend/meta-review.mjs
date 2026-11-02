@@ -31,7 +31,7 @@ export async function reviewWithMeta(input,key,signal){
  const usage={};for(const k of ['prompt_tokens','completion_tokens','total_tokens'])usage[k]=Number.isFinite(data.usage?.[k])?data.usage[k]:null;
  return {content:choice.message.content,usage,providerModel:typeof data.model==='string'?data.model:null};
 }
-export const finalText=r=>r.formatting?.text??r.numberFormatting?.text??r.text??'';
+export const finalText=r=>r.formatting?.text??r.termFormatting?.text??r.numberFormatting?.text??r.text??'';
 
 export function createReviewer({db,save,getKey,sourceHash,build,provider=reviewWithMeta,timeoutMs=REVIEW_CONFIG.timeoutMs}){
  db.reviews??=[];db.reviewDocuments??=[];let active=null,closed=false;const queued=new Map();

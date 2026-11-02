@@ -98,13 +98,13 @@ window.addEventListener('dicta-take',async event=>{
    const state=await api('/api/state',undefined,controller.signal),run=state.runs.find(r=>r.id===job.runId);
    if(epoch!==generation)return;
    if(run?.status==='completed'){
-    const finalText=run.formatting?.text??run.numberFormatting?.text??run.text;
+    const finalText=run.formatting?.text??run.termFormatting?.text??run.numberFormatting?.text??run.text;
     text.textContent=finalText.trim()||(finalText.includes('\n')?'(Salto aplicado al informe.)':'(El motor devolvió texto vacío.)');
     await reportEditor.finish(reportAnchor,finalText,run.id);
     if(epoch!==generation)return;
     mountReview(card,run,{onChange:(old,next)=>epoch===generation&&reportEditor.review(reportAnchor,old,next)});
     const original=document.createElement('details'),summary=document.createElement('summary'),raw=document.createElement('pre');summary.textContent='Ver transcripción original y comandos';raw.textContent=run.text;original.append(summary,raw);
-    const report=document.createElement('p');report.className='tiny';report.textContent=run.formatting?`${run.formatting.events.length} comandos aplicados · ${run.formatting.elapsedMs.toFixed(2)} ms · ${run.formatting.warnings.length} dudas conservadas sin convertir. ${run.formatting.warnings.map(w=>w.command+': posible uso literal o decimal').join('; ')}`:'Comandos desactivados para esta toma.';report.textContent+=run.numberFormatting?` Números: ${run.numberFormatting.events.length} conversiones · ${run.numberFormatting.elapsedMs.toFixed(2)} ms · ${run.numberFormatting.warnings.length} dudas.`:'';original.append(report);card.append(original);
+    const report=document.createElement('p');report.className='tiny';report.textContent=run.formatting?`${run.formatting.events.length} comandos aplicados · ${run.formatting.elapsedMs.toFixed(2)} ms · ${run.formatting.warnings.length} dudas conservadas sin convertir. ${run.formatting.warnings.map(w=>w.command+': posible uso literal o decimal').join('; ')}`:'Comandos desactivados para esta toma.';report.textContent+=run.numberFormatting?` Números: ${run.numberFormatting.events.length} conversiones · ${run.numberFormatting.elapsedMs.toFixed(2)} ms · ${run.numberFormatting.warnings.length} dudas.`:'';report.textContent+=run.termFormatting?.events.length?` Términos: ${run.termFormatting.events.map(e=>`${e.spoken} → ${e.replacement}`).join('; ')}.`:'';original.append(report);card.append(original);
     if(run.formatting?.warnings.length||run.numberFormatting?.warnings.length){const warning=document.createElement('p');warning.className='tiny';warning.textContent='Revisa las dudas de comandos: se conservaron palabras potencialmente literales o decimales.';card.append(warning);}
     // DOM update time, not a hardware measurement of screen presentation.
     const receiveEndToTextMs=performance.now()-take.receivedEnd;
