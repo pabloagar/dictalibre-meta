@@ -104,7 +104,7 @@ test('hash incorrecto nunca se marca verificado', async t => {
 });
 test('caída del teléfono interrumpe toma y conserva emparejamiento temporal', async t => {
   const { pair } = await environment(t); const { pc, phone } = await pair(); await start(pc, phone);
-  phone.ws.terminate(); assert.match((await pc.next('aborted')).reason, /interrumpida/); assert.equal((await pc.next('mobile_suspended')).windowMs,120000);
+  phone.ws.terminate(); assert.match((await pc.next('aborted')).reason, /interrumpida/); assert.equal((await pc.next('mobile_suspended')).windowMs,300000);
 });
 test('rechaza comandos de grabación del receptor', async t => {
   const { pair } = await environment(t); const { pc } = await pair(); pc.send({ type: 'start', id: 1, rate: 48000 }); assert.match((await pc.next('error')).message, /permitida/);

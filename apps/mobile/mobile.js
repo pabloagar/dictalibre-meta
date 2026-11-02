@@ -191,15 +191,15 @@ function onMessage(m) {
 function forgetResume(){resumeToken=null;resumeUntil=0;clearTimeout(retryTimer);}
 function reconnect(){
   if(client||document.hidden||!resumeToken)return;
-  if(Date.now()>=resumeUntil){forgetResume();status('La pausa superó dos minutos. Crea una sesión en el PC y escanea el nuevo QR.');return;}
+  if(Date.now()>=resumeUntil){forgetResume();status('La pausa superó cinco minutos. Crea una sesión en el PC y escanea el nuevo QR.');return;}
   lifecycleEvent('resume-attempt');openConnection({type:'resume',token:resumeToken});
 }
 function openConnection(request){
   connectStarted=performance.now();
   client=new RelayClient(onMessage,()=>{
     lifecycleEvent('connection-closed');paired=false;releaseMicrophone();
-    if(resumeToken&&!resumeUntil)resumeUntil=Date.now()+120000;
-    abort(resumeToken?'Conexión en pausa. Vuelve a Chrome antes de dos minutos.':'Conexión cerrada. Crea una sesión en el PC y escanea el QR.',false);
+    if(resumeToken&&!resumeUntil)resumeUntil=Date.now()+300000;
+    abort(resumeToken?'Conexión en pausa. Vuelve a Chrome antes de cinco minutos.':'Conexión cerrada. Crea una sesión en el PC y escanea el QR.',false);
     client=null;$('join-panel').hidden=false;$('confirm-panel').hidden=true;$('controls').hidden=true;refresh();
     if(resumeToken&&!document.hidden)retryTimer=setTimeout(reconnect,1000);
   });
@@ -229,7 +229,7 @@ button.addEventListener('keyup', event => { if (mode === 'hold' && [' ', 'Enter'
 button.addEventListener('blur', () => { if (mode === 'hold') stop(); });
 $('close').onclick = () => { forgetResume(); if (recording) abort('Sesión finalizada.'); releaseMicrophone(); client?.send({ type: 'close' }); client?.close(); };
 document.addEventListener('visibilitychange', () => {
- if(document.hidden){hiddenAt=performance.now();lifecycleEvent('hidden',{duringTake:!!recording});if(recording)abort('Pantalla oculta o bloqueada: toma interrumpida, no completada.');releaseMicrophone();if(paired&&client&&resumeToken){resumeUntil=Date.now()+120000;client.send({type:'suspend'});client.close();}}
+ if(document.hidden){hiddenAt=performance.now();lifecycleEvent('hidden',{duringTake:!!recording});if(recording)abort('Pantalla oculta o bloqueada: toma interrumpida, no completada.');releaseMicrophone();if(paired&&client&&resumeToken){resumeUntil=Date.now()+300000;client.send({type:'suspend'});client.close();}}
  else {lifecycleEvent('visible',{hiddenDurationMs:hiddenAt===null?null:performance.now()-hiddenAt});hiddenAt=null;
   if(paired&&client){$('prepare').textContent='Reactivar micrófono';status('Volviste a la pantalla. Pulsa Reactivar micrófono para volver a dictar.');}
   else if(resumeToken)reconnect();else status('La conexión terminó. Crea una sesión en el PC y escanea el nuevo QR.');refresh();}

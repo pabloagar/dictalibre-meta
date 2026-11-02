@@ -24,7 +24,7 @@ const fingerprint = data => createHash('sha256').update(data).digest('hex');
 const nowMs = () => performance.timeOrigin + performance.now();
 
 export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL = 120_000,
-  sessionTTL = 30 * 60_000, maxSessions = 30, resumeTTL = 120_000, route = null, canCreate = null, clientIp = null, passUpgrade = null } = {}) {
+  sessionTTL = 30 * 60_000, maxSessions = 30, resumeTTL = 300_000, route = null, canCreate = null, clientIp = null, passUpgrade = null } = {}) {
   const sessions = new Map(), codes = new Map(), tokens = new Map(), attempts = new Map(), resumes = new Map();
   const headers = {
     'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer',
