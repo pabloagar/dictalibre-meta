@@ -12,6 +12,7 @@ import {formatDictation,COMMAND_VERSION} from './dictation-commands.mjs';
 import {formatNumbers,NUMBER_VERSION} from './number-format.mjs';
 import {attachMuseStream} from './muse-stream.mjs';
 import {createReviewer,reviewWithMeta} from './meta-review.mjs';
+import {reviewContext} from './review-context.mjs';
 import {STREAM_PREPARATION} from './stream-audio.mjs';
 import { wavInfo, hash, configuration, score, csv } from './lab-core.mjs';
 const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
@@ -63,7 +64,7 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
   for(const r of db.runs) if(['queued','running'].includes(r.status)){r.status='interrupted';r.error='Servidor reiniciado antes de terminar.';}
   save();
   let build='unknown';try{build=execFileSync('git',['rev-parse','HEAD'],{cwd:ROOT,encoding:'utf8'}).trim();}catch{}
-  const sourceHash=hash(Buffer.concat(['backend/lab.mjs','backend/meta-key.mjs','backend/meta-review.mjs','apps/shared/review-ui.js','backend/dictation-commands.mjs','backend/number-format.mjs','backend/muse-stream.mjs','backend/speech-turns.mjs','backend/stream-audio.mjs','backend/lab-core.mjs','backend/lab-worker.py','backend/live-bridge.mjs','apps/desktop/live.js','apps/desktop/report-editor.js','apps/shared/report-model.js','apps/desktop/stream-client.js','apps/desktop/desktop.js','apps/mobile/mobile.js','apps/shared/metrics.js'].map(f=>fs.readFileSync(path.join(ROOT,f)))));
+  const sourceHash=hash(Buffer.concat(['backend/lab.mjs','backend/meta-key.mjs','backend/meta-review.mjs','backend/review-context.mjs','apps/desktop/report-review.js','apps/shared/review-ui.js','backend/dictation-commands.mjs','backend/number-format.mjs','backend/muse-stream.mjs','backend/speech-turns.mjs','backend/stream-audio.mjs','backend/lab-core.mjs','backend/lab-worker.py','backend/live-bridge.mjs','apps/desktop/live.js','apps/desktop/report-editor.js','apps/shared/report-model.js','apps/desktop/stream-client.js','apps/desktop/desktop.js','apps/mobile/mobile.js','apps/shared/metrics.js'].map(f=>fs.readFileSync(path.join(ROOT,f)))));
   let apiKey=loadMetaKey(keyFile),active=null,closed=false;
   const reviewer=createReviewer({db,save,getKey:()=>apiKey,sourceHash,build,provider:reviewProvider});
   const queuedAt=new Map();
@@ -109,6 +110,7 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
       if(req.method==='GET'){
         if(p==='/api/live-info')return json({mobileOrigin:demoConnection(ROOT).origin});
         if(p==='/api/templates'){if(!fs.existsSync(templateFile))return json({templates:[],references:[],summary:null});return json(JSON.parse(fs.readFileSync(templateFile,'utf8')));}
+        if(p.startsWith('/api/report-reviews/')){const r=db.reviews.find(r=>r.scope==='report'&&r.id===p.split('/').at(-1));return r?json(r):json({error:'Revisión desconocida.'},404);}
         if(p==='/api/state')return json({audios:db.audios,configs:db.configs,runs:db.runs.map(viewRun),reviews:db.reviews,reviewDocuments:db.reviewDocuments,metaConfigured:!!apiKey,modelPresent:modelReady(),build,sourceHash});
         if(p==='/api/reviews/export'){
           const cell=v=>'"'+String(v??'').replaceAll('"','""').replace(/^[=+@-]/,m=>' '+m)+'"';
@@ -118,7 +120,7 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
         if(p==='/api/export'){const out={...db,schema:'dicta-libre.lab.v1',exportedAt:new Date().toISOString(),build,sourceHash,runs:db.runs.map(viewRun)};if(url.searchParams.get('format')==='csv'){res.writeHead(200,{...headers,'Content-Type':'text/csv; charset=utf-8','Content-Disposition':'attachment; filename="dicta-lab.csv"'});return res.end('\uFEFF'+csv(out.runs));}res.setHeader('Content-Disposition','attachment; filename="dicta-lab.json"');return json(out);}
         const audio=db.audios.find(a=>p===`/api/audio/${a.id}`);
         if(audio){res.writeHead(200,{...headers,'Content-Type':'audio/wav'});return res.end(fs.readFileSync(path.join(dataDir,'audio',audio.id+'.wav')));}
-        const file={'/':'apps/lab/index.html','/lab.js':'apps/lab/lab.js','/style.css':'apps/lab/style.css','/live':'apps/desktop/index.html','/desktop.js':'apps/desktop/desktop.js','/live.js':'apps/desktop/live.js','/stream-client.js':'apps/desktop/stream-client.js','/receiver.css':'apps/shared/style.css','/qr.js':'node_modules/qrcode-generator/dist/qrcode.js','/review-ui.js':'apps/shared/review-ui.js','/report-editor.js':'apps/desktop/report-editor.js','/shared/report-model.js':'apps/shared/report-model.js','/shared/client.js':'apps/shared/client.js','/shared/protocol.js':'apps/shared/protocol.js','/shared/metrics.js':'apps/shared/metrics.js'}[p];
+        const file={'/':'apps/lab/index.html','/lab.js':'apps/lab/lab.js','/style.css':'apps/lab/style.css','/live':'apps/desktop/index.html','/desktop.js':'apps/desktop/desktop.js','/live.js':'apps/desktop/live.js','/stream-client.js':'apps/desktop/stream-client.js','/receiver.css':'apps/shared/style.css','/qr.js':'node_modules/qrcode-generator/dist/qrcode.js','/review-ui.js':'apps/shared/review-ui.js','/report-editor.js':'apps/desktop/report-editor.js','/report-review.js':'apps/desktop/report-review.js','/shared/report-model.js':'apps/shared/report-model.js','/shared/client.js':'apps/shared/client.js','/shared/protocol.js':'apps/shared/protocol.js','/shared/metrics.js':'apps/shared/metrics.js'}[p];
         if(file){res.writeHead(200,{...headers,'Content-Type':p.endsWith('.js')?'text/javascript':p.endsWith('.css')?'text/css':'text/html; charset=utf-8'});return res.end(fs.readFileSync(path.join(ROOT,file)));}
         return json({error:'No encontrado.'},404);
       }
@@ -137,6 +139,7 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
         r.live={...timing,recordingId:Number.isInteger(m.recordingId)?m.recordingId:null,source:['tone','microphone'].includes(m.source)?m.source:null,measuredBy:'receiver-browser',savedAt:new Date().toISOString()};
         r.environment.source='live-receiver';save();return json({saved:true});
       }
+      if(p==='/api/report-reviews')return json(reviewer.enqueueReport(m),202);
       if(p==='/api/reviews')return json(reviewer.enqueue(m.runId,{retry:m.retry===true}),202);
       if(p==='/api/reviews/cancel')return json(reviewer.cancel(m.id));
       if(p==='/api/reviews/action')return json(reviewer.revise(m));
@@ -164,7 +167,7 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
         if(db.runs.filter(r=>['queued','running'].includes(r.status)).length+aids.length*cids.length*repeats>100)throw new Error('Cola llena.');
         const batchId=randomUUID(),created=[];
         for(let rep=0;rep<repeats;rep++)for(let ai=0;ai<audios.length;ai++)for(const c of ((rep+ai)%2?[...configs].reverse():configs)){
-          const a=audios[ai],r={id:randomUUID(),batchId,audioId:a.id,audioHash:a.sha256,configId:c.id,configuration:structuredClone(c),referenceAtRun:structuredClone(a.references.at(-1)??null),repeat:rep+1,reviewEnabled:m.reviewEnabled===true,commandsEnabled:m.commandsEnabled!==false,numbersEnabled:m.numbersEnabled!==false,numberVersion:NUMBER_VERSION,commandVersion:COMMAND_VERSION,build,sourceHash,modelRevision:c.engine==='whisper'?MODEL_REVISION:null,createdAt:new Date().toISOString(),status:'queued',text:null,error:null,timings:{queueMs:null,prepareMs:null,loadMs:null,generateMs:null,requestMs:null,totalMs:null,firstTextMs:null}};
+          const a=audios[ai],r={id:randomUUID(),batchId,audioId:a.id,audioHash:a.sha256,configId:c.id,configuration:structuredClone(c),referenceAtRun:structuredClone(a.references.at(-1)??null),repeat:rep+1,reviewEnabled:m.reviewEnabled===true,reviewContext:reviewContext(m.reviewContext),commandsEnabled:m.commandsEnabled!==false,numbersEnabled:m.numbersEnabled!==false,numberVersion:NUMBER_VERSION,commandVersion:COMMAND_VERSION,build,sourceHash,modelRevision:c.engine==='whisper'?MODEL_REVISION:null,createdAt:new Date().toISOString(),status:'queued',text:null,error:null,timings:{queueMs:null,prepareMs:null,loadMs:null,generateMs:null,requestMs:null,totalMs:null,firstTextMs:null}};
           r.environment={os:os.platform(),osRelease:os.release(),cpu:os.cpus()[0]?.model??null,totalRamBytes:os.totalmem(),node:process.version,network:null,source:'uploaded-file'};
           r.audioDurationMs=a.durationMs;
           db.runs.push(r);queuedAt.set(r.id,performance.now());created.push(r.id);
@@ -177,7 +180,7 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
   const closeBridge=attachLiveBridge(server,()=>demoConnection(ROOT));
   const closeStream=attachMuseStream(server,{endpoint:streamEndpoint,getKey:()=>apiKey,getConfig:id=>db.configs.find(c=>c.id===id),
     start(config,m){
-      const r={id:randomUUID(),batchId:randomUUID(),audioId:null,configId:config.id,configuration:{...structuredClone(config),mode:'streaming',segmentation:m.segmentation,providerMode:m.segmentation==='automatic'?'ENDPOINTING':'PUSH_TO_TALK',preparation:STREAM_PREPARATION},repeat:1,reviewEnabled:m.reviewEnabled===true,build,sourceHash,createdAt:new Date().toISOString(),status:'running',text:null,error:null,commandsEnabled:m.commandsEnabled!==false,numbersEnabled:m.numbersEnabled!==false,commandVersion:COMMAND_VERSION,numberVersion:NUMBER_VERSION,
+      const r={id:randomUUID(),batchId:randomUUID(),audioId:null,configId:config.id,configuration:{...structuredClone(config),mode:'streaming',segmentation:m.segmentation,providerMode:m.segmentation==='automatic'?'ENDPOINTING':'PUSH_TO_TALK',preparation:STREAM_PREPARATION},repeat:1,reviewEnabled:m.reviewEnabled===true,reviewContext:reviewContext(m.reviewContext),build,sourceHash,createdAt:new Date().toISOString(),status:'running',text:null,error:null,commandsEnabled:m.commandsEnabled!==false,numbersEnabled:m.numbersEnabled!==false,commandVersion:COMMAND_VERSION,numberVersion:NUMBER_VERSION,
         environment:{os:os.platform(),node:process.version,source:'live-stream',network:null},timings:{queueMs:0,prepareMs:null,requestMs:null,totalMs:null,loadMs:null,generateMs:null}};
       db.runs.push(r);save();return r;
     },

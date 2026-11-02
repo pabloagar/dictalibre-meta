@@ -220,3 +220,9 @@ Implementada casilla móvil desactivada por defecto con persistencia por navegad
 
 ## 2026-11-01 · Retroalimentación de copia y diagnóstico háptico
 Tras prueba del responsable: copia muestra confirmación en el propio botón durante 3 s, solo tras éxito del portapapeles; fallo visible diferenciado. Métrica copy conserva duración y resultado, identifica feedback button-and-status. Botón móvil de prueba directa solicita 12 ms fuera de toma, informa resultado API y no cambia preferencia. 72 pruebas Node y sintaxis aprobadas; percepción física pendiente. No se reinició el servidor ni se modificó el prompt del revisor.
+
+## 2026-11-01 · Series de métricas aportadas por el responsable
+Analizadas seis exportaciones locales y cruzadas con catálogo por runId. Preservados originales con SHA-256 en reporte privado. Detectadas exportaciones acumulativas y dos tomas adicionales sin texto en la segunda ventana de cinco; recuperadas métricas ASR de las dos frases omitidas. Comparación descriptiva guardada en EXPERIMENTS.md, sin concluir efecto de vibración ni precisión clínica. No se modificó código ni se reiniciaron servicios.
+
+## 2026-11-01 · Revisor contextual y revisión global
+Acordado botón junto a Copiar y aviso al copiar, sin revisión por pausas. Implementados snapshots acotados de plantilla aplicada/informe previo por toma, revisión global con evidencia literal sin sustituciones, estados desactualizados/cancelación y copia sin revisión. Contexto/prompt/tokens/tiempos persistidos; documentación en REPORT_REVIEW.md. 76 pruebas y tres controles sintéticos reales completados; detalle y limitaciones en EXPERIMENTS.md. Servidor principal no reiniciado mientras el responsable prueba vibración; activación pendiente de terminar y exportar sesión.

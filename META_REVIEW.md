@@ -24,3 +24,6 @@ Modelo y contrato: [Meta chat completions](https://dev.meta.ai/docs/protocols/ch
 Tests locales: node --test tests/meta-review.test.mjs tests/lab.test.mjs tests/muse-stream.test.mjs. Incluyen contratos, guardas, cola, cancelación, persistencia, edición y activación automática tras ASR por archivo y streaming (proveedores simulados).
 Piloto real: 7 textos sintéticos + tres transcripciones sintéticas ya guardadas. Resultados en EXPERIMENTS.md. Interfaz aceptar/deshacer comprobada con fixture aislada, sin alterar tus resultados.
 Pendiente: aceptación física desde S25, valoración del médico de propuestas, corpus reservado con referencias humanas, falsas alertas/errores introducidos y costos. Fase 8 implementada para piloto, todavía en validación.
+
+## 2026-11-01 · Contexto y revisión global
+Actualización implementada con radiology-review-v2-context y report-consistency-v1: contexto de plantilla/informe previo por toma y revisión global manual con aviso al copiar. Sustituye la limitación anterior de contexto solo de la toma. Ver REPORT_REVIEW.md para alcance, límites y activación; requiere reiniciar servidor principal.
