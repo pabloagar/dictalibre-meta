@@ -311,3 +311,7 @@ A petición del responsable se crearon y corrigieron Hoja continua y Mesa compac
 ## 02-11-2026 · Stitch v3: primer uso visible
 
 Revisadas ambas direcciones con «1. Conectar tu teléfono», ayuda QR, tamaño visible y etiqueta completa Revisar informe. Enlaces en design/STITCH_DIRECCIONES.md. El conector de edición no devolvió pantalla; se completó mediante navegador Stitch. Verificación visual/DOM sin atribuir funcionalidad a controles: A+ no cambió el valor en la vista previa. Solo propuestas, sin cambios de aplicación ni despliegue.
+
+## 02-11-2026 · Nuevo proyecto Stitch: Revisión al margen
+
+Creado un proyecto separado con dos direcciones, Margen editorial y Revisión enfocada. Prompt de alcance cerrado, subrayados numerados vinculados visualmente a explicaciones a la derecha, inicio vacío especificado y controles secundarios limitados. Contexto y prompt en [design/STITCH_REVISION_MARGEN.md](design/STITCH_REVISION_MARGEN.md). Conservadas versiones hueso iniciales y revisiones de color realizadas desde Stitch, más blancas; sin elección de tema definitiva. Verificación visual/AX del lienzo y prototipo: A alterna vacío/con avisos; B cierra su panel conservando subrayados. No se validaron todas las interacciones ni funciones clínicas. Solo documentación y propuestas, sin código ni despliegue; metodología pendiente registrada en EXPERIMENTS.md.

@@ -349,3 +349,9 @@ Diseño aprobado por el responsable el 2-nov-2026. **Todavía no hay ejecución*
 
 ## 2026-11-02 · Contenido de plantillas de demo
 Cambio de contenido, no de motores: cinco informes sintéticos completos, versión demo-completa-v2. Verificación reproducible: pnpm check y pnpm test (prueba de empaquetado y contenido en tests/demo.test.mjs). Pendiente prueba humana en Render: aplicar cada plantilla, sustituir una frase mediante dictado, deshacer y copiar conservando saltos. No hay nuevas mediciones de latencia ni resultados clínicos; valores no medidos permanecen ausentes. Las medidas y hallazgos del contenido son ficción de demostración.
+
+## 2026-11-02 · Revisión al margen (propuestas Stitch)
+
+Diseños y versiones: [STITCH_REVISION_MARGEN.md](design/STITCH_REVISION_MARGEN.md). No es un experimento ejecutado ni un cambio funcional. Hipótesis: A facilita relacionar texto y explicación por proximidad; B permite recuperar ancho al cerrar la revisión. Antes de comparar: mismo texto sintético, viewport 1280×900, zoom 100 %, tamaño tipográfico y tema iguales; alternar orden A/B. Medir tiempo en ms desde seleccionar una duda hasta localizar su explicación, clics para volver al texto y ancho útil del editor en px con panel abierto/cerrado. Aceptación funcional: dos correspondencias correctas, informe sin modificaciones al navegar, estado inicial vacío y ausencia de desbordamiento; el umbral de preferencia humana debe acordarse antes de medir.
+
+Ejecuciones de comparación: 0; tiempos, clics, área, luminancia, precisión temporal y sobrecosto de instrumentación: null. Revisión visual directa en Chrome/Windows; versión del navegador, hardware y red: null. Sin fuente de audio ni dictado. Preferencias sobre brillo son información comunicada, no medición. Pendiente instrumentar un prototipo funcional y registrar ambos resultados, favorables y desfavorables, antes de decidir implementación. Ningún servicio externo de analítica añadido.
