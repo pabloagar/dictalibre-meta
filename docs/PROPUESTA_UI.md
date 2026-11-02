@@ -17,7 +17,55 @@
 
 ## 1. Auditoría del estado actual
 
-Ver la sección 1 completa más abajo («Estado actual: hallazgos»), con capturas en `docs/propuesta-ui/actual/`.
+**Cómo se capturó:**
+
+- Playwright con Chromium 153 headless.
+- Teléfono emulado de tipo S25 Ultra: 412×915 CSS px, DPR 3,5, táctil y agente de usuario Android.
+- Escritorio a 1440×900 y 1920×1080.
+- Relay y laboratorio reales del repo, en local, detrás de un proxy HTTPS autofirmado y con el micrófono falso de Chromium.
+
+**Lo que no se pudo capturar:** sin clave Meta ni modelo Whisper no hay texto transcrito, borradores, propuestas ni revisión global.
+
+**No es un S25 físico:** la fuente renderizada fue Inter, porque Segoe UI no existe en el contenedor.
+
+El detalle de las mediciones, marcadas [M] medido / [I] inferido, está en [`propuesta-ui/actual/NOTAS_CAPTURA.md`](propuesta-ui/actual/NOTAS_CAPTURA.md). Los scripts están en `propuesta-ui/actual/scripts/`.
+
+![Móvil actual: preparado, grabando, recibida](propuesta-ui/actual/movil-preparado-grabando-recibida.png)
+![/live con texto sintético](propuesta-ui/actual/escritorio-live-texto.png)
+![/live después de pulsar Conectar teléfono: el informe quedó vacío](propuesta-ui/actual/escritorio-live-tras-conectar-vacio.png)
+![/live, panel de tomas y Revisor Meta](propuesta-ui/actual/escritorio-live-panel-tomas.png)
+![Receptor del relay durante una toma](propuesta-ui/actual/escritorio-receptor-grabando.png)
+
+### Lo que ya funciona y conviene conservar
+
+- **Botón de grabar:** el texto dice exactamente qué hacer («Mantén pulsado para hablar» y luego «Suelta para detener»). Mide **346×100 px** y aparece en la primera vista sin desplazar la pantalla [M].
+- **Integridad:** el mensaje «El PC recibió exactamente el mismo audio» aparece solo después de verificar el hash.
+- **Accesibilidad básica:** foco visible de 3 px en todas las pantallas, `role="status"` / `aria-live="polite"` en el estado general y ningún desplazamiento horizontal en el móvil [M].
+- **Privacidad:** los textos sobre el envío a Meta y sobre que el audio entre tomas se descarta son claros.
+- **Honestidad:** ningún texto afirma validación clínica, precisión ni integración con RIS/PACS.
+
+### Problemas observados
+
+Ordenados por impacto en el radiólogo:
+
+1. **Conectar el teléfono vacía el informe** sin aviso, y el panel del QR tapa «Deshacer» [M]. Es el hallazgo A1 de `REVISION_TECNICA.md`.
+2. **El estado de grabación en el teléfono depende de un solo elemento.** El cuadro de estado conserva el mismo fondo neutro en espera y grabando (`#ecefe5`); solo cambia el botón a rojo [M]. Con la vista periférica, o en una sala oscura, no se distingue con certeza si está grabando.
+3. **El móvil tiene un solo objetivo grande.** Todo lo demás mide 36–37 px de alto (por debajo de los 44 px recomendados). La casilla de vibración mide 13×13 px. Los textos son pequeños: estado 13 px, modos 12 px, nota de privacidad 12 px, pie 10 px [M].
+4. **No hay modo oscuro.** `:root{color-scheme:light}`: las capturas con `prefers-color-scheme: dark` salen idénticas píxel a píxel [M]. En una sala de lectura el teléfono y el PC deslumbran.
+5. **Varios textos grises no alcanzan el contraste AA:** `#67766e` sobre `#f5f4ee` da **4,34:1** en botones secundarios, nota de privacidad y pie [M].
+6. **En /live el informe no domina.**
+   - A 1440×900 el editor termina 1 px bajo el pliegue: antes se apilan el estado, la franja «1. Conecta tu teléfono» y la barra de controles [M].
+   - «Conectar teléfono» aparece dos veces.
+   - Los paneles de plantillas, ajustes y QR se abren encima del editor.
+7. **El destino del dictado no se ve antes de dictar.** Solo hay un texto de ayuda («Haz clic para insertar o selecciona…»). No hay una indicación permanente de dónde se insertará la próxima toma.
+8. **No hay atajos de teclado visibles,** ni para copiar, revisar, deshacer o buscar plantilla [M]. El orden de tabulación del móvil pasa primero por «Reiniciar sesión» y «Exportar diagnóstico» [M].
+9. **Mensajes que no reflejan el estado real:**
+   - «Descargar WAV sintético» aparece en tomas de micrófono.
+   - El PC sigue diciendo «Prepara el micrófono» cuando el teléfono ya está preparado.
+   - Tras un fallo del ASR, el estado global dice «Audio recibido completo» mientras el informe dice «Toma cancelada» [M].
+10. **Información técnica en la pantalla principal del móvil:** frecuencia, PCM, procesado del navegador, bloques recibidos e ida y vuelta al servidor. Sirve en el piloto, pero compite con el control principal.
+11. **Faltan avisos de seguridad:** ninguna pantalla advierte que no se deben usar datos de pacientes, y el Revisor Meta viene marcado por defecto, incluso con Whisper local y sin clave [M].
+12. **`/live` no tiene la marca de prototipo** y conserva textos estáticos obsoletos del receptor («El reconocimiento de voz aún no está integrado»).
 
 ## 2. Principios comunes a ambas direcciones
 
