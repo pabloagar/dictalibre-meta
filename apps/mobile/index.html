@@ -16,6 +16,8 @@
   <button id="test-signal" class="quiet">Probar con tono sintético, sin micrófono</button>
   <fieldset id="modes" class="mode-selector"><legend>Compara los dos controles</legend><label><input type="radio" name="mode" value="hold" checked><span>Mantener pulsado</span></label><label><input type="radio" name="mode" value="toggle"><span>Inicio / parada</span></label></fieldset>
   <div id="duration" class="timer">00:00</div><meter id="level" min="0" max="1" value="0" aria-label="Nivel del micrófono"></meter>
+  <label><input id="haptics" type="checkbox" aria-describedby="haptics-note"> Vibración breve al grabar</label>
+  <p id="haptics-note" class="tiny">Opcional · se guarda en este navegador para este enlace.</p>
   <button id="record" class="record-button" disabled><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="12" y="4" width="8" height="16" rx="4"></rect><path d="M8 15v2a8 8 0 0 0 16 0v-2M16 25v4M11 29h10"></path></svg><span id="record-label">Mantén pulsado para hablar</span></button>
   <p id="capture-info" class="tiny center">Pantalla encendida · interfaz abierta · máximo 3 min</p>
   <div class="metrics phone-metrics"><div><span>RECIBIDOS EN PC</span><strong id="received">0</strong></div><div><span>IDA/VUELTA SERVIDOR</span><strong id="rtt">—</strong></div></div>

@@ -8,6 +8,35 @@ let synthetic = false;
 let prepareMs = null, connectStarted = null;
 const lifecycle=[];let hiddenAt=null;
 function lifecycleEvent(type,extra={}){lifecycle.push({type,atMs:performance.now(),recordingId:recording?.id??null,paired,...extra});if(lifecycle.length>100)lifecycle.shift();}
+const HAPTIC_MS = 12, HAPTIC_KEY = 'dicta-haptics-v1';
+let hapticsEnabled = false;
+try { hapticsEnabled = localStorage.getItem(HAPTIC_KEY) === 'true'; } catch { /* optional storage */ }
+$('haptics').checked = hapticsEnabled;
+if (typeof globalThis.navigator?.vibrate !== 'function') $('haptics-note').textContent = 'Este navegador no ofrece vibración; puedes grabar normalmente.';
+$('haptics').onchange = () => {
+  hapticsEnabled = $('haptics').checked;
+  let saved = false;
+  try { localStorage.setItem(HAPTIC_KEY, String(hapticsEnabled)); saved = true; } catch { /* keep session preference */ }
+  $('haptics-note').textContent = saved ? 'Preferencia guardada para este enlace en este navegador.' : 'Preferencia activa solo en esta página: no se pudo guardar.';
+  lifecycleEvent('haptics-preference', { enabled: hapticsEnabled, saved });
+};
+function haptic(r, edge) {
+  if (!r.hapticsEnabled || r[`haptic_${edge}`] || document.hidden) return;
+  r[`haptic_${edge}`] = true;
+  const began = performance.now();
+  let accepted = null, outcome = 'unsupported';
+  try {
+    if (typeof globalThis.navigator?.vibrate === 'function') {
+      accepted = navigator.vibrate(HAPTIC_MS); outcome = accepted ? 'requested' : 'rejected';
+    }
+  } catch { outcome = 'error'; }
+  const callMs = performance.now() - began;
+  lifecycleEvent('haptic', { recordingId: r.id, edge, requestedMs: HAPTIC_MS, accepted, outcome, callMs, actualDurationMs: null, audibleInRecording: null });
+}
+function captureStarted(r) {
+  if (r.state !== 'starting') return;
+  r.state = 'recording'; haptic(r, 'start');
+}
 $('export-lifecycle').onclick=()=>{const blob=new Blob([JSON.stringify({schema:'mobile-lifecycle.v1',clock:'performance.now; ms desde navegación',browser:navigator.userAgent,network:null,events:lifecycle},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='dicta-interrupciones.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 $('restart').onclick=()=>{lifecycleEvent('reset');if(recording)abort('Sesión reiniciada.');releaseMicrophone();client?.send({type:'close'});client?.close();qrToken=null;$('join-code').value='';$('duration').textContent='00:00';$('received').textContent='0';$('verified').textContent='';$('capture-info').textContent='Micrófono liberado.';status('Crea una sesión nueva en el PC y escanea el nuevo QR.');};
 function report(r, stages = {}, extra = {}) { client?.send({ type: 'sender_metrics', id: r.id, stages, ...extra }); }
@@ -21,6 +50,7 @@ function refresh() {
   $('prepare').hidden = prepared; $('prepare').disabled = preparing;
   $('test-signal').hidden = prepared; $('test-signal').disabled = preparing;
   $('modes').disabled = !!recording;
+  $('haptics').disabled = !!recording;
   $('record').classList.toggle('recording', !!recording && ['starting', 'recording'].includes(recording.state));
   $('record-label').textContent = recording ? (recording.state === 'finishing' ? 'Comprobando entrega…' : mode === 'hold' ? 'Suelta para detener' : 'Pulsa para detener') : mode === 'hold' ? 'Mantén pulsado para hablar' : 'Pulsa para empezar';
 }
@@ -40,6 +70,7 @@ function abort(reason, notify = true) {
 async function stopped(m) {
   const r = recording;
   if (!r || r.id !== m.id) return;
+  haptic(r, 'stop');
   r.state = 'finishing'; refresh(); $('level').value = 0;
   const flushedAt = performance.now();
   const stopFlushMs = r.stopAt == null ? null : flushedAt - r.stopAt;
@@ -77,7 +108,7 @@ async function prepare(useSynthetic = false) {
     worklet.port.onmessage = ({ data: m }) => {
       const r = recording;
       if (!r || m.id !== r.id) return;
-      if (m.type === 'started') { report(r, { prepareMs, startControlMs: performance.now() - r.startAt }); if (r.state === 'starting') r.state = 'recording'; refresh(); return; }
+      if (m.type === 'started') { report(r, { prepareMs, startControlMs: performance.now() - r.startAt }); captureStarted(r); refresh(); return; }
       if (m.type === 'stopped') { void stopped(m); return; }
       if (m.type !== 'chunk') return;
       if (client.buffered > 524288) { abort('La conexión está saturada. La toma se detuvo.'); return; }
@@ -111,7 +142,8 @@ async function prepare(useSynthetic = false) {
 function start() {
   if (!prepared || !paired || recording || context?.state !== 'running') return;
   $('verified').textContent = ''; $('received').textContent = '0'; $('duration').textContent = '00:00';
-  recording = { id: ++counter, sequence: 0, samples: 0, parts: [], state: 'starting', startAt: performance.now(), sentTimes: new Map() };
+  recording = { id: ++counter, sequence: 0, samples: 0, parts: [], state: 'starting', startAt: performance.now(), sentTimes: new Map(), hapticsEnabled };
+  lifecycleEvent('capture-request', { hapticsEnabled, requestedPulseMs: hapticsEnabled ? HAPTIC_MS : 0, source: synthetic ? 'tone' : 'microphone', mode });
   if (!client.send({ type: 'start', id: recording.id, rate: context.sampleRate, mode, source: synthetic ? 'tone' : 'microphone' })) { abort('No hay conexión con el PC.'); return; }
   worklet.port.postMessage({ type: 'start', id: recording.id }); status('Grabando y enviando al computador.'); refresh();
 }

@@ -214,3 +214,6 @@ Publicación completada el 1 de noviembre: https://github.com/pabloagar/dicta-li
 
 ## 2026-11-01 · Nombre público actualizado
 A solicitud del responsable, repositorio renombrado a https://github.com/pabloagar/dictalibre-meta. Remoto local y enlaces actuales actualizados; historial y visibilidad pública conservados. Sin cambios funcionales.
+
+## 2026-11-01 · Vibración opcional de grabación
+Implementada casilla móvil desactivada por defecto con persistencia por navegador/origen. Pulso solicitado de 12 ms tras confirmación de inicio y después de parada del AudioWorklet, antes de esperar hash/entrega/ASR. Preferencia fijada durante cada toma, API opcional con fallo tolerado y diagnóstico exportable. Sin retrasar captura ni añadir silencios. Validación: 72/72 pruebas Node y sintaxis aprobadas, incluyendo preferencia, confirmaciones, duplicados y API/almacenamiento fallidos. Pendiente percepción física y contaminación acústica en S25 según tests/HAPTICS_CHECKLIST.md.
