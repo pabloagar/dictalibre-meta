@@ -301,3 +301,8 @@ Pendiente: recarga y verificación gráfica en navegador real, bloqueadas por el
 ## 2026-11-02 · Plantillas completas de demostración
 A solicitud del responsable, las cinco estructuras públicas pasan a informes sintéticos completos (TC tórax, angioTC, TC abdomen/pelvis, ecografía tiroidea y mamografía), conservando identificadores y categorías. Rótulo sintético visible en nombre y texto, sin usar la biblioteca privada ni datos de pacientes. Versión demo-completa-v2. Se actualiza la prueba existente para verificar cinco plantillas, secciones pobladas y rótulo; no se mide precisión clínica. Publicación y activación se comprueban por separado.
 Verificación local: pnpm check y 125/125 pruebas aprobadas. Sin inferencias nuevas. La activación del catálogo protegido en Render requiere comprobar la sesión autenticada; no se afirma verificación remota del contenido.
+
+
+## 02-11-2026 · Dos direcciones en Stitch, sin cambiar la aplicación
+
+A petición del responsable se crearon y corrigieron Hoja continua y Mesa compacta en Stitch, partiendo del contexto existente y cambiando el claro a hueso atenuado. Conexión conseguida mediante navegador autenticado después de fallos del conector; vistas previas recuperadas posteriormente por get_screen. Enlaces, paleta, versiones y límites en design/STITCH_DIRECCIONES.md. No hay cambio de código ni despliegue; no se atribuye mejora ergonómica medida.
