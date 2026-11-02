@@ -211,3 +211,24 @@ test('demo oculta detalles técnicos de sesión y mantiene controles de dictado'
  assert.equal(document.querySelector('.text-settings').hidden,false);
  await window.happyDOM.close();delete globalThis.__clinicalDemoTest;
 });
+
+test('interpretación protegida exige confirmar y conserva deshacer; edición invalida confirmación',async()=>{
+ const {window,editor,button}=setup({globalReview:true});
+ const original='Lesión de siete milimetrijilos.';
+ const input=t=>{editor.element.textContent=t;editor.element.dispatchEvent(new window.Event('input'));};
+ input(original);
+ globalThis.fetch=async()=>({ok:true,json:async()=>({id:'guarded-test',status:'completed',suggestions:[{original:'milimetrijilos',replacement:null,proposedReplacement:'milímetros',guarded:true,kind:'ambiguous_term',reason:'Comprobar unidad.',evidence:['milimetrijilos']}]})});
+ await button('Revisar con IA').onclick();
+ assert.match(editor.reviewPanel.textContent,/Posible interpretación/);
+ assert.equal(editor.model.text,original);
+ button('Confirmo el dato y aplico el cambio').onclick();assert.equal(editor.model.text,original);
+ button('Revisar y confirmar').click();assert.equal(editor.model.text,original);
+ button('Conservar original').click();assert.equal(editor.model.text,original);
+ button('Revisar y confirmar').click();button('Confirmo el dato y aplico el cambio').click();
+ assert.equal(editor.model.text,'Lesión de siete milímetros.');
+ button('Deshacer').click();assert.equal(editor.model.text,original);
+ await button('Revisar de nuevo').onclick();
+ button('Revisar y confirmar').click();input('Texto modificado.');
+ button('Confirmo el dato y aplico el cambio').onclick();assert.equal(editor.model.text,'Texto modificado.');
+ await window.happyDOM.close();
+});

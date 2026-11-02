@@ -35,9 +35,18 @@ export function mountReportReview({controls,section,copyButton,snapshot,onCopy,e
     result=r;warnings.replaceChildren();
     for(const [index,s] of (r.suggestions??[]).entries()){const id=String(index+1),row=el('article');row.dataset.reviewId=id;row.tabIndex=-1;const label={contradiction:'Contradicción entre fragmentos',ambiguous_term:'Término para comprobar',format:'Formato o comando'}[s.kind];if(label)row.append(el('small',label));row.append(el('strong',id+' · «'+s.original+'»'),el('p',s.reason));for(const quote of s.evidence??[])row.append(el('blockquote',quote));
       if(getRanges(r.suggestions??[]).some(a=>a.id===id)){const go=el('button','Ir al texto');go.onclick=()=>onNavigate(id);row.append(go);}else row.append(el('small','Comprueba la cita en el informe; no hay un único fragmento al que enlazar.'));
-      if(typeof s.replacement==='string'&&s.replacement!==s.original&&s.reason?.trim()){
-        row.append(el('strong','Te sugiero esta corrección'),el('blockquote',s.replacement));
-        row.className='correction-proposal';const apply=el('button','Aceptar');apply.className='accept-correction';apply.onclick=()=>{const state=current();if(state.pending||requested!==signature(state))return;const at=state.text.indexOf(s.original);if(at<0||state.text.indexOf(s.original,at+1)>=0)return;if(onApply({start:at,end:at+s.original.length,original:s.original,replacement:s.replacement})){event('report-suggestion-accepted',{reviewId:r.id,warning:index});changed();}};row.append(apply);
+      const requiresConfirmation=s.replacement===null&&s.guarded===true&&s.kind!=='contradiction';
+      const replacement=requiresConfirmation?s.proposedReplacement:s.replacement;
+      if(typeof replacement==='string'&&replacement!==s.original&&s.reason?.trim()){
+        row.append(el('strong',requiresConfirmation?'Posible interpretación · confirma el dato':'Te sugiero esta corrección'),el('blockquote',replacement));
+        row.className='correction-proposal';
+        const apply=el('button',requiresConfirmation?'Revisar y confirmar':'Aceptar');apply.className='accept-correction';
+        const confirmation=el('div');confirmation.hidden=true;confirmation.append(el('p','Este cambio afecta una cifra, unidad, negación o lado. Comprueba lo que dictaste antes de aplicarlo. No se ha modificado el informe.'));
+        const confirm=el('button','Confirmo el dato y aplico el cambio'),keep=el('button','Conservar original');confirmation.append(confirm,keep);
+        const applyChange=()=>{const state=current();if(state.pending||requested!==signature(state))return;const at=state.text.indexOf(s.original);if(at<0||state.text.indexOf(s.original,at+1)>=0)return;if(onApply({start:at,end:at+s.original.length,original:s.original,replacement})){confirmation.hidden=true;event('report-suggestion-accepted',{reviewId:r.id,warning:index,confirmedSensitive:requiresConfirmation});changed();}};
+        apply.onclick=()=>{if(requiresConfirmation){const state=current();if(state.pending||requested!==signature(state))return;confirmation.hidden=false;event('report-sensitive-confirmation-opened',{reviewId:r.id,warning:index});}else applyChange();};
+        confirm.onclick=()=>{if(!confirmation.hidden)applyChange();};keep.onclick=()=>{confirmation.hidden=true;};
+        row.append(apply);if(requiresConfirmation)row.append(confirmation);
       }
       const accept=el('button','Es correcto');accept.onclick=()=>{if(requested!==signature(current())||current().pending)return;acknowledged.add(id);row.hidden=true;changed();event('report-warning-acknowledged',{reviewId:r.id,warning:index});};row.append(accept);warnings.append(row);}
     changed();
