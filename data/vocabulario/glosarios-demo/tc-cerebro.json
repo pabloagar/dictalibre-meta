@@ -2,6 +2,8 @@
  "schema": "dicta-libre.glosario-demo.v1",
  "examen": "tc-cerebro",
  "nombre": "TC de cerebro",
+ "orden_demo": 2,
+ "evidencia_orden": "Inglaterra 2023/24: 26 % (segundo); urgencias: 55 % (estudio de 1997).",
  "estado": "glosario de demostración, sin medir",
  "regla": "Términos de las secciones del examen; sin lateralidad, negaciones, unidades ni lista PUC; variantes agrupadas; por grupo: prioridad A, técnicos (10+ letras, sigla o epónimo), conteo en plantillas como apoyo y orden de la fuente; grupos intercalados. Revisión del responsable pendiente.",
  "secciones": [
@@ -156,5 +158,5 @@
   }
  ],
  "omitidos_por_repeticion": [],
- "hash": "7d2e0c1fb5f735d3e79c8395c19df020c20e3d1f45029b00370ce7af535daddb"
+ "hash": "ec7b285e45298d026d76a47c1bb3652b9d3597d4c8c1269f064aa40135cde17c"
 }

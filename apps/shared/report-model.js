@@ -37,3 +37,24 @@ export function sectionAt(text,position,max=3000){
 const templateOrigin=t=>!t?'en blanco':t.imported===true?'importada':t.imported===false?'propia':'sin dato';
 export function reportContext({template}){return {templateName:(template?.name??'').slice(0,200),templateCategory:(template?.category??'').slice(0,200),templateOrigin:templateOrigin(template)};}
 export function takeContext({template,text,position}){const s=sectionAt(text,position);return {...reportContext({template}),sectionTitle:s.title.slice(0,200),sectionText:s.text,truncated:s.truncated};}
+// Examen de TC al que corresponde una plantilla, por su nombre (y categoría si existe). Sirve para PROPONER el glosario
+// de demostración en /live; el médico puede cambiarlo. El orden importa: angio antes que simple; columna antes que cuello.
+const EXAM_PATTERNS=[
+ ['angiotc-torax-tep',/angio.*(torax|pulmon|tep\b)|tromboemb|\btep\b/],
+ ['angiotc-aorta',/angio.*(aort|abdom|mesenter|renal|visceral)|aortograf/],
+ ['angiotc-cerebro-cuello',/angio.*(cerebr|encefal|cuello|carot|willis|cran)|perfusion/],
+ ['pielotc-urotc',/pielo|\buro ?(tc|tac)\b|urotomograf/],
+ ['tc-cavidades-orbitas-oidos',/paranasal|orbita|oido|penasco|macizo facial|maxilofacial/],
+ ['tc-columna',/columna|lumbar|dorsal|sacro|raquis/],
+ ['tc-cuello',/cuello/],
+ ['tc-cerebro',/cerebr|encefal|craneo|cabeza/],
+ ['tc-torax',/torax|pulmon|alta resolucion|\btacar\b/],
+ ['tc-abdomen-pelvis',/abdom|pelvi|higado|hepat|pancrea|biliar|apendic/],
+];
+export function examForTemplate(template){
+ if(!template||typeof template.name!=='string')return null;
+ const n=plain(template.name),cat=plain(template.category??'');
+ if(/resonancia|ecograf|doppler|radiograf|mamograf/.test(cat))return null;
+ if(cat!=='tomografia'&&!/\b(tc|tac|angio|tomograf|pielo|uro)/.test(n))return null;
+ return EXAM_PATTERNS.find(([,re])=>re.test(n))?.[0]??null;
+}

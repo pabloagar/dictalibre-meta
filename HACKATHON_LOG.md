@@ -259,3 +259,10 @@ El vocabulario quedó en 334 candidatos. La propuesta de 60 y las frases no camb
 
 ## 2026-11-02 · Glosarios de demostración por examen (sin medir)
 Con aprobación del responsable se generaron 10 glosarios de 20 términos, uno por examen de TC, de forma determinista desde su archivo de vocabulario. La regla prioriza términos técnicos, intercala los grupos del examen y omite repeticiones (sigla y forma completa, expresiones contenidas). Quedan marcados como «glosario de demostración, sin medir» y pendientes de la revisión del responsable (`data/vocabulario/glosarios-demo/revision.csv`). Pruebas nuevas vistas fallar antes de implementar. No se cambió todavía el comportamiento de `/live`.
+
+## 2026-11-02 · Demo: orden por volumen y glosario propuesto al aplicar la plantilla
+Con aprobación del responsable, los 10 glosarios de demostración se ordenaron según el volumen de solicitud encontrado en publicaciones. Los puestos 1–3 tienen respaldo directo (abdomen y pelvis, cerebro, tórax); el resto, datos parciales anotados en cada archivo. No se pudieron leer `core.ac.uk` ni `developer.meta.ai` por la política de red de la sesión.
+
+`/live` ahora carga los glosarios de demostración como configuraciones de solo lectura marcadas «sin medir». Al aplicar una plantilla reconocida por su nombre, propone el glosario de su examen; la configuración por defecto no cambió.
+
+Pruebas nuevas (`examForTemplate` y carga en el laboratorio) vistas fallar antes de implementar: 98/98 Node y 5/5 Python. Se verificó en Chromium con el laboratorio real (plantilla propia «TC de cerebro» → glosario propuesto; plantilla sin examen → vuelve a «Sin glosario»). Pendiente: revisar en el PC del responsable qué plantillas PUC reconoce `examForTemplate` y la revisión de las 10 listas.

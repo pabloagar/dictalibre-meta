@@ -105,7 +105,7 @@ test('glosario de solo lectura en el laboratorio; una versión nueva no altera t
  const v1=escribir(1,['atelectasia','bula']);
  assert.equal(glossaryToConfig(v1).id,`vocab:tc-torax:v1:${v1.hash.slice(0,12)}`);
  const wav=()=>{const b=Buffer.alloc(64044);b.write('RIFF');b.writeUInt32LE(b.length-8,4);b.write('WAVEfmt ',8);b.writeUInt32LE(16,16);b.writeUInt16LE(1,20);b.writeUInt16LE(1,22);b.writeUInt32LE(16000,24);b.writeUInt32LE(32000,28);b.writeUInt16LE(2,32);b.writeUInt16LE(16,34);b.write('data',36);b.writeUInt32LE(b.length-44,40);return b;};
- const seen=[];const opts={dataDir:dir,keyFile:path.join(dir,'.env.local'),glossaryDir:glosarios,worker:{call:async m=>{fs.copyFileSync(m.input,m.output);},close(){}},muse:async(w,config)=>{seen.push(config.keywords);return {text:'atelectasia'};}};
+ const seen=[];const opts={dataDir:dir,keyFile:path.join(dir,'.env.local'),glossaryDir:glosarios,glossaryDemoDir:path.join(dir,'sin-demo'),worker:{call:async m=>{fs.copyFileSync(m.input,m.output);},close(){}},muse:async(w,config)=>{seen.push(config.keywords);return {text:'atelectasia'};}};
  const start=async()=>{const lab=createLab(opts);lab.server.listen(0,'127.0.0.1');await once(lab.server,'listening');return {lab,base:`http://127.0.0.1:${lab.server.address().port}`};};
  let {lab,base}=await start();
  const post=(p,body)=>fetch(base+p,{method:'POST',headers:{Origin:base},body:Buffer.isBuffer(body)?body:JSON.stringify(body)});
@@ -259,4 +259,18 @@ enfermedad pulmonar obstructiva crónica (0); hipertensión pulmonar (0)
  assert.equal(r.terminos.includes('EPOC')&&r.terminos.includes('enfermedad pulmonar obstructiva crónica'),false);
  assert.ok(r.terminos.includes('joroba de Hampton')&&r.terminos.includes('hipertensión pulmonar'));
  assert.deepEqual(r.omitidos_por_repeticion.map(x=>x.termino).sort(),['EPOC','rectificación del septum interventricular','trombosis venosa profunda'].sort(),'se queda el primero en el orden; el otro se registra');
+});
+
+test('glosarios de demostración en el laboratorio: solo lectura, marcados sin medir, con examen; hash alterado se omite',async()=>{
+ const {demoGlossaryToConfig}=await import('../backend/vocabulary.mjs');
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'dicta-demo-')),demo=path.join(dir,'demo');fs.mkdirSync(demo);
+ const g={schema:'dicta-libre.glosario-demo.v1',examen:'tc-cerebro',nombre:'TC de cerebro',orden_demo:2,estado:'glosario de demostración, sin medir',terminos:['meningioma','neumoencéfalo']};g.hash=stableHash(g);
+ fs.writeFileSync(path.join(demo,'tc-cerebro.json'),JSON.stringify(g));
+ fs.writeFileSync(path.join(demo,'malo.json'),JSON.stringify({...g,examen:'tc-cuello',terminos:['otro']}));
+ const c=demoGlossaryToConfig(g);assert.equal(c.readOnly,true);assert.equal(c.demo,true);assert.equal(c.vocabulario.examen,'tc-cerebro');assert.match(c.name,/sin medir/);
+ const lab=createLab({dataDir:dir,keyFile:path.join(dir,'.env.local'),glossaryDir:path.join(dir,'none'),glossaryDemoDir:demo,worker:{close(){}}});
+ lab.server.listen(0,'127.0.0.1');await once(lab.server,'listening');const base=`http://127.0.0.1:${lab.server.address().port}`;
+ try{const s=await(await fetch(base+'/api/state')).json();const demos=s.configs.filter(x=>x.demo);
+  assert.deepEqual(demos.map(x=>x.vocabulario.examen),['tc-cerebro']);assert.deepEqual(demos[0].keywords,['meningioma','neumoencéfalo']);assert.equal(lab.db.configs.some(x=>x.demo),false);
+ }finally{const closed=once(lab.server,'close');lab.close();await closed;fs.rmSync(dir,{recursive:true,force:true});}
 });

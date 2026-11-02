@@ -2,6 +2,8 @@
  "schema": "dicta-libre.glosario-demo.v1",
  "examen": "angiotc-cerebro-cuello",
  "nombre": "AngioTC de cerebro y cuello (incluye perfusión)",
+ "orden_demo": 9,
+ "evidencia_orden": "Sin porcentaje del total; en crecimiento rápido (14,9 % de la imagen neurológica de urgencia en un centro; se triplicó en Medicare 2017–2024).",
  "estado": "glosario de demostración, sin medir",
  "regla": "Términos de las secciones del examen; sin lateralidad, negaciones, unidades ni lista PUC; variantes agrupadas; por grupo: prioridad A, técnicos (10+ letras, sigla o epónimo), conteo en plantillas como apoyo y orden de la fuente; grupos intercalados. Revisión del responsable pendiente.",
  "secciones": [
@@ -156,5 +158,5 @@
   }
  ],
  "omitidos_por_repeticion": [],
- "hash": "c5f45db31641546f6c74ea7602f45d2796a6e13e04119f1341f86d17402ddb45"
+ "hash": "208c08435c5128ab4c03c464fab3b4bd29589094f4cca59d89ed783455c5daa6"
 }

@@ -2,6 +2,8 @@
  "schema": "dicta-libre.glosario-demo.v1",
  "examen": "tc-cavidades-orbitas-oidos",
  "nombre": "TC de cavidades paranasales, órbitas y oídos",
+ "orden_demo": 7,
+ "evidencia_orden": "Taiwán 2013: senos paranasales 1,8 % de los pacientes.",
  "estado": "glosario de demostración, sin medir",
  "regla": "Términos de las secciones del examen; sin lateralidad, negaciones, unidades ni lista PUC; variantes agrupadas; por grupo: prioridad A, técnicos (10+ letras, sigla o epónimo), conteo en plantillas como apoyo y orden de la fuente; grupos intercalados. Revisión del responsable pendiente.",
  "secciones": [
@@ -156,5 +158,5 @@
   }
  ],
  "omitidos_por_repeticion": [],
- "hash": "ef86bf946136c8dfb37aa7a8a3991b9e90464a20eecf2c3557b260e54f80104c"
+ "hash": "e84c7a03920f756f7c358b2f768725bf350093f4dbb6137c6fffd2ae9ca5aa26"
 }

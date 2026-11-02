@@ -2,6 +2,8 @@
  "schema": "dicta-libre.glosario-demo.v1",
  "examen": "pielotc-urotc",
  "nombre": "PieloTC / UroTC",
+ "orden_demo": 8,
+ "evidencia_orden": "Sin porcentaje del total; el TC sin contraste es la primera opción en cólico renal (75 % de los casos sospechosos en una auditoría de urgencias).",
  "estado": "glosario de demostración, sin medir",
  "regla": "Términos de las secciones del examen; sin lateralidad, negaciones, unidades ni lista PUC; variantes agrupadas; por grupo: prioridad A, técnicos (10+ letras, sigla o epónimo), conteo en plantillas como apoyo y orden de la fuente; grupos intercalados. Revisión del responsable pendiente.",
  "secciones": [
@@ -156,5 +158,5 @@
   }
  ],
  "omitidos_por_repeticion": [],
- "hash": "25446ad55682b733cdfe563c827bd5ab27f5d01876f7511a1d214d7fa13439c8"
+ "hash": "1f0898679612390cdff29b4aee2e0e7d39e1c53f0202721ddf795421d78beb30"
 }

@@ -325,3 +325,11 @@ export function selectDemoGlossary(entries, {secciones, n = 20}) {
     }
   return {terminos: elegidos.map(c => c.termino), detalle: elegidos.map(({termino, grupo, prioridad, tecnico}) => ({termino, grupo, prioridad, tecnico})), omitidos_por_repeticion};
 }
+
+// Glosario de demostración (sin medir) → configuración de Muse de solo lectura, con su examen y advertencia en el nombre.
+export function demoGlossaryToConfig(g) {
+  if (g?.schema !== 'dicta-libre.glosario-demo.v1' || typeof g.examen !== 'string' || !/^[a-z0-9-]{3,60}$/.test(g.examen)) throw Error('Glosario de demostración inválido.');
+  if (!Array.isArray(g.terminos) || !g.terminos.length || g.terminos.length > MAX_TERMINOS || g.terminos.some(t => typeof t !== 'string' || !t.trim() || t.length > MAX_LARGO)) throw Error('Glosario de demostración inválido: 1 a 100 términos de hasta 100 caracteres.');
+  if (g.hash !== stableHash({...g, hash: undefined})) throw Error('Hash del glosario de demostración no coincide con su contenido.');
+  return {id: `demo:${g.examen}:${g.hash.slice(0, 12)}`, name: `Demo · ${g.nombre ?? g.examen} · ${g.terminos.length} términos (sin medir)`, engine: 'muse', version: 1, parentId: null, model: 'muse-voice-transcribe-1.0', language: 'es', device: null, precision: null, beams: null, keywords: [...g.terminos], preparation: 'scipy-resample-poly-mono-16k-v1', mode: 'file', correction: false, readOnly: true, demo: true, orden_demo: Number.isInteger(g.orden_demo) ? g.orden_demo : null, vocabulario: {examen: g.examen, version: null, hash: g.hash, estado: g.estado ?? 'glosario de demostración, sin medir'}, createdAt: null};
+}

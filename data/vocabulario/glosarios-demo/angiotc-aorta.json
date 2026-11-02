@@ -2,6 +2,8 @@
  "schema": "dicta-libre.glosario-demo.v1",
  "examen": "angiotc-aorta",
  "nombre": "AngioTC de aorta y vasos abdominales",
+ "orden_demo": 10,
+ "evidencia_orden": "Sin porcentaje del total; aparece entre los exámenes de alta dosis, que son menos del 1 % de los TC.",
  "estado": "glosario de demostración, sin medir",
  "regla": "Términos de las secciones del examen; sin lateralidad, negaciones, unidades ni lista PUC; variantes agrupadas; por grupo: prioridad A, técnicos (10+ letras, sigla o epónimo), conteo en plantillas como apoyo y orden de la fuente; grupos intercalados. Revisión del responsable pendiente.",
  "secciones": [
@@ -156,5 +158,5 @@
   }
  ],
  "omitidos_por_repeticion": [],
- "hash": "5227c2d493aaabf4ba61c1feb367e0108a3463845648b23305c000a751563204"
+ "hash": "fff3aa5b7fabec7688e8879702ad5a2f6693ff39994c51448da811606de10ea4"
 }

@@ -35,3 +35,15 @@ test('contexto por toma: ficha y sección, sin texto de plantilla ni informe com
  const g=reportContext({template});
  assert.deepEqual(g,{templateName:'TC de tórax',templateCategory:'TC',templateOrigin:'importada'});
 });
+test('examen de la plantilla por nombre: angio antes que simple, columna cervical no es cuello, otras modalidades fuera',async()=>{
+ const {examForTemplate}=await import('../apps/shared/report-model.js');
+ const casos={'TC de tórax sin contraste':'tc-torax','TAC de tórax alta resolución':'tc-torax','AngioTC de tórax TEP':'angiotc-torax-tep','Angio TAC pulmonar':'angiotc-torax-tep','TC de cerebro':'tc-cerebro','TAC de encéfalo sin contraste':'tc-cerebro','AngioTC de cerebro y cuello':'angiotc-cerebro-cuello','TC perfusión cerebral':'angiotc-cerebro-cuello','TC de cuello con contraste':'tc-cuello','TC de columna cervical':'tc-columna','TAC columna lumbar':'tc-columna','TC de cavidades paranasales':'tc-cavidades-orbitas-oidos','TC de órbitas':'tc-cavidades-orbitas-oidos','TC de oídos':'tc-cavidades-orbitas-oidos','PieloTAC':'pielotc-urotc','UroTC':'pielotc-urotc','TC de abdomen y pelvis':'tc-abdomen-pelvis','TAC de abdomen y pelvis con contraste':'tc-abdomen-pelvis','AngioTC de aorta abdominal':'angiotc-aorta'};
+ for(const [n,e] of Object.entries(casos))assert.equal(examForTemplate({name:n,category:'Tomografía'}),e,n);
+ assert.equal(examForTemplate({name:'RM de cerebro',category:'Resonancia'}),null);
+ assert.equal(examForTemplate({name:'Ecografía abdominal',category:'Ecografía / Doppler'}),null);
+ assert.equal(examForTemplate({name:'Estructura de prueba'}),null);assert.equal(examForTemplate(null),null);
+ assert.equal(examForTemplate({name:'TC de tórax'}),'tc-torax','sin categoría basta el nombre con TC');
+ assert.equal(examForTemplate({name:'PieloTAC',category:'Otros / por clasificar'}),'pielotc-urotc','el importador deja PieloTAC sin clasificar');
+ assert.equal(examForTemplate({name:'AngioTAC de tórax',category:'Otros / por clasificar'}),'angiotc-torax-tep');
+ assert.equal(examForTemplate({name:'Radiografía de tórax',category:'Radiografía'}),null);
+});

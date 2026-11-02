@@ -2,6 +2,8 @@
  "schema": "dicta-libre.glosario-demo.v1",
  "examen": "angiotc-torax-tep",
  "nombre": "AngioTC de tórax por tromboembolismo",
+ "orden_demo": 4,
+ "evidencia_orden": "Inglaterra: unos 360 000 angioTC pulmonares en 2023/24, cerca del 5 % de los TC (cálculo propio con dos fuentes).",
  "estado": "glosario de demostración, sin medir",
  "regla": "Términos de las secciones del examen; sin lateralidad, negaciones, unidades ni lista PUC; variantes agrupadas; por grupo: prioridad A, técnicos (10+ letras, sigla o epónimo), conteo en plantillas como apoyo y orden de la fuente; grupos intercalados. Revisión del responsable pendiente.",
  "secciones": [
@@ -169,5 +171,5 @@
    "repite": "TVP"
   }
  ],
- "hash": "1f9b4ee0b9601b429ce888e134e03b304246032b3f59a1b3225cfee56a2cfe85"
+ "hash": "67e9437b7fd7226c8799919b7a88893e2eb37382a41f5b970f2b21e4cc380821"
 }

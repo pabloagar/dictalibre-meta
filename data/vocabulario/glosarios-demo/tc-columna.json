@@ -2,6 +2,8 @@
  "schema": "dicta-libre.glosario-demo.v1",
  "examen": "tc-columna",
  "nombre": "TC de columna",
+ "orden_demo": 5,
+ "evidencia_orden": "Urgencias 11 % (1997); Taiwán 2013: columna cervical y lumbar 2,3 % de los pacientes.",
  "estado": "glosario de demostración, sin medir",
  "regla": "Términos de las secciones del examen; sin lateralidad, negaciones, unidades ni lista PUC; variantes agrupadas; por grupo: prioridad A, técnicos (10+ letras, sigla o epónimo), conteo en plantillas como apoyo y orden de la fuente; grupos intercalados. Revisión del responsable pendiente.",
  "secciones": [
@@ -161,5 +163,5 @@
    "repite": "protrusión discal"
   }
  ],
- "hash": "2602e6711650b01d7d443a8aa1dff3cf7712f4d52bbcf0849488aa6a86784ee3"
+ "hash": "baab98648ce797b3ec1d0c40261a919a763d3c3a9de21e74a3902d687c53029b"
 }

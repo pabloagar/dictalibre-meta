@@ -2,6 +2,8 @@
  "schema": "dicta-libre.glosario-demo.v1",
  "examen": "tc-torax",
  "nombre": "TC de tórax (incluye alta resolución)",
+ "orden_demo": 3,
+ "evidencia_orden": "Corea 26 %; 19 % de los TC con contraste en EE. UU.; atención primaria 16 %.",
  "estado": "glosario de demostración, sin medir",
  "regla": "Términos de las secciones del examen; sin lateralidad, negaciones, unidades ni lista PUC; variantes agrupadas; por grupo: prioridad A, técnicos (10+ letras, sigla o epónimo), conteo en plantillas como apoyo y orden de la fuente; grupos intercalados. Revisión del responsable pendiente.",
  "secciones": [
@@ -161,5 +163,5 @@
    "repite": "EPOC"
   }
  ],
- "hash": "cd51ec97bf6b90a0fb3cc2dca166faabac2eed443fa8d088c63d5395d0a29548"
+ "hash": "80dc2139c368ef670077701d3f81ef08d9234a218e1f6e27dd977f9facf5e3ea"
 }

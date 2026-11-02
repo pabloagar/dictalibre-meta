@@ -2,6 +2,8 @@
  "schema": "dicta-libre.glosario-demo.v1",
  "examen": "tc-cuello",
  "nombre": "TC de cuello",
+ "orden_demo": 6,
+ "evidencia_orden": "Taiwán 2013: 2,6 % de los pacientes.",
  "estado": "glosario de demostración, sin medir",
  "regla": "Términos de las secciones del examen; sin lateralidad, negaciones, unidades ni lista PUC; variantes agrupadas; por grupo: prioridad A, técnicos (10+ letras, sigla o epónimo), conteo en plantillas como apoyo y orden de la fuente; grupos intercalados. Revisión del responsable pendiente.",
  "secciones": [
@@ -156,5 +158,5 @@
   }
  ],
  "omitidos_por_repeticion": [],
- "hash": "5f0366365135fdbaed43c99aeefce8e9544f449dda02ca13cf9a4728a7542544"
+ "hash": "99ed367ab40c4dce001ce76f60681aca7dab3ed3dcbad72cda8415ac40f68b5b"
 }

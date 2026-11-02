@@ -15,7 +15,7 @@ import {createReviewer,reviewWithMeta} from './meta-review.mjs';
 import {reviewContext} from './review-context.mjs';
 import {STREAM_PREPARATION} from './stream-audio.mjs';
 import { wavInfo, hash, configuration, score, csv } from './lab-core.mjs';
-import {validateGlossary,glossaryToConfig} from './vocabulary.mjs';
+import {validateGlossary,glossaryToConfig,demoGlossaryToConfig} from './vocabulary.mjs';
 const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 export const MODEL_REVISION='220761e60602a5ca694c409d5f424563b75d6820';
 function modelReady(){
@@ -56,9 +56,11 @@ export async function museTranscribe(wav,config,key,signal) {
   if(typeof data.transcript!=='string') throw new Error('Muse no devolvió transcript válido.');
   return {text:data.transcript,providerAudioDurationMs:data.audioDurationMs??null,device:'Meta API',modelRevision:null,memoryBytes:null};
 }
-export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=path.join(ROOT,'.env.local'),worker=new LocalWorker(),muse=museTranscribe,streamEndpoint,reviewProvider=reviewWithMeta,templateFile=path.join(ROOT,'data','local','templates','catalog.json'),glossaryDir=path.join(ROOT,'data','vocabulario','glosarios')}={}) {
+export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=path.join(ROOT,'.env.local'),worker=new LocalWorker(),muse=museTranscribe,streamEndpoint,reviewProvider=reviewWithMeta,templateFile=path.join(ROOT,'data','local','templates','catalog.json'),glossaryDir=path.join(ROOT,'data','vocabulario','glosarios'),glossaryDemoDir=path.join(ROOT,'data','vocabulario','glosarios-demo')}={}) {
   // Glosarios versionados del repo: configuraciones de Muse de solo lectura, nunca escritas en el catálogo.
   const builtinConfigs=[];if(fs.existsSync(glossaryDir))for(const f of fs.readdirSync(glossaryDir).filter(f=>f.endsWith('.json')).sort()){try{builtinConfigs.push(glossaryToConfig(validateGlossary(JSON.parse(fs.readFileSync(path.join(glossaryDir,f),'utf8')))));}catch(e){console.error(`Glosario omitido (${f}): ${e.message}`);}}
+  // Glosarios de demostración por examen (sin medir), también de solo lectura y ordenados por volumen de solicitud.
+  if(fs.existsSync(glossaryDemoDir)){const demos=[];for(const f of fs.readdirSync(glossaryDemoDir).filter(f=>f.endsWith('.json')).sort()){try{demos.push(demoGlossaryToConfig(JSON.parse(fs.readFileSync(path.join(glossaryDemoDir,f),'utf8'))));}catch(e){console.error(`Glosario de demostración omitido (${f}): ${e.message}`);}}builtinConfigs.push(...demos.sort((a,b)=>(a.orden_demo??99)-(b.orden_demo??99)));}
   const findConfig=id=>db.configs.find(c=>c.id===id)??builtinConfigs.find(c=>c.id===id);
   fs.mkdirSync(dataDir,{recursive:true});fs.mkdirSync(path.join(dataDir,'audio'),{recursive:true});fs.mkdirSync(path.join(dataDir,'derived'),{recursive:true});
   const dbPath=path.join(dataDir,'catalog.json');

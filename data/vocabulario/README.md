@@ -63,4 +63,9 @@ En `glosarios-demo/` hay un JSON por examen con 20 términos, más `revision.csv
   - los grupos se intercalan;
   - se omite una sigla junto a su forma completa y una expresión contenida en otra; queda la primera en el orden y la otra se registra.
 - **Estado:** **glosario de demostración, sin medir**. No se afirma que mejoren el reconocimiento. Pueden quedar sinónimos que la regla no detecta.
-- **Pendiente:** que `/live` los proponga al aplicar una plantilla; espera la revisión del responsable y su aprobación.
+- **Orden de la demo** (`orden_demo` y `evidencia_orden` en cada JSON): abdomen y pelvis, cerebro, tórax, angioTC por tromboembolismo, columna, cuello, cavidades paranasales, órbitas y oídos, PieloTC/UroTC, angioTC de cerebro y cuello, y angioTC de aorta. Los puestos 1–3 tienen respaldo directo en publicaciones; del 4 en adelante los datos son parciales o indirectos. Reemplazar por el volumen real del servicio cuando exista.
+- **En `/live`:** aparecen en el selector «Configuración de Muse» como `Demo · <examen> · 20 términos (sin medir)`, de solo lectura y sin escribirse en el catálogo.
+  - Al aplicar una plantilla cuyo nombre corresponde a uno de estos exámenes (`examForTemplate`, en `apps/shared/report-model.js`), se **propone** su glosario con una nota visible; el médico puede cambiarlo.
+  - Si después se aplica una plantilla sin examen reconocido, se vuelve a la selección anterior, salvo que el médico haya elegido otra a mano.
+  - La configuración por defecto sigue siendo «Sin glosario».
+  - El examen reconocido queda en el evento `template-loaded` del editor, y el glosario usado en cada toma queda en su configuración (`demo:<examen>:<hash>`).

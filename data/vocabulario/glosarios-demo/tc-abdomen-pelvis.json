@@ -2,6 +2,8 @@
  "schema": "dicta-libre.glosario-demo.v1",
  "examen": "tc-abdomen-pelvis",
  "nombre": "TC de abdomen y pelvis",
+ "orden_demo": 1,
+ "evidencia_orden": "Más frecuente en EE. UU. (45 % en 583 centros; 56 % de los TC con contraste) y Corea (35 %).",
  "estado": "glosario de demostración, sin medir",
  "regla": "Términos de las secciones del examen; sin lateralidad, negaciones, unidades ni lista PUC; variantes agrupadas; por grupo: prioridad A, técnicos (10+ letras, sigla o epónimo), conteo en plantillas como apoyo y orden de la fuente; grupos intercalados. Revisión del responsable pendiente.",
  "secciones": [
@@ -160,5 +162,5 @@
   }
  ],
  "omitidos_por_repeticion": [],
- "hash": "eb40aa5c5c4cdabe455e9c91f9dffb3f2f5cd9e47c11e65c38d254b8be2a3a77"
+ "hash": "4e0f216dd2c78bf15371c64d8e2120641198d03156b94ec4935646787b854543"
 }
