@@ -2,6 +2,7 @@
   "name": "dicta-libre",
   "version": "0.1.0",
   "private": true,
+  "license": "PolyForm-Noncommercial-1.0.0",
   "packageManager": "pnpm@11.25.0",
   "type": "module",
   "description": "Dictado radiológico experimental con Muse, Whisper local, laboratorio comparativo y editor revisable",

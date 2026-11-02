@@ -13,7 +13,7 @@ La idea y exploración conceptual precedieron al evento; la implementación conc
 | Revisor Meta con aprobación humana | backend/meta-review.mjs, META_REVIEW.md | No valida clínicamente el informe |
 | Editor, plantillas propias e importador | PHASE_9_EDITOR.md, TEMPLATE_LIBRARY.md | Código incluido; colección externa privada excluida |
 
-Se conservan los 19 commits originales. Los cambios acumulados posteriores se registran con la fecha real del nuevo commit, sin reconstruir artificialmente fechas. PUBLICATION.md describe auditoría y pendientes de reglas/licencia.
+Se conservan los 19 commits originales. Los cambios acumulados posteriores se registran con la fecha real del nuevo commit, sin reconstruir artificialmente fechas. PUBLICATION.md describe auditoría, licencia PolyForm Noncommercial elegida el 02-11-2026 y pendientes de entrega; LICENSING.md documenta la revisión de las bases públicas y sus límites.
 
 Pendiente: aceptación física completa, referencias humanas independientes, evaluación de errores clínicamente relevantes, entrega y comprobante del concurso.
 
