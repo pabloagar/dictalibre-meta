@@ -1,0 +1,314 @@
+{
+  "schema": "dictation-adjustments-summary-v1",
+  "build": "60c0b04d4b661902c1e12af80ca601ae9f183d1c",
+  "protocolHash": "ac57a2b63d3d23d7b22de2831aad1b1afb7131f1ce4bb2211cc22fbdbd97d3bb",
+  "resultsHash": "6c11ca508e5361c9b441bb03929d3b1c1d50bec8cad9568e725c523b76c97440",
+  "variants": [
+    {
+      "id": "baseline",
+      "spokenRuns": 24,
+      "completed": 24,
+      "exactMatch": 17,
+      "termMatch": 18,
+      "protectedMatch": 24,
+      "quantityMatch": 24,
+      "emptySilence": true
+    },
+    {
+      "id": "balanced",
+      "spokenRuns": 24,
+      "completed": 24,
+      "exactMatch": 24,
+      "termMatch": 24,
+      "protectedMatch": 24,
+      "quantityMatch": 24,
+      "emptySilence": true
+    }
+  ],
+  "pairs": [
+    {
+      "caseId": "microsoft-helena-desktop-pleural-air",
+      "base": "Se identifica neumotórax basal izquierdo de pequeña cuantía.",
+      "candidate": "Se identifica neumotórax basal izquierdo de pequeña cuantía.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": true,
+      "candidateTerms": true,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-helena-desktop-pleural-blood",
+      "base": "El control muestra hemotorax derecho sin neumotórax asociado.",
+      "candidate": "El control muestra hemotórax derecho sin neumotórax asociado.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": true,
+      "candidateTerms": true,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-helena-desktop-chest-wall",
+      "base": " Engrosamiento de partes blandas del hemitórax izquierdo.",
+      "candidate": "Engrosamiento de partes blandas del hemitórax izquierdo.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": true,
+      "candidateTerms": true,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-helena-desktop-density-low",
+      "base": "Lesión hipodensa en el segmento hepático derecho.",
+      "candidate": "Lesión hipodensa en el segmento hepático derecho.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": true,
+      "candidateTerms": true,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-helena-desktop-density-high",
+      "base": "Lesión hiperdensa en el segmento hepático derecho.",
+      "candidate": "Lesión hiperdensa en el segmento hepático derecho.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": true,
+      "candidateTerms": true,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-helena-desktop-renal",
+      "base": "Litiasis ureteral izquierda de 4 milímetros con hidronefrosis leve.",
+      "candidate": "Litiasis ureteral izquierda de 4 milímetros con hidronefrosis leve.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": true,
+      "candidateTerms": true,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-helena-desktop-liver",
+      "base": "Este atosis hepática sin hepatomegalia.",
+      "candidate": "Esteatosis hepática sin hepatomegalia.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": false,
+      "candidateTerms": true,
+      "improved": true,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-helena-desktop-brain-negative",
+      "base": "No se observa hemorragia subaracnoidea ni hidrocefalia.",
+      "candidate": "No se observa hemorragia subaracnoidea ni hidrocefalia.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": true,
+      "candidateTerms": true,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-helena-desktop-bone-negative",
+      "base": "No hay fractura ni luxación en el hombro izquierdo.",
+      "candidate": "No hay fractura ni luxación en el hombro izquierdo.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": true,
+      "candidateTerms": true,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-helena-desktop-comparison",
+      "base": "La lesión mide 12 milímetros, previamente medía 20 milímetros.",
+      "candidate": "La lesión mide 12 milímetros, previamente medía 20 milímetros.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": true,
+      "candidateTerms": true,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-helena-desktop-headings",
+      "base": "Hallazgos:\nhorta de calibre normal.\n\nImpresión:\nsin aneurisma.",
+      "candidate": "Hallazgos:\naorta de calibre normal.\n\nImpresión:\nsin aneurisma.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": false,
+      "candidateTerms": true,
+      "improved": true,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-helena-desktop-literal-coma",
+      "base": "Paciente en coma inducido. Sin edema cerebral.",
+      "candidate": "Paciente en coma inducido. Sin edema cerebral.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": true,
+      "candidateTerms": true,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-laura-pleural-air",
+      "base": "Se identifican hemotórax basal izquierdo de pequeña cuantía.",
+      "candidate": "Se identifica neumotórax basal izquierdo de pequeña cuantía.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": false,
+      "candidateTerms": true,
+      "improved": true,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-laura-pleural-blood",
+      "base": "El control muestra emotorax derecho sin neumotórax asociado.",
+      "candidate": "El control muestra hemotórax derecho sin neumotórax asociado.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": false,
+      "candidateTerms": true,
+      "improved": true,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-laura-chest-wall",
+      "base": "Engrosamiento de partes blandas del hemitórax izquierdo.",
+      "candidate": "Engrosamiento de partes blandas del hemitórax izquierdo.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": true,
+      "candidateTerms": true,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-laura-density-low",
+      "base": "Lesión hipodensa en el segmento hepático derecho.",
+      "candidate": "Lesión hipodensa en el segmento hepático derecho.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": true,
+      "candidateTerms": true,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-laura-density-high",
+      "base": "Lesión hiperdensa en el segmento hepático derecho.",
+      "candidate": "Lesión hiperdensa en el segmento hepático derecho.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": true,
+      "candidateTerms": true,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-laura-renal",
+      "base": "Litiasis ureteral izquierda de 4 milímetros con hidronefrosis leve.",
+      "candidate": "Litiasis ureteral izquierda de 4 milímetros con hidronefrosis leve.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": true,
+      "candidateTerms": true,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-laura-liver",
+      "base": "Este atosis hepática sin hepatomegalia.",
+      "candidate": "Esteatosis hepática sin hepatomegalia.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": false,
+      "candidateTerms": true,
+      "improved": true,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-laura-brain-negative",
+      "base": "No se observa hemorragia subaracnoidea ni hidrocefalia.",
+      "candidate": "No se observa hemorragia subaracnoidea ni hidrocefalia.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": true,
+      "candidateTerms": true,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-laura-bone-negative",
+      "base": "No hay fractura ni luxación en el hombro izquierdo.",
+      "candidate": "No hay fractura ni luxación en el hombro izquierdo.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": true,
+      "candidateTerms": true,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-laura-comparison",
+      "base": "La lesión mide 12 milímetros, previamente medía 20 milímetros.",
+      "candidate": "La lesión mide 12 milímetros, previamente medía 20 milímetros.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": true,
+      "candidateTerms": true,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-laura-headings",
+      "base": "Hallazgos:\nhorta de calibre normal.\n\nImpresión:\nsin aneurisma.",
+      "candidate": "Hallazgos:\naorta de calibre normal.\n\nImpresión:\nsin aneurisma.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": false,
+      "candidateTerms": true,
+      "improved": true,
+      "regressed": false
+    },
+    {
+      "caseId": "microsoft-laura-literal-coma",
+      "base": "Paciente en coma inducido. Sin edema cerebral.",
+      "candidate": "Paciente en coma inducido. Sin edema cerebral.",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": true,
+      "candidateTerms": true,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "caseId": "digital-silence",
+      "base": "",
+      "candidate": "",
+      "baseStatus": "completed",
+      "candidateStatus": "completed",
+      "baseTerms": true,
+      "candidateTerms": true,
+      "improved": false,
+      "regressed": false
+    }
+  ],
+  "exploratoryPass": true,
+  "productionAdopted": false,
+  "referenceHumanValidated": false,
+  "limits": [
+    "Development on previously seen synthetic scripts, not independent validation",
+    "One run per audio/variant, two es-ES voices; cannot estimate reliability in people",
+    "Counters do not fully adjudicate meaning; complete outputs retained",
+    "Bad-encoding preliminary execution separately invalidated and retained"
+  ]
+}

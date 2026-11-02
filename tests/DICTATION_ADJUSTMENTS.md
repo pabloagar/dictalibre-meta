@@ -1,0 +1,33 @@
+# Ajustes conservadores: protocolo previo, 02-11-2026
+
+Pablo autoriza más pruebas mientras termina Samsung, sin actualizar Render. Comparación exploratoria de desarrollo: 12 guiones ya conocidos, dos voces (24 audios) más silencio, dos variantes, una repetición: 50 solicitudes secuenciales. No es conjunto reservado ni validación independiente: se eligieron seis contextos problemáticos y seis controles, algunos también con errores previos. Mismo PCM por par; alternar orden. Lista y selección congeladas en scripts/evaluate-dictation-adjustments.mjs antes de inferir.
+
+Base: Muse streaming manual, Spanish, sin keywords. Candidata: misma configuración con lista equilibrada neumotórax, hemotórax, hemitórax, esteatosis, aorta, litiasis, hipodensa, hiperdensa, hemorragia, hidrocefalia. No cambiar lista según la frase. No reescribir resultados, no usar Spark. Servidor loopback separado, credencial habitual, sin reinicios ni modificación de producción. Recursos externos del proveedor compartidos: no inferir latencia telefónica ni mejora causal de velocidad.
+
+Hipótesis: reducir sustituciones de términos sin degradar controles correctos. Métricas: coincidencia final, secuencia de términos, negaciones/lados y cifras/unidades; original y cada etapa conservados. Comparación pareada nueva, no atribuir variación frente a series históricas al ajuste. Éxito exploratorio: menos errores de términos, cero regresiones de texto que antes coincidía o de ejes protegidos, silencio vacío; todos los estados terminales contados. Red, navegador, dispositivo, precisión y sobrecosto ausentes: null. Referencias TTS no escuchadas; antes de adopción exige nuevas frases humanas, referencias escuchadas y repetición. Guardar fallos, hashes del audio/fuentes/scripts/configuración y commit comprobado.
+
+## Reglas deterministas y límites a evaluar
+
+- Aplicar automáticamente solo transformaciones explícitas y reversibles de formato: comandos, cifras/unidades revisadas. Conservar original y cambios. Nunca convertir por plausibilidad neumotórax/hemotórax, derecha/izquierda, hipo/hiper, ni eliminar negaciones.
+- Cuando una expresión numérica o comando sea ambiguo, conservarla y señalarla para revisión. Un aviso no resuelve la intención: «cinco punto dos lesiones» puede ser decimal o fin de frase. Probar un bloqueo conservador de formato ante warnings fuera de producción.
+- Una propuesta de IA que difiere del resultado determinista necesita aceptación. Comparar el texto completo; no basta contar palabras médicas porque puede cambiar relaciones manteniendo las mismas palabras.
+- Las tildes no son universalmente intercambiables (sí/si). Una tabla ortográfica solo sería adoptable con entradas inequívocas y controles de contexto; no añadir reglas a partir de una única salida sintética.
+- IA en reconocimiento: glosario equilibrado es un sesgo, no garantía. IA de revisión textual: señalar contradicciones con citas, sin inventar hallazgos ni afirmar conocer el audio. Segunda transcripción del mismo audio podría señalar desacuerdos para escuchar, nunca elegir por mayoría; aún no evaluada, tiene coste/latencia adicionales.
+
+Este documento distingue experimentos de funciones: ninguna regla nueva está activada en móvil, laboratorio o Render. Reproducción: node scripts/evaluate-dictation-adjustments.mjs data/local/dictation-breadth-v1. No subir WAV, credenciales ni resultados completos.
+
+## Prototipo determinista (sin integrar)
+
+`scripts/dictation-safety-prototype.mjs` permite únicamente la salida exacta del formateador existente sin warnings; retiene el original ante ambigüedad o una propuesta distinta. No es un detector de si el ASR oyó mal: si el ASR entrega una palabra incorrecta plausible, no puede saberlo. Pruebas: diez propuestas que cambian entidades, lado, negación, unidades/cifras, relaciones o añaden hallazgos requieren aceptación; tres ambigüedades preservan original; un decimal explícito pasa. Se añade control UTF-8 del glosario del experimento. Suite: 200/200 y sintaxis aprobadas.
+
+Control de carga con los 24 guiones correctos: 23 pasan automáticamente y uno se retiene («coma inducido», warning de uso literal). Resultado desfavorable del enfoque amplio: no integrar tal cual, porque generaría revisión innecesaria de una frase válida. Refinamiento pendiente: distinguir ambigüedad real de un aviso sobre literalidad que el formateador ya preservó. No ocultar warnings ni cambiar expectativas para declarar éxito.
+
+Primera comparación interrumpida e invalidada: el script se escribió accidentalmente en cp1252 y Node leyó tildes de keywords como caracteres de reemplazo. La instancia aislada PID37808 se detuvo, evidencia conservada en data/local/lab/reports/dictation-breadth-1793647756617 con invalidated.json. No atribuir esas salidas al glosario previsto. Script corregido a UTF-8, prueba añadida; nueva ejecución íntegra en dictation-adjustments-1793647820319. Ningún servidor de usuario reiniciado.
+
+## Resultado de comparación válida
+
+50/50 solicitudes completadas. Aplicación comprobada contra 60c0b04d4b661902c1e12af80ca601ae9f183d1c; evaluador nuevo identificado por hash aparte. Los 24 mismos audios dieron 17/24 textos finales coincidentes sin glosario y 24/24 con la lista equilibrada. Secuencia de términos: 18/24 frente a 24/24; seis pares mejoran en ese eje y ninguno regresa. Marcadores de negación/lado y cifras/unidades conservados en ambas variantes, 24/24 por eje; vacíos no equivalen a oportunidades clínicas. Silencio vacío en ambas. Una diferencia adicional de exactitud es una tilde. Resumen seleccionado: experiments/results/2026-11-02-dictation-adjustments/summary.json; originales completos locales.
+
+Pasa el criterio exploratorio de este conjunto de desarrollo. No activar todavía: una sola repetición por variante, dos voces sintéticas es-ES, referencias sin escuchar y frases ya conocidas para elegir vocabulario. Faltan voces humanas y controles nuevos con palabras próximas ausentes del glosario, ruido y frases más largas. No equivale a una exactitud general del 100%. No hubo sustituciones posteriores de términos ni uso de Spark en esta comparación. No se estima ganancia causal de velocidad.
+
+Decisión propuesta: priorizar vocabulario equilibrado en el reconocimiento y mantener revisión explícita de cambios de contenido; descartar reglas hemotórax→neumotórax y similares. El prototipo de bloqueo amplio ante warnings necesita refinamiento por su falso bloqueo de coma literal. Ninguna de estas candidatas se integra o despliega en esta entrega. Código, pruebas y resumen a GitHub con skip render; audio/evidencia completa locales. Render y laboratorio siguen sin reinicios.

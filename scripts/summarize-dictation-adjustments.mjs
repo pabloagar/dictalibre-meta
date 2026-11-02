@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {createHash} from 'node:crypto';
+const dir=process.argv[2];if(!dir)throw Error('Evidence directory required');
+const read=f=>JSON.parse(fs.readFileSync(path.join(dir,f),'utf8'));
+const hash=f=>createHash('sha256').update(fs.readFileSync(path.join(dir,f))).digest('hex');
+const p=read('protocol.json'),r=read('results.json');
+if(p.schema!=='dictation-adjustments-v1'||read('completion.json').runs!==50||r.length!==50||new Set(r.map(x=>x.caseId+'/'+x.variant)).size!==50)throw Error('Incomplete comparison');
+if(JSON.stringify(p.variants[1].keywords)!==JSON.stringify(['neumotórax','hemotórax','hemitórax','esteatosis','aorta','litiasis','hipodensa','hiperdensa','hemorragia','hidrocefalia']))throw Error('Wrong vocabulary');
+const measures=['exactMatch','termMatch','protectedMatch','quantityMatch'];
+const variants=p.variants.map(v=>{const rows=r.filter(x=>x.variant===v.id&&x.caseId!=='digital-silence');return {id:v.id,spokenRuns:rows.length,completed:rows.filter(x=>x.status==='completed').length,...Object.fromEntries(measures.map(k=>[k,rows.filter(x=>x[k]).length])),emptySilence:r.some(x=>x.variant===v.id&&x.caseId==='digital-silence'&&x.status==='completed'&&x.text==='')};});
+const pairs=r.filter(x=>x.variant==='baseline').map(b=>{const a=r.find(x=>x.variant==='balanced'&&x.caseId===b.caseId);return {caseId:b.caseId,base:b.formatted,candidate:a.formatted,baseStatus:b.status,candidateStatus:a.status,baseTerms:b.termMatch,candidateTerms:a.termMatch,improved:!b.termMatch&&a.termMatch,regressed:measures.some(k=>b[k]&&!a[k])};});
+const summary={schema:'dictation-adjustments-summary-v1',build:p.build,protocolHash:hash('protocol.json'),resultsHash:hash('results.json'),variants,pairs,exploratoryPass:variants.every(v=>v.completed===24&&v.emptySilence)&&variants[1].termMatch>variants[0].termMatch&&!pairs.some(p=>p.regressed),productionAdopted:false,referenceHumanValidated:false,limits:['Development on previously seen synthetic scripts, not independent validation','One run per audio/variant, two es-ES voices; cannot estimate reliability in people','Counters do not fully adjudicate meaning; complete outputs retained','Bad-encoding preliminary execution separately invalidated and retained']};
+fs.writeFileSync(path.join(dir,'summary.json'),JSON.stringify(summary,null,2)+'\n');
+console.log(JSON.stringify(summary,null,2));
