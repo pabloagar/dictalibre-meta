@@ -1,0 +1,409 @@
+{
+ "schema": "dicta-libre.frases.v1",
+ "examen": "tc-torax",
+ "version": 1,
+ "estado": "revisión profesional pendiente",
+ "autoria": "Frases sintéticas escritas por el equipo el 2-nov-2026. No provienen de informes de pacientes ni de plantillas.",
+ "seleccion": "Cubren la propuesta editorial de 60 candidatos (propuesta_medicion en candidatos-tc-torax.v1.json). Si el responsable cambia la selección, ejecutar node scripts/vocab-frases.mjs --verificar --planilla <csv> y ajustar las frases.",
+ "lectura": [
+  "Leer cada frase una vez, a velocidad y tono habituales de dictado, sin decir los signos de puntuación.",
+  "Un archivo WAV PCM 16 bits mono por frase y voz, de hasta 3 minutos, con el micrófono habitual.",
+  "Nombre del archivo: <fase>_<id>_<voz>.wav, por ejemplo A_A01_v1.wav. v1 = responsable, v2 = segunda voz humana, s1 = voz sintética (se informa aparte).",
+  "Si una lectura sale distinta del texto (palabra cambiada u omitida), repetirla; no corregir la referencia después de grabar."
+ ],
+ "fases": {
+  "A": {
+   "proposito": "Selección: tasa de error sin glosario por candidato.",
+   "frases": [
+    {
+     "id": "A01",
+     "texto": "Bronconeumonía con broncograma aéreo y árbol en brote en la língula."
+    },
+    {
+     "id": "A02",
+     "texto": "Vidrio esmerilado con patrón en mosaico y atrapamiento aéreo, sugerente de neumonitis por hipersensibilidad."
+    },
+    {
+     "id": "A03",
+     "texto": "Bronquiolitis con árbol en brote, sin cavitación ni empiema."
+    },
+    {
+     "id": "A04",
+     "texto": "Tuberculoma calcificado y aspergiloma dentro de una cavitación residual."
+    },
+    {
+     "id": "A05",
+     "texto": "Empiema con paquipleuritis e hidroneumotórax secundario a bronconeumonía."
+    },
+    {
+     "id": "A06",
+     "texto": "Atelectasia del lóbulo medio con bandas fibroatelectásicas y paquipleuritis tras pleurodesis."
+    },
+    {
+     "id": "A07",
+     "texto": "Hemotórax postraumático con neumomediastino, hidroneumotórax y atelectasia pasiva."
+    },
+    {
+     "id": "A08",
+     "texto": "Engrosamiento pleural sugerente de mesotelioma, con antecedente de pleurodesis y bandas fibroatelectásicas."
+    },
+    {
+     "id": "A09",
+     "texto": "Bula apical con hiperinsuflación y atrapamiento aéreo en paciente con EPOC y traqueobroncomalacia."
+    },
+    {
+     "id": "A10",
+     "texto": "Bronquiectasia cilíndrica y bronquiolectasias en la língula, con patrón en mosaico."
+    },
+    {
+     "id": "A11",
+     "texto": "Traqueobroncomalacia con colapso espiratorio, bronquiectasia y bronquiolectasias distales."
+    },
+    {
+     "id": "A12",
+     "texto": "Micronódulo en la língula y nódulo subsólido; se sugiere control según Fleischner."
+    },
+    {
+     "id": "A13",
+     "texto": "Nódulo espiculado sospechoso de adenocarcinoma, categoría Lung-RADS cuatro."
+    },
+    {
+     "id": "A14",
+     "texto": "Masa hiliar compatible con carcinoma epidermoide, con adenopatía subcarinal y adenopatías en la ventana aortopulmonar."
+    },
+    {
+     "id": "A15",
+     "texto": "Linfangitis carcinomatosa con engrosamiento septal interlobulillar, secundaria a adenocarcinoma."
+    },
+    {
+     "id": "A16",
+     "texto": "Tumor de Pancoast con nódulo espiculado y adenopatía subcarinal."
+    },
+    {
+     "id": "A17",
+     "texto": "Cambios de segmentectomía con nódulo perifisural estable; según Fleischner no requiere control."
+    },
+    {
+     "id": "A18",
+     "texto": "Cambios de neumonectomía con timoma resecado, esternotomía, cerclajes esternales y ateromatosis aórtica."
+    },
+    {
+     "id": "A19",
+     "texto": "Masa del mediastino anterior compatible con timoma que ocupa la ventana aortopulmonar, y micronódulo subpleural."
+    },
+    {
+     "id": "A20",
+     "texto": "Reticulación subpleural y panalización basal, sugerentes de neumonitis por hipersensibilidad crónica."
+    },
+    {
+     "id": "A21",
+     "texto": "Engrosamiento septal interlobulillar sobre vidrio esmerilado con patrón de crazy paving, a diferenciar de neumonitis por hipersensibilidad."
+    },
+    {
+     "id": "A22",
+     "texto": "Sarcoidosis con adenopatías hiliares, sin reticulación ni panalización."
+    },
+    {
+     "id": "A23",
+     "texto": "Placas pleurales calcificadas y reticulación basal sugerentes de asbestosis, sin panalización ni líneas de Kerley."
+    },
+    {
+     "id": "A24",
+     "texto": "Líneas de Kerley y cardiomegalia con engrosamiento septal interlobulillar, en paciente con cerclajes esternales."
+    },
+    {
+     "id": "A25",
+     "texto": "Ateromatosis aórtica y cambios de esternotomía con cerclajes esternales indemnes."
+    },
+    {
+     "id": "A26",
+     "texto": "Cánula de traqueostomía y sonda nasoenteral en posición adecuada, con atelectasia basal."
+    },
+    {
+     "id": "A27",
+     "texto": "Defecto de repleción en la arteria lobar inferior compatible con TEP agudo, joroba de Hampton y opacificación subóptima distal."
+    },
+    {
+     "id": "A28",
+     "texto": "Rectificación del septum interventricular en relación con TEP, sin defecto de repleción central ni joroba de Hampton."
+    },
+    {
+     "id": "A29",
+     "texto": "Opacificación subóptima que impide descartar TEP; septum interventricular de posición normal."
+    },
+    {
+     "id": "A30",
+     "texto": "Joroba de Hampton y defecto de repleción, con opacificación subóptima de las ramas segmentarias y septum interventricular rectificado."
+    },
+    {
+     "id": "A31",
+     "texto": "Cardiomegalia y ateromatosis aórtica con cambios de esternotomía."
+    },
+    {
+     "id": "A32",
+     "texto": "Traqueostomía y sonda nasoenteral, con neumomediastino mínimo y hemotórax residual."
+    },
+    {
+     "id": "A33",
+     "texto": "Cambios de pleurodesis con paquipleuritis y hemotórax residual, sin signos de mesotelioma."
+    },
+    {
+     "id": "A34",
+     "texto": "Mesotelioma con derrame pleural, atelectasia compresiva y bandas fibroatelectásicas."
+    },
+    {
+     "id": "A35",
+     "texto": "Hiperinsuflación y bula subpleural en paciente con EPOC, con bronquiectasia y bronquiolectasias leves."
+    },
+    {
+     "id": "A36",
+     "texto": "Traqueobroncomalacia con atrapamiento aéreo y patrón en mosaico."
+    },
+    {
+     "id": "A37",
+     "texto": "Bula gigante con hiperinsuflación compensatoria en paciente con EPOC avanzada."
+    },
+    {
+     "id": "A38",
+     "texto": "Bronquiolitis infecciosa con árbol en brote y broncograma aéreo periférico."
+    },
+    {
+     "id": "A39",
+     "texto": "Tuberculoma con micronódulo satélite y aspergiloma contralateral."
+    },
+    {
+     "id": "A40",
+     "texto": "Cavitación con broncograma aéreo y bronconeumonía necrotizante, sin aspergiloma."
+    },
+    {
+     "id": "A41",
+     "texto": "Empiema con vidrio esmerilado adyacente, bronquiolitis y tuberculoma calcificado."
+    },
+    {
+     "id": "A42",
+     "texto": "Hidroneumotórax y neumomediastino después de la neumonectomía, con traqueostomía y sonda nasoenteral."
+    },
+    {
+     "id": "A43",
+     "texto": "Nódulo subsólido y nódulo perifisural clasificados según Lung-RADS."
+    },
+    {
+     "id": "A44",
+     "texto": "Carcinoma epidermoide del vértice con características de tumor de Pancoast y linfangitis carcinomatosa."
+    },
+    {
+     "id": "A45",
+     "texto": "Adenocarcinoma tratado con segmentectomía; nódulo subsólido nuevo, controlar según Fleischner y Lung-RADS."
+    },
+    {
+     "id": "A46",
+     "texto": "Antecedente de segmentectomía por carcinoma epidermoide, sin linfangitis carcinomatosa."
+    },
+    {
+     "id": "A47",
+     "texto": "Tumor de Pancoast con adenopatía subcarinal y masa en la ventana aortopulmonar sugerente de timoma."
+    },
+    {
+     "id": "A48",
+     "texto": "Nódulo espiculado contralateral a la neumonectomía y nódulo perifisural estable."
+    },
+    {
+     "id": "A49",
+     "texto": "Patrón de crazy paving, a diferenciar de sarcoidosis o asbestosis."
+    },
+    {
+     "id": "A50",
+     "texto": "Líneas de Kerley con cardiomegalia y crazy paving sugerentes de edema; se descartan sarcoidosis y asbestosis."
+    }
+   ]
+  },
+  "B": {
+   "proposito": "Evaluación de variantes de glosario con frases distintas a la fase A.",
+   "frases": [
+    {
+     "id": "B01",
+     "texto": "Foco de bronconeumonía basal con broncograma aéreo."
+    },
+    {
+     "id": "B02",
+     "texto": "Tenue vidrio esmerilado y árbol en brote periférico."
+    },
+    {
+     "id": "B03",
+     "texto": "Hallazgos de bronquiolitis y cavitación apical."
+    },
+    {
+     "id": "B04",
+     "texto": "Tuberculoma estable y aspergiloma sin cambios."
+    },
+    {
+     "id": "B05",
+     "texto": "Colección compatible con empiema y atelectasia adyacente."
+    },
+    {
+     "id": "B06",
+     "texto": "Bandas fibroatelectásicas y hemotórax mínimo."
+    },
+    {
+     "id": "B07",
+     "texto": "Hidroneumotórax laminar con neumomediastino leve."
+    },
+    {
+     "id": "B08",
+     "texto": "Paquipleuritis difusa sugerente de mesotelioma."
+    },
+    {
+     "id": "B09",
+     "texto": "Antecedente de pleurodesis y bula residual."
+    },
+    {
+     "id": "B10",
+     "texto": "Hiperinsuflación con atrapamiento aéreo moderado."
+    },
+    {
+     "id": "B11",
+     "texto": "Patrón en mosaico y bronquiectasia varicosa."
+    },
+    {
+     "id": "B12",
+     "texto": "Bronquiolectasias con traqueobroncomalacia leve."
+    },
+    {
+     "id": "B13",
+     "texto": "Opacidad en la língula y micronódulo calcificado."
+    },
+    {
+     "id": "B14",
+     "texto": "Nódulo subsólido y nódulo perifisural sin cambios."
+    },
+    {
+     "id": "B15",
+     "texto": "Recidiva de adenocarcinoma con linfangitis carcinomatosa."
+    },
+    {
+     "id": "B16",
+     "texto": "Carcinoma epidermoide con presentación de tumor de Pancoast."
+    },
+    {
+     "id": "B17",
+     "texto": "Cambios de segmentectomía y de neumonectomía contralateral."
+    },
+    {
+     "id": "B18",
+     "texto": "Adenopatía subcarinal y ganglios en la ventana aortopulmonar."
+    },
+    {
+     "id": "B19",
+     "texto": "Timoma con nódulo espiculado pleural."
+    },
+    {
+     "id": "B20",
+     "texto": "Reticulación y panalización de predominio periférico."
+    },
+    {
+     "id": "B21",
+     "texto": "Engrosamiento septal interlobulillar con crazy paving."
+    },
+    {
+     "id": "B22",
+     "texto": "Neumonitis por hipersensibilidad y sarcoidosis como diagnóstico diferencial."
+    },
+    {
+     "id": "B23",
+     "texto": "Asbestosis con líneas de Kerley."
+    },
+    {
+     "id": "B24",
+     "texto": "Cardiomegalia y ateromatosis aórtica."
+    },
+    {
+     "id": "B25",
+     "texto": "Esternotomía con cerclajes esternales."
+    },
+    {
+     "id": "B26",
+     "texto": "Traqueostomía y sonda nasoenteral."
+    },
+    {
+     "id": "B27",
+     "texto": "Defecto de repleción por TEP con joroba de Hampton."
+    },
+    {
+     "id": "B28",
+     "texto": "Septum interventricular rectificado y opacificación subóptima."
+    },
+    {
+     "id": "B29",
+     "texto": "Control según Fleischner y Lung-RADS en paciente con EPOC."
+    }
+   ],
+   "controles": [
+    {
+     "id": "K01",
+     "texto": "Parénquima pulmonar sin lesiones focales, con ambos hemitórax simétricos.",
+     "parecidas": "hemitórax~hemotórax"
+    },
+    {
+     "id": "K02",
+     "texto": "No se observan signos de neumonía ni derrame pleural.",
+     "parecidas": "neumonía~bronconeumonía/neumonectomía"
+    },
+    {
+     "id": "K03",
+     "texto": "Mediastino centrado, sin adenopatías ni masas.",
+     "parecidas": "adenopatías~adenopatía subcarinal"
+    },
+    {
+     "id": "K04",
+     "texto": "Bronquios de calibre normal y paredes finas.",
+     "parecidas": "bronquios~bronquiectasia/bronquiolitis/bronquiolectasias"
+    },
+    {
+     "id": "K05",
+     "texto": "Pleura sin engrosamientos, con cisuras de aspecto habitual.",
+     "parecidas": "pleura~pleurodesis/paquipleuritis"
+    },
+    {
+     "id": "K06",
+     "texto": "Corazón de tamaño normal y aorta de calibre conservado.",
+     "parecidas": "aorta~ateromatosis aórtica/aortopulmonar"
+    },
+    {
+     "id": "K07",
+     "texto": "Esternón y arcos costales sin alteraciones.",
+     "parecidas": "esternón~esternotomía/cerclajes esternales"
+    },
+    {
+     "id": "K08",
+     "texto": "Tráquea permeable y de calibre normal.",
+     "parecidas": "tráquea~traqueostomía/traqueobroncomalacia"
+    },
+    {
+     "id": "K09",
+     "texto": "Arterias pulmonares bien opacificadas, sin alteraciones.",
+     "parecidas": "opacificadas~opacificación subóptima"
+    },
+    {
+     "id": "K10",
+     "texto": "Timo involucionado de aspecto habitual.",
+     "parecidas": "timo~timoma"
+    },
+    {
+     "id": "K11",
+     "texto": "Ventilación pulmonar homogénea y espacio aéreo conservado.",
+     "parecidas": "aéreo~broncograma aéreo/atrapamiento aéreo"
+    },
+    {
+     "id": "K12",
+     "texto": "Hilios pulmonares de tamaño y morfología normales.",
+     "parecidas": "hilios~hiliar"
+    },
+    {
+     "id": "K13",
+     "texto": "Estudio angiográfico de tipo diagnóstico, sin defectos de llene en las arterias pulmonares.",
+     "parecidas": "tipo, defectos~TEP, defecto de repleción"
+    }
+   ]
+  }
+ }
+}

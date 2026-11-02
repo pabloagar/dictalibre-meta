@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="es" data-theme="lectura">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maqueta A · Sala de lectura · escritorio</title>
+<!-- Maqueta estática de propuesta. No es la aplicación. Texto 100 % sintético.
+     En producto, las fuentes se alojarían localmente (OFL), sin solicitudes a terceros. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;500;700&family=Atkinson+Hyperlegible+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --fondo:#1b1e1d; --superficie:#222625; --elevado:#2a2f2d; --linea:#3a403e;
+  --texto:#d5dad6; --texto-2:#a3aca7; --texto-3:#8a948f;
+  --grabando:#e8665f; --grabando-fondo:#3a2322;
+  --borrador:#9cc0e6; --alerta:#f0a74e; --alerta-fondo:#3a2d1c;
+  --ok:#8cc49a; --foco:#ffd27a;
+  --ui:'Atkinson Hyperlegible Next',system-ui,sans-serif;
+  --mono:'Atkinson Hyperlegible Mono',ui-monospace,monospace;
+  font:15px/1.45 var(--ui); color:var(--texto); background:var(--fondo);
+}
+:root[data-theme="dia"]{
+  --fondo:#eceeed; --superficie:#f8f9f8; --elevado:#ffffff; --linea:#cdd2d0;
+  --texto:#1d2422; --texto-2:#4d5753; --texto-3:#5f6965;
+  --grabando:#b3261e; --grabando-fondo:#f8e1df;
+  --borrador:#24578f; --alerta:#8a4b00; --alerta-fondo:#f7ead8; --ok:#2b6b3d; --foco:#0b57d0;
+}
+*{box-sizing:border-box} body{margin:0;background:var(--fondo);min-height:100vh;display:grid;grid-template-rows:44px 1fr 34px}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--foco);outline-offset:2px}
+kbd{font:12px var(--mono);border:1px solid var(--linea);border-bottom-width:2px;padding:0 5px;border-radius:3px;color:var(--texto-2);background:var(--superficie)}
+
+/* Barra superior: solo identidad, informe actual y acción final */
+.top{display:flex;align-items:center;gap:16px;padding:0 16px;border-bottom:1px solid var(--linea);background:var(--superficie)}
+.marca{font-weight:700;letter-spacing:-.2px}
+.marca span{color:var(--texto-3);font-weight:400}
+.doc{color:var(--texto-2)}
+.top .sp{flex:1}
+.btn{border:1px solid var(--linea);background:var(--elevado);padding:5px 10px;border-radius:4px;display:inline-flex;gap:8px;align-items:center;min-height:32px}
+.btn.primario{background:var(--texto);color:var(--fondo);border-color:var(--texto);font-weight:700}
+.btn.primario kbd{background:transparent;color:inherit;border-color:currentColor;opacity:.7}
+.btn[aria-disabled="true"]{opacity:.55}
+
+/* Tres zonas: plantillas, informe, decisiones */
+.zonas{display:grid;grid-template-columns:260px minmax(0,1fr) 340px;min-height:0}
+.plantillas{border-right:1px solid var(--linea);padding:12px;overflow:auto}
+.buscar{display:flex;align-items:center;gap:8px;border:1px solid var(--linea);background:var(--elevado);border-radius:4px;padding:6px 8px}
+.buscar input{all:unset;flex:1;font-size:14px}
+.buscar input::placeholder{color:var(--texto-3)}
+.grupo{margin-top:14px;font-size:13px;color:var(--texto-3)}
+.plantillas ul{list-style:none;margin:4px 0 0;padding:0}
+.plantillas li{padding:6px 8px;border-radius:3px;font-size:14px;display:flex;justify-content:space-between}
+.plantillas li[aria-selected="true"]{background:var(--elevado);outline:1px solid var(--linea)}
+.plantillas li small{color:var(--texto-3);font-family:var(--mono);font-size:11px}
+
+.informe{padding:24px 40px;overflow:auto}
+.hoja{max-width:72ch;margin:0 auto;font-size:18px;line-height:1.6}
+.hoja h2{font-size:13px;font-weight:700;color:var(--texto-2);margin:22px 0 4px;letter-spacing:.2px}
+.hoja p{margin:0 0 8px}
+.hoja{font-variant-numeric:tabular-nums lining-nums}
+/* Borrador streaming: color distinto + subrayado punteado + etiqueta de margen */
+.borrador{color:var(--borrador);text-decoration:underline dotted 2px;text-underline-offset:4px}
+.destino{position:relative}
+.destino::before{content:"";position:absolute;left:-22px;top:4px;bottom:4px;width:4px;background:var(--grabando);border-radius:2px}
+.marca-margen{display:block;font-size:12px;color:var(--grabando);font-weight:700;margin-bottom:2px}
+/* Alerta sensible: doble subrayado + número de decisión, nunca solo color */
+.sensible{background:var(--alerta-fondo);box-shadow:inset 0 -2px 0 var(--alerta);padding:0 2px}
+.sensible sup{font:600 11px var(--mono);color:var(--alerta);margin-left:2px}
+
+.decisiones{border-left:1px solid var(--linea);padding:12px;overflow:auto;background:var(--superficie)}
+.decisiones h3{font-size:14px;margin:2px 0 10px;display:flex;justify-content:space-between}
+.decisiones h3 span{color:var(--alerta);font-family:var(--mono)}
+.dec{border:1px solid var(--linea);border-left:4px solid var(--alerta);background:var(--fondo);padding:10px 12px;margin-bottom:10px;border-radius:3px}
+.dec.prop{border-left-color:var(--borrador)}
+.dec .tipo{font-size:12px;color:var(--alerta);font-weight:700}
+.dec.prop .tipo{color:var(--borrador)}
+.dec .cmp{display:grid;grid-template-columns:72px 1fr;gap:2px 8px;margin:8px 0;font-size:14px}
+.dec .cmp dt{color:var(--texto-3)}
+.dec .cmp dd{margin:0}
+.dec del{text-decoration:line-through;color:var(--texto-2)}
+.dec .acc{display:flex;gap:6px;flex-wrap:wrap}
+.dec .acc .btn{font-size:13px;min-height:30px}
+.nota{font-size:12px;color:var(--texto-3);margin:10px 0 0}
+
+/* Barra de estado: estado de dictado y destino, siempre a la vista */
+.estado{display:flex;align-items:stretch;border-top:1px solid var(--linea);background:var(--superficie);font-size:13px}
+.estado>div{display:flex;align-items:center;gap:8px;padding:0 14px;border-right:1px solid var(--linea)}
+.estado .rec{background:var(--grabando-fondo);color:var(--grabando);font-weight:700}
+.estado .rec i{width:10px;height:10px;border-radius:50%;background:var(--grabando)}
+.estado .t{font-family:var(--mono)}
+.estado .sp{flex:1;border:0}
+.estado .atajos{color:var(--texto-3);gap:14px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="marca">Dicta Libre <span>prototipo de investigación</span></div>
+  <div class="doc">Informe sin guardar en RIS · TC de tórax (plantilla propia)</div>
+  <div class="sp"></div>
+  <button class="btn">Revisar informe <kbd>Ctrl</kbd><kbd>⇧</kbd><kbd>R</kbd></button>
+  <button class="btn primario" aria-disabled="true" aria-describedby="copia-bloq">Copiar para RIS <kbd>Ctrl</kbd><kbd>⇧</kbd><kbd>C</kbd></button>
+</header>
+
+<div class="zonas">
+  <nav class="plantillas" aria-label="Plantillas">
+    <label class="buscar"><kbd>Ctrl</kbd><kbd>K</kbd><input type="search" placeholder="Buscar plantilla" value="tórax"></label>
+    <div class="grupo">Favoritas</div>
+    <ul role="listbox" aria-label="Plantillas favoritas">
+      <li aria-selected="true">TC de tórax sin contraste <small>propia</small></li>
+      <li>Radiografía de tórax PA <small>propia</small></li>
+    </ul>
+    <div class="grupo">Resultados para «tórax» · 2</div>
+    <ul role="listbox" aria-label="Resultados">
+      <li>Angio-TC de tórax <small>propia</small></li>
+      <li>Informe en blanco <small>vacío</small></li>
+    </ul>
+    <p class="nota">Aplicar una plantilla se puede deshacer. Su contenido requiere tu revisión.</p>
+  </nav>
+
+  <main class="informe" aria-label="Editor del informe">
+    <article class="hoja">
+      <h2>Técnica</h2>
+      <p>Tomografía computada de tórax sin contraste endovenoso.</p>
+      <h2>Hallazgos</h2>
+      <p>Parénquima pulmonar con nódulo sólido de 5 mm en lóbulo superior <span class="sensible">izquierdo<sup>1</sup></span>, sin otras lesiones focales.</p>
+      <p class="destino"><span class="marca-margen">Destino de la toma 7</span>No se observa derrame pleural. <span class="borrador">Mediastino sin adenopatías de tamaño</span></p>
+      <p>Estructuras óseas sin alteraciones.</p>
+      <h2>Impresión</h2>
+      <p>Nódulo pulmonar sólido de 5 mm.</p>
+    </article>
+  </main>
+
+  <aside class="decisiones" aria-label="Decisiones pendientes">
+    <h3>Decisiones pendientes <span>2</span></h3>
+    <section class="dec" aria-labelledby="d1">
+      <div class="tipo" id="d1">1 · Lateralidad en conflicto</div>
+      <p style="margin:6px 0 0;font-size:14px">El revisor señala que «Impresión» y la toma 5 no coinciden en el lado.</p>
+      <dl class="cmp"><dt>Dictado</dt><dd>lóbulo superior izquierdo</dd><dt>Toma 5</dt><dd>«…lóbulo superior derecho…»</dd></dl>
+      <div class="acc"><button class="btn">Mantener lo dictado</button><button class="btn">Editar</button></div>
+      <p class="nota">No se cambia nada sin tu decisión.</p>
+    </section>
+    <section class="dec prop" aria-labelledby="d2">
+      <div class="tipo" id="d2">2 · Propuesta de redacción</div>
+      <dl class="cmp"><dt>Original</dt><dd><del>sin otras lesiones focales</del></dd><dt>Propuesta</dt><dd>sin otras lesiones focales evidentes</dd></dl>
+      <div class="acc"><button class="btn">Aceptar <kbd>A</kbd></button><button class="btn">Rechazar <kbd>R</kbd></button><button class="btn">Editar <kbd>E</kbd></button></div>
+    </section>
+    <p class="nota" id="copia-bloq">Copiar se habilita al decidir las alertas de cifras, unidades, negaciones o lateralidad. La revisión es una ayuda; no aprueba el informe.</p>
+  </aside>
+</div>
+
+<footer class="estado" aria-label="Estado del dictado">
+  <div class="rec" role="status" aria-live="assertive"><i aria-hidden="true"></i>Grabando <span class="t">00:04</span></div>
+  <div>Teléfono conectado</div>
+  <div>Muse-streaming · envía audio a Meta</div>
+  <div>Destino: Hallazgos, párrafo 2, al final</div>
+  <div class="sp"></div>
+  <div class="atajos"><span><kbd>Esc</kbd> cancelar toma</span><span><kbd>Ctrl</kbd><kbd>Z</kbd> deshacer</span><span><kbd>Alt</kbd><kbd>↓</kbd> siguiente decisión</span></div>
+</footer>
+</body>
+</html>

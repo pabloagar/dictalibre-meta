@@ -10,14 +10,24 @@ import {attachLiveBridge,demoConnection} from './live-bridge.mjs';
 import {loadMetaKey,saveMetaKey,checkMetaKey} from './meta-key.mjs';
 import {formatDictation,COMMAND_VERSION} from './dictation-commands.mjs';
 import {formatNumbers,NUMBER_VERSION} from './number-format.mjs';
+import {formatTerms,TERM_VERSION} from './term-format.mjs';
 import {attachMuseStream} from './muse-stream.mjs';
 import {createReviewer,reviewWithMeta} from './meta-review.mjs';
 import {reviewContext} from './review-context.mjs';
 import {createStudy,studyCsv,comparePair} from './lab-study.mjs';
 import {STREAM_PREPARATION} from './stream-audio.mjs';
 import { wavInfo, hash, configuration, score, csv } from './lab-core.mjs';
+import {validateGlossary,glossaryToConfig} from './vocabulary.mjs';
 const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 export const MODEL_REVISION='220761e60602a5ca694c409d5f424563b75d6820';
+function applyFormatting(r){
+  r.numberFormatting=r.numbersEnabled?formatNumbers(r.text):null;
+  r.termFormatting=r.termsEnabled?formatTerms(r.numberFormatting?.text??r.text):null;
+  if(r.termFormatting)r.termFormatting.input=r.numberFormatting?'numberFormatting.text':'text';
+  r.formatting=r.commandsEnabled?formatDictation(r.termFormatting?.text??r.numberFormatting?.text??r.text):null;
+  if(r.formatting)r.formatting.input=r.termFormatting?'termFormatting.text':r.numberFormatting?'numberFormatting.text':'text';
+  r.timings.numberFormatMs=r.numberFormatting?.elapsedMs??0;r.timings.termFormatMs=r.termFormatting?.elapsedMs??0;
+}
 function modelReady(){
   const dir=path.join(ROOT,'models','whisper-large-v3-fp16-ov');
   try{return JSON.parse(fs.readFileSync(path.join(dir,'dicta-manifest.json'),'utf8')).revision===MODEL_REVISION&&['encoder_model','decoder_model','tokenizer','detokenizer'].every(name=>['xml','bin'].every(ext=>fs.statSync(path.join(dir,`openvino_${name}.${ext}`)).size>0));}catch{return false;}
@@ -56,7 +66,10 @@ export async function museTranscribe(wav,config,key,signal) {
   if(typeof data.transcript!=='string') throw new Error('Muse no devolvió transcript válido.');
   return {text:data.transcript,providerAudioDurationMs:data.audioDurationMs??null,device:'Meta API',modelRevision:null,memoryBytes:null};
 }
-export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=path.join(ROOT,'.env.local'),worker=new LocalWorker(),muse=museTranscribe,streamEndpoint,reviewProvider=reviewWithMeta,templateFile=path.join(ROOT,'data','local','templates','catalog.json')}={}) {
+export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=path.join(ROOT,'.env.local'),worker=new LocalWorker(),muse=museTranscribe,streamEndpoint,reviewProvider=reviewWithMeta,templateFile=path.join(ROOT,'data','local','templates','catalog.json'),glossaryDir=path.join(ROOT,'data','vocabulario','glosarios')}={}) {
+  // Glosarios versionados del repo: configuraciones de Muse de solo lectura, nunca escritas en el catálogo.
+  const builtinConfigs=[];if(fs.existsSync(glossaryDir))for(const f of fs.readdirSync(glossaryDir).filter(f=>f.endsWith('.json')).sort()){try{builtinConfigs.push(glossaryToConfig(validateGlossary(JSON.parse(fs.readFileSync(path.join(glossaryDir,f),'utf8')))));}catch(e){console.error(`Glosario omitido (${f}): ${e.message}`);}}
+  const findConfig=id=>db.configs.find(c=>c.id===id)??builtinConfigs.find(c=>c.id===id);
   fs.mkdirSync(dataDir,{recursive:true});fs.mkdirSync(path.join(dataDir,'audio'),{recursive:true});fs.mkdirSync(path.join(dataDir,'derived'),{recursive:true});
   const dbPath=path.join(dataDir,'catalog.json');
   const db=fs.existsSync(dbPath)?JSON.parse(fs.readFileSync(dbPath,'utf8')):{schema:1,audios:[],configs:[],runs:[]};
@@ -65,7 +78,7 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
   for(const r of db.runs) if(['queued','running'].includes(r.status)){r.status='interrupted';r.error='Servidor reiniciado antes de terminar.';}
   save();
   let build='unknown';try{build=execFileSync('git',['rev-parse','HEAD'],{cwd:ROOT,encoding:'utf8'}).trim();}catch{}
-  const sourceHash=hash(Buffer.concat(['backend/lab.mjs','backend/lab-study.mjs','apps/lab/study.js','apps/shared/lab-timing.js','backend/meta-key.mjs','backend/meta-review.mjs','backend/review-context.mjs','apps/desktop/report-review.js','apps/shared/review-ui.js','backend/dictation-commands.mjs','backend/number-format.mjs','backend/muse-stream.mjs','backend/speech-turns.mjs','backend/stream-audio.mjs','backend/lab-core.mjs','backend/lab-worker.py','backend/live-bridge.mjs','apps/desktop/live.js','apps/desktop/report-editor.js','apps/shared/report-model.js','apps/desktop/stream-client.js','apps/desktop/desktop.js','apps/mobile/mobile.js','apps/shared/metrics.js'].map(f=>fs.readFileSync(path.join(ROOT,f)))));
+  const sourceHash=hash(Buffer.concat(['backend/lab.mjs','backend/lab-study.mjs','apps/lab/study.js','apps/shared/lab-timing.js','backend/meta-key.mjs','backend/meta-review.mjs','backend/review-context.mjs','backend/vocabulary.mjs','backend/term-format.mjs','data/vocabulario/formas-dictadas.v1.json','apps/desktop/report-review.js','apps/shared/review-ui.js','backend/dictation-commands.mjs','backend/number-format.mjs','backend/muse-stream.mjs','backend/speech-turns.mjs','backend/stream-audio.mjs','backend/lab-core.mjs','backend/lab-worker.py','backend/live-bridge.mjs','apps/desktop/live.js','apps/desktop/report-editor.js','apps/shared/report-model.js','apps/desktop/stream-client.js','apps/desktop/desktop.js','apps/mobile/mobile.js','apps/shared/metrics.js'].map(f=>fs.readFileSync(path.join(ROOT,f)))));
   let apiKey=loadMetaKey(keyFile),active=null,closed=false;
   const reviewer=createReviewer({db,save,getKey:()=>apiKey,sourceHash,build,provider:reviewProvider});
   const study=createStudy({db,save,build,sourceHash});
@@ -93,10 +106,7 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
       r.timings.requestMs=performance.now()-requestStart;r.timings.loadMs=result.loadMs??null;r.timings.generateMs=result.generateMs??null;
       r.timings.requestRtf=r.timings.requestMs/audio.durationMs;
       r.result=result;r.text=result.text;
-      r.numberFormatting=r.numbersEnabled?formatNumbers(r.text):null;
-      r.formatting=r.commandsEnabled?formatDictation(r.numberFormatting?.text??r.text):null;
-      if(r.formatting)r.formatting.input=r.numberFormatting?'numberFormatting.text':'text';
-      r.timings.numberFormatMs=r.numberFormatting?.elapsedMs??0;
+      applyFormatting(r);
       r.timings.commandMs=r.formatting?.elapsedMs??0;r.status='completed';
       r.cost={currency:'USD',estimated:config.engine==='muse'?Math.floor(audio.durationMs/1000)*.18/3600:null,actual:null,rateDate:'2026-10-28',note:'Estimación del audio original; no factura. Coste local no medido.'};
     } catch(e){if(r.status!=='cancelled'){r.status=controller.signal.aborted?'timeout':'error';r.error=String(e.message).slice(0,1000);}}
@@ -117,7 +127,7 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
         if(p==='/api/live-info')return json({mobileOrigin:demoConnection(ROOT).origin});
         if(p==='/api/templates'){if(!fs.existsSync(templateFile))return json({templates:[],references:[],summary:null});return json(JSON.parse(fs.readFileSync(templateFile,'utf8')));}
         if(p.startsWith('/api/report-reviews/')){const r=db.reviews.find(r=>r.scope==='report'&&r.id===p.split('/').at(-1));return r?json(r):json({error:'Revisión desconocida.'},404);}
-        if(p==='/api/state')return json({audios:db.audios,configs:db.configs,runs:db.runs.map(viewRun),reviews:db.reviews,reviewDocuments:db.reviewDocuments,metaConfigured:!!apiKey,modelPresent:modelReady(),build,sourceHash});
+        if(p==='/api/state')return json({audios:db.audios,configs:[...db.configs,...builtinConfigs],runs:db.runs.map(viewRun),reviews:db.reviews,reviewDocuments:db.reviewDocuments,metaConfigured:!!apiKey,modelPresent:modelReady(),build,sourceHash});
         if(p==='/api/reviews/export'){
           const cell=v=>'"'+String(v??'').replaceAll('"','""').replace(/^[=+@-]/,m=>' '+m)+'"';
           const rows=[['reviewId','runId','model','status','queueMs','requestMs','validationMs','suggestionId','original','replacement','category','decision'],...db.reviews.flatMap(r=>(r.suggestions.length?r.suggestions:[{}]).map(s=>[r.id,r.runId,r.config.model,r.status,r.timings.queueMs,r.timings.requestMs,r.timings.validationMs,s.id,s.original,s.replacement,s.category,s.status]))];
@@ -164,19 +174,19 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
         a.references.push({version:a.references.length+1,text:m.text,createdAt:new Date().toISOString()});save();return json(a);
       }
       if(p==='/api/configs'){
-        const previous=m.parentId?db.configs.find(c=>c.id===m.parentId):null;if(m.parentId&&!previous)throw new Error('Versión anterior desconocida.');
+        if(builtinConfigs.some(c=>c.id===m.parentId))throw new Error('Configuración de solo lectura: crea una nueva sin basarte en ella.');const previous=m.parentId?db.configs.find(c=>c.id===m.parentId):null;if(m.parentId&&!previous)throw new Error('Versión anterior desconocida.');
         const config={...configuration(m,previous),id:randomUUID(),createdAt:new Date().toISOString()};db.configs.push(config);save();return json(config,201);
       }
       if(p==='/api/runs'){
         const aids=[...new Set(m.audioIds??[])],cids=[...new Set(m.configIds??[])],repeats=Number(m.repeats??1);
         if(!aids.length||!cids.length||!Number.isInteger(repeats)||repeats<1||repeats>3||aids.length*cids.length*repeats>100)throw new Error('Selecciona audios/configuraciones: máximo 100 ejecuciones, 1–3 repeticiones.');
-        const audios=aids.map(id=>db.audios.find(a=>a.id===id)),configs=cids.map(id=>db.configs.find(c=>c.id===id));if(audios.includes(undefined)||configs.includes(undefined))throw new Error('Selección desconocida.');
+        const audios=aids.map(id=>db.audios.find(a=>a.id===id)),configs=cids.map(findConfig);if(audios.includes(undefined)||configs.includes(undefined))throw new Error('Selección desconocida.');
         if(configs.some(c=>c.engine==='muse')&&!apiKey)throw new Error('Configura la clave de Meta antes de ejecutar Muse.');
         if(configs.some(c=>c.engine==='whisper'&&c.beams!==1))throw new Error('Esta variante de búsqueda falló en el runtime GPU. Usa Whisper base (beams 1); el fallo histórico se conserva.');
         if(db.runs.filter(r=>['queued','running'].includes(r.status)).length+aids.length*cids.length*repeats>100)throw new Error('Cola llena.');
         const batchId=randomUUID(),created=[];
         for(let rep=0;rep<repeats;rep++)for(let ai=0;ai<audios.length;ai++)for(const c of ((rep+ai)%2?[...configs].reverse():configs)){
-          const a=audios[ai],r={id:randomUUID(),batchId,audioId:a.id,audioHash:a.sha256,configId:c.id,configuration:structuredClone(c),referenceAtRun:structuredClone(a.references.at(-1)??null),repeat:rep+1,reviewEnabled:m.reviewEnabled===true,reviewContext:reviewContext(m.reviewContext),commandsEnabled:m.commandsEnabled!==false,numbersEnabled:m.numbersEnabled!==false,numberVersion:NUMBER_VERSION,commandVersion:COMMAND_VERSION,build,sourceHash,modelRevision:c.engine==='whisper'?MODEL_REVISION:null,createdAt:new Date().toISOString(),status:'queued',text:null,error:null,timings:{queueMs:null,prepareMs:null,loadMs:null,generateMs:null,requestMs:null,totalMs:null,firstTextMs:null}};
+          const a=audios[ai],r={id:randomUUID(),batchId,audioId:a.id,audioHash:a.sha256,configId:c.id,configuration:structuredClone(c),referenceAtRun:structuredClone(a.references.at(-1)??null),repeat:rep+1,reviewEnabled:m.reviewEnabled===true,reviewContext:reviewContext(m.reviewContext),commandsEnabled:m.commandsEnabled!==false,numbersEnabled:m.numbersEnabled!==false,termsEnabled:m.termsEnabled!==false,numberVersion:NUMBER_VERSION,termVersion:TERM_VERSION,commandVersion:COMMAND_VERSION,build,sourceHash,modelRevision:c.engine==='whisper'?MODEL_REVISION:null,createdAt:new Date().toISOString(),status:'queued',text:null,error:null,timings:{queueMs:null,prepareMs:null,loadMs:null,generateMs:null,requestMs:null,totalMs:null,firstTextMs:null}};
           r.environment={os:os.platform(),osRelease:os.release(),cpu:os.cpus()[0]?.model??null,totalRamBytes:os.totalmem(),node:process.version,network:null,source:'uploaded-file'};
           r.audioDurationMs=a.durationMs;
           db.runs.push(r);queuedAt.set(r.id,performance.now());created.push(r.id);
@@ -187,9 +197,9 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
     }catch(e){if(!res.headersSent)json({error:e.message},400);else res.end();}
   });
   const closeBridge=attachLiveBridge(server,()=>demoConnection(ROOT));
-  const closeStream=attachMuseStream(server,{endpoint:streamEndpoint,getKey:()=>apiKey,getConfig:id=>db.configs.find(c=>c.id===id),
+  const closeStream=attachMuseStream(server,{endpoint:streamEndpoint,getKey:()=>apiKey,getConfig:findConfig,
     start(config,m){
-      const r={id:randomUUID(),batchId:randomUUID(),audioId:null,configId:config.id,configuration:{...structuredClone(config),mode:'streaming',segmentation:m.segmentation,providerMode:m.segmentation==='automatic'?'ENDPOINTING':'PUSH_TO_TALK',preparation:STREAM_PREPARATION},repeat:1,reviewEnabled:m.reviewEnabled===true,reviewContext:reviewContext(m.reviewContext),build,sourceHash,createdAt:new Date().toISOString(),status:'running',text:null,error:null,commandsEnabled:m.commandsEnabled!==false,numbersEnabled:m.numbersEnabled!==false,commandVersion:COMMAND_VERSION,numberVersion:NUMBER_VERSION,
+      const r={id:randomUUID(),batchId:randomUUID(),audioId:null,configId:config.id,configuration:{...structuredClone(config),mode:'streaming',segmentation:m.segmentation,providerMode:m.segmentation==='automatic'?'ENDPOINTING':'PUSH_TO_TALK',preparation:STREAM_PREPARATION},repeat:1,reviewEnabled:m.reviewEnabled===true,reviewContext:reviewContext(m.reviewContext),build,sourceHash,createdAt:new Date().toISOString(),status:'running',text:null,error:null,commandsEnabled:m.commandsEnabled!==false,numbersEnabled:m.numbersEnabled!==false,termsEnabled:m.termsEnabled!==false,commandVersion:COMMAND_VERSION,numberVersion:NUMBER_VERSION,termVersion:TERM_VERSION,
         environment:{os:os.platform(),node:process.version,source:'live-stream',network:null},timings:{queueMs:0,prepareMs:null,requestMs:null,totalMs:null,loadMs:null,generateMs:null}};
       db.runs.push(r);save();return r;
     },
@@ -202,11 +212,8 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
       if(result.derived){fs.writeFileSync(path.join(dataDir,'derived',r.id+'.wav'),result.derived);r.derived={sha256:hash(result.derived),originalSha256:r.audioHash,sampleRate:24000,channels:1,format:'PCM16'};}
       r.status=result.status;r.error=result.error;r.text=result.text;r.stream={...result.metrics,events:result.events};
       r.result={text:r.text,device:'Meta API realtime',modelRevision:null,cold:null};
-      if(r.status==='completed'){
-        r.numberFormatting=r.numbersEnabled?formatNumbers(r.text):null;r.formatting=r.commandsEnabled?formatDictation(r.numberFormatting?.text??r.text):null;
-        if(r.formatting)r.formatting.input=r.numberFormatting?'numberFormatting.text':'text';
-      }
-      r.timings.numberFormatMs=r.numberFormatting?.elapsedMs??0;r.timings.commandMs=r.formatting?.elapsedMs??0;
+      if(r.status==='completed')applyFormatting(r);
+      r.timings.numberFormatMs??=0;r.timings.termFormatMs??=0;r.timings.commandMs=r.formatting?.elapsedMs??0;
       // Session duration includes dictation; not comparable with file processing time.
       r.timings.streamSessionMs=result.metrics.streamSessionMs;r.finishedAt=new Date().toISOString();save();if(r.status==='completed'&&r.reviewEnabled)reviewer.enqueue(r.id);return r;
     }});

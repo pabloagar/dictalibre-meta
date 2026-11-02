@@ -15,3 +15,25 @@ export class ReportModel {
  undo(){if(this.pending)throw Error('Espera a que terminen las tomas antes de deshacer.');if(!this.history.length)return false;this.text=this.history.pop();this.anchors.clear();return true;}
  reset(text=''){if(this.pending)throw Error('Termina las tomas antes de cambiar de informe.');this.history.push(this.text);this.text=text;this.anchors.clear();}
 }
+// Contexto para el Revisor: ficha del estudio y sección de destino, sin texto de plantilla ni informe completo.
+const SECTION_LABELS=new Set(['tecnica','tecnica del examen','hallazgos','hallazgo','conclusion','conclusiones','impresion','impresion diagnostica','comparacion','antecedentes','antecedentes clinicos','indicacion','indicaciones','indicacion clinica','historia clinica','examen','estudio','comentario','comentarios','sugerencia','sugerencias','recomendacion','recomendaciones','diagnostico','observaciones','resultado','resultados','informe']);
+const plain=t=>t.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
+function heading(line){
+ const t=line.trim();if(!t||t.length>60)return null;
+ if(!/\p{Ll}/u.test(t)&&(t.match(/\p{Lu}/gu)??[]).length>=3&&/^[\p{Lu}\d\s.,()/-]+:?$/u.test(t))return {title:t.replace(/:$/,'').trim(),inline:''};
+ const m=/^([\p{L} ]{3,40}):(.*)$/u.exec(t);if(m&&SECTION_LABELS.has(plain(m[1])))return {title:m[1].trim(),inline:m[2]};
+ return null;
+}
+export function sectionAt(text,position,max=3000){
+ const heads=[];let offset=0;
+ for(const line of text.split('\n')){const h=heading(line);if(h)heads.push({start:offset,title:h.title,contentStart:h.inline?offset+line.length-h.inline.length:offset+line.length+1});offset+=line.length+1;}
+ const current=heads.filter(h=>h.start<=position).at(-1),next=heads.find(h=>h.start>(current?.start??-1));
+ const start=Math.min(current?.contentStart??0,text.length),end=next?.start??text.length,raw=text.slice(start,Math.max(start,end));
+ const content=raw.trim(),lead=raw.length-raw.trimStart().length;
+ if(content.length<=max)return {title:current?.title??'',text:content,truncated:false};
+ const at=Math.min(Math.max(position-start-lead-Math.floor(max/2),0),content.length-max);
+ return {title:current?.title??'',text:content.slice(at,at+max),truncated:true};
+}
+const templateOrigin=t=>!t?'en blanco':t.imported===true?'importada':t.imported===false?'propia':'sin dato';
+export function reportContext({template}){return {templateName:(template?.name??'').slice(0,200),templateCategory:(template?.category??'').slice(0,200),templateOrigin:templateOrigin(template)};}
+export function takeContext({template,text,position}){const s=sectionAt(text,position);return {...reportContext({template}),sectionTitle:s.title.slice(0,200),sectionText:s.text,truncated:s.truncated};}

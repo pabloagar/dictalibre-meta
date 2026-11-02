@@ -1,0 +1,5550 @@
+{
+ "schema": "dicta-libre.vocabulario.v1",
+ "version": 1,
+ "examen_inicial": "tc-torax",
+ "descripcion": "Vocabulario candidato para glosarios de Muse en TC de tórax. Nunca se envía completo a Muse: el glosario es un subconjunto elegido por medición.",
+ "estado": "revisión profesional pendiente",
+ "prioridad_tipo": "juicio editorial por grupo, no frecuencia medida",
+ "fuente": {
+  "nombre": "Vocabulario_por_TAC_y_patologia.txt",
+  "sha256": "6fbd26a02da704236d9f2a6e3ee30ed9ab179be8d2f1de530ddba1e0ff48bb5d",
+  "autoria": "Responsable del proyecto, 2-nov-2026; derivado de lectura de plantillas y literatura citada."
+ },
+ "reglas": [
+  "Secciones de TC de tórax y angioTC de tromboembolismo, grupos transversales de densidad/realce/forma, y Lung-RADS y Fleischner.",
+  "Se agrupan variantes de género y número; se conserva la primera forma de la fuente.",
+  "Se excluyen lateralidad, negación y unidades.",
+  "Se omiten los términos de la lista PUC original (permisos de redistribución pendientes); solo se registra cuántos.",
+  "Se excluyen expresiones que contienen una palabra que ya es candidata por sí sola.",
+  "Conteos en plantillas, tasa de error e impacto clínico quedan en null hasta medirse o asignarse."
+ ],
+ "fuentes_bibliograficas": [
+  "https://neomed.omeka.net/items/show/10273",
+  "https://f1000research.com/articles/11-1113",
+  "https://ir.uitm.edu.my/id/eprint/107766",
+  "https://hrcak.srce.hr/file/274973",
+  "https://rb.org.br/details/2412/en-US",
+  "https://arxiv.org/abs/2002.04752",
+  "https://discovery.ucl.ac.uk/id/eprint/10172159/1/e001664.full.pdf",
+  "https://corescholar.libraries.wright.edu/surg/23",
+  "https://gco.iarc.who.int/media/globocan/factsheets/populations/152-chile-fact-sheet.pdf",
+  "https://ecancer.org/en/journal/article/704-cancer-of-the-gallbladder-chilean-statistics/pdf/es",
+  "https://www.medigraphic.com/pdfs/anaradmex/arm-2009/arm094g.pdf"
+ ],
+ "grupos": [
+  "Densidad y atenuación",
+  "Realce y fases de contraste",
+  "Forma, tamaño y márgenes",
+  "Clasificaciones y escalas frecuentes",
+  "Neumonía e infección",
+  "Atelectasia y pleura",
+  "Vía aérea y enfisema",
+  "Nódulos y cáncer pulmonar",
+  "Enfermedad intersticial",
+  "Corazón, mediastino y edema",
+  "Dispositivos en tórax",
+  "Pared torácica y mama",
+  "Tromboembolismo pulmonar"
+ ],
+ "excluidos": {
+  "lateralidad_negacion": [
+   "sin contraste",
+   "derrame pleural bilateral",
+   "lóbulo superior derecho",
+   "lóbulo superior izquierdo",
+   "lóbulo inferior derecho",
+   "lóbulo inferior izquierdo",
+   "pulmón derecho",
+   "pulmón izquierdo",
+   "neumonía intersticial no específica",
+   "aurícula derecha",
+   "aurícula izquierda",
+   "ventrículo derecho",
+   "ventrículo izquierdo",
+   "trombo no oclusivo",
+   "arteria pulmonar derecha",
+   "arteria pulmonar izquierda",
+   "sobrecarga derecha",
+   "sobrecarga de cavidades derechas",
+   "relación ventrículo derecho ventrículo izquierdo"
+  ],
+  "unidades": [
+   "milímetros",
+   "centímetros"
+  ],
+  "compuestos_con_candidato": [
+   "realce heterogéneo",
+   "realce homogéneo",
+   "captación de contraste",
+   "lavado de contraste",
+   "neumonía multifocal",
+   "foco de condensación",
+   "opacidad en vidrio esmerilado",
+   "neumonía viral",
+   "neumonía aspirativa",
+   "micronódulos centrolobulillares",
+   "micronódulos centrilobulillares",
+   "secuela de tuberculosis",
+   "granuloma calcificado",
+   "neumonía organizada",
+   "atelectasia laminar",
+   "atelectasia subsegmentaria",
+   "atelectasia pasiva",
+   "atelectasia compresiva",
+   "atelectasia lobar",
+   "atelectasia obstructiva",
+   "atelectasia redonda",
+   "derrame pleural loculado",
+   "derrame pleural tabicado",
+   "enfisema subcutáneo",
+   "placas pleurales calcificadas",
+   "cisura mayor",
+   "cisura menor",
+   "enfisema centrilobulillar",
+   "enfisema centroacinar",
+   "enfisema paraseptal",
+   "enfisema panacinar",
+   "bula subpleural",
+   "atenuación en mosaico",
+   "bronquiectasias cilíndricas",
+   "bronquiectasias varicosas",
+   "bronquiectasias quísticas",
+   "bronquiectasias por tracción",
+   "nódulo sólido",
+   "nódulo parcialmente sólido",
+   "nódulo espiculado",
+   "nódulo calcificado",
+   "linfonodos calcificados",
+   "neumonía intersticial usual",
+   "opacidades reticulares",
+   "bronquiolitis respiratoria",
+   "trombo oclusivo",
+   "trombo agudo",
+   "trombo crónico",
+   "TEP central",
+   "TEP lobar",
+   "TEP segmentario",
+   "TEP subsegmentario"
+  ],
+  "origen_puc_omitidos": 1
+ },
+ "candidatos": [
+  {
+   "termino": "hipodenso",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Densidad y atenuación",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "hipodensa",
+    "hipodensos",
+    "hipodensas"
+   ]
+  },
+  {
+   "termino": "hiperdenso",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Densidad y atenuación",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "hiperdensa",
+    "hiperdensos",
+    "hiperdensas"
+   ]
+  },
+  {
+   "termino": "isodenso",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Densidad y atenuación",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "isodensa",
+    "isodensos",
+    "isodensas"
+   ]
+  },
+  {
+   "termino": "hipodensidad",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Densidad y atenuación",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "hipodensidades"
+   ]
+  },
+  {
+   "termino": "hiperdensidad",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Densidad y atenuación",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "hiperdensidades"
+   ]
+  },
+  {
+   "termino": "isodensidad",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Densidad y atenuación",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "atenuación",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Densidad y atenuación",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "hipoatenuante",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Densidad y atenuación",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "hiperatenuante",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Densidad y atenuación",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "heterogéneo",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Densidad y atenuación",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "heterogénea",
+    "heterogéneos",
+    "heterogéneas"
+   ]
+  },
+  {
+   "termino": "homogéneo",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Densidad y atenuación",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "homogénea",
+    "homogéneos",
+    "homogéneas"
+   ]
+  },
+  {
+   "termino": "unidades Hounsfield",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Densidad y atenuación",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "densidad grasa",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Densidad y atenuación",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "densidad líquida",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Densidad y atenuación",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "densidad de partes blandas",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Densidad y atenuación",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "densidad cálcica",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Densidad y atenuación",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "densidad aire",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Densidad y atenuación",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "densidad metálica",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Densidad y atenuación",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "nivel líquido-líquido",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Densidad y atenuación",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "nivel hidroaéreo",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Densidad y atenuación",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "niveles hidroaéreos"
+   ]
+  },
+  {
+   "termino": "refuerzo",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "realce periférico",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "realce anular",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "realce en anillo",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "realce nodular",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "realce parietal",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "realce mucoso",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "realce periférico nodular",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "realce tardío",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "realce precoz",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "captación",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "hipercaptante",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "hipocaptante",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "hipervascular",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "hipovascular",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "lavado",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "fase arterial",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "fase portal",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "fase venosa",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "fase tardía",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "fase de equilibrio",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "fase excretora",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "fase nefrográfica",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "fase corticomedular",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "fase simple",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "con contraste",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "medio de contraste",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "contraste oral",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "contraste endovenoso",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "extravasación de contraste",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "artefacto de movimiento",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "artefacto metálico",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "artefacto de endurecimiento",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Realce y fases de contraste",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "ovalado",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "ovalada",
+    "ovalados",
+    "ovaladas"
+   ]
+  },
+  {
+   "termino": "redondeado",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "redondeada",
+    "redondeados",
+    "redondeadas"
+   ]
+  },
+  {
+   "termino": "lobulado",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "lobulada",
+    "lobulados",
+    "lobuladas"
+   ]
+  },
+  {
+   "termino": "irregular",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "irregulares"
+   ]
+  },
+  {
+   "termino": "espiculado",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": [
+    "espiculada",
+    "espiculados",
+    "espiculadas"
+   ]
+  },
+  {
+   "termino": "polilobulado",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "polilobulada",
+    "polilobulados",
+    "polilobuladas"
+   ]
+  },
+  {
+   "termino": "bien delimitado",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "bien delimitada",
+    "bien delimitados",
+    "bien delimitadas"
+   ]
+  },
+  {
+   "termino": "mal delimitado",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "mal delimitada",
+    "mal delimitados",
+    "mal delimitadas"
+   ]
+  },
+  {
+   "termino": "bien definido",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "bien definida",
+    "bien definidos",
+    "bien definidas"
+   ]
+  },
+  {
+   "termino": "mal definido",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "mal definida",
+    "mal definidos",
+    "mal definidas"
+   ]
+  },
+  {
+   "termino": "márgenes",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "bordes",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "contornos",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "infiltrativo",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "infiltrativa",
+    "infiltrativos",
+    "infiltrativas"
+   ]
+  },
+  {
+   "termino": "expansivo",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "expansiva",
+    "expansivos",
+    "expansivas"
+   ]
+  },
+  {
+   "termino": "sólido",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "sólida",
+    "sólidos",
+    "sólidas"
+   ]
+  },
+  {
+   "termino": "quístico",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "quística",
+    "quísticos",
+    "quísticas"
+   ]
+  },
+  {
+   "termino": "sólido-quístico",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "calcificado",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "calcificada",
+    "calcificados",
+    "calcificadas"
+   ]
+  },
+  {
+   "termino": "septado",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "septada",
+    "septados",
+    "septadas"
+   ]
+  },
+  {
+   "termino": "tabicado",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "tabicada",
+    "tabicados",
+    "tabicadas"
+   ]
+  },
+  {
+   "termino": "loculado",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "loculada",
+    "loculados",
+    "loculadas"
+   ]
+  },
+  {
+   "termino": "necrótico",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "necrótica",
+    "necróticos",
+    "necróticas"
+   ]
+  },
+  {
+   "termino": "hemorrágico",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "hemorrágica",
+    "hemorrágicos",
+    "hemorrágicas"
+   ]
+  },
+  {
+   "termino": "eje mayor",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "eje corto",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "diámetro mayor",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "diámetro transverso",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "diámetro anteroposterior",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "subcentimétrico",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "subcentimétrica",
+    "subcentimétricos",
+    "subcentimétricas"
+   ]
+  },
+  {
+   "termino": "milimétrico",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "milimétrica",
+    "milimétricos",
+    "milimétricas"
+   ]
+  },
+  {
+   "termino": "centimétrico",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "centimétrica",
+    "centimétricos",
+    "centimétricas"
+   ]
+  },
+  {
+   "termino": "aumentado de tamaño",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "aumentada de tamaño",
+    "aumentados de tamaño",
+    "aumentadas de tamaño"
+   ]
+  },
+  {
+   "termino": "de tamaño normal",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "engrosado",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "engrosada",
+    "engrosados",
+    "engrosadas"
+   ]
+  },
+  {
+   "termino": "dilatado",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "dilatada",
+    "dilatados",
+    "dilatadas"
+   ]
+  },
+  {
+   "termino": "ectásico",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "ectásica",
+    "ectásicos",
+    "ectásicas"
+   ]
+  },
+  {
+   "termino": "ectasia",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "atrófico",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "atrófica",
+    "atróficos",
+    "atróficas"
+   ]
+  },
+  {
+   "termino": "atrofia",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "hipertrofia",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "hipertrófico",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Forma, tamaño y márgenes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "hipertrófica",
+    "hipertróficos",
+    "hipertróficas"
+   ]
+  },
+  {
+   "termino": "Lung-RADS",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Clasificaciones y escalas frecuentes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "Fleischner",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax",
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Clasificaciones y escalas frecuentes",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "neumonía",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "bronconeumonía",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "condensación",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "condensaciones"
+   ]
+  },
+  {
+   "termino": "consolidación",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "consolidaciones"
+   ]
+  },
+  {
+   "termino": "broncograma aéreo",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": [
+    "broncogramas aéreos"
+   ]
+  },
+  {
+   "termino": "opacidad",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "opacidades"
+   ]
+  },
+  {
+   "termino": "vidrio esmerilado",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "vidrio deslustrado",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "COVID-19",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "aspiración",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "árbol en brote",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "árbol en yema",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "bronquiolitis",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "bronquitis",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "engrosamiento peribronquial",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "engrosamiento de paredes bronquiales",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "tapón mucoso",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "tapones mucosos"
+   ]
+  },
+  {
+   "termino": "impactación mucosa",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "absceso pulmonar",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "cavitación",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "cavitado",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "cavitada",
+    "cavitados",
+    "cavitadas"
+   ]
+  },
+  {
+   "termino": "caverna",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "tuberculosis",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "tuberculoma",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "aspergiloma",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "granuloma",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "granulomas"
+   ]
+  },
+  {
+   "termino": "empiema",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Neumonía e infección",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "atelectasia",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": [
+    "atelectasias"
+   ]
+  },
+  {
+   "termino": "bandas atelectásicas",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "banda parenquimatosa",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "bandas fibroatelectásicas",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "pérdida de volumen",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "derrame pleural masivo",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "derrame pleural leve",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "derrame pleural moderado",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "hemotórax",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "hidrotórax",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "hidroneumotórax",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "neumotórax a tensión",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "neumotórax residual",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "neumomediastino",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "engrosamiento pleural",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "paquipleuritis",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "placa pleural",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "placas pleurales"
+   ]
+  },
+  {
+   "termino": "mesotelioma",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "pleurodesis",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "pleurostomía",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "fisura",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "cisura",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Atelectasia y pleura",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "enfisema",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "bula",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": [
+    "bulas"
+   ]
+  },
+  {
+   "termino": "bleb",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "EPOC",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "enfermedad pulmonar obstructiva crónica",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "hiperinsuflación",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "atrapamiento aéreo",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "atrapamiento de aire",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "patrón en mosaico",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "bronquiectasia",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": [
+    "bronquiectasias"
+   ]
+  },
+  {
+   "termino": "bronquiolectasias",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "traqueobroncomalacia",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "bronquio fuente",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "bronquio principal",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "carina",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "lóbulo superior",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "lóbulo medio",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "lóbulo inferior",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "língula",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "segmento apical",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "segmento posterior",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "segmento anterior",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "segmento superior",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "segmentos basales",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "hemitórax",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "campo pulmonar",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "campos pulmonares"
+   ]
+  },
+  {
+   "termino": "hilio pulmonar",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Vía aérea y enfisema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "nódulo pulmonar",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "nódulos pulmonares"
+   ]
+  },
+  {
+   "termino": "nódulo pulmonar solitario",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "nódulo subsólido",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "nódulo en vidrio esmerilado",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "nódulo subpleural",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "nódulo perifisural",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "nódulo cisural",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "micronódulo",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "masa pulmonar",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "masa hiliar",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "cáncer pulmonar",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "carcinoma broncogénico",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "adenocarcinoma",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "carcinoma de células pequeñas",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "carcinoma epidermoide",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "linfangitis carcinomatosa",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "suelta de globos",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "metástasis pulmonares",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "nódulos metastásicos",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "invasión mediastínica",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "invasión pleural",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "tumor de Pancoast",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "lobectomía",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "segmentectomía",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "neumonectomía",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "resección en cuña",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "cuña pulmonar",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "puntos de sutura",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "sutura quirúrgica",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "adenopatías mediastínicas",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "adenopatías hiliares",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "adenopatías axilares",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "adenopatías supraclaviculares",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "adenopatías paratraqueales",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "adenopatía subcarinal",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "ventana aortopulmonar",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "región subcarinal",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "región paratraqueal",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "espacio prevascular",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "mediastino",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "timo",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "masa mediastínica",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "timoma",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Nódulos y cáncer pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "enfermedad pulmonar intersticial",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "fibrosis pulmonar",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "fibrosis pulmonar idiopática",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "neumonitis por hipersensibilidad",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "patrón intersticial",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "reticulación",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": [
+    "reticulaciones"
+   ]
+  },
+  {
+   "termino": "panal de abeja",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "panalización",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "apanalamiento",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "engrosamiento septal",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "engrosamiento septal interlobulillar",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "septos interlobulillares",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "distorsión de la arquitectura",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "empedrado",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "crazy paving",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "patrón miliar",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "distribución perilinfática",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "distribución subpleural",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "predominio basal",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "sarcoidosis",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "silicosis",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "asbestosis",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "neumoconiosis",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "quistes pulmonares",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "líneas de Kerley",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Enfermedad intersticial",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "cardiomegalia",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "aumento de cavidades cardíacas",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "aorta ascendente",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "aorta descendente",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "cayado aórtico",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "arteria pulmonar",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "tronco de la arteria pulmonar",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "edema pulmonar",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "edema pulmonar agudo",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "congestión pulmonar",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "redistribución de flujo",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "calcificaciones coronarias",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "calcificación coronaria"
+   ]
+  },
+  {
+   "termino": "calcificaciones valvulares",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "calcificación aórtica",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "ateromatosis aórtica",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "derrame pericárdico leve",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "derrame pericárdico moderado",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "engrosamiento pericárdico",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "pericarditis",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "dilatación del tronco pulmonar",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "válvula aórtica",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "válvula mitral",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "esternotomía",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "cerclajes esternales",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "bypass coronario",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "prótesis valvular",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Corazón, mediastino y edema",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "tubo endotraqueal",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Dispositivos en tórax",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "traqueostomía",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Dispositivos en tórax",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "sonda nasogástrica",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Dispositivos en tórax",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "sonda nasoenteral",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Dispositivos en tórax",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "catéter venoso central",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Dispositivos en tórax",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "catéter central de inserción periférica",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Dispositivos en tórax",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "catéter de hemodiálisis",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Dispositivos en tórax",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "reservorio",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Dispositivos en tórax",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "port",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Dispositivos en tórax",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "marcapasos",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Dispositivos en tórax",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "desfibrilador",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Dispositivos en tórax",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "electrodo",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Dispositivos en tórax",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "electrodos"
+   ]
+  },
+  {
+   "termino": "tubo pleural",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Dispositivos en tórax",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "drenaje pleural",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Dispositivos en tórax",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "punta del catéter",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Dispositivos en tórax",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "vena cava superior",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Dispositivos en tórax",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "ventilación mecánica",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Dispositivos en tórax",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "fractura costal",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Pared torácica y mama",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "fracturas costales"
+   ]
+  },
+  {
+   "termino": "fractura de esternón",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Pared torácica y mama",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "fractura de clavícula",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Pared torácica y mama",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "callo óseo",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Pared torácica y mama",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "arco costal",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Pared torácica y mama",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "arcos costales"
+   ]
+  },
+  {
+   "termino": "mastectomía",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Pared torácica y mama",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "nódulo mamario",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Pared torácica y mama",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "prótesis mamaria",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Pared torácica y mama",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "ginecomastia",
+   "forma": "palabra",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Pared torácica y mama",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "tejido fibroglandular",
+   "forma": "expresion",
+   "examenes": [
+    "tc-torax"
+   ],
+   "grupo": "Pared torácica y mama",
+   "prioridad": "B",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "TEP",
+   "forma": "palabra",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "embolia pulmonar",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "trombo",
+   "forma": "palabra",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "trombos"
+   ]
+  },
+  {
+   "termino": "defecto de repleción",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": [
+    "defectos de repleción"
+   ]
+  },
+  {
+   "termino": "defecto de llene",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": [
+    "defectos de llene"
+   ]
+  },
+  {
+   "termino": "embolia en silla de montar",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "ramas lobares",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "ramas segmentarias",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "ramas subsegmentarias",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "arterias lobares",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "arterias segmentarias",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "arterias subsegmentarias",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "infarto pulmonar",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "joroba de Hampton",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "rectificación del septum interventricular",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "septum interventricular",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "septum paradójico",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "reflujo de contraste",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "reflujo a venas suprahepáticas",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "reflujo a vena cava inferior",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "hipertensión pulmonar",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "hipertensión pulmonar tromboembólica crónica",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "dilatación de la arteria pulmonar",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "opacificación subóptima",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": true,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "estudio subóptimo",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "trombosis venosa profunda",
+   "forma": "expresion",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  },
+  {
+   "termino": "TVP",
+   "forma": "palabra",
+   "examenes": [
+    "angiotc-torax-tep"
+   ],
+   "grupo": "Tromboembolismo pulmonar",
+   "prioridad": "A",
+   "apariciones_plantillas": null,
+   "fuente_frecuencia": null,
+   "tasa_error_sin_glosario": null,
+   "impacto_clinico": null,
+   "estado": "revisión profesional pendiente",
+   "propuesta_medicion": false,
+   "variantes_omitidas": []
+  }
+ ]
+}

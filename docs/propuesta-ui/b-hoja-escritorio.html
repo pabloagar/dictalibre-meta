@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maqueta B · Hoja de informe · escritorio</title>
+<!-- Maqueta estática de propuesta. No es la aplicación. Texto 100 % sintético.
+     Cambiar data-tema="sala" en <html> para ver la variante de bajo deslumbramiento. -->
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --mesa:#e4e8e7; --hoja:#ffffff; --barra:#f4f6f5; --linea:#c9d0ce;
+  --tinta:#1c2a2e; --tinta-2:#4f5f64; --tinta-3:#55646a;
+  --institucional:#1d5a52; --grabando:#b3261e; --grabando-suave:#fbe4e2;
+  --borrador:#fff2c2; --borrador-borde:#a37a00; --alerta:#8f4700; --alerta-suave:#fcecd9; --foco:#0b57d0;
+  --serif:'Source Serif 4',Georgia,serif; --ui:'Public Sans',system-ui,sans-serif;
+  font:14px/1.45 var(--ui); color:var(--tinta);
+}
+:root[data-tema="sala"]{
+  --mesa:#171a1b; --hoja:#22272a; --barra:#1d2123; --linea:#3a4245;
+  --tinta:#d3d9d8; --tinta-2:#a6b0b0; --tinta-3:#8e9899;
+  --institucional:#7cc0b4; --grabando:#ef7a72; --grabando-suave:#3b2221;
+  --borrador:#3b3420; --borrador-borde:#d9b44a; --alerta:#f2a65a; --alerta-suave:#3a2c1d; --foco:#ffd27a;
+}
+*{box-sizing:border-box} body{margin:0;background:var(--mesa);min-height:100vh}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--foco);outline-offset:2px}
+kbd{font:600 11px var(--ui);border:1px solid var(--linea);padding:1px 5px;border-radius:3px;color:var(--tinta-2);background:var(--hoja)}
+
+.barra{height:52px;display:flex;align-items:center;gap:12px;padding:0 20px;background:var(--barra);border-bottom:1px solid var(--linea)}
+.barra .nombre{font-weight:700}
+.barra .nombre small{font-weight:400;color:var(--tinta-3);margin-left:8px}
+.barra .sp{flex:1}
+/* Indicador de destino: el elemento más visible de la barra */
+.dictando{display:flex;align-items:center;gap:10px;padding:6px 12px 6px 10px;border:2px solid var(--grabando);background:var(--grabando-suave);border-radius:4px;font-weight:600;color:var(--grabando)}
+.dictando i{width:10px;height:10px;border-radius:50%;background:var(--grabando)}
+.dictando span{color:var(--tinta);font-weight:500}
+.btn{border:1px solid var(--linea);background:var(--hoja);padding:7px 12px;border-radius:4px;min-height:34px;display:inline-flex;align-items:center;gap:8px}
+.btn.final{background:var(--institucional);border-color:var(--institucional);color:#fff;font-weight:600}
+:root[data-tema="sala"] .btn.final{color:#10201d}
+.btn.final b{font-weight:400;opacity:.85}
+
+.mesa{display:grid;grid-template-columns:280px minmax(0,780px) 300px;justify-content:center;gap:24px;padding:24px 20px}
+.lateral h2{font-size:13px;font-weight:700;margin:0 0 8px}
+.buscar{width:100%;border:1px solid var(--linea);background:var(--hoja);padding:9px 10px;border-radius:4px;font:inherit;color:inherit}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.chips span{border:1px solid var(--linea);padding:3px 8px;border-radius:3px;font-size:12px;color:var(--tinta-2);background:var(--hoja)}
+.chips span[aria-pressed="true"]{border-color:var(--tinta);color:var(--tinta);font-weight:600}
+.lista{list-style:none;padding:0;margin:0;border-top:1px solid var(--linea)}
+.lista li{padding:9px 2px;border-bottom:1px solid var(--linea)}
+.lista li b{display:block;font-weight:600}
+.lista li small{color:var(--tinta-3)}
+.lista li.sel{box-shadow:inset 3px 0 0 var(--institucional);padding-left:10px}
+
+/* La hoja: texto del informe en serif, medida de lectura acotada */
+.hoja{background:var(--hoja);border:1px solid var(--linea);padding:48px 64px 64px;min-height:780px}
+.hoja .enc{font-size:12px;color:var(--tinta-3);border-bottom:1px solid var(--linea);padding-bottom:10px;margin-bottom:22px;display:flex;justify-content:space-between}
+.texto{font:19px/1.65 var(--serif);max-width:64ch;font-variant-numeric:lining-nums tabular-nums}
+.texto h3{font:600 15px var(--ui);margin:24px 0 6px;color:var(--tinta-2)}
+.texto p{margin:0 0 10px}
+.borrador{background:var(--borrador);box-shadow:inset 0 -2px 0 var(--borrador-borde);font-style:italic}
+.caret{display:inline-block;width:2px;height:1.1em;background:var(--grabando);vertical-align:-3px;margin-left:1px}
+.sensible{box-shadow:inset 0 -3px 0 var(--alerta);background:var(--alerta-suave)}
+.ref{font:700 11px var(--ui);color:var(--alerta);vertical-align:super;margin-left:2px}
+
+/* Notas al margen ancladas al párrafo, como comentarios de un procesador de texto */
+.margen{position:relative}
+.nota{position:absolute;left:0;right:0;background:var(--hoja);border:1px solid var(--linea);border-left:4px solid var(--alerta);padding:10px 12px;border-radius:3px}
+.nota h4{margin:0;font-size:12px;color:var(--alerta)}
+.nota p{margin:6px 0;font-size:13px}
+.nota q{quotes:"«" "»";font-family:var(--serif);font-size:14px}
+.nota .acc{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.nota .acc .btn{font-size:12px;min-height:30px;padding:4px 9px}
+.nota.prop{border-left-color:var(--institucional)}
+.nota.prop h4{color:var(--institucional)}
+.pendiente{position:absolute;bottom:0;left:0;right:0;font-size:12px;color:var(--tinta-3);border-top:1px solid var(--linea);padding-top:10px}
+</style>
+</head>
+<body>
+<header class="barra">
+  <div class="nombre">Dicta Libre<small>prototipo de investigación · sin validación clínica</small></div>
+  <div class="sp"></div>
+  <div class="dictando" role="status" aria-live="polite"><i aria-hidden="true"></i>Grabando 00:04 <span>en Hallazgos, párrafo 2</span></div>
+  <button class="btn">Revisar informe</button>
+  <button class="btn final" aria-disabled="true">Copiar para RIS <b>· 1 alerta sin decidir</b></button>
+</header>
+
+<div class="mesa">
+  <aside class="lateral" aria-label="Plantillas">
+    <h2>Plantillas</h2>
+    <input class="buscar" type="search" placeholder="Buscar por estudio, región o frase  ( / )" value="tórax">
+    <div class="chips" role="group" aria-label="Filtrar"><span aria-pressed="true">Favoritas</span><span>TC</span><span>RM</span><span>Radiografía</span><span>Propias</span></div>
+    <ul class="lista">
+      <li class="sel"><b>TC de tórax sin contraste</b><small>Propia · aplicada a este informe</small></li>
+      <li><b>Radiografía de tórax PA</b><small>Propia</small></li>
+      <li><b>Angio-TC de tórax</b><small>Propia</small></li>
+      <li><b>Informe en blanco</b><small>Sin contenido</small></li>
+    </ul>
+  </aside>
+
+  <main class="hoja" aria-label="Informe">
+    <div class="enc"><span>Informe en edición · no enviado a ningún sistema</span><span>Plantilla: TC de tórax sin contraste</span></div>
+    <div class="texto">
+      <h3>Técnica</h3>
+      <p>Tomografía computada de tórax sin contraste endovenoso.</p>
+      <h3>Hallazgos</h3>
+      <p>Parénquima pulmonar con nódulo sólido de <span class="sensible">5 mm</span><span class="ref">1</span> en lóbulo superior derecho, sin otras lesiones focales.</p>
+      <p>No se observa derrame pleural. <span class="borrador">Mediastino sin adenopatías de tamaño</span><span class="caret" aria-hidden="true"></span></p>
+      <p>Estructuras óseas sin alteraciones.</p>
+      <h3>Impresión</h3>
+      <p>Nódulo pulmonar sólido en lóbulo superior derecho.</p>
+    </div>
+  </main>
+
+  <aside class="margen" aria-label="Notas de revisión">
+    <section class="nota" style="top:142px" aria-labelledby="n1">
+      <h4 id="n1">1 · Alerta de unidad</h4>
+      <p>El informe dice <q>5 mm</q>. El revisor propone <q>5 cm</q>.</p>
+      <p>Las cifras y unidades no se sustituyen solas. El revisor no escuchó el audio.</p>
+      <div class="acc"><button class="btn">Mantener 5 mm</button><button class="btn">Usar 5 cm</button><button class="btn">Editar</button></div>
+    </section>
+    <section class="nota prop" style="top:330px" aria-labelledby="n2">
+      <h4 id="n2">Borrador de la toma 7</h4>
+      <p>Muse-streaming está escribiendo aquí. Se consolida al soltar el botón del teléfono.</p>
+      <div class="acc"><button class="btn">Cancelar toma <kbd>Esc</kbd></button></div>
+    </section>
+    <div class="pendiente">Atajos: <kbd>/</kbd> buscar plantilla · <kbd>Ctrl</kbd>+<kbd>Z</kbd> deshacer · <kbd>F8</kbd> siguiente nota · <kbd>Ctrl</kbd>+<kbd>⇧</kbd>+<kbd>C</kbd> copiar</div>
+  </aside>
+</div>
+</body>
+</html>
