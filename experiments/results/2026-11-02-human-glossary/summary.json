@@ -1,0 +1,42 @@
+{
+  "schema": "human-glossary-public-aggregate-v1",
+  "build": "032bb0ade4be8b3ec13246e56e35a68b00613799",
+  "protocolHash": "e33885b1ba140aa68bfd70fb94037d0e4719592dd612f9738a56b5b177da98c7",
+  "resultsHash": "26eb1c249dab2d882607fd21ea90312eecaabe14646f2c5db4391f565ed2d9bf",
+  "variants": [
+    {
+      "id": "baseline",
+      "spokenRuns": 12,
+      "completed": 12,
+      "exactMatch": 7,
+      "termMatch": 8,
+      "protectedMatch": 12,
+      "quantityMatch": 12,
+      "emptySilence": true
+    },
+    {
+      "id": "balanced",
+      "spokenRuns": 12,
+      "completed": 12,
+      "exactMatch": 10,
+      "termMatch": 12,
+      "protectedMatch": 12,
+      "quantityMatch": 12,
+      "emptySilence": true
+    }
+  ],
+  "referenceSource": "User confirmed scripts verbatim in chat; no independent listening by agent",
+  "wordContentReview": "All 12 candidate outputs match confirmed reference words after intended numeral formatting; cases 10 and 11 add commas",
+  "strictExploratoryPass": false,
+  "regressionCaseIds": [
+    "10",
+    "11"
+  ],
+  "adopted": false,
+  "limitations": [
+    "One speaker; one inference per variant/file",
+    "Punctuation regressions retained; original gate not relaxed",
+    "No phone streaming latency measured",
+    "Original voice and transcripts remain local"
+  ]
+}
