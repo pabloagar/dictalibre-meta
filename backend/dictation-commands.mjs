@@ -1,15 +1,18 @@
 // Independent, deterministic formatting of ASR text; never a clinical corrector.
-export const COMMAND_VERSION='es-basic-v1';
+import {isHeadingColon} from './spoken-colon.mjs';
+export const COMMAND_VERSION='es-basic-v2-heading-colon';
 const replacements={'nueva línea':'\n','nuevo párrafo':'\n\n','punto y coma':';','dos puntos':':','punto':'.','coma':','};
 const numbers=/^(?:\d+(?:[.,]\d+)?|cero|un|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|veinte|treinta|cien)$/iu;
 export function formatDictation(original){
  const started=performance.now(),events=[],warnings=[];
- const pattern=/(?<![\p{L}\p{N}_])(?:nueva l[ií]nea|nuevo p[aá]rrafo|punto y coma|(?:dos|2) puntos|punto|coma)(?![\p{L}\p{N}_])/giu;
+ const pattern=/(?<![\p{L}\p{N}_])(?:nueva l[ií]nea|nuevo p[aá]rrafo|punto y coma|(?:dos|2) puntos?|punto|coma)(?![\p{L}\p{N}_])/giu;
  let output='',cursor=0;
  for(const match of original.matchAll(pattern)){
   if(match.index<cursor)continue;
   const start=match.index,end=start+match[0].length;
-  const command=match[0].toLowerCase().replace('linea','línea').replace('parrafo','párrafo').replace(/^2 puntos$/u,'dos puntos');
+  const singular=/^(?:dos|2) punto$/iu.test(match[0]);
+  if(singular&&!isHeadingColon(original,start,end)){warnings.push({start,end,command:match[0],reason:'possible_decimal_or_literal'});continue;}
+  const command=match[0].toLowerCase().replace('linea','línea').replace('parrafo','párrafo').replace(/^(?:dos|2) puntos?$/u,'dos puntos');
   const before=original.slice(0,start),after=original.slice(end);
   const previous=before.match(/([\p{L}\d.,]+)\s*$/u)?.[1]??'';
   const next=after.match(/^\s*([\p{L}\d.,]+)/u)?.[1]??'';

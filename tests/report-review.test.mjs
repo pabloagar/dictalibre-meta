@@ -5,7 +5,7 @@ import {createReviewer,validateReview} from '../backend/meta-review.mjs';
 import {reviewContext,validateReportEvidence} from '../backend/review-context.mjs';
 const wait=async fn=>{for(let i=0;i<100;i++){if(fn())return;await new Promise(r=>setTimeout(r,5));}throw Error('timeout');};
 const text='Hallazgos: nódulo derecho. Conclusión: nódulo izquierdo.';
-const warning={original:'nódulo derecho',replacement:null,category:'sensitive',reason:'Comprobar si es el mismo hallazgo.',evidence:['nódulo derecho','nódulo izquierdo']};
+const warning={kind:'contradiction',original:'nódulo derecho',replacement:null,category:'sensitive',reason:'Comprobar si es el mismo hallazgo.',evidence:['nódulo derecho','nódulo izquierdo']};
 test('contexto acotado, sin rutas ni metadatos arbitrarios; revisión global exige citas y nunca sustituye',()=>{
  const c=reviewContext({templateName:'TC tórax',reportText:'Previo',path:'PRIVADO',reference:'NO ENVIAR'});
  assert.equal(c.path,undefined);assert.equal(c.reference,undefined);assert.equal(c.reportText,'Previo');
@@ -13,13 +13,16 @@ test('contexto acotado, sin rutas ni metadatos arbitrarios; revisión global exi
  assert.throws(()=>reviewContext({templateName:12}));
  assert.equal(validateReportEvidence(JSON.stringify({suggestions:[warning]}),text,validateReview)[0].replacement,null);
  for(const s of [{...warning,replacement:'nódulo izquierdo'},{...warning,evidence:['inexistente']}])assert.throws(()=>validateReportEvidence(JSON.stringify({suggestions:[s]}),text,validateReview));
+ for(const s of [{...warning,kind:'completeness'},{...warning,evidence:['nódulo derecho']},{...warning,evidence:['nódulo derecho','nódulo derecho']}])assert.throws(()=>validateReportEvidence(JSON.stringify({suggestions:[s]}),text,validateReview));
+ assert.equal(validateReportEvidence(JSON.stringify({suggestions:[warning]}),text,validateReview)[0].kind,'contradiction');
 });
 test('toma conserva contexto inmutable; global conserva snapshot, deduplica y registra fallos',async()=>{
  const inputs=[],db={runs:[{id:'r',status:'completed',text:'Ate tacia.',configuration:{keywords:[]},reviewContext:{templateName:'TC',reportText:'Hallazgos previos.'}}]};
  const q=createReviewer({db,save(){},getKey:()=>'',provider:async input=>{inputs.push(structuredClone(input));return {content:JSON.stringify({suggestions:input.reviewScope==='report'?[warning]:[]})};}});
  try{const take=q.enqueue('r');db.runs[0].reviewContext.reportText='CAMBIADO';await wait(()=>take.status==='completed');assert.equal(inputs[0].context.reportText,'Hallazgos previos.');
- const global=q.enqueueReport({text,context:{templateName:'TC'}});assert.equal(q.enqueueReport({text,context:{templateName:'TC'}}).id,global.id);await wait(()=>global.status==='completed');assert.equal(global.baseText,text);assert.equal(global.suggestions[0].evidence.length,2);assert.ok(global.timings.requestMs>=0);assert.equal(global.config.promptVersion,'report-consistency-v1');
+ const global=q.enqueueReport({text,context:{templateName:'TC'}});assert.equal(q.enqueueReport({text,context:{templateName:'TC'}}).id,global.id);await wait(()=>global.status==='completed');assert.equal(global.baseText,text);assert.equal(global.suggestions[0].evidence.length,2);assert.ok(global.timings.requestMs>=0);assert.equal(global.config.promptVersion,'report-consistency-v2-evidence-only');
  assert.notEqual(q.enqueueReport({text,context:{templateName:'RM'}}).inputHash,global.inputHash);
+ global.config.promptHash='previous-prompt';assert.notEqual(q.enqueueReport({text,context:{templateName:'TC'}}).id,global.id);
  assert.throws(()=>q.enqueueReport({text:' '}));assert.throws(()=>q.enqueueReport({text:'x'.repeat(20001)}));
  }finally{q.close();}
 });

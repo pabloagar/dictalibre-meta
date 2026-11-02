@@ -52,11 +52,11 @@ export function createReviewer({db,save,getKey,sourceHash,build,provider=reviewW
   const context=reviewContext(m.context),input={reviewScope:'report',formattedText:m.text,context};
   if(context?.reportText)throw Error('El informe global se envía una sola vez, fuera del contexto.');
   const inputHash=hash(Buffer.from(JSON.stringify(input)));
-  const existing=db.reviews.findLast(r=>r.scope==='report'&&r.inputHash===inputHash&&['queued','running','completed'].includes(r.status));
+  const existing=db.reviews.findLast(r=>r.scope==='report'&&r.inputHash===inputHash&&r.config?.promptHash===hash(Buffer.from(REPORT_PROMPT))&&['queued','running','completed'].includes(r.status));
   if(existing&&!m.retry)return existing;
   if(existing&&['queued','running'].includes(existing.status))return existing;
   if(db.reviews.filter(r=>['queued','running'].includes(r.status)).length>=100)throw Error('Cola de revisión llena.');
-  const r={id:randomUUID(),scope:'report',runId:null,audioId:null,baseText:m.text,input,inputHash,config:{...REVIEW_CONFIG,promptVersion:'report-consistency-v1',prompt:REPORT_PROMPT,promptHash:hash(Buffer.from(REPORT_PROMPT))},build,sourceHash,status:'queued',createdAt:new Date().toISOString(),suggestions:[],error:null,usage:null,providerModel:null,timings:{queueMs:null,requestMs:null,validationMs:null,totalMs:null},uiMeasurements:[]};
+  const r={id:randomUUID(),scope:'report',runId:null,audioId:null,baseText:m.text,input,inputHash,config:{...REVIEW_CONFIG,promptVersion:'report-consistency-v2-evidence-only',prompt:REPORT_PROMPT,promptHash:hash(Buffer.from(REPORT_PROMPT))},build,sourceHash,status:'queued',createdAt:new Date().toISOString(),suggestions:[],error:null,usage:null,providerModel:null,timings:{queueMs:null,requestMs:null,validationMs:null,totalMs:null},uiMeasurements:[]};
   db.reviews.push(r);queued.set(r.id,performance.now());save();setImmediate(pump);return r;
  }
  async function pump(){

@@ -1,5 +1,6 @@
 // Display normalization, not ASR correction. Offsets refer to the original input.
-export const NUMBER_VERSION='es-cardinals-v2';
+import {isHeadingColon} from './spoken-colon.mjs';
+export const NUMBER_VERSION='es-cardinals-v3-heading-colon';
 // Sin una unidad o medida después, «ocho punto dos quistes» puede ser fin de frase y no un decimal.
 const MEASURE=/^\s*(?:mm|mil[ií]metros?|cm|cent[ií]metros?|ml|mililitros?|cc|mg|miligramos?|g|gramos?|kg|l|litros?|m|metros?|%|por\s+ciento|por|x|×|uh|hu|unidades|s|seg|segundos?|min|minutos?|horas?|d[ií]as?|semanas?|mes(?:es)?|a[nñ]os?)(?![\p{L}\p{N}_])/iu;
 const fold=s=>s.toLowerCase().normalize('NFD').replace(/\p{M}/gu,'');
@@ -22,6 +23,8 @@ export function formatNumbers(original){
   const after=original.slice(start+spoken.length);
   // Articles and the spoken colon command are not number-formatting targets.
   if(/^(?:un|una)$/iu.test(spoken)||/^(?:dos|2)$/iu.test(spoken)&&/^\s+puntos\b/iu.test(after))return spoken;
+  const singular=after.match(/^[ \t]+punto\b/iu);
+  if(/^(?:dos|2)$/iu.test(spoken)&&singular&&isHeadingColon(original,start,start+spoken.length+singular[0].length))return spoken;
   const pieces=spoken.split(/\s+(?:coma|punto)\s+/iu);
   const whole=integer(pieces[0]);let replacement=whole;
   if(pieces.length===2){const words=fold(pieces[1]).split(/\s+/u);const fraction=words.length>1&&words[0]==='cero'&&words.every(w=>values[w]>=0&&values[w]<=9)?words.map(w=>values[w]).join(''):integer(pieces[1]);replacement=whole!==null&&fraction!==null?`${whole},${fraction}`:null;}

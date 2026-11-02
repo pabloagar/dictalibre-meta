@@ -5,7 +5,7 @@ test('dictado: puntuación, párrafos y mayúscula sin cambiar hallazgos',()=>{
  const original='no hay derrame punto nueva línea nódulo derecho de 3 mm punto nuevo párrafo conclusión dos puntos sin cambios punto';
  const r=formatDictation(original);
  assert.equal(r.text,'No hay derrame.\nNódulo derecho de 3 mm.\n\nConclusión: sin cambios.');
- assert.equal(r.events.length,6);assert.ok(r.elapsedMs>=0);assert.equal(r.version,'es-basic-v1');
+ assert.equal(r.events.length,6);assert.ok(r.elapsedMs>=0);assert.equal(r.version,'es-basic-v2-heading-colon');
  assert.equal(original.includes('punto'),true);
 });
 test('evita duplicación de signos del ASR y reconoce frases completas primero',()=>{

@@ -18,6 +18,7 @@ const manifestBytes=fs.readFileSync(path.join(corpus,'manifest.json'));
 const manifest=JSON.parse(manifestBytes.toString('utf8').replace(/^\uFEFF/,''));
 if(manifest.source!=='System.Speech local synthetic TTS'||manifest.cases.length!==15)throw Error('Unexpected corpus.');
 const files=['backend/demo.mjs','backend/muse-stream.mjs','backend/format-pipeline.mjs','backend/number-format.mjs','backend/term-format.mjs','backend/dictation-commands.mjs','backend/meta-review.mjs','backend/review-context.mjs'];
+if(fs.existsSync(path.join(source,'backend/spoken-colon.mjs')))files.push('backend/spoken-colon.mjs');
 for(const f of files){const expected=execFileSync('git',['show',build+':'+f]);if(hash(expected)!==hash(fs.readFileSync(path.join(source,f))))throw Error('Archived source mismatch: '+f);}
 const sourceHashes=Object.fromEntries(files.map(f=>[f,hash(fs.readFileSync(path.join(source,f)))]));
 const output=path.resolve('data/local/lab/reports/mvp-evaluation-'+Date.now());fs.mkdirSync(output,{recursive:true});

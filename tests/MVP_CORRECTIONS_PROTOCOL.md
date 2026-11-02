@@ -1,0 +1,15 @@
+# Correcciones del MVP: protocolo previo a la comparación
+
+Fecha: 02-11-2026. iPhone lo prueba el responsable. No hay cambio de glosario ni entrenamiento con los audios.
+
+Hipótesis 1: reconocer «dos punto» solo tras un encabezado y antes de salto/final elimina la cifra espuria sin alterar decimales o cantidades. Comparación causal: pasar exactamente los 15 textos ASR de la línea base por el formateador nuevo, además de repetir los 15 WAV una vez. Aceptación: se corrige el encabezado fallido, no se cambian medidas/lados/negaciones ni se degradan los otros 14 textos. La nueva inferencia ASR es estocástica; una diferencia en neumotórax no se atribuirá al formateador.
+
+Hipótesis 2: limitar Spark a contradicciones explícitas, términos ambiguos y formato reduce avisos de completitud sin perder problemas reales. Comparar el prompt anterior y el nuevo sobre textos iguales. Aceptación en línea base: detectar los tres términos deformados; corregido el encabezado, ningún aviso que exija información no dictada. Conservar todos los errores y respuestas inválidas. No calcular sensibilidad clínica.
+
+Controles nuevos fijados antes de ejecutar: hallazgo aislado sin lado/tamaño; hallazgo presente solo en impresión; medidas distintas de lóbulos distintos; ausencia de hepatomegalia con esteatosis; medida actual frente a previa identificada; contradicción de lado de la misma lesión; negación frente a derrame en conclusión; medida 5 frente a 50 de la misma lesión; término deformado nuevo; normalidad heredada junto a lesión explícita en el mismo órgano. Los cinco primeros no deberían generar aviso, los otros cinco sí. Mismos textos/prompt/modelo salvo variante; una repetición por variante, orden alternado. Adjudicación del agente pendiente de revisión profesional.
+
+Plantillas reales: aplicar las 285 localmente al modelo del editor; reemplazar una selección con contenido sintético, comprobar provisional/confirmado, resto intacto, deshacer/rehacer, nuevo informe y contexto sin texto base. No enviar el catálogo privado a Meta. Las pruebas semánticas remotas usan textos nuevos sintéticos con estructura de hallazgos/impresión de las plantillas, sin copiar su contenido. No confundir prueba del modelo del editor con comprobación física ni afirmar revisión clínica de las 285 plantillas.
+
+Métricas: coincidencias finales ignorando mayúsculas/espacios exteriores; conteos y etapa de cada cambio; avisos útiles/de completitud por caso y solicitudes únicas (deduplicación explícita); requestMs/validationMs/totalMs del revisor y endToFinalMs/endStreamToFinalMs del ASR. Intervalos definidos en METRICS.md. Registrar commit real, hashes del código/script/corpus/prompt, configuración y resultado completo local. Red, dispositivo físico, navegador, precisión y sobrecosto se mantienen null cuando no observados. Resultados favorables y desfavorables se conservan.
+
+Publicación: scripts, pruebas y resumen seleccionado sin secretos ni textos privados en GitHub; datos completos locales. Despliegue solo después de las verificaciones y coordinación para no interrumpir dictado. No activar cambios a mitad de la comparación.

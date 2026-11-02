@@ -2,6 +2,20 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {formatNumbers} from '../backend/number-format.mjs';
 import {formatDictation} from '../backend/dictation-commands.mjs';
+
+test('colon singular de encabezado no se convierte en cifra; medidas reales permanecen',()=>{
+ const format=s=>formatDictation(formatNumbers(s).text).text;
+ assert.equal(format('hallazgos dos punto nueva línea pulmones bien expandidos punto'),'Hallazgos:\npulmones bien expandidos.');
+ assert.equal(format('técnica dos punto nuevo párrafo sin contraste'),'Técnica:\n\nSin contraste');
+ assert.equal(format('conclusión dos punto'),'Conclusión:');
+ assert.equal(format('hallazgos dos punto cinco centímetros'),'Hallazgos 2,5 centímetros');
+ assert.equal(format('nódulo de dos punto cinco milímetros punto'),'Nódulo de 2,5 milímetros.');
+ assert.equal(format('hallazgos dos nódulos punto'),'Hallazgos 2 nódulos.');
+ assert.equal(format('dos puntos ecogénicos'),'Dos puntos ecogénicos');
+ assert.equal(format('hay dos puntos de sutura'),'Hay dos puntos de sutura');
+ assert.equal(format('impresión dos puntos nueva línea sin cambios'),'Impresión:\nsin cambios');
+ const r=formatDictation('hallazgos dos punto nueva línea sin cambios');assert.equal(r.events[0].spoken,'dos punto');assert.equal(r.events[0].replacement,':');assert.ok(r.elapsedMs>=0);
+});
 test('números radiológicos: cantidades, unidades y lateralidad',()=>{
  const original='un nódulo derecho de tres milímetros y un quiste de doce por ocho milímetros';
  const r=formatNumbers(original);assert.equal(r.text,'un nódulo derecho de 3 milímetros y un quiste de 12 por 8 milímetros');assert.equal(r.events.length,3);assert.equal(r.warnings.length,0);assert.ok(r.elapsedMs>=0);
