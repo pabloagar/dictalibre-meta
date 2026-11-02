@@ -1,3 +1,4 @@
+import {Window} from 'happy-dom';
 import test from 'node:test';import assert from 'node:assert/strict';
 import fs from 'node:fs';import os from 'node:os';import path from 'node:path';import vm from 'node:vm';import {once} from 'node:events';
 import {createLab} from '../backend/lab.mjs';
@@ -16,25 +17,25 @@ test('global proposals require evidence and preserve protected numbers and later
 });
 
 test('global UI applies only explicit acceptance and blocks stale proposals',async()=>{
- const elements=[];const el=tag=>{const n={tag,textContent:'',hidden:false,dataset:{},children:[],append(...x){this.children.push(...x);},setAttribute(){},insertBefore(){},replaceChildren(){this.children=[];}};elements.push(n);return n;};
+ const window=new Window();const elements=[];const el=tag=>{const n=window.document.createElement(tag);elements.push(n);return n;};
  let state={text:'35 mili. Milímetros.',pending:false,context:null},applied=0;
  const response={id:'test',status:'completed',suggestions:[{original:state.text,replacement:'35 milímetros.',kind:'format',reason:'Unidad repetida.',evidence:[state.text]}]};
- const ctx={document:{createElement:el},performance:{now:()=>100},setTimeout,clearTimeout,encodeURIComponent,fetch:async()=>({ok:true,json:async()=>response})};
+ const ctx={window,CustomEvent:window.CustomEvent,document:{createElement:el},setInterval,clearInterval,performance:{now:()=>100},setTimeout,clearTimeout,encodeURIComponent,fetch:async()=>({ok:true,json:async()=>response})};
  vm.createContext(ctx);vm.runInContext(fs.readFileSync('apps/desktop/report-review.js','utf8').replace('export function','function'),ctx);
  ctx.args={controls:el('div'),section:el('section'),copyButton:el('button'),snapshot:()=>state,onCopy(){},event(){},onApply:p=>{applied++;assert.equal(p.original,state.text);state={...state,text:p.replacement};return true;}};
- vm.runInContext('mountReportReview(args)',ctx);
+ ctx.args.controls.append(ctx.args.copyButton);vm.runInContext('mountReportReview(args)',ctx);
  await elements.find(n=>n.textContent==='Revisar de nuevo').onclick();assert.equal(applied,0);
  const accept=elements.find(n=>n.textContent==='Aceptar');assert.ok(accept);accept.onclick();assert.equal(applied,1);assert.equal(state.text,'35 milímetros.');
  accept.onclick();assert.equal(applied,1);
 });
 
 test('one click requests review; concurrent clicks and current results do not resend',async()=>{
- const elements=[];const el=tag=>{const n={tag,textContent:'',hidden:false,dataset:{},append(){},setAttribute(){},insertBefore(){},replaceChildren(){}};elements.push(n);return n;};
+ const window=new Window();const elements=[];const el=tag=>{const n=window.document.createElement(tag);elements.push(n);return n;};
  let calls=0,resolve;let state={text:'Texto.',pending:false,context:null};
- const ctx={document:{createElement:el},performance:{now:()=>100},setTimeout,clearTimeout,encodeURIComponent,fetch:async()=>{calls++;return {ok:true,json:()=>new Promise(r=>resolve=r)};}};
+ const ctx={window,CustomEvent:window.CustomEvent,document:{createElement:el},setInterval,clearInterval,performance:{now:()=>100},setTimeout,clearTimeout,encodeURIComponent,fetch:async()=>{calls++;return {ok:true,json:()=>new Promise(r=>resolve=r)};}};
  vm.createContext(ctx);vm.runInContext(fs.readFileSync('apps/desktop/report-review.js','utf8').replace('export function','function'),ctx);
  ctx.args={controls:el('div'),section:el('section'),copyButton:el('button'),snapshot:()=>state,onCopy(){},event(){}};
- vm.runInContext('mountReportReview(args)',ctx);
+ ctx.args.controls.append(ctx.args.copyButton);vm.runInContext('mountReportReview(args)',ctx);
  const button=elements.find(n=>n.className==='report-review-button');const pending=button.onclick();assert.equal(calls,1);button.onclick();assert.equal(calls,1);
  await wait(()=>!!resolve);resolve({id:'one',status:'completed',suggestions:[]});await pending;
  button.onclick();assert.equal(calls,1);
@@ -72,13 +73,12 @@ test('API global: origen, exportación, lectura aislada y validación de respues
  }finally{lab.close();fs.rmSync(dir,{recursive:true,force:true});}
 });
 test('UI: copiar ofrece revisar o continuar; edición invalida avisos y respuestas tardías no rehabilitan copia',async()=>{
- const elements=[];
- function el(tag){const n={tag,textContent:'',hidden:false,dataset:{},append(...x){},setAttribute(){},insertBefore(){},replaceChildren(){}};elements.push(n);return n;}
+ const window=new Window();const elements=[];const el=tag=>{const n=window.document.createElement(tag);elements.push(n);return n;};
  let snapshot={text:'Texto original.',context:{templateName:'TC'},pending:false},copies=0,calls=0,resolveReview;
- const box={document:{createElement:el},performance:{now:()=>100},setTimeout,clearTimeout,encodeURIComponent,fetch:async()=>{calls++;return {ok:true,json:()=>new Promise(r=>{resolveReview=r;})};}};
+ const box={window,CustomEvent:window.CustomEvent,document:{createElement:el},setInterval,clearInterval,performance:{now:()=>100},setTimeout,clearTimeout,encodeURIComponent,fetch:async()=>{calls++;return {ok:true,json:()=>new Promise(r=>{resolveReview=r;})};}};
  vm.createContext(box);vm.runInContext(fs.readFileSync('apps/desktop/report-review.js','utf8').replace('export function','function'),box);
  box.args={controls:el('div'),section:el('section'),copyButton:el('button'),snapshot:()=>snapshot,onCopy:()=>copies++,event(){}};
- const ui=vm.runInContext('mountReportReview(args)',box);
+ box.args.controls.append(box.args.copyButton);const ui=vm.runInContext('mountReportReview(args)',box);
  assert.equal(ui.beforeCopy(),false);assert.equal(calls,0);
  elements.find(n=>n.textContent==='Copiar sin revisar').onclick();assert.equal(copies,1);
  const pending=elements.find(n=>n.textContent==='Revisar de nuevo').onclick();await wait(()=>typeof resolveReview==='function');

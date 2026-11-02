@@ -296,3 +296,6 @@ Esto se registrará en EXPERIMENTS.md antes de comparar. Por ahora no hay medici
   - contraste AA medido.
 
   La reducción mínima de tiempo la define el responsable. Se conservan los resultados favorables y los desfavorables.
+
+## Diseño final del MVP · 02-11-2026
+Implementado desde el paquete del responsable dicta-rediseno-v1_1.zip: hoja centrada, herramientas dentro de hoja, ayuda vacía, indicadores de revisión y letrero anclado con acciones compartidas. Referencia del paquete permanece local en .runtime/rediseno-final/dicta-rediseno-v1; no se publica el ZIP ni contenido clínico de sus maquetas. Se conserva invalidación al modificar texto (opción 1); rebase y confirmación visual verde opcionales quedan fuera. Ver HACKATHON_LOG.md para pruebas y versión desplegada, y EXPERIMENTS.md para instrumentación y límites.

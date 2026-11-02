@@ -96,7 +96,7 @@ for(const savedTheme of [null,'sala'])test('montaje completo, controles y tema g
  assert.ok(document.querySelector('.clinical-settings #metrics-export'));
  assert.ok(document.querySelector('.clinical-status'));
  assert.equal(document.querySelectorAll('.clinical-record').length,1);
- assert.equal(document.querySelectorAll('.sex-control').length,1);assert.ok(document.querySelector('.sheet-head .sex-control'));assert.equal(document.querySelector('header .sex-control'),null);
+ assert.equal(document.querySelectorAll('.sex-control').length,1);assert.ok(document.querySelector('.clinical-sheet > .clinical-editbar .sex-control'));assert.equal(document.querySelector('header .sex-control'),null);
  assert.equal(document.querySelector('.clinical-settings').open,false);
  assert.ok(document.querySelector('.clinical-editbar .report-redo'));
  assert.equal(document.querySelector('.template-library-panel').nextElementSibling,document.querySelector('.clinical-settings'));
@@ -130,7 +130,7 @@ for(const savedTheme of [null,'sala'])test('montaje completo, controles y tema g
  for(const summary of settings.querySelectorAll('summary'))summary.tabIndex=0;
  const firstSetting=document.querySelector('[data-page="dictado"]');firstSetting.focus();firstSetting.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Tab',shiftKey:true,bubbles:true}));assert.equal(document.activeElement.parentElement.className,'advanced-settings');
  document.querySelector('[data-page="apariencia"]').click();assert.equal(document.querySelector('.appearance-panel').hidden,false);document.querySelector('[data-value="penumbra"]').click();assert.equal(document.body.dataset.theme,'penumbra');assert.equal(localStorage.getItem('dicta-theme-v1'),'penumbra');
- document.querySelector('[data-page="ayuda"]').click();assert.equal(document.querySelectorAll('.help-step').length,4);document.querySelector('.settings-close').click();assert.equal(settings.open,false);
+ document.querySelector('[data-page="ayuda"]').click();assert.equal(document.querySelectorAll('.howto-panel .help-step').length,4);document.querySelector('.settings-close').click();assert.equal(settings.open,false);
  const level=document.querySelector('#level');level.value=.8;await new Promise(r=>setTimeout(r,0));assert.ok(document.querySelectorAll('.audio-bars .lit').length>0);
  level.value=0;await new Promise(r=>setTimeout(r,0));assert.equal(document.querySelectorAll('.audio-bars .lit').length,0);
  await window.happyDOM.close();delete globalThis.__clinicalTest;
@@ -230,5 +230,47 @@ test('interpretación protegida exige confirmar y conserva deshacer; edición in
  await button('Revisar de nuevo').onclick();
  button('Revisar y confirmar').click();input('Texto modificado.');
  button('Confirmo el dato y aplico el cambio').onclick();assert.equal(editor.model.text,'Texto modificado.');
+ await window.happyDOM.close();
+});
+
+
+test('rediseño: aviso anclado, teclado, copia limpia y acciones compartidas',async()=>{
+ const {window,editor,button}=setup({globalReview:true});
+ editor.element.textContent='Hallazgo secuenzia derecho.';editor.element.dispatchEvent(new window.Event('input'));
+ let copied=null;Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{copied=text;}},configurable:true});
+ globalThis.fetch=async()=>({ok:true,json:async()=>({id:'redesign-fixture',status:'completed',suggestions:[{kind:'ambiguous_term',original:'secuenzia',replacement:'secuencia',reason:'Ejemplo sintético.',evidence:[]}]})});
+ await button('Revisar con IA').onclick();
+ let mark=editor.element.querySelector('.report-annotation');mark.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
+ let popup=document.querySelector('.review-popover');assert.ok(popup);assert.equal(editor.element.contains(popup),false);assert.equal(document.activeElement,popup.querySelector('button'));
+ await button('Copiar para RIS').onclick();assert.equal(copied,'Hallazgo secuenzia derecho.');
+ popup.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));assert.equal(document.querySelector('.review-popover'),null);assert.equal(document.activeElement,mark);
+ button('Ir al texto').click();popup=document.querySelector('.review-popover');assert.ok(popup);popup.querySelector('.accept-correction').click();
+ assert.equal(editor.model.text,'Hallazgo secuencia derecho.');assert.equal(document.querySelector('.review-popover'),null);assert.equal(editor.reviewPanel.dataset.stale,'true');
+ button('Deshacer').click();assert.equal(editor.model.text,'Hallazgo secuenzia derecho.');
+ mark=editor.element.querySelector('.report-annotation');mark.click();document.body.click();assert.equal(document.querySelector('.review-popover'),null);
+ mark.click();editor.element.textContent='Edición sintética';editor.element.dispatchEvent(new window.Event('input'));assert.equal(document.querySelector('.review-popover'),null);
+ await window.happyDOM.close();
+});
+
+test('rediseño: confirmación protegida en letrero y conteo al reconocer aviso',async()=>{
+ const {window,editor,button}=setup({globalReview:true});
+ editor.element.textContent='Doce milímetros.';editor.element.dispatchEvent(new window.Event('input'));
+ globalThis.fetch=async()=>({ok:true,json:async()=>({id:'protected-fixture',status:'completed',suggestions:[{kind:'ambiguous_term',original:'Doce milímetros',replacement:null,guarded:true,proposedReplacement:'12 mm',reason:'Interpretación sintética.',evidence:[]}]})});
+ await button('Revisar con IA').onclick();editor.element.querySelector('.report-annotation').click();
+ assert.equal(editor.model.text,'Doce milímetros.');assert.equal(document.querySelector('.review-popover .accept-correction').textContent,'Confirmo el dato y aplico el cambio');
+ document.querySelector('.review-popover .accept-correction').click();assert.equal(editor.model.text,'12 mm.');
+ button('Deshacer').click();button('Es correcto').click();assert.equal(editor.element.querySelector('.report-annotation'),null);assert.match(editor.reviewPanel.querySelector('[role=status]').textContent,/0 avisos/);
+ await window.happyDOM.close();
+});
+
+test('rediseño: reloj y carga visibles, cancelación y respuesta tardía no reabren avisos',async()=>{
+ const {window,editor,button}=setup({globalReview:true});
+ editor.element.textContent='Informe sintético.';editor.element.dispatchEvent(new window.Event('input'));
+ let finish;globalThis.fetch=async()=>({ok:true,json:()=>new Promise(resolve=>{finish=resolve;})});
+ const reviewing=button('Revisar con IA').onclick();await new Promise(r=>setTimeout(r,0));
+ assert.equal(editor.reviewPanel.dataset.busy,'true');assert.equal(document.querySelector('.review-progress').hidden,false);assert.equal(button('Revisando…').getAttribute('aria-busy'),'true');
+ await new Promise(r=>setTimeout(r,1050));assert.match(document.querySelector('.review-elapsed').textContent,/00:01/);
+ button('Cancelar revisión').click();assert.equal(editor.reviewPanel.dataset.busy,'false');assert.equal(document.querySelector('.review-progress').hidden,true);assert.equal(document.querySelector('.review-elapsed').hidden,true);
+ finish({id:'late',status:'completed',suggestions:[]});await reviewing;assert.equal(editor.reviewPanel.dataset.busy,'false');assert.match(editor.reviewPanel.querySelector('[role=status]').textContent,/cancelled/);
  await window.happyDOM.close();
 });

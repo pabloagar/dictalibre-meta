@@ -55,7 +55,7 @@ function showFigureDoubts(warnings){
 }
 // Hoja clínica: preserve the mounted editor, transport controls and listeners.
 document.body.classList.add('live-workspace','clinical-workspace');
-const layoutMetrics={version:'propuesta-b-rev3',settingsVersion:'dictado-agrupado-v1',serverBuild:initialState.build??null,serverSourceHash:initialState.sourceHash??null,createdAt:new Date().toISOString(),browser:navigator.userAgent,device:null,network:null,audioSource:null,clockResolutionMs:null,instrumentationOverheadMs:null,audioMeter:{updates:0,totalPaintMs:0,maxPaintMs:0,source:'received-pcm-rms'},events:[]};
+const layoutMetrics={version:'propuesta-b-rev3+rediseno-v1',settingsVersion:'dictado-agrupado-v1',serverBuild:initialState.build??null,serverSourceHash:initialState.sourceHash??null,createdAt:new Date().toISOString(),browser:navigator.userAgent,device:null,network:null,audioSource:null,clockResolutionMs:null,instrumentationOverheadMs:null,audioMeter:{updates:0,totalPaintMs:0,maxPaintMs:0,source:'received-pcm-rms'},events:[]};
 const track=(type,data={})=>{layoutMetrics.events.push({type,atMs:performance.now(),...data});if(layoutMetrics.events.length>500)layoutMetrics.events.shift();};
 const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text)n.textContent=text;return n;};
 const makeDetails=(label,cls)=>{const d=make('details',cls);d.append(make('summary','',label));return d;};
@@ -98,8 +98,9 @@ const diagnostics=document.querySelector('.diagnostics');diagnostics.prepend(doc
 const recordings=document.querySelector('#recordings').closest('details');settingsBody.append(takes,recordings,diagnostics);
 const transcript=document.querySelector('.transcript');document.querySelector('.section-head').remove();
 const desk=make('div','clinical-desk'),sheet=make('div','clinical-sheet'),sheetHead=make('div','sheet-head');
-sheetHead.append(make('span','','Informe radiológico · documento en curso'),sex);
-reportEditor.element.before(desk);desk.append(sheet);sheet.append(sheetHead,reportEditor.element);
+sheetHead.append(make('span','','Informe radiológico · documento en curso'));
+sizeControls.after(sex);
+reportEditor.element.before(desk);desk.append(sheet);sheet.append(editbar,sheetHead,reportEditor.element);
 const margin=make('aside','clinical-notes');margin.setAttribute('aria-label','Notas del estudio');desk.append(margin);
 const connectionNote=make('section','clinical-note neutral');connectionNote.append(make('h2','','Estado del teléfono'),document.querySelector('#record-help'));settingsBody.append(connectionNote);
 const glossaryText=make('p','tiny');
@@ -142,6 +143,7 @@ const guideText=make('p','','Conecta tu teléfono para dictar, o escribe aquí d
 const templatePicker=templatePanel.querySelector('.template-picker');templatePicker.id='report-template-picker';templateShortcut.setAttribute('aria-controls',templatePicker.id);templateShortcut.setAttribute('aria-expanded','false');
 templateShortcut.onclick=()=>{templatePanel.open=true;track('template-entry',{source:'empty-guide'});};templatePanel.addEventListener('toggle',()=>templateShortcut.setAttribute('aria-expanded',String(templatePanel.open)));
 guideText.append(templateShortcut,' si quieres partir de una estructura.');emptyGuide.append(guideText,firstHelp);reportEditor.element.after(emptyGuide);firstHelp.onclick=()=>{showSettingsPage('ayuda');settings.open=true;};
+const emptySteps=make('div','empty-steps');emptySteps.append(make('strong','','CÓMO USAR'),steps.cloneNode(true));emptyGuide.append(emptySteps);
 const syncFirstHelp=()=>{emptyGuide.hidden=reportEditor.element.dataset.empty!=='true';};new MutationObserver(syncFirstHelp).observe(reportEditor.element,{attributes:true,attributeFilter:['data-empty']});syncFirstHelp();
 // Segmented buttons drive the same selects; no changes to engine or transport logic.
 for(const select of [engineSelect,segmentationSelect,glossary]){const group=make('div','settings-segments');group.setAttribute('role','group');group.setAttribute('aria-label',select.getAttribute('aria-label'));if(select.hasAttribute('aria-describedby'))group.setAttribute('aria-describedby',select.getAttribute('aria-describedby'));select.hidden=true;select.after(group);const sync=()=>{group.replaceChildren();for(const option of select.options){const b=make('button','',option.textContent);b.type='button';b.disabled=select.disabled;b.setAttribute('aria-pressed',String(select.value===option.value));b.onclick=()=>{select.value=option.value;select.dispatchEvent(new window.Event('change'));sync();};group.append(b);}};sync();select.addEventListener('change',sync);new MutationObserver(sync).observe(select,{attributes:true,attributeFilter:['disabled']});}
