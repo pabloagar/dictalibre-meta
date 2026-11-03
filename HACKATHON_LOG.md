@@ -855,3 +855,5 @@ ZIP privado descargado y comprobado: SHA256 151f4cb01993775d1645c5fe8697299d1700
 
 ## 2026-11-03 · Avisos IA concisos
 Por petición del responsable: tarjeta con título corto, evidencia sin cita duplicada y explicación plegada; pie de información Meta desplegable; estado sin párrafo repetido. No cambia solicitudes ni aceptación de correcciones o guardas sensibles. UI es/en. check y267/267 OK.
+
+Avisos concisos activos en Render: deployment7529567902 success2026-11-03T20:17:38Z, API build56728239bae09ebda664882e8369b42948876924 y report-review.js verificados tras propagación. active=0 antes del push.
