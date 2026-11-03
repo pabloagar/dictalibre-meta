@@ -722,3 +722,9 @@ body.clinical-workspace[data-theme="ambar"], .clinical-workspace [data-theme="am
 .clinical-workspace .quick-template{min-height:40px;max-width:100%;padding:9px 14px;border:1px solid var(--dl-line);border-radius:6px;background:var(--dl-bg);color:var(--dl-ink);font:400 14px/1.4 var(--dl-font-ui);white-space:normal;text-align:left;overflow-wrap:anywhere}
 .clinical-workspace .quick-template:hover{background:var(--dl-soft);border-color:var(--dl-accent)}
 .clinical-workspace .quick-template:focus-visible{outline:2px solid var(--dl-accent);outline-offset:2px}
+
+/* Language controls share the existing theme. */
+.language-switch{display:flex;align-items:center;gap:8px;font-size:14px;margin:10px 0}
+.language-switch select{max-width:130px;font:inherit;padding:6px}
+.phone-shell header:has(.language-switch){height:auto;min-height:60px;flex-wrap:wrap;gap:8px}
+html:lang(en) .report-editor[data-empty="true"]::before{content:"Start typing or dictating…"}

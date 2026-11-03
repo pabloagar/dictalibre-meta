@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {Window} from 'happy-dom';
-const source=fs.readFileSync(new URL('../apps/desktop/report-editor.js',import.meta.url),'utf8').replace("'/report-review.js'",JSON.stringify(new URL('../apps/desktop/report-review.js',import.meta.url).href)).replace("'/shared/report-model.js'",JSON.stringify(new URL('../apps/shared/report-model.js',import.meta.url).href));
+const source=fs.readFileSync(new URL('../apps/desktop/report-editor.js',import.meta.url),'utf8').replace("'../shared/i18n.js'",JSON.stringify(new URL('../apps/shared/i18n.js',import.meta.url).href)).replace("'/report-review.js'",JSON.stringify(new URL('../apps/desktop/report-review.js',import.meta.url).href)).replace("'/shared/report-model.js'",JSON.stringify(new URL('../apps/shared/report-model.js',import.meta.url).href));
 const {mountReport}=await import('data:text/javascript;base64,'+Buffer.from(source+'\n//# sourceURL=clinical-editor-test.js').toString('base64'));
 function setup(options={}){
  const window=new Window({url:'http://127.0.0.1:8799'});
@@ -11,6 +11,7 @@ function setup(options={}){
  globalThis.Option=function(text,value){const option=document.createElement('option');option.textContent=text;option.value=value;return option;};
  Object.defineProperty(globalThis,'navigator',{configurable:true,value:window.navigator});
  globalThis.fetch=async()=>({ok:true,json:async()=>({templates:options.library??[]})});
+ document.documentElement.lang=options.language??'es';
  document.body.innerHTML='<div id="parent"></div>';
  localStorage.setItem('dicta-report-v1',options.savedDraft??'');
  localStorage.setItem('dicta-report-context-v1',JSON.stringify(options.savedDraft?{name:'Anterior',text:'ANTERIOR'}:null));
@@ -89,7 +90,7 @@ for(const savedTheme of [null,'sala'])test('montaje completo, controles y tema g
  globalThis.__clinicalTest={mountReport,state,createTakeQueue};if(savedTheme)localStorage.setItem('dicta-theme-v1',savedTheme);
  let live=fs.readFileSync(new URL('../apps/desktop/live.js',import.meta.url),'utf8');
  live=live.replace(/^import .*;\r?\n/gm,'');
- live="const {state,createTakeQueue}=globalThis.__clinicalTest;const mountReport=(p,o)=>globalThis.__clinicalTest.mountReport(p,{...o,globalReview:false});const sharedState=async()=>state;\n"+live;
+ live="import {t as tr,language,mountLanguageSwitch} from "+JSON.stringify(new URL('../apps/shared/i18n.js',import.meta.url).href)+";const {state,createTakeQueue}=globalThis.__clinicalTest;const mountReport=(p,o)=>globalThis.__clinicalTest.mountReport(p,{...o,globalReview:false});const sharedState=async()=>state;\n"+live;
  await import('data:text/javascript;base64,'+Buffer.from(live+'\n//# sourceURL=clinical-live-test-'+savedTheme+'.js').toString('base64'));
  assert.equal(document.body.dataset.theme,savedTheme==='sala'?'ambar':'dia');if(savedTheme==='sala')assert.equal(localStorage.getItem('dicta-theme-v1'),'ambar');
  assert.equal(document.querySelector('.clinical-editbar .template-library-panel').open,false);
@@ -206,7 +207,7 @@ test('demo oculta detalles técnicos de sesión y mantiene controles de dictado'
  const state={demo:true,configs:[{id:'demo-muse',engine:'muse-stream',keywords:[],name:'Prueba'}],metaConfigured:false};
  globalThis.__clinicalDemoTest={mountReport,state,createTakeQueue};
  let live=fs.readFileSync(new URL('../apps/desktop/live.js',import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'');
- live="const {state,createTakeQueue}=globalThis.__clinicalDemoTest;const mountReport=(p,o)=>globalThis.__clinicalDemoTest.mountReport(p,{...o,globalReview:false});const sharedState=async()=>state;\n"+live;
+ live="import {t as tr,language,mountLanguageSwitch} from "+JSON.stringify(new URL('../apps/shared/i18n.js',import.meta.url).href)+";const {state,createTakeQueue}=globalThis.__clinicalDemoTest;const mountReport=(p,o)=>globalThis.__clinicalDemoTest.mountReport(p,{...o,globalReview:false});const sharedState=async()=>state;\n"+live;
  await import('data:text/javascript;base64,'+Buffer.from(live+'\n//# sourceURL=clinical-demo-hidden-details.js').toString('base64'));
  assert.equal(document.querySelector('.advanced-settings').hidden,true);
  assert.ok(document.querySelector('#metrics-export').closest('[hidden]'));
@@ -373,4 +374,17 @@ test('campo de plantilla: teclado, lateralidad, dictado y corchetes ordinarios',
  const before=count();editor.element.querySelector('.report-placeholder')?.click();assert.equal(count(),before);
  editor.cancel('pending-field');assert.equal(editor.model.text,original);
  await window.happyDOM.close();
+});
+
+
+test('English editor: five favorites, placeholder dictation, undo, copy and Spanish draft preserved',async()=>{
+ const library=JSON.parse(fs.readFileSync(new URL('../data/demo/plantillas-sinteticas.json',import.meta.url),'utf8')).templates.map(t=>({...t,...t.locales.en}));
+ const {window,editor,button}=setup({language:'en',library});await new Promise(r=>setTimeout(r,0));
+ assert.deepEqual([...editor.quickTemplates.children].map(b=>b.textContent),library.filter(t=>t.defaultFavorite).map(t=>t.name));
+ editor.quickTemplates.firstChild.click();assert.equal(editor.model.text,library[0].text);assert.equal(editor.element.querySelectorAll('.report-heading').length,4);
+ editor.element.querySelector('.report-placeholder').click();assert.equal(window.getSelection().toString(),'[Enter clinical history.]');editor.begin('en');editor.preview('en','Synthetic case.');await editor.finish('en','Synthetic case.','fixture');
+ assert.equal(editor.model.text,library[0].text.replace('[Enter clinical history.]','Synthetic case.'));button('Undo').click();assert.equal(editor.model.text,library[0].text);
+ let copied;Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{copied=text;}},configurable:true});await button('Copy for RIS').onclick();assert.equal(copied,library[0].text);
+ assert.equal(JSON.parse(localStorage.getItem('dicta-editor-metrics-v1')).language,'en');await window.happyDOM.close();
+ const restored=setup({language:'en',savedDraft:'ANTECEDENTES\nTexto español sin traducir.'});assert.equal(restored.editor.model.text,'ANTECEDENTES\nTexto español sin traducir.');assert.ok(restored.button('New report'));await restored.window.happyDOM.close();
 });

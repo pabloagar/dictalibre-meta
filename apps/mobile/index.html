@@ -1,37 +1,37 @@
 <!doctype html>
-<html lang="es">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#1c2a2e"><title>Dicta Libre · Micrófono</title><link rel="stylesheet" href="/style.css"><script src="/jsqr.js" defer></script><script type="module" src="/mobile.js"></script></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#1c2a2e"><title data-i18n="Dicta Libre · Micrófono">Dicta Libre · Microphone</title><link rel="stylesheet" href="/style.css"><script src="/jsqr.js" defer=""></script><script type="module" src="/mobile.js"></script></head>
 <body class="mobile-body"><div class="phone-shell">
-<header><a class="brand" href="/mobile"><span class="brand-mark">d.</span> dicta libre</a><span class="tag">MICRÓFONO · PROTOTIPO</span></header>
+<header><a class="brand" href="/mobile"><span class="brand-mark">d.</span> dicta libre</a><span class="tag" data-i18n="MICRÓFONO · PROTOTIPO">MICROPHONE · PROTOTYPE</span></header>
 <main>
-<h1 class="visually-hidden">Micrófono del teléfono</h1>
-<section class="visor" aria-label="Estado del dictado">
-  <div id="status" class="status" role="status" aria-live="polite">Introduce el código que muestra el computador.</div>
-  <div class="visor-live"><div id="duration" class="timer">00:00</div><meter id="level" min="0" max="1" value="0" aria-label="Nivel del micrófono"></meter></div>
+<h1 class="visually-hidden" data-i18n="Micrófono del teléfono">Phone microphone</h1>
+<section class="visor" aria-label="Dictation status" data-i18n-aria-label="Estado del dictado">
+  <div id="status" class="status" role="status" aria-live="polite" data-i18n="Introduce el código que muestra el computador.">Enter the code shown on your computer.</div>
+  <div class="visor-live"><div id="duration" class="timer">00:00</div><meter id="level" min="0" max="1" value="0" aria-label="Microphone level" data-i18n-aria-label="Nivel del micrófono"></meter></div>
   <p id="verified" class="verification" role="status"></p>
 </section>
-<section id="join-panel" class="card"><button id="scan-qr" class="primary" type="button">Escanear QR del computador</button><p class="tiny">También puedes introducir el código:</p><label for="join-code" class="input-label">Código del computador</label><input id="join-code" class="code-input" placeholder="Ej. A12B34C56D" maxlength="14" autocomplete="off" autocapitalize="characters" spellcheck="false"><button id="join" class="primary">Conectar con el PC</button></section>
-<section id="qr-reader" class="card" hidden aria-label="Lector QR"><video id="qr-video" autoplay muted playsinline width="280" height="280" aria-label="Vista de cámara para QR"></video><p id="qr-message" role="status">Apunta al QR del computador.</p><button id="qr-cancel" type="button">Cancelar escaneo</button></section>
-<div id="confirm-panel" class="confirm" hidden><p>Confirma este número en el computador:</p><strong id="confirm-code"></strong></div>
-<section id="controls" class="control-card" hidden>
-  <button id="prepare" class="primary" type="button">Preparar micrófono</button>
-  <p class="tiny prepare-note">Prepara el micrófono al iniciar para autorizar el acceso. Al volver a esta pestaña, usa directamente el botón de dictado y espera «Grabando». Entre tomas, el audio se descarta.</p>
-  <button id="record" class="record-button" disabled><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="12" y="4" width="8" height="16" rx="4"></rect><path d="M8 15v2a8 8 0 0 0 16 0v-2M16 25v4M11 29h10"></path></svg><span id="record-label">Mantén pulsado para hablar</span></button>
-  <fieldset id="modes" class="mode-selector"><legend>Forma de grabar</legend><label><input type="radio" name="mode" value="hold" checked><span>Mantener pulsado</span></label><label><input type="radio" name="mode" value="toggle"><span>Inicio / parada</span></label></fieldset>
+<section id="join-panel" class="card"><button id="scan-qr" class="primary" type="button" data-i18n="Escanear QR del computador">Scan computer QR</button><p class="tiny" data-i18n="También puedes introducir el código:">You can also enter the code:</p><label for="join-code" class="input-label" data-i18n="Código del computador">Computer code</label><input id="join-code" class="code-input" placeholder="e.g. A12B34C56D" maxlength="14" autocomplete="off" autocapitalize="characters" spellcheck="false" data-i18n-placeholder="Ej. A12B34C56D"><button id="join" class="primary" data-i18n="Conectar con el PC">Connect to computer</button></section>
+<section id="qr-reader" class="card" hidden="" aria-label="QR scanner" data-i18n-aria-label="Lector QR"><video id="qr-video" autoplay="" muted="" playsinline="" width="280" height="280" aria-label="QR camera view" data-i18n-aria-label="Vista de cámara para QR"></video><p id="qr-message" role="status" data-i18n="Apunta al QR del computador.">Point at the computer's QR.</p><button id="qr-cancel" type="button" data-i18n="Cancelar escaneo">Cancel scan</button></section>
+<div id="confirm-panel" class="confirm" hidden=""><p data-i18n="Confirma este número en el computador:">Confirm this number on your computer:</p><strong id="confirm-code"></strong></div>
+<section id="controls" class="control-card" hidden="">
+  <button id="prepare" class="primary" type="button" data-i18n="Preparar micrófono">Prepare microphone</button>
+  <p class="tiny prepare-note" data-i18n="Prepara el micrófono al iniciar para autorizar el acceso. Al volver a esta pestaña, usa directamente el botón de dictado y espera «Grabando». Entre tomas, el audio se descarta.">Prepare the microphone to allow access. When returning to this tab, use the dictation button and wait for “Recording”. Audio between takes is discarded.</p>
+  <button id="record" class="record-button" disabled=""><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="12" y="4" width="8" height="16" rx="4"></rect><path d="M8 15v2a8 8 0 0 0 16 0v-2M16 25v4M11 29h10"></path></svg><span id="record-label" data-i18n="Mantén pulsado para hablar">Hold to talk</span></button>
+  <fieldset id="modes" class="mode-selector"><legend data-i18n="Forma de grabar">Recording mode</legend><label><input type="radio" name="mode" value="hold" checked=""><span data-i18n="Mantener pulsado">Hold to talk</span></label><label><input type="radio" name="mode" value="toggle"><span data-i18n="Inicio / parada">Start / stop</span></label></fieldset>
 </section>
-<details class="more-options"><summary>Más opciones</summary>
+<details class="more-options"><summary data-i18n="Más opciones">More options</summary>
   <div class="paired-only">
-    <button id="test-signal" class="quiet">Probar con tono sintético, sin micrófono</button>
-    <label class="check-row"><input id="haptics" type="checkbox" checked aria-describedby="haptics-note"> Vibración al iniciar y detener</label>
-    <p id="haptics-note" class="tiny">Activada inicialmente; puedes apagarla. Un pulso confirma el inicio de captura y otro la parada, no la transcripción. Se recuerda tu elección en este navegador. Puede no sentirse en silencio o No molestar.</p>
-    <button id="test-haptics" class="quiet" type="button">Probar vibración breve</button>
-    <p id="capture-info" class="tiny">Pantalla encendida · interfaz abierta · máximo 3 min</p>
-    <div class="metrics phone-metrics"><div><span>RECIBIDOS EN PC</span><strong id="received">0</strong></div><div><span>IDA/VUELTA SERVIDOR</span><strong id="rtt">—</strong></div></div>
-    <button id="close" class="quiet">Finalizar sesión y liberar micrófono</button>
+    <button id="test-signal" class="quiet" data-i18n="Probar con tono sintético, sin micrófono">Test with a synthetic tone, without microphone</button>
+    <label class="check-row"><input id="haptics" type="checkbox" checked="" aria-describedby="haptics-note"><span data-i18n="Vibración al iniciar y detener">Vibrate on start and stop</span></label>
+    <p id="haptics-note" class="tiny" data-i18n="Activada inicialmente; puedes apagarla. Un pulso confirma el inicio de captura y otro la parada, no la transcripción. Se recuerda tu elección en este navegador. Puede no sentirse en silencio o No molestar.">Enabled initially; you can turn it off. A pulse confirms capture start and stop, not transcription. Your choice is saved in this browser. It may not vibrate in silent or Do Not Disturb mode.</p>
+    <button id="test-haptics" class="quiet" type="button" data-i18n="Probar vibración breve">Test short vibration</button>
+    <p id="capture-info" class="tiny" data-i18n="Pantalla encendida · interfaz abierta · máximo 3 min">Screen on · keep page open · maximum 3 min</p>
+    <div class="metrics phone-metrics"><div><span data-i18n="RECIBIDOS EN PC">RECEIVED ON PC</span><strong id="received">0</strong></div><div><span data-i18n="IDA/VUELTA SERVIDOR">SERVER ROUND TRIP</span><strong id="rtt">—</strong></div></div>
+    <button id="close" class="quiet" data-i18n="Finalizar sesión y liberar micrófono">End session and release microphone</button>
   </div>
-  <button id="restart" class="quiet">Reiniciar sesión</button>
-  <button id="export-lifecycle" class="quiet">Exportar diagnóstico de interrupciones</button>
-  <p class="tiny privacy-note">Al bloquear o cambiar de aplicación se libera el micrófono. Vuelve a la misma pestaña antes de cinco minutos y usa el botón de dictado. Si la sesión venció, escanea un nuevo QR desde el PC.</p>
+  <button id="restart" class="quiet" data-i18n="Reiniciar sesión">Restart session</button>
+  <button id="export-lifecycle" class="quiet" data-i18n="Exportar diagnóstico de interrupciones">Export interruption diagnostics</button>
+  <p class="tiny privacy-note" data-i18n="Al bloquear o cambiar de aplicación se libera el micrófono. Vuelve a la misma pestaña antes de cinco minutos y usa el botón de dictado. Si la sesión venció, escanea un nuevo QR desde el PC.">Locking the screen or switching apps releases the microphone. Return to the same tab within five minutes and use the dictation button. If the session expired, scan a new QR from your computer.</p>
 </details>
-<p class="tiny prototype-note">Prototipo de investigación, sin validación clínica. No uses datos de pacientes.</p>
-</main></div></body></html>
+<p class="tiny prototype-note" data-i18n="Prototipo de investigación, sin validación clínica. No uses datos de pacientes.">Research prototype, without clinical validation. Do not use patient data.</p>
+</main></div>
+</body></html>

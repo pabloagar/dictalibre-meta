@@ -62,7 +62,7 @@ export function attachMuseStream(server,{getKey,getConfig,start,finish,endpoint=
           started=performance.now();run=start(config,m,req);cancellations.set(run.id,()=>complete('cancelled','Streaming cancelado.'));emit({type:'started',runId:run.id});
           up=new WebSocket(endpoint,{handshakeTimeout:10000,maxPayload:1024*1024});
           handshakeTimer=setTimeout(()=>complete('timeout','Muse no confirmó la conexión en diez segundos.'),10000);
-          up.on('open',()=>up.send(JSON.stringify({authorization:{accessToken:`Bearer ${key}`},model:config.model,mode:segmentation==='automatic'?'ENDPOINTING':'PUSH_TO_TALK',audioEncoding:'PCM_24KHZ',partialMode:'CUMULATIVE',languageBias:['Spanish'],keywords:config.keywords,emitAudioProgress:true})));
+          up.on('open',()=>up.send(JSON.stringify({authorization:{accessToken:`Bearer ${key}`},model:config.model,mode:segmentation==='automatic'?'ENDPOINTING':'PUSH_TO_TALK',audioEncoding:'PCM_24KHZ',partialMode:'CUMULATIVE',languageBias:[config.language==='en'?'English':'Spanish'],keywords:config.keywords,emitAudioProgress:true})));
           up.on('message',(data,isBinary)=>{
             if(done||isBinary)return;
             try{

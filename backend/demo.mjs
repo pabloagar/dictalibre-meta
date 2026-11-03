@@ -33,7 +33,9 @@ export function createDemo({accessCode,metaKey='',reviewProvider=reviewWithMeta,
   const visitors=new Map(),logins=new Map();
   const configs=[
     {...configuration({engine:'muse',name:'Glosario MVP',keywords:[...DEMO_KEYWORDS]}),id:'demo-muse',createdAt:null,readOnly:true},
-    {...configuration({engine:'muse',name:'Sin glosario'}),id:'demo-muse-no-glossary',createdAt:null,readOnly:true}
+    {...configuration({engine:'muse',name:'Sin glosario'}),id:'demo-muse-no-glossary',createdAt:null,readOnly:true},
+    {...configuration({engine:'muse',language:'en',name:'English radiology',keywords:['pleural effusion','pneumothorax','atelectasis','cardiomediastinal silhouette','hydronephrosis','urolithiasis','lymphadenopathy']}),id:'demo-muse-en',createdAt:null,readOnly:true},
+    {...configuration({engine:'muse',language:'en',name:'No glossary'}),id:'demo-muse-en-no-glossary',createdAt:null,readOnly:true}
   ];
   if(fs.existsSync(glossaryDir))for(const f of fs.readdirSync(glossaryDir).filter(f=>f.endsWith('.json')).sort()){try{configs.push(glossaryToConfig(validateGlossary(JSON.parse(fs.readFileSync(path.join(glossaryDir,f),'utf8')))));}catch(e){console.error(`Glosario omitido (${f}): ${e.message}`);}}
   const usage={day:null,audioMs:0},activeVisitors=new Map(),runOwners=new Map();
@@ -61,11 +63,11 @@ export function createDemo({accessCode,metaKey='',reviewProvider=reviewWithMeta,
       if(!originOk(req)&&!(req.headers.origin==='null'&&req.headers['sec-fetch-site']==='same-origin'))return json({error:'Origen no permitido.'},403);
       const ip=clientIp(req);let bucket=logins.get(ip);
       if(!bucket||now()-bucket.start>60_000)logins.set(ip,bucket={start:now(),count:0});
-      if(++bucket.count>10)return accessPage(429,'<p class="status error" role="alert">Demasiados intentos. Espera un minuto.</p>');
+      if(++bucket.count>10)return accessPage(429,'<p class="status error" role="alert" data-i18n="Demasiados intentos. Espera un minuto.">Demasiados intentos. Espera un minuto.</p>');
       const chunks=[];let size=0;for await(const b of req){size+=b.length;if(size>2048)return json({error:'Petición demasiado grande.'},413);chunks.push(b);}
       const code=new URLSearchParams(Buffer.concat(chunks).toString('utf8')).get('code')??'';
-      if(!sameSecret(code.trim(),accessCode))return accessPage(401,'<p class="status error" role="alert">Código incorrecto.</p>');
-      if(visitors.size>=maxVisitors)return accessPage(503,'<p class="status error" role="alert">La demo está ocupada. Intenta más tarde.</p>');
+      if(!sameSecret(code.trim(),accessCode))return accessPage(401,'<p class="status error" role="alert" data-i18n="Código incorrecto.">Código incorrecto.</p>');
+      if(visitors.size>=maxVisitors)return accessPage(503,'<p class="status error" role="alert" data-i18n="La demo está ocupada. Intenta más tarde.">La demo está ocupada. Intenta más tarde.</p>');
       const id=randomBytes(32).toString('hex');const visitor={id,seen:now(),runs:[],reviews:[],reviewDocuments:[]}; visitor.reviewer=createReviewer({db:visitor,save:()=>{},getKey:()=>metaKey,build,sourceHash:null,provider:reviewProvider});visitors.set(id,visitor);
       res.writeHead(303,{...headers,Location:'/live','Set-Cookie':`${COOKIE}=${id}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${Math.floor(visitorTtlMs/1000)}${secure?'; Secure':''}`});res.end();return true;
     }
@@ -77,7 +79,7 @@ export function createDemo({accessCode,metaKey='',reviewProvider=reviewWithMeta,
     if(req.method==='GET'){
       if(p.startsWith('/api/report-reviews/')){const r=visitor.reviews.find(r=>r.id===decodeURIComponent(p.slice('/api/report-reviews/'.length)));return r?json(r):json({error:'Revisión desconocida.'},404);}
       if(p==='/api/live-info')return json({mobileOrigin:origin});
-      if(p==='/api/templates')return sendFile(path.relative(ROOT,templateFile),'application/json; charset=utf-8');
+      if(p==='/api/templates'){const catalogue=JSON.parse(await fs.promises.readFile(templateFile,'utf8'));if(url.searchParams.get('lang')==='en'){catalogue.templates=catalogue.templates.map(t=>({...t,...t.locales?.en}));catalogue.language='en';}else catalogue.language='es';return json(catalogue);}
       if(p==='/api/state')return json({demo:true,audios:[],configs,runs:visitor.runs,reviews:visitor.reviews,reviewDocuments:[],reportReviewAvailable:!!metaKey,metaConfigured:!!metaKey,modelPresent:false,build,sourceHash:null,concurrency:{...concurrency}});
       return json({error:'No disponible en la demostración.'},404);
     }
@@ -100,7 +102,7 @@ export function createDemo({accessCode,metaKey='',reviewProvider=reviewWithMeta,
       if(activeVisitors.has(visitor)){concurrency.rejectedVisitor++;throw Error('Ya tienes un dictado en curso. Espera a que termine.');}
       if(concurrency.active>=maxConcurrentStreams){concurrency.rejectedCapacity++;throw Error('Los '+maxConcurrentStreams+' cupos de dictado están ocupados. Intenta nuevamente al terminar una toma.');}
       if(usedToday()>=maxAudioMinutesPerDay*60_000){concurrency.rejectedBudget++;throw Error('La demostración alcanzó su límite de uso de hoy.');}
-      const r={id:randomUUID(),configId:config.id,configuration:{model:config.model,name:config.name,mode:'streaming',segmentation:m.segmentation},createdAt:new Date(now()).toISOString(),status:'running',text:null,error:null,commandsEnabled:m.commandsEnabled!==false,numbersEnabled:m.numbersEnabled!==false,termsEnabled:m.termsEnabled!==false,numberVersion:NUMBER_VERSION,termVersion:TERM_VERSION,commandVersion:COMMAND_VERSION,build,reviewEnabled:false,environment:{source:'demo-stream'},timings:{queueMs:0,requestMs:null,totalMs:null}};
+      const r={id:randomUUID(),configId:config.id,configuration:{model:config.model,name:config.name,language:config.language,mode:'streaming',segmentation:m.segmentation},createdAt:new Date(now()).toISOString(),status:'running',text:null,error:null,commandsEnabled:m.commandsEnabled!==false,numbersEnabled:m.numbersEnabled!==false,termsEnabled:m.termsEnabled!==false,numberVersion:NUMBER_VERSION,termVersion:TERM_VERSION,commandVersion:COMMAND_VERSION,build,reviewEnabled:false,environment:{source:'demo-stream'},timings:{queueMs:0,requestMs:null,totalMs:null}};
       activeVisitors.set(visitor,r.id);runOwners.set(r.id,visitor);concurrency.active++;concurrency.started++;concurrency.peak=Math.max(concurrency.peak,concurrency.active);
       visitor.runs.push(r);if(visitor.runs.length>20)visitor.runs.shift();
       return r;

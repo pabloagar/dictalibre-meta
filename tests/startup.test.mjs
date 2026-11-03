@@ -7,6 +7,7 @@ const html=fs.readFileSync('apps/desktop/index.html','utf8');
 const boot=fs.readFileSync('apps/desktop/startup.js','utf8');
 function setup(theme){
  const window=new Window({url:'https://example.test/live'});window.document.write(('<style>'+fs.readFileSync('apps/shared/style.css','utf8')+'</style>'+html).replace(/<script[\s\S]*?<\/script>/g,''));
+ window.document.documentElement.lang='es';
  if(theme)window.localStorage.setItem('dicta-theme-v1',theme);
  let timeout;const measures=[];
  vm.runInNewContext(boot,{window,document:window.document,location:window.location,localStorage:window.localStorage,performance:{now:()=>10,measure:(...args)=>measures.push(args)},setTimeout:fn=>{timeout=fn;return 1;},clearTimeout:()=>{timeout=null;}});

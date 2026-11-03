@@ -21,7 +21,7 @@ test('global UI applies only explicit acceptance and blocks stale proposals',asy
  let state={text:'35 mili. Milímetros.',pending:false,context:null},applied=0;
  const response={id:'test',status:'completed',suggestions:[{original:state.text,replacement:'35 milímetros.',kind:'format',reason:'Unidad repetida.',evidence:[state.text]}]};
  const ctx={window,CustomEvent:window.CustomEvent,document:{createElement:el},setInterval,clearInterval,performance:{now:()=>100},setTimeout,clearTimeout,encodeURIComponent,fetch:async()=>({ok:true,json:async()=>response})};
- vm.createContext(ctx);vm.runInContext(fs.readFileSync('apps/desktop/report-review.js','utf8').replace('export function','function'),ctx);
+ vm.createContext(ctx);vm.runInContext(("const tr=(s,...v)=>Array.isArray(s)?s.reduce((a,b,i)=>a+(i?v[i-1]:'')+b,''):s;const language=()=> 'es';const initializeLanguage=()=>{};const mountLanguageSwitch=()=>({});\n"+fs.readFileSync('apps/desktop/report-review.js','utf8').replace(/^import .*;\r?\n/gm,'')).replace('export function','function'),ctx);
  ctx.args={controls:el('div'),section:el('section'),copyButton:el('button'),snapshot:()=>state,onCopy(){},event(){},onApply:p=>{applied++;assert.equal(p.original,state.text);state={...state,text:p.replacement};return true;}};
  ctx.args.controls.append(ctx.args.copyButton);vm.runInContext('mountReportReview(args)',ctx);
  await elements.find(n=>n.textContent==='Revisar de nuevo').onclick();assert.equal(applied,0);
@@ -33,7 +33,7 @@ test('one click requests review; concurrent clicks and current results do not re
  const window=new Window();const elements=[];const el=tag=>{const n=window.document.createElement(tag);elements.push(n);return n;};
  let calls=0,resolve;let state={text:'Texto.',pending:false,context:null};
  const ctx={window,CustomEvent:window.CustomEvent,document:{createElement:el},setInterval,clearInterval,performance:{now:()=>100},setTimeout,clearTimeout,encodeURIComponent,fetch:async()=>{calls++;return {ok:true,json:()=>new Promise(r=>resolve=r)};}};
- vm.createContext(ctx);vm.runInContext(fs.readFileSync('apps/desktop/report-review.js','utf8').replace('export function','function'),ctx);
+ vm.createContext(ctx);vm.runInContext(("const tr=(s,...v)=>Array.isArray(s)?s.reduce((a,b,i)=>a+(i?v[i-1]:'')+b,''):s;const language=()=> 'es';const initializeLanguage=()=>{};const mountLanguageSwitch=()=>({});\n"+fs.readFileSync('apps/desktop/report-review.js','utf8').replace(/^import .*;\r?\n/gm,'')).replace('export function','function'),ctx);
  ctx.args={controls:el('div'),section:el('section'),copyButton:el('button'),snapshot:()=>state,onCopy(){},event(){}};
  ctx.args.controls.append(ctx.args.copyButton);vm.runInContext('mountReportReview(args)',ctx);
  const button=elements.find(n=>n.className==='report-review-button');const pending=button.onclick();assert.equal(calls,1);button.onclick();assert.equal(calls,1);
@@ -55,7 +55,7 @@ test('toma conserva contexto inmutable; global conserva snapshot, deduplica y re
  const inputs=[],db={runs:[{id:'r',status:'completed',text:'Ate tacia.',configuration:{keywords:[]},reviewContext:{templateName:'TC',reportText:'Hallazgos previos.'}}]};
  const q=createReviewer({db,save(){},getKey:()=>'',provider:async input=>{inputs.push(structuredClone(input));return {content:JSON.stringify({suggestions:input.reviewScope==='report'?[warning]:[]})};}});
  try{const take=q.enqueue('r');db.runs[0].reviewContext.reportText='CAMBIADO';await wait(()=>take.status==='completed');assert.equal(inputs[0].context.reportText,'Hallazgos previos.');
- const global=q.enqueueReport({text,context:{templateName:'TC'}});assert.equal(q.enqueueReport({text,context:{templateName:'TC'}}).id,global.id);await wait(()=>global.status==='completed');assert.equal(global.baseText,text);assert.equal(global.suggestions[0].evidence.length,2);assert.ok(global.timings.requestMs>=0);assert.equal(global.config.reasoning_effort,'medium');assert.equal(global.config.max_completion_tokens,8000);assert.equal(global.config.promptVersion,'report-consistency-v4-actionable');
+ const global=q.enqueueReport({text,context:{templateName:'TC'}});assert.equal(q.enqueueReport({text,context:{templateName:'TC'}}).id,global.id);await wait(()=>global.status==='completed');assert.equal(global.baseText,text);assert.equal(global.suggestions[0].evidence.length,2);assert.ok(global.timings.requestMs>=0);assert.equal(global.config.reasoning_effort,'medium');assert.equal(global.config.max_completion_tokens,8000);assert.equal(global.config.promptVersion,'report-consistency-v5-bilingual');
  assert.notEqual(q.enqueueReport({text,context:{templateName:'RM'}}).inputHash,global.inputHash);
  global.config.promptHash='previous-prompt';assert.notEqual(q.enqueueReport({text,context:{templateName:'TC'}}).id,global.id);
  assert.throws(()=>q.enqueueReport({text:' '}));assert.throws(()=>q.enqueueReport({text:'x'.repeat(20001)}));
@@ -76,7 +76,7 @@ test('UI: copiar ofrece revisar o continuar; edición invalida avisos y respuest
  const window=new Window();const elements=[];const el=tag=>{const n=window.document.createElement(tag);elements.push(n);return n;};
  let snapshot={text:'Texto original.',context:{templateName:'TC'},pending:false},copies=0,calls=0,resolveReview;
  const box={window,CustomEvent:window.CustomEvent,document:{createElement:el},setInterval,clearInterval,performance:{now:()=>100},setTimeout,clearTimeout,encodeURIComponent,fetch:async()=>{calls++;return {ok:true,json:()=>new Promise(r=>{resolveReview=r;})};}};
- vm.createContext(box);vm.runInContext(fs.readFileSync('apps/desktop/report-review.js','utf8').replace('export function','function'),box);
+ vm.createContext(box);vm.runInContext(("const tr=(s,...v)=>Array.isArray(s)?s.reduce((a,b,i)=>a+(i?v[i-1]:'')+b,''):s;const language=()=> 'es';const initializeLanguage=()=>{};const mountLanguageSwitch=()=>({});\n"+fs.readFileSync('apps/desktop/report-review.js','utf8').replace(/^import .*;\r?\n/gm,'')).replace('export function','function'),box);
  box.args={controls:el('div'),section:el('section'),copyButton:el('button'),snapshot:()=>snapshot,onCopy:()=>copies++,event(){}};
  box.args.controls.append(box.args.copyButton);const ui=vm.runInContext('mountReportReview(args)',box);
  assert.equal(ui.beforeCopy(),false);assert.equal(calls,0);

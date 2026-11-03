@@ -51,7 +51,7 @@ export class LocalWorker {
 }
 export async function museTranscribe(wav,config,key,signal) {
   const form=new FormData();
-  form.append('request',new Blob([JSON.stringify({model:config.model,mode:'PUSH_TO_TALK',audioEncoding:'WAV',languageBias:['Spanish'],keywords:config.keywords})],{type:'application/json'}));
+  form.append('request',new Blob([JSON.stringify({model:config.model,mode:'PUSH_TO_TALK',audioEncoding:'WAV',languageBias:[config.language==='en'?'English':'Spanish'],keywords:config.keywords})],{type:'application/json'}));
   form.append('audio',new Blob([wav],{type:'audio/wav'}),'audio.wav');
   const response=await fetch('https://api.meta.ai/v1/asr/transcribe',{method:'POST',headers:{Authorization:`Bearer ${key}`},body:form,signal});
   if(!response.ok) throw new Error(`Muse HTTP ${response.status}. Revisa acceso, cuota y configuración; no se guardó la respuesta de error.`);
@@ -68,6 +68,7 @@ export function createLab({dataDir=path.join(ROOT,'data','local','lab'),keyFile=
   const db=fs.existsSync(dbPath)?JSON.parse(fs.readFileSync(dbPath,'utf8')):{schema:1,audios:[],configs:[],runs:[]};
   const save=()=>{const tmp=dbPath+'.tmp';fs.writeFileSync(tmp,JSON.stringify(db,null,2));fs.renameSync(tmp,dbPath);};
   if(!db.configs.length) for(const engine of ['muse','whisper']) db.configs.push({...configuration({engine,name:engine==='muse'?'Muse · base':'Whisper large-v3 · GPU · base'}),id:randomUUID(),createdAt:new Date().toISOString()});
+  if(!db.configs.some(c=>c.engine==='muse'&&c.language==='en'))db.configs.push({...configuration({engine:'muse',language:'en',name:'English · no glossary'}),id:randomUUID(),createdAt:new Date().toISOString()});
   for(const r of db.runs) if(['queued','running'].includes(r.status)){r.status='interrupted';r.error='Servidor reiniciado antes de terminar.';}
   save();
   let build='unknown';try{build=execFileSync('git',['rev-parse','HEAD'],{cwd:ROOT,encoding:'utf8'}).trim();}catch{}

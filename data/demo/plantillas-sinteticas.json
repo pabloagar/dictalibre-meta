@@ -10,7 +10,14 @@
       "category": "Radiografía",
       "sources": [],
       "text": "RX DE TÓRAX\n\nANTECEDENTES\n[Completar antecedentes clínicos.]\n\nTÉCNICA\nRadiografías de tórax en las proyecciones realizadas.\n\nHALLAZGOS\nPulmones sin opacidades focales.\nSilueta cardiomediastínica sin alteraciones evidentes.\nSin derrame pleural ni neumotórax.\n\nCONCLUSIÓN\nSin hallazgos torácicos agudos.\n",
-      "defaultFavorite": true
+      "defaultFavorite": true,
+      "locales": {
+        "en": {
+          "name": "Chest X-ray",
+          "category": "Radiography",
+          "text": "CHEST X-RAY\n\nCLINICAL HISTORY\n[Enter clinical history.]\n\nTECHNIQUE\nChest radiographs in the acquired projections.\n\nFINDINGS\nNo focal pulmonary opacity.\nCardiomediastinal silhouette without evident abnormality.\nNo pleural effusion or pneumothorax.\n\nIMPRESSION\nNo acute chest findings.\n"
+        }
+      }
     },
     {
       "id": "demo-tc-torax",
@@ -18,7 +25,14 @@
       "category": "Tomografía",
       "sources": [],
       "text": "TC DE TÓRAX\n\nANTECEDENTES\n[Completar antecedentes clínicos.]\n\nTÉCNICA\nAdquisición tomográfica de tórax con reconstrucciones multiplanares.\n\nHALLAZGOS\nPulmones sin alteraciones focales evidentes.\nVía aérea central permeable.\nSin derrame pleural.\nSin adenopatías torácicas evidentes.\n\nCONCLUSIÓN\nSin alteraciones torácicas significativas.\n",
-      "defaultFavorite": true
+      "defaultFavorite": true,
+      "locales": {
+        "en": {
+          "name": "Chest CT",
+          "category": "CT",
+          "text": "CHEST CT\n\nCLINICAL HISTORY\n[Enter clinical history.]\n\nTECHNIQUE\nCT of the chest with multiplanar reconstructions.\n\nFINDINGS\nNo evident focal pulmonary abnormality.\nCentral airways are patent.\nNo pleural effusion.\nNo evident thoracic lymphadenopathy.\n\nIMPRESSION\nNo significant chest abnormality.\n"
+        }
+      }
     },
     {
       "id": "demo-tc-abdomen",
@@ -26,7 +40,14 @@
       "category": "Tomografía",
       "sources": [],
       "text": "TC DE ABDOMEN Y PELVIS\n\nANTECEDENTES\n[Completar antecedentes clínicos.]\n\nTÉCNICA\nAdquisición tomográfica de abdomen y pelvis con reconstrucciones multiplanares.\n\nHALLAZGOS\nÓrganos abdominales sin alteraciones evidentes.\nSin dilatación de la vía biliar ni de las vías urinarias.\nAsas intestinales sin dilatación.\nSin líquido libre ni colecciones.\n\nCONCLUSIÓN\nSin alteraciones abdominopelvianas significativas.\n",
-      "defaultFavorite": true
+      "defaultFavorite": true,
+      "locales": {
+        "en": {
+          "name": "Abdomen and pelvis CT",
+          "category": "CT",
+          "text": "ABDOMEN AND PELVIS CT\n\nCLINICAL HISTORY\n[Enter clinical history.]\n\nTECHNIQUE\nCT of the abdomen and pelvis with multiplanar reconstructions.\n\nFINDINGS\nNo evident abdominal organ abnormality.\nNo biliary or urinary tract dilatation.\nNo bowel dilatation.\nNo free fluid or collections.\n\nIMPRESSION\nNo significant abdominopelvic abnormality.\n"
+        }
+      }
     },
     {
       "id": "demo-pielotc",
@@ -34,7 +55,14 @@
       "category": "Tomografía",
       "sources": [],
       "text": "PIELOTC\n\nANTECEDENTES\n[Completar antecedentes clínicos.]\n\nTÉCNICA\nAdquisición tomográfica de abdomen y pelvis sin contraste endovenoso, dirigida al tracto urinario.\n\nHALLAZGOS\nRiñones de morfología conservada.\nSin cálculos en el tracto urinario ni dilatación de las cavidades excretoras.\nVejiga sin alteraciones evidentes.\n\nCONCLUSIÓN\nSin signos de litiasis urinaria ni uropatía obstructiva.\n",
-      "defaultFavorite": true
+      "defaultFavorite": true,
+      "locales": {
+        "en": {
+          "name": "Noncontrast urinary tract CT",
+          "category": "CT",
+          "text": "NONCONTRAST URINARY TRACT CT\n\nCLINICAL HISTORY\n[Enter clinical history.]\n\nTECHNIQUE\nCT of the abdomen and pelvis without intravenous contrast, focused on the urinary tract.\n\nFINDINGS\nRenal morphology is preserved.\nNo urinary tract calculi or collecting system dilatation.\nNo evident bladder abnormality.\n\nIMPRESSION\nNo urinary calculi or obstructive uropathy.\n"
+        }
+      }
     },
     {
       "id": "demo-eco-abdominal",
@@ -42,7 +70,14 @@
       "category": "Ecografía",
       "sources": [],
       "text": "ECOGRAFÍA ABDOMINAL\n\nANTECEDENTES\n[Completar antecedentes clínicos.]\n\nTÉCNICA\nEvaluación ecográfica del abdomen.\n\nHALLAZGOS\nHígado de ecotextura homogénea.\nVesícula sin cálculos y vía biliar no dilatada.\nPáncreas visible y bazo sin alteraciones evidentes.\nRiñones sin dilatación de las cavidades excretoras.\nSin líquido libre.\n\nCONCLUSIÓN\nSin alteraciones ecográficas abdominales significativas.\n",
-      "defaultFavorite": true
+      "defaultFavorite": true,
+      "locales": {
+        "en": {
+          "name": "Abdominal ultrasound",
+          "category": "Ultrasound",
+          "text": "ABDOMINAL ULTRASOUND\n\nCLINICAL HISTORY\n[Enter clinical history.]\n\nTECHNIQUE\nUltrasound examination of the abdomen.\n\nFINDINGS\nHomogeneous hepatic echotexture.\nNo gallstones or biliary dilatation.\nVisualized pancreas and spleen without evident abnormality.\nNo renal collecting system dilatation.\nNo free fluid.\n\nIMPRESSION\nNo significant abdominal ultrasound abnormality.\n"
+        }
+      }
     },
     {
       "id": "demo-angiotc-tep",
@@ -50,7 +85,14 @@
       "category": "Tomografía",
       "sources": [],
       "text": "ANGIOTC DE TÓRAX\n\nANTECEDENTES\n[Completar antecedentes clínicos.]\n\nTÉCNICA\nAdquisición tomográfica de tórax con contraste endovenoso en fase arterial pulmonar.\n\nHALLAZGOS\nArterias pulmonares opacificadas, sin defectos de llenado evidentes.\nPulmones sin alteraciones focales evidentes.\nSin derrame pleural.\n\nCONCLUSIÓN\nSin signos de tromboembolismo pulmonar.\n",
-      "defaultFavorite": false
+      "defaultFavorite": false,
+      "locales": {
+        "en": {
+          "name": "CT pulmonary angiography",
+          "category": "CT",
+          "text": "CT PULMONARY ANGIOGRAPHY\n\nCLINICAL HISTORY\n[Enter clinical history.]\n\nTECHNIQUE\nContrast-enhanced CT of the chest with pulmonary arterial phase imaging.\n\nFINDINGS\nNo filling defects in the evaluated pulmonary arteries.\nNo focal pulmonary opacity.\nNo pleural effusion.\n\nIMPRESSION\nNo CT evidence of pulmonary embolism.\n"
+        }
+      }
     },
     {
       "id": "demo-eco-tiroides",
@@ -58,7 +100,14 @@
       "category": "Ecografía",
       "sources": [],
       "text": "ECOGRAFÍA DE TIROIDES\n\nANTECEDENTES\n[Completar antecedentes clínicos.]\n\nTÉCNICA\nEvaluación ecográfica de la glándula tiroides.\n\nHALLAZGOS\nTiroides de contornos regulares y ecotextura homogénea.\nSin nódulos evidentes.\nSin adenopatías cervicales sospechosas en las regiones evaluadas.\n\nCONCLUSIÓN\nSin alteraciones ecográficas tiroideas significativas.\n",
-      "defaultFavorite": false
+      "defaultFavorite": false,
+      "locales": {
+        "en": {
+          "name": "Thyroid ultrasound",
+          "category": "Ultrasound",
+          "text": "THYROID ULTRASOUND\n\nCLINICAL HISTORY\n[Enter clinical history.]\n\nTECHNIQUE\nUltrasound examination of the thyroid and adjacent tissues.\n\nFINDINGS\nHomogeneous thyroid echotexture.\nNo evident focal thyroid lesion.\nNo suspicious cervical lymph nodes in the evaluated regions.\n\nIMPRESSION\nNo significant thyroid ultrasound abnormality.\n"
+        }
+      }
     },
     {
       "id": "demo-mamografia",
@@ -66,7 +115,14 @@
       "category": "Mamografía",
       "sources": [],
       "text": "MAMOGRAFÍA\n\nANTECEDENTES\n[Completar antecedentes clínicos.]\n\nTÉCNICA\nMamografía bilateral en proyecciones habituales.\n\nHALLAZGOS\nSin masas, distorsiones ni calcificaciones sospechosas.\nPiel y complejos areola-pezón sin alteraciones evidentes.\n\nCONCLUSIÓN\nSin hallazgos mamográficos sospechosos.\n",
-      "defaultFavorite": false
+      "defaultFavorite": false,
+      "locales": {
+        "en": {
+          "name": "Mammography",
+          "category": "Mammography",
+          "text": "MAMMOGRAPHY\n\nCLINICAL HISTORY\n[Enter clinical history.]\n\nTECHNIQUE\nBilateral mammography in the acquired projections.\n\nFINDINGS\nNo suspicious mass or architectural distortion.\nNo suspicious grouped calcifications.\n\nIMPRESSION\nNo suspicious mammographic findings.\n"
+        }
+      }
     },
     {
       "id": "demo-urotc",
@@ -74,7 +130,14 @@
       "category": "Tomografía",
       "sources": [],
       "text": "UROTC\n\nANTECEDENTES\n[Completar antecedentes clínicos.]\n\nTÉCNICA\nEstudio tomográfico del tracto urinario antes y después de contraste endovenoso, con fase excretora.\n\nHALLAZGOS\nRiñones de morfología y realce conservados.\nSin litiasis ni dilatación de las vías urinarias.\nSin defectos de llenado en los segmentos opacificados.\nVejiga sin alteraciones evidentes.\n\nCONCLUSIÓN\nSin alteraciones significativas del tracto urinario.\n",
-      "defaultFavorite": false
+      "defaultFavorite": false,
+      "locales": {
+        "en": {
+          "name": "CT urography",
+          "category": "CT",
+          "text": "CT UROGRAPHY\n\nCLINICAL HISTORY\n[Enter clinical history.]\n\nTECHNIQUE\nCT of the urinary tract before and after intravenous contrast, including an excretory phase.\n\nFINDINGS\nRenal morphology is preserved.\nNo evident urinary tract calculi or dilatation.\nNo filling defects in the opacified collecting systems.\nNo evident bladder abnormality.\n\nIMPRESSION\nNo significant urinary tract abnormality.\n"
+        }
+      }
     },
     {
       "id": "demo-tc-cerebro",
@@ -82,7 +145,14 @@
       "category": "Tomografía",
       "sources": [],
       "text": "TC DE CEREBRO SIN CONTRASTE\n\nANTECEDENTES\n[Completar antecedentes clínicos.]\n\nTÉCNICA\nAdquisición tomográfica de encéfalo sin contraste endovenoso.\n\nHALLAZGOS\nSin hemorragia intracraneal ni efecto de masa.\nDiferenciación entre sustancia gris y blanca conservada.\nSistema ventricular sin dilatación.\nLínea media centrada.\n\nCONCLUSIÓN\nSin hallazgos intracraneales agudos evidentes.\n",
-      "defaultFavorite": false
+      "defaultFavorite": false,
+      "locales": {
+        "en": {
+          "name": "Noncontrast head CT",
+          "category": "CT",
+          "text": "NONCONTRAST HEAD CT\n\nCLINICAL HISTORY\n[Enter clinical history.]\n\nTECHNIQUE\nCT of the head without intravenous contrast.\n\nFINDINGS\nNo acute intracranial hemorrhage.\nMidline structures are centered.\nNo hydrocephalus or extra-axial collection.\n\nIMPRESSION\nNo acute intracranial findings.\n"
+        }
+      }
     },
     {
       "id": "demo-tc-senos",
@@ -90,7 +160,14 @@
       "category": "Tomografía",
       "sources": [],
       "text": "TC DE SENOS PARANASALES\n\nANTECEDENTES\n[Completar antecedentes clínicos.]\n\nTÉCNICA\nAdquisición tomográfica de senos paranasales sin contraste endovenoso.\n\nHALLAZGOS\nSenos paranasales bien aireados, sin ocupación ni niveles líquidos.\nVías de drenaje sin obstrucción evidente.\nParedes óseas conservadas.\n\nCONCLUSIÓN\nSin alteraciones inflamatorias sinusales evidentes.\n",
-      "defaultFavorite": false
+      "defaultFavorite": false,
+      "locales": {
+        "en": {
+          "name": "Sinus CT",
+          "category": "CT",
+          "text": "SINUS CT\n\nCLINICAL HISTORY\n[Enter clinical history.]\n\nTECHNIQUE\nCT of the paranasal sinuses with multiplanar reconstructions.\n\nFINDINGS\nParanasal sinuses are aerated.\nNo fluid levels.\nNo evident abnormality of the visualized bony walls.\n\nIMPRESSION\nNo significant paranasal sinus abnormality.\n"
+        }
+      }
     },
     {
       "id": "demo-eco-renovesical",
@@ -98,7 +175,14 @@
       "category": "Ecografía",
       "sources": [],
       "text": "ECOGRAFÍA RENAL Y VESICAL\n\nANTECEDENTES\n[Completar antecedentes clínicos.]\n\nTÉCNICA\nEvaluación ecográfica de riñones y vejiga.\n\nHALLAZGOS\nRiñones de morfología y ecogenicidad conservadas.\nSin cálculos evidentes ni dilatación de las cavidades excretoras.\nVejiga de paredes regulares, sin lesiones endoluminales evidentes.\n\nCONCLUSIÓN\nSin alteraciones ecográficas renovesicales significativas.\n",
-      "defaultFavorite": false
+      "defaultFavorite": false,
+      "locales": {
+        "en": {
+          "name": "Renal and bladder ultrasound",
+          "category": "Ultrasound",
+          "text": "RENAL AND BLADDER ULTRASOUND\n\nCLINICAL HISTORY\n[Enter clinical history.]\n\nTECHNIQUE\nUltrasound examination of the kidneys and bladder.\n\nFINDINGS\nRenal morphology and echogenicity are preserved.\nNo collecting system dilatation.\nNo evident bladder abnormality.\n\nIMPRESSION\nNo significant renal or bladder ultrasound abnormality.\n"
+        }
+      }
     },
     {
       "id": "demo-rx-lumbar",
@@ -106,7 +190,14 @@
       "category": "Radiografía",
       "sources": [],
       "text": "RX DE COLUMNA LUMBAR\n\nANTECEDENTES\n[Completar antecedentes clínicos.]\n\nTÉCNICA\nRadiografías de columna lumbar en las proyecciones realizadas.\n\nHALLAZGOS\nAlineación y altura de los cuerpos vertebrales conservadas.\nEspacios intervertebrales sin disminución evidente.\nSin lesiones óseas agudas visibles.\n\nCONCLUSIÓN\nSin alteraciones radiográficas lumbares significativas.\n",
-      "defaultFavorite": false
+      "defaultFavorite": false,
+      "locales": {
+        "en": {
+          "name": "Lumbar spine X-ray",
+          "category": "Radiography",
+          "text": "LUMBAR SPINE X-RAY\n\nCLINICAL HISTORY\n[Enter clinical history.]\n\nTECHNIQUE\nLumbar spine radiographs in the acquired projections.\n\nFINDINGS\nLumbar alignment and vertebral body heights are preserved.\nNo evident acute osseous abnormality.\n\nIMPRESSION\nNo significant lumbar radiographic abnormality.\n"
+        }
+      }
     },
     {
       "id": "demo-rx-rodilla",
@@ -114,7 +205,14 @@
       "category": "Radiografía",
       "sources": [],
       "text": "RX DE RODILLA\n\nANTECEDENTES\n[Completar antecedentes clínicos.]\n\nTÉCNICA\nRadiografías de rodilla [indicar lado] en las proyecciones realizadas.\n\nHALLAZGOS\nAlineación y espacios articulares conservados.\nSin fracturas ni lesiones óseas focales evidentes.\nPartes blandas sin alteraciones evidentes.\n\nCONCLUSIÓN\nSin alteraciones radiográficas significativas.\n",
-      "defaultFavorite": false
+      "defaultFavorite": false,
+      "locales": {
+        "en": {
+          "name": "Knee X-ray",
+          "category": "Radiography",
+          "text": "KNEE X-RAY\n\nCLINICAL HISTORY\n[Enter clinical history.]\n\nTECHNIQUE\nRadiographs of the [specify side] knee in the acquired projections.\n\nFINDINGS\nJoint alignment is preserved.\nNo evident acute fracture.\nNo significant joint space narrowing.\n\nIMPRESSION\nNo acute osseous abnormality.\n"
+        }
+      }
     },
     {
       "id": "demo-rx-pelvis",
@@ -122,8 +220,15 @@
       "category": "Radiografía",
       "sources": [],
       "text": "RX DE PELVIS\n\nANTECEDENTES\n[Completar antecedentes clínicos.]\n\nTÉCNICA\nRadiografía de pelvis en proyección anteroposterior.\n\nHALLAZGOS\nAnillo pélvico conservado.\nArticulaciones coxofemorales congruentes, con espacios conservados.\nSin lesiones óseas agudas evidentes.\n\nCONCLUSIÓN\nSin alteraciones radiográficas pélvicas significativas.\n",
-      "defaultFavorite": false
+      "defaultFavorite": false,
+      "locales": {
+        "en": {
+          "name": "Pelvis X-ray",
+          "category": "Radiography",
+          "text": "PELVIS X-RAY\n\nCLINICAL HISTORY\n[Enter clinical history.]\n\nTECHNIQUE\nPelvic radiograph in the acquired projection.\n\nFINDINGS\nPelvic alignment is preserved.\nNo evident acute fracture.\nHip joint spaces are preserved.\n\nIMPRESSION\nNo acute pelvic osseous abnormality.\n"
+        }
+      }
     }
   ],
-  "version": "demo-informes-basicos-v5"
+  "version": "demo-informes-basicos-v6-bilingual"
 }

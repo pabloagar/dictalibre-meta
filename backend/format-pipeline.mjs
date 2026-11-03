@@ -3,8 +3,17 @@ import {formatDictation} from './dictation-commands.mjs';
 import {formatNumbers} from './number-format.mjs';
 import {formatTerms} from './term-format.mjs';
 import {suppressUnattributedCommas} from './spoken-punctuation.mjs';
+import {formatEnglishDictation,ENGLISH_COMMAND_VERSION} from './english-format.mjs';
 
 export function applyFormatting(r){
+  if(r.configuration?.language==='en'){
+    r.commandVersion=ENGLISH_COMMAND_VERSION;r.numberVersion=null;r.termVersion=null;
+    r.punctuationFormatting=null;r.numberFormatting=null;r.termFormatting=null;
+    r.formatting=r.commandsEnabled?formatEnglishDictation(r.text):null;
+    if(r.formatting)r.formatting.input='text';
+    r.timings.numberFormatMs=0;r.timings.termFormatMs=0;
+    return;
+  }
   // Not enabled by demo/mobile. Candidate must be evaluated before UI/default adoption.
   r.punctuationFormatting=r.punctuationMode==='explicit-commas-candidate'?suppressUnattributedCommas(r.text):null;
   const input=r.punctuationFormatting?.text??r.text;

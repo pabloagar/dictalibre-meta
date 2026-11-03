@@ -12,6 +12,7 @@ const paths = new Map([
   ['/startup.js', 'apps/desktop/startup.js'], ['/desktop.js', 'apps/desktop/desktop.js'], ['/mobile.js', 'apps/mobile/mobile.js'],
   ['/qr-scanner.js', 'apps/mobile/qr-scanner.js'], ['/jsqr.js', 'node_modules/jsqr/dist/jsQR.js'], ['/jsqr.LICENSE', 'node_modules/jsqr/LICENSE'],
   ['/capture-worklet.js', 'apps/mobile/capture-worklet.js'],
+  ['/shared/i18n.js','apps/shared/i18n.js'], ['/shared/locale-en.js','apps/shared/locale-en.js'], ['/shared/access-language.js','apps/shared/access-language.js'],
   ['/shared/protocol.js', 'apps/shared/protocol.js'], ['/shared/client.js', 'apps/shared/client.js'],
   ['/shared/metrics.js', 'apps/shared/metrics.js'],
   ['/style.css', 'apps/shared/style.css'], ['/qr.js', 'node_modules/qrcode-generator/dist/qrcode.js'],

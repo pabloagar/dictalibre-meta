@@ -7,7 +7,7 @@ test('ocultar interrumpe captura, volver exige gesto y reset no reutiliza token'
  const $=id=>{if(!elements.has(id))elements.set(id,{value:'',textContent:'',classList:{toggle(){}},addEventListener(){}});return elements.get(id);};
  const document={hidden:false,querySelectorAll:()=>[],addEventListener:(name,fn)=>listeners[name]=fn};
  const box={$,document,window:{addEventListener(){}},location:{hash:'',pathname:'/mobile'},history:{replaceState(){}},performance:{now:()=>100},status:t=>lastStatus=t,console,setTimeout,clearTimeout};
- vm.createContext(box);vm.runInContext(fs.readFileSync('apps/mobile/mobile.js','utf8').replace(/^import .*;\r?\n/gm,''),box);
+ vm.createContext(box);vm.runInContext(("const tr=(s,...v)=>Array.isArray(s)?s.reduce((a,b,i)=>a+(i?v[i-1]:'')+b,''):s;const language=()=> 'es';const initializeLanguage=()=>{};const mountLanguageSwitch=()=>({});\n"+fs.readFileSync('apps/mobile/mobile.js','utf8').replace(/^import .*;\r?\n/gm,'')).replace(/^import .*;\r?\n/gm,''),box);
  box.fakeClient={send:m=>sent.push(m),close:()=>closed++};box.fakeStream={getTracks:()=>[{stop:()=>stopped++}]};
  vm.runInContext("paired=true;prepared=true;microphoneInitialized=true;client=fakeClient;stream=fakeStream;recording={id:7,state:'recording'};",box);
  document.hidden=true;listeners.visibilitychange();assert.equal(sent[0].type,'abort');assert.equal(stopped,1);assert.equal($('record').disabled,true);
@@ -20,7 +20,7 @@ test('aborted rezagado de otra toma no anula la toma en curso; el de la toma act
  const $=id=>{if(!elements.has(id))elements.set(id,{value:'',textContent:'',classList:{toggle(){}},addEventListener(){}});return elements.get(id);};
  const document={hidden:false,querySelectorAll:()=>[],addEventListener(){}};
  const box={$,document,window:{addEventListener(){}},location:{hash:'',pathname:'/mobile'},history:{replaceState(){}},performance:{now:()=>100},status(){},console,setTimeout,clearTimeout};
- vm.createContext(box);vm.runInContext(fs.readFileSync('apps/mobile/mobile.js','utf8').replace(/^import .*;\r?\n/gm,''),box);
+ vm.createContext(box);vm.runInContext(("const tr=(s,...v)=>Array.isArray(s)?s.reduce((a,b,i)=>a+(i?v[i-1]:'')+b,''):s;const language=()=> 'es';const initializeLanguage=()=>{};const mountLanguageSwitch=()=>({});\n"+fs.readFileSync('apps/mobile/mobile.js','utf8').replace(/^import .*;\r?\n/gm,'')).replace(/^import .*;\r?\n/gm,''),box);
  box.fakeClient={send:m=>{sent.push(m);return true;},close(){}};box.fakeWorklet={port:{postMessage:m=>worklet.push(m)},disconnect(){}};
  vm.runInContext("paired=true;prepared=true;microphoneInitialized=true;client=fakeClient;worklet=fakeWorklet;recording={id:2,state:'starting',sequence:0,samples:0,parts:[],sentTimes:new Map()};",box);
  vm.runInContext("onMessage({type:'aborted',id:1,reason:'Grabación interrumpida.'})",box);

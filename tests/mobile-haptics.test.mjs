@@ -17,7 +17,7 @@ function phone(saved, vibrate = () => true, storageFails = false) {
     localStorage: { getItem: key => { if (storageFails) throw Error(); return values.get(key); }, setItem: (key, value) => { if (storageFails) throw Error(); values.set(key, value); } },
     sha256: async () => 'hash', posts };
   vm.createContext(box);
-  vm.runInContext(fs.readFileSync('apps/mobile/mobile.js', 'utf8').replace(/^import .*;\r?\n/gm, ''), box);
+  vm.runInContext(("const tr=(s,...v)=>Array.isArray(s)?s.reduce((a,b,i)=>a+(i?v[i-1]:'')+b,''):s;const language=()=> 'es';const initializeLanguage=()=>{};const mountLanguageSwitch=()=>({});\n"+fs.readFileSync('apps/mobile/mobile.js', 'utf8').replace(/^import .*;\r?\n/gm,'')).replace(/^import .*;\r?\n/gm, ''), box);
   vm.runInContext("paired=true;prepared=true;microphoneInitialized=true;context={state:'running',sampleRate:48000};worklet={port:{postMessage:m=>posts.push(m)}};client={send:()=>true,clock:{stamp:()=>({})}};", box);
   return { $, box, pulses, values, statuses, run: code => vm.runInContext(code, box) };
 }

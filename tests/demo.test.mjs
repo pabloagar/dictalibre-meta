@@ -9,8 +9,8 @@ import {hash} from '../backend/lab-core.mjs';
 
 const freePort=async()=>{const s=net.createServer();s.listen(0,'127.0.0.1');await once(s,'listening');const {port}=s.address();s.close();await once(s,'close');return port;};
 function fakeMuse(final='categoría biurads cuatro a punto'){
-  const provider=new WebSocketServer({port:0});const seen={keys:[],keywords:[],hold:false,sockets:[]};
-  provider.on('connection',s=>{seen.sockets.push(s);const number=seen.sockets.length;let open=false;s.on('message',(b,binary)=>{if(binary)return;const m=JSON.parse(b);if(!open){open=true;seen.keys.push(m.authorization.accessToken);seen.keywords.push(m.keywords);s.send(JSON.stringify({sessionId:'fixture'}));s.send(JSON.stringify({type:'transcript',transcript:'categoría',final:false}));}else if(m.type==='endStream'&&!seen.hold)s.send(JSON.stringify({type:'transcript',transcript:typeof final==='function'?final(number):final,final:true,audioProcessedMs:100}));});});
+  const provider=new WebSocketServer({port:0});const seen={keys:[],languages:[],keywords:[],hold:false,sockets:[]};
+  provider.on('connection',s=>{seen.sockets.push(s);const number=seen.sockets.length;let open=false;s.on('message',(b,binary)=>{if(binary)return;const m=JSON.parse(b);if(!open){open=true;seen.keys.push(m.authorization.accessToken);seen.languages.push(m.languageBias);seen.keywords.push(m.keywords);s.send(JSON.stringify({sessionId:'fixture'}));s.send(JSON.stringify({type:'transcript',transcript:'categoría',final:false}));}else if(m.type==='endStream'&&!seen.hold)s.send(JSON.stringify({type:'transcript',transcript:typeof final==='function'?final(number):final,final:true,audioProcessedMs:100}));});});
   return {provider,seen};
 }
 async function start(options={}){
@@ -267,4 +267,16 @@ test('demo: desconexión, error de proveedor y cancelación liberan exactamente 
 test('demo: rechaza límites inválidos antes de arrancar',()=>{
  for(const maxConcurrentStreams of [0,11,1.5,NaN])assert.throws(()=>createDemo({accessCode:'fixture',publicOrigin:'http://localhost',maxConcurrentStreams}),/DEMO_MAX_CONCURRENT_STREAMS/);
  for(const maxAudioMinutesPerDay of [0,-1,NaN,Infinity])assert.throws(()=>createDemo({accessCode:'fixture',publicOrigin:'http://localhost',maxAudioMinutesPerDay}),/DEMO_MAX_AUDIO/);
+});
+
+
+test('demo: language catalogues share favorites; English provider and formatter stay separate from Spanish',async()=>{
+ const d=await start({syntheticFinal:'No effusion full stop new paragraph No pneumothorax full stop'});
+ try{const {cookie}=await d.login();const en=await (await d.get('/api/templates?lang=en',cookie)).json(),es=await (await d.get('/api/templates?lang=es',cookie)).json();
+ assert.equal(en.language,'en');assert.equal(es.language,'es');assert.deepEqual(en.templates.map(t=>t.id),es.templates.map(t=>t.id));assert.equal(en.templates[0].name,'Chest X-ray');assert.equal(es.templates[0].name,'RX de tórax');
+ const take=await d.dictate(cookie,{configId:'demo-muse-en'});await take.closed;
+ const state=await (await d.get('/api/state',cookie)).json(),run=state.runs.at(-1);assert.equal(run.status,'completed');assert.equal(run.configuration.language,'en');assert.deepEqual(d.seen.languages.at(-1),['English']);assert.equal(run.formatting.text,'No effusion.\n\nNo pneumothorax.');assert.equal(run.numberFormatting,null);assert.equal(state.concurrency.limit,10);
+ const spanish=await d.dictate(cookie);await spanish.closed;assert.deepEqual(d.seen.languages.at(-1),['Spanish']);
+ for(const asset of ['/shared/i18n.js','/shared/locale-en.js','/shared/access-language.js'])assert.equal((await d.get(asset)).status,200);
+ }finally{await d.stop();}
 });

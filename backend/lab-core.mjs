@@ -53,7 +53,7 @@ export function configuration(input,previous) {
   const beams=Number(input.beams??1); if(![1,3,5].includes(beams)) throw new Error('Beams: 1, 3 o 5.');
   if(input.engine==='whisper'&&beams!==1) throw new Error('Esta GPU/runtime solo tiene validada búsqueda 1. Beams > 1 bloqueados tras fallo real de OpenVINO.');
   return {name,engine:input.engine,version:(previous?.version??0)+1,parentId:previous?.id??null,
-    model:input.engine==='muse'?'muse-voice-transcribe-1.0':'whisper-large-v3',language:'es',device:input.engine==='whisper'?'GPU':null,
+    model:input.engine==='muse'?'muse-voice-transcribe-1.0':'whisper-large-v3',language:input.language==='en'?'en':'es',device:input.engine==='whisper'?'GPU':null,
     precision:input.engine==='whisper'?'FP16 weights':null,beams:input.engine==='whisper'?beams:null,keywords,
     preparation:'scipy-resample-poly-mono-16k-v1',mode:'file',correction:false};
 }

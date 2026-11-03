@@ -1,6 +1,8 @@
+import {t as tr, language, initializeLanguage, mountLanguageSwitch} from '../shared/i18n.js';
 import { $, RelayClient, status, clock } from '/shared/client.js';
 import { encodeChunk, sha256 } from '/shared/protocol.js';
 
+initializeLanguage();
 let qrReader=null;
 let resumeToken=null, resumeUntil=0, retryTimer=null;
 let client, stream, context, source, worklet, silent, wakeLock;
@@ -8,6 +10,8 @@ let paired = false, prepared = false, preparing = false, epoch = 0, recording = 
 let startIntent=0, microphoneInitialized=false;
 let mode = 'hold';
 let synthetic = false;
+mountLanguageSwitch(document.querySelector?.('header'),()=>!recording&&!preparing);
+window.addEventListener('dicta-language-change',e=>{if(recording||preparing)e.preventDefault();});
 let prepareMs = null, connectStarted = null;
 const lifecycle=[];let hiddenAt=null;
 function lifecycleEvent(type,extra={}){lifecycle.push({type,atMs:performance.now(),recordingId:recording?.id??null,paired,...extra});if(lifecycle.length>100)lifecycle.shift();}
@@ -16,12 +20,12 @@ const CAPTURE_FEEDBACK_VERSION = 'first-input-v2';
 let hapticsEnabled = true;
 try { hapticsEnabled = localStorage.getItem(HAPTIC_KEY) !== 'false'; } catch { /* optional storage */ }
 $('haptics').checked = hapticsEnabled;
-if (typeof globalThis.navigator?.vibrate !== 'function') $('haptics-note').textContent = 'Este navegador no ofrece vibración; puedes grabar normalmente.';
+if (typeof globalThis.navigator?.vibrate !== 'function') $('haptics-note').textContent = tr('Este navegador no ofrece vibración; puedes grabar normalmente.');
 $('haptics').onchange = () => {
   hapticsEnabled = $('haptics').checked;
   let saved = false;
   try { localStorage.setItem(HAPTIC_KEY, String(hapticsEnabled)); saved = true; } catch { /* keep session preference */ }
-  $('haptics-note').textContent = saved ? 'Preferencia guardada para este enlace en este navegador.' : 'Preferencia activa solo en esta página: no se pudo guardar.';
+  $('haptics-note').textContent = saved ? tr('Preferencia guardada para este enlace en este navegador.') : tr('Preferencia activa solo en esta página: no se pudo guardar.');
   lifecycleEvent('haptics-preference', { enabled: hapticsEnabled, saved });
 };
 function haptic(r, edge) {
@@ -42,21 +46,21 @@ $('test-haptics').onclick = () => {
   if (recording) return;
   const outcome = haptic({ id: null, hapticsEnabled: true }, 'test');
   $('haptics-note').textContent = outcome === 'requested'
-    ? 'Pulso de 12 ms solicitado. ¿Lo sentiste? La aceptación del navegador no confirma vibración física. Si no se siente, comprueba que el teléfono no esté en silencio y revisa sus ajustes de vibración.'
-    : outcome === 'unsupported' ? 'Este navegador no ofrece vibración.' : 'El navegador no aceptó la vibración. Puedes seguir grabando normalmente.';
+    ? tr('Pulso de 12 ms solicitado. ¿Lo sentiste? La aceptación del navegador no confirma vibración física. Si no se siente, comprueba que el teléfono no esté en silencio y revisa sus ajustes de vibración.')
+    : outcome === 'unsupported' ? tr('Este navegador no ofrece vibración.') : tr('El navegador no aceptó la vibración. Puedes seguir grabando normalmente.');
 };
 function captureStarted(r, confirmation = 'worklet-start') {
   if (r.state !== 'starting') return;
   r.state = 'recording'; lifecycleEvent('capture-started', { confirmation }); haptic(r, 'start');
-  status('Grabando y enviando al computador.');
+  status(tr('Grabando y enviando al computador.'));
 }
 $('export-lifecycle').onclick=()=>{const blob=new Blob([JSON.stringify({schema:'mobile-lifecycle.v1',captureFeedbackVersion:CAPTURE_FEEDBACK_VERSION,clock:'performance.now; ms desde navegación',browser:navigator.userAgent,network:null,events:lifecycle},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='dicta-interrupciones.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
-$('restart').onclick=()=>{forgetResume();lifecycleEvent('reset');if(recording)abort('Sesión reiniciada.');releaseMicrophone();client?.send({type:'close'});client?.close();qrToken=null;$('join-code').value='';$('duration').textContent='00:00';$('received').textContent='0';$('verified').textContent='';$('capture-info').textContent='Micrófono liberado.';status('Crea una sesión nueva en el PC y escanea el nuevo QR.');};
+$('restart').onclick=()=>{forgetResume();lifecycleEvent('reset');if(recording)abort(tr('Sesión reiniciada.'));releaseMicrophone();client?.send({type:'close'});client?.close();qrToken=null;$('join-code').value='';$('duration').textContent='00:00';$('received').textContent='0';$('verified').textContent='';$('capture-info').textContent=tr('Micrófono liberado.');status(tr('Crea una sesión nueva en el PC y escanea el nuevo QR.'));};
 function report(r, stages = {}, extra = {}) { client?.send({ type: 'sender_metrics', id: r.id, stages, ...extra }); }
 const initialCode = location.hash.slice(1);
 let qrToken = /^qr=[a-f0-9]{64}$/.test(initialCode) ? initialCode.slice(3) : null;
 if (/^[a-f0-9]{10}$/i.test(initialCode)) $('join-code').value = initialCode;
-history.replaceState(null, '', location.pathname);
+history.replaceState(null, '', location.pathname+'?lang='+language());
 function refresh() {
   $('join').disabled = !!client;
   $('scan-qr').disabled = !!client;
@@ -67,7 +71,7 @@ function refresh() {
   $('haptics').disabled = !!recording;
   $('test-haptics').disabled = !!recording;
   $('record').classList.toggle('recording', recording?.state === 'recording');
-  $('record-label').textContent = preparing ? 'Preparando… Espera para hablar' : recording ? ({starting:'Iniciando…',stopping:'Deteniendo…',finishing:'Comprobando entrega…'}[recording.state] ?? (mode === 'hold' ? 'Suelta para detener' : 'Pulsa para detener')) : mode === 'hold' ? 'Mantén pulsado para hablar' : 'Pulsa para empezar';
+  $('record-label').textContent = preparing ? tr('Preparando… Espera para hablar') : recording ? ({starting:'Iniciando…',stopping:'Deteniendo…',finishing:tr('Comprobando entrega…')}[recording.state] ?? (mode === 'hold' ? tr('Suelta para detener') : tr('Pulsa para detener'))) : mode === 'hold' ? tr('Mantén pulsado para hablar') : tr('Pulsa para empezar');
 }
 function releaseMicrophone() {
   startIntent++; epoch++; prepared = false; preparing = false;
@@ -92,22 +96,22 @@ async function stopped(m) {
   const flushedAt = performance.now();
   const stopFlushMs = r.stopAt == null ? null : flushedAt - r.stopAt;
   r.stopAt ??= flushedAt;
-  status(m.limit ? 'Límite de 3 minutos alcanzado. Comprobando el audio capturado.' : 'Captura detenida. Comprobando entrega al computador…');
+  status(m.limit ? tr('Límite de 3 minutos alcanzado. Comprobando el audio capturado.') : tr('Captura detenida. Comprobando entrega al computador…'));
   try {
     const hash = await sha256(r.parts);
     report(r, { stopFlushMs, senderHashMs: performance.now() - flushedAt });
     if (recording !== r) return;
-    if (m.samples !== r.samples) throw new Error('Faltan muestras antes del envío.');
+    if (m.samples !== r.samples) throw new Error(tr('Faltan muestras antes del envío.'));
     const stopStamp=client.clock.stamp(performance.timeOrigin+r.stopAt);
-    if (!client.send({ type: 'end', id: r.id, samples: r.samples, frames: r.sequence, hash, stopStamp })) throw new Error('Se perdió la conexión.');
+    if (!client.send({ type: 'end', id: r.id, samples: r.samples, frames: r.sequence, hash, stopStamp })) throw new Error(tr('Se perdió la conexión.'));
     r.parts = [];
   } catch (error) { abort(error.message); }
 }
 async function prepare(useSynthetic = false) {
   const prepareStart = performance.now();
   if (preparing || prepared || !paired) return;
-  if (!window.isSecureContext || !navigator.mediaDevices?.getUserMedia) { status('Abre el enlace HTTPS del servidor para usar el micrófono.', 'error'); return; }
-  preparing = true; synthetic = useSynthetic; const generation = ++epoch; refresh(); status(synthetic ? 'Preparando tono sintético…' : 'Solicitando acceso al micrófono…');
+  if (!window.isSecureContext || !navigator.mediaDevices?.getUserMedia) { status(tr('Abre el enlace HTTPS del servidor para usar el micrófono.'), 'error'); return; }
+  preparing = true; synthetic = useSynthetic; const generation = ++epoch; refresh(); status(synthetic ? tr('Preparando tono sintético…') : tr('Solicitando acceso al micrófono…'));
   let obtained;
   try {
     if (!synthetic) obtained = await navigator.mediaDevices.getUserMedia({ audio: { channelCount: { ideal: 1 }, echoCancellation: false, noiseSuppression: false, autoGainControl: false }, video: false });
@@ -120,7 +124,7 @@ async function prepare(useSynthetic = false) {
       const oscillator = context.createOscillator(); oscillator.frequency.value = 440; oscillator.connect(source); oscillator.start();
     } else source = context.createMediaStreamSource(stream);
     worklet = new AudioWorkletNode(context, 'dicta-capture');
-    worklet.onprocessorerror = () => { abort('Falló la captura de audio. Prepara de nuevo el micrófono.'); releaseMicrophone(); };
+    worklet.onprocessorerror = () => { abort(tr('Falló la captura de audio. Prepara de nuevo el micrófono.')); releaseMicrophone(); };
     silent = context.createGain(); silent.gain.value = 0; source.connect(worklet).connect(silent).connect(context.destination);
     worklet.port.onmessage = ({ data: m }) => {
       const r = recording;
@@ -128,7 +132,7 @@ async function prepare(useSynthetic = false) {
       if (m.type === 'started') { report(r, { prepareMs, startControlMs: performance.now() - r.startAt }); captureStarted(r, m.confirmation); refresh(); return; }
       if (m.type === 'stopped') { void stopped(m); return; }
       if (m.type !== 'chunk') return;
-      if (client.buffered > 524288) { abort('La conexión está saturada. La toma se detuvo.'); return; }
+      if (client.buffered > 524288) { abort(tr('La conexión está saturada. La toma se detuvo.')); return; }
       const sequence = r.sequence++;
       const encoded = encodeChunk(r.id, sequence, m.pcm);
       client.send({ type: 'block_timing', id: r.id, sequence, sent: client.clock.stamp(), queueBytes: client.buffered });
@@ -137,23 +141,23 @@ async function prepare(useSynthetic = false) {
       let sum = 0; for (const sample of m.pcm) sum += (sample / 32768) ** 2;
       $('level').value = Math.min(1, Math.sqrt(sum / m.pcm.length) * 4);
       $('duration').textContent = clock(r.samples, context.sampleRate);
-      if (!client.send(encoded)) abort('Se perdió la conexión. La toma se detuvo.');
+      if (!client.send(encoded)) abort(tr('Se perdió la conexión. La toma se detuvo.'));
     };
-    if (stream) stream.getAudioTracks()[0].onended = () => { abort('El sistema interrumpió el micrófono.'); releaseMicrophone(); };
+    if (stream) stream.getAudioTracks()[0].onended = () => { abort(tr('El sistema interrumpió el micrófono.')); releaseMicrophone(); };
     context.onstatechange = () => {
-      if (prepared && context && context.state !== 'running') { abort('La captura se suspendió. Usa el botón de dictado para volver a empezar.'); releaseMicrophone(); }
+      if (prepared && context && context.state !== 'running') { abort(tr('La captura se suspendió. Usa el botón de dictado para volver a empezar.')); releaseMicrophone(); }
     };
     prepared = true; preparing = false;if(!synthetic)microphoneInitialized=true;lifecycleEvent('microphone-ready',{prepareMs:performance.now()-prepareStart});
     prepareMs = performance.now() - prepareStart;
     const settings = stream?.getAudioTracks()[0].getSettings() ?? {};
-    const flag = value => value === undefined ? 'no informado' : value ? 'sí' : 'no';
-    $('capture-info').textContent = synthetic ? `TONO SINTÉTICO 440 Hz · sin micrófono · ${context.sampleRate / 1000} kHz` : `${context.sampleRate / 1000} kHz · PCM 16 bits · mono · máx. 3 min. Procesado del navegador: eco ${flag(settings.echoCancellation)}, ruido ${flag(settings.noiseSuppression)}, ganancia automática ${flag(settings.autoGainControl)}.`;
-    status(synthetic ? 'Tono sintético preparado. Usa los controles para probar el envío.' : 'Micrófono preparado. Fuera de cada toma, el audio se descarta.', 'success'); refresh();
+    const flag = value => value === undefined ? tr('no informado') : value ? tr('sí') : 'no';
+    $('capture-info').textContent = synthetic ? tr`TONO SINTÉTICO 440 Hz · sin micrófono · ${context.sampleRate / 1000} kHz` : tr`${context.sampleRate / 1000} kHz · PCM 16 bits · mono · máx. 3 min. Procesado del navegador: eco ${flag(settings.echoCancellation)}, ruido ${flag(settings.noiseSuppression)}, ganancia automática ${flag(settings.autoGainControl)}.`;
+    status(synthetic ? tr('Tono sintético preparado. Usa los controles para probar el envío.') : tr('Micrófono preparado. Fuera de cada toma, el audio se descarta.'), 'success'); refresh();
     try { wakeLock = await navigator.wakeLock?.request('screen'); } catch { /* screen must remain on manually */ }
   } catch (error) {
     obtained?.getTracks().forEach(t => t.stop());
     if (generation !== epoch) return;
-    releaseMicrophone(); status(error.name === 'NotAllowedError' ? 'Permiso denegado. Habilita el micrófono para este sitio y pulsa el botón de dictado.' : `No se pudo preparar el micrófono: ${error.message}`, 'error');
+    releaseMicrophone(); status(error.name === 'NotAllowedError' ? tr('Permiso denegado. Habilita el micrófono para este sitio y pulsa el botón de dictado.') : tr`No se pudo preparar el micrófono: ${error.message}`, 'error');
   }
 }
 async function requestStart(){
@@ -169,18 +173,18 @@ function start() {
   $('verified').textContent = ''; $('received').textContent = '0'; $('duration').textContent = '00:00';
   recording = { id: ++counter, sequence: 0, samples: 0, parts: [], state: 'starting', startAt: performance.now(), sentTimes: new Map(), hapticsEnabled };
   lifecycleEvent('capture-request', { captureFeedbackVersion: CAPTURE_FEEDBACK_VERSION, hapticsEnabled, requestedPulseMs: hapticsEnabled ? HAPTIC_MS : 0, source: synthetic ? 'tone' : 'microphone', mode });
-  if (!client.send({ type: 'start', id: recording.id, rate: context.sampleRate, mode, source: synthetic ? 'tone' : 'microphone' })) { abort('No hay conexión con el PC.'); return; }
-  worklet.port.postMessage({ type: 'start', id: recording.id }); status('Iniciando captura… Espera la confirmación para hablar.'); refresh();
+  if (!client.send({ type: 'start', id: recording.id, rate: context.sampleRate, mode, source: synthetic ? 'tone' : 'microphone' })) { abort(tr('No hay conexión con el PC.')); return; }
+  worklet.port.postMessage({ type: 'start', id: recording.id }); status(tr('Iniciando captura… Espera la confirmación para hablar.')); refresh();
 }
 function stop() {
   if (!recording || !['starting', 'recording'].includes(recording.state)) return;
   recording.stopAt = performance.now(); recording.state = 'stopping'; worklet?.port.postMessage({ type: 'stop' });
-  status('Deteniendo captura…'); refresh();
+  status(tr('Deteniendo captura…')); refresh();
 }
 function onMessage(m) {
   switch (m.type) {
-    case 'pending': $('join-panel').hidden = true; $('confirm-panel').hidden = false; $('confirm-code').textContent = m.confirm; status('Espera la confirmación en el computador.'); break;
-    case 'paired': if(m.resumeToken){resumeToken=m.resumeToken;resumeUntil=0;}lifecycleEvent('connection-ready',{resumed:!!m.resumed});client.send({ type: 'pairing_metrics', connectToPairedMs: performance.now() - connectStarted }); $('join-panel').hidden = true; paired = true; $('confirm-panel').hidden = true; $('controls').hidden = false; status(microphoneInitialized?'Conectado. Usa el botón de dictado; espera Grabando para hablar.':'Conectado. Pulsa Preparar micrófono para autorizarlo antes de dictar.', 'success'); refresh(); break;
+    case 'pending': $('join-panel').hidden = true; $('confirm-panel').hidden = false; $('confirm-code').textContent = m.confirm; status(tr('Espera la confirmación en el computador.')); break;
+    case 'paired': if(m.resumeToken){resumeToken=m.resumeToken;resumeUntil=0;}lifecycleEvent('connection-ready',{resumed:!!m.resumed});client.send({ type: 'pairing_metrics', connectToPairedMs: performance.now() - connectStarted }); $('join-panel').hidden = true; paired = true; $('confirm-panel').hidden = true; $('controls').hidden = false; status(microphoneInitialized?tr('Conectado. Usa el botón de dictado; espera Grabando para hablar.'):tr('Conectado. Pulsa Preparar micrófono para autorizarlo antes de dictar.'), 'success'); refresh(); break;
     case 'receipt':
       if (recording?.id === m.id) {
         $('received').textContent = m.sequence + 1;
@@ -192,8 +196,8 @@ function onMessage(m) {
       if (recording?.id !== m.id) return;
       if (recording.stopAt != null) report(recording, { stopToVerifiedMs: performance.now() - recording.stopAt });
       recording = null; $('level').value = 0; refresh();
-      $('verified').textContent = m.samples ? '✓ El PC recibió exactamente el mismo audio. Puedes escucharlo allí.' : 'La toma quedó vacía. Prueba de nuevo.';
-      status(synthetic ? 'Tono sintético preparado para otra toma.' : 'Micrófono preparado para otra toma.', 'success'); break;
+      $('verified').textContent = m.samples ? tr('✓ El PC recibió exactamente el mismo audio. Puedes escucharlo allí.') : tr('La toma quedó vacía. Prueba de nuevo.');
+      status(synthetic ? tr('Tono sintético preparado para otra toma.') : tr('Micrófono preparado para otra toma.'), 'success'); break;
     case 'aborted': if (recording && m.id !== recording.id) break; abort(m.reason, false); break;
     case 'error': if(!paired)forgetResume();status(m.message, 'error'); if (!paired) client?.close(); break;
     case 'closed': forgetResume();paired=false;abort(m.reason, false); releaseMicrophone();client?.close();break;
@@ -202,7 +206,7 @@ function onMessage(m) {
 function forgetResume(){resumeToken=null;resumeUntil=0;clearTimeout(retryTimer);}
 function reconnect(){
   if(client||document.hidden||!resumeToken)return;
-  if(Date.now()>=resumeUntil){forgetResume();status('La pausa superó cinco minutos. Crea una sesión en el PC y escanea el nuevo QR.');return;}
+  if(Date.now()>=resumeUntil){forgetResume();status(tr('La pausa superó cinco minutos. Crea una sesión en el PC y escanea el nuevo QR.'));return;}
   lifecycleEvent('resume-attempt');openConnection({type:'resume',token:resumeToken});
 }
 function openConnection(request){
@@ -210,17 +214,17 @@ function openConnection(request){
   client=new RelayClient(onMessage,()=>{
     lifecycleEvent('connection-closed');paired=false;releaseMicrophone();
     if(resumeToken&&!resumeUntil)resumeUntil=Date.now()+300000;
-    abort(resumeToken?'Conexión en pausa. Vuelve a Chrome antes de cinco minutos.':'Conexión cerrada. Crea una sesión en el PC y escanea el QR.',false);
+    abort(resumeToken?tr('Conexión en pausa. Vuelve a Chrome antes de cinco minutos.'):tr('Conexión cerrada. Crea una sesión en el PC y escanea el QR.'),false);
     client=null;$('join-panel').hidden=false;$('confirm-panel').hidden=true;$('controls').hidden=true;refresh();
     if(resumeToken&&!document.hidden)retryTimer=setTimeout(reconnect,1000);
   });
-  client.connect(request);refresh();status(request.type==='resume'?'Recuperando conexión…':'Conectando…');
+  client.connect(request);refresh();status(request.type==='resume'?tr('Recuperando conexión…'):'Conectando…');
 }
 $('join').onclick=()=>{
   if(client)return;
   qrReader?.stop('connecting');
   if(resumeToken){reconnect();return;}
-  if(!qrToken&&!/^[a-f0-9]{10}$/i.test($('join-code').value.replace(/[\s-]/g,''))){status('Introduce los 10 caracteres del código.','error');return;}
+  if(!qrToken&&!/^[a-f0-9]{10}$/i.test($('join-code').value.replace(/[\s-]/g,''))){status(tr('Introduce los 10 caracteres del código.'),'error');return;}
   const request=qrToken?{type:'join_qr',token:qrToken}:{type:'join',code:$('join-code').value};qrToken=null;openConnection(request);
 };
 $('prepare').onclick=()=>prepare(false);
@@ -239,12 +243,12 @@ button.addEventListener('contextmenu', event => event.preventDefault());
 button.addEventListener('keydown', event => { if (mode === 'hold' && [' ', 'Enter'].includes(event.key)) { event.preventDefault(); if (!event.repeat) void requestStart(); } });
 button.addEventListener('keyup', event => { if (mode === 'hold' && [' ', 'Enter'].includes(event.key)) { event.preventDefault(); releaseStart(); } });
 button.addEventListener('blur', () => { if (mode === 'hold') releaseStart(); });
-$('close').onclick = () => { forgetResume(); if (recording) abort('Sesión finalizada.'); releaseMicrophone(); client?.send({ type: 'close' }); client?.close(); };
+$('close').onclick = () => { forgetResume(); if (recording) abort(tr('Sesión finalizada.')); releaseMicrophone(); client?.send({ type: 'close' }); client?.close(); };
 document.addEventListener('visibilitychange', () => {
- if(document.hidden){hiddenAt=performance.now();lifecycleEvent('hidden',{duringTake:!!recording});if(recording)abort('Pantalla oculta o bloqueada: toma interrumpida, no completada.');releaseMicrophone();if(paired&&client&&resumeToken){resumeUntil=Date.now()+300000;client.send({type:'suspend'});client.close();}}
+ if(document.hidden){hiddenAt=performance.now();lifecycleEvent('hidden',{duringTake:!!recording});if(recording)abort(tr('Pantalla oculta o bloqueada: toma interrumpida, no completada.'));releaseMicrophone();if(paired&&client&&resumeToken){resumeUntil=Date.now()+300000;client.send({type:'suspend'});client.close();}}
  else {lifecycleEvent('visible',{hiddenDurationMs:hiddenAt===null?null:performance.now()-hiddenAt});hiddenAt=null;
-  if(paired&&client){status('Volviste a la pantalla. Usa el botón de dictado para preparar el micrófono y empezar.');}
-  else if(resumeToken)reconnect();else status('La conexión terminó. Crea una sesión en el PC y escanea el nuevo QR.');refresh();}
+  if(paired&&client){status(tr('Volviste a la pantalla. Usa el botón de dictado para preparar el micrófono y empezar.'));}
+  else if(resumeToken)reconnect();else status(tr('La conexión terminó. Crea una sesión en el PC y escanea el nuevo QR.'));refresh();}
 });
 window.addEventListener('pagehide', () => { if (recording) client?.send({ type: 'abort' }); releaseMicrophone(); client?.close(); });
 refresh();
@@ -257,5 +261,5 @@ $('scan-qr').onclick=async()=>{
   const {createQrScanner}=await import('/qr-scanner.js');
   qrReader??=createQrScanner({video:$('qr-video'),panel:$('qr-reader'),message:$('qr-message'),cancel:$('qr-cancel'),onEvent:(type,data)=>lifecycleEvent(type,data),onResult:token=>{forgetResume();qrToken=token;$('join').click();}});
   await qrReader.start();
- }catch{status('No se pudo abrir el lector. Puedes usar el código manual.','error');}
+ }catch{status(tr('No se pudo abrir el lector. Puedes usar el código manual.'),'error');}
 };

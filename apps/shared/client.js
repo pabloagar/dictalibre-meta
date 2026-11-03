@@ -1,7 +1,8 @@
+import {t as tr, language} from './i18n.js';
 import { ClockCalibration, epochNow } from './metrics.js';
 export const $ = id => document.getElementById(id);
 export function status(text, kind = '') {
-  $('status').textContent = text;
+  $('status').textContent = tr(text);
   $('status').className = `status ${kind}`;
 }
 export class RelayClient {
@@ -30,9 +31,9 @@ export class RelayClient {
           this.clock.observe(m.echo, m.serverReceive, m.serverSend, now);
           if ($('rtt')) $('rtt').textContent = `${Math.round(now - m.echo)} ms`;
         } else this.onMessage(m);
-      } catch { status('Respuesta no válida. Cierra y vuelve a emparejar.', 'error'); this.close(); }
+      } catch { status(tr('Respuesta no válida. Cierra y vuelve a emparejar.'), 'error'); this.close(); }
     };
-    this.socket.onerror = () => status('No se pudo conectar con el servidor.', 'error');
+    this.socket.onerror = () => status(tr('No se pudo conectar con el servidor.'), 'error');
     this.socket.onclose = () => { this.clearTimers(); this.onClose(); };
   }
   send(m) {
