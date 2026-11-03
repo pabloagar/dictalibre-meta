@@ -469,3 +469,6 @@ Hipótesis antes de comparar: el temporizador de 20 s declara error mientras el 
 
 
 2026-11-03 · Verificación en web pública real, cinco recargas con red Chrome 300 ms/1,6 Mbps y caché desactivada: 5/5 completadas, QR observado a 3114–3368 ms, delta máximo de hoja/logo 0 px. Sondeo DOM tras reload, no CLS ni medición de cada pintura. Protocolo, alcance y evidencia en experiments/results/2026-11-03-public-startup/README.md.
+
+
+2026-11-03 · Flujo público y clics dirigidos: conexión de teléfono y toma sintética observadas, plantilla/editor/ajustes/revisión ejercitados. Sin caída, pero separación dictado-título pendiente y copia no confirmada fuera del navegador integrado. Detalles y límites: experiments/results/2026-11-03-public-flow/README.md.
