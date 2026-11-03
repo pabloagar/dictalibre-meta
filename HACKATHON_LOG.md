@@ -836,3 +836,5 @@ Publicación del código y metodología a rama codex/capture-transport con skip 
 
 ## 2026-11-03 · HTML inicial actualizado
 Verificado por HTTP en Render: texto obsoleto de reconocimiento pendiente y fases01+02. Se actualiza respaldo, meta descripción y noscript bilingüe con funciones reales y requisito JavaScript; no altera UI montada. check OK y267/267. active=0 antes del push. Archivos y notas de otras tareas conservados sin incluirlos.
+
+Render confirmado: API build de13f54ef9927ed73818926ed71b7faf594a3d5f, deployment7527206972. HTTP/live sin texto de reconocimiento no integrado y con descripción actual.
