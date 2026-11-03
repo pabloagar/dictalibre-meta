@@ -1,5 +1,49 @@
 # Piloto Chatterbox V3 en Colab
 
+## Prueba de cuatro voces completada · 03-11-2026
+
+Solicitud explícita: cinco audios por Aldo, Dave, Joe y Kathleen en Colab. Ejecución run_20261103T052215Z, completada 05:24:24 UTC (02:24:24 America/Santiago). Resultado técnico 20/20, una toma por voz y caso, guiones p01-p05; Aldo/Dave en español y Joe/Kathleen con traducciones inglesas guardadas en el protocolo. Sin datos de pacientes, sin referencia del responsable y sin entrenamiento Whisper.
+
+Duración directa por voz: Aldo 28,24 s; Dave 21,92 s; Joe 22,96 s; Kathleen 22,80 s. Total 95,92 s. Suma de intervalos sincronizados de generación: 103,8124 s; no es tiempo total de sesión ni benchmark comparativo. Tesla T4, Python 3.13.16, CUDA 12.4, chatterbox-tts 0.1.7, torch/torchaudio 2.6.0. Código Chatterbox 5de7a54aa4e5e2baadb0182dde554908b48b85c2 y modelo 5bb1f6ee58e50c3b8d408bc82a6d3740c2db6e18. SHA256 del generador ejecutado: f6936806ef22673647d131b4af6e0218e4f889d560e2dc45fd82b71e1228549d. No atribuir ejecución al commit posterior de documentación.
+
+Referencias: clips completos OHF Dave 8,496 s, Joe 8,424 s y Kathleen 3,336 s; Aldo, miembro «6 (enhanced).wav» del ZIP del dataset, 8,44 s. Decodificados a mono PCM16 24 kHz, sin recorte. URLs y hashes originales, procesados y ZIP se conservan en references.json privado. Parámetros iguales a A, semilla 20261103 + número de caso. Los avisos del modelo quedan en Colab; no se interpretan como validación de pronunciación.
+
+Entrega local privada: 20 WAV PCM16 mono 24 kHz recuperados de las salidas del notebook vía Drive y verificados contra sus hashes de Colab; ZIP con copias PCM16, manifiesto, protocolo, entorno y generador. Los originales FLOAT y referencias permanecen en Colab, cuyo disco es temporal; no se afirma que estén en el ZIP local. Audición humana, errores y aceptación siguen en null. Conservar muestras desfavorables; no escalar por el solo éxito técnico.
+
+Código reproducible: scripts/chatterbox-four-voices.py y experiments/chatterbox-four-voices.ipynb. No se publican audios, referencias, exportaciones privadas ni notebook con salidas/metadatos de cuenta. El script usa las URLs de referencia publicadas; una reproducción debe contrastar sus hashes con la evidencia privada porque esas URLs pueden cambiar.
+
+## Licencias y alcance de uso · revisión 03-11-2026
+
+### Referencias alternativas investigadas · 03-11-2026
+
+Selección documental, todavía sin descargar, generar, escuchar ni entrenar. El responsable busca español e inglés, uso comercial y entrenamiento Whisper, sin clonar su voz.
+
+- Dave (es_ES), Joe y Kathleen (en_US): OHF-Voice/voice-datasets publica estas grabaciones expresamente como datasets de síntesis de voz bajo CC0: https://github.com/OHF-Voice/voice-datasets . Son candidatos a referencias directas para el Chatterbox ya disponible, no una aprobación general de todos los checkpoints Piper derivados.
+- Aldo (español mexicano): https://huggingface.co/datasets/rmcpantoja/Ald_Mexican_Spanish_speech_dataset . Etiqueta Unlicense y declaración expresa de uso para ajustar modelos Speech To Text y Text To Speech; 535 archivos. Candidato a referencia y a datos ASR directos. No se auditó cada archivo ni se obtuvo documentación individual adicional del hablante.
+- Alcance: CC0 permite copia, modificación y explotación comercial sin solicitar permiso de copyright; no elimina derechos de privacidad/personalidad ni permite insinuar respaldo del hablante. https://creativecommons.org/publicdomain/zero/1.0/ . La compatibilidad de generación comercial y entrenamiento se interpreta a partir de la licencia y finalidad publicada; no es una garantía jurídica universal ni una autorización que nombre específicamente Whisper.
+- Alternativa sin grabaciones de referencia: Kokoro-82M (Apache-2.0), voces españolas ef_dora, em_alex, em_santa y 28 inglesas. Catálogo: https://huggingface.co/hexgrad/Kokoro-82M/blob/main/VOICES.md . No se encontró una cláusula específica que autorice entrenamiento sobre salidas; no confundir licencia del modelo con auditoría independiente de cada voz.
+- Otra alternativa sin referencia: Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign, Apache-2.0, español e inglés, crea voces por descripción. https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign . Capacidad documentada, sin prueba local ni garantía de acento chileno o calidad médica.
+- No seleccionar automáticamente Piper davefx/ald por la licencia del dataset: sus fichas indican una cadena de ajuste desde lessac, cuya ficha enlaza una licencia de datos de investigación. Se deja esa cadena pendiente de aclaración; no se concluye que todos los pesos derivados estén prohibidos comercialmente. https://huggingface.co/rhasspy/piper-voices/blob/main/en/en_US/lessac/medium/MODEL_CARD
+
+Propuesta siguiente, no ejecutada: comparar referencias Dave, Aldo, Joe y Kathleen con guiones sintéticos propios. Definir protocolo y conservar licencia, revisión y hashes antes de generar. Coste de licencia cero según las fuentes; disponibilidad de GPU gratuita no garantizada. No se ha cambiado el estado pendiente de permisos del lote A anterior.
+
+Conclusión: el motor Chatterbox Multilingual V3 puede usarse comercialmente sin pagar licencia MIT. No se encontró una restricción de entrenamiento de otros modelos en MIT ni en la ficha revisada. Esta es una lectura del alcance del motor, no una autorización independiente sobre cada audio de referencia o identidad vocal. El costo de GPU/Colab es independiente; no se garantiza entrenamiento ni cómputo gratuito.
+
+Fuentes primarias consultadas:
+
+- Ficha del modelo general, etiqueta MIT: https://huggingface.co/ResembleAI/chatterbox
+- Licencia del código: https://raw.githubusercontent.com/resemble-ai/chatterbox/master/LICENSE — permite uso, modificación, distribución y venta; exige conservar avisos al redistribuir software o partes sustanciales y no ofrece garantía de no infracción.
+- Fuente de la referencia A: https://huggingface.co/spaces/ResembleAI/Chatterbox-Multilingual-TTS-es-mx-latam/blob/main/app.py
+
+Separación de lotes:
+
+- Piloto inicial run_20261103T033052Z: voz incorporada, sin referencia personal aportada; 12 WAV. No confundirlo con A ni atribuirle la referencia es-MX. La licencia del motor está confirmada; no se realizó una auditoría independiente de la procedencia de la voz incorporada.
+- A/B y lote A run_20261103T040001Z: referencia pública es_mx_f1.wav de la demo oficial. URL: https://storage.googleapis.com/chatterbox-demo-samples/mtl-v3-single-language-prompts/es-latam/es_mx_f1.wav. SHA256: ee61089324b429371ae5562e1070283b34e220e742b60bff2457569f74484be4. No se localizó una licencia específica de esta grabación ni autorización del hablante que confirme generación comercial y entrenamiento de ASR comercial. Que sea pública y oficial no demuestra esos permisos. Estado: pendiente, no prohibición demostrada.
+
+Decisión de trazabilidad: conservar evidencia privada del laboratorio; no marcar el lote A como corpus comercial con derechos verificados. Antes de ese uso, obtener confirmación documentada o regenerar con una fuente cuyos derechos cubran los usos previstos. La conversión PCM16 no cambia el estado de permisos. No se ha entrenado Whisper con este lote. La licencia MIT de Whisper tampoco subsana permisos ausentes de los datos.
+
+Preferencia del responsable: no usar ni clonar su voz personal. Aprobación auditiva cualitativa posterior del lote A comunicada por el usuario: «Esta perfecto ningun cambio». Esto actualiza el estado de escucha pendiente descrito históricamente abajo; puntuaciones y conteos de errores siguen en null. No equivale a validación ASR ni autorización de derechos.
+
 Fase autorizada el 03-11-2026: 12 guiones originales sintéticos, una voz incorporada, una repetición por guion, condición limpia. No incluye pacientes, referencias de voz personales, variantes con ruido ni validación clínica.
 
 Notebook reproducible público: `experiments/chatterbox-colab-pilot.ipynb` (sin salidas ni metadatos personales). El notebook ejecutado y sus audios permanecen privados.

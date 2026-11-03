@@ -1,5 +1,12 @@
 # Dicta Libre: criterios de desarrollo
 
+## Contexto persistente: voces y licencias (revisado 03-11-2026)
+
+- Chatterbox Multilingual V3: código y ficha del modelo bajo MIT; uso comercial del motor sin regalías de licencia. Esto no garantiza cómputo gratuito ni derechos sobre cualquier voz de referencia.
+- No afirmar que todos los WAV del laboratorio están autorizados comercialmente o para entrenar una IA solo por la licencia MIT. El lote A aprobado usa la muestra pública oficial es_mx_f1.wav: permiso específico de esa grabación/voz para esos usos no localizado; estado pendiente, no prohibición demostrada.
+- Antes de exportar un corpus comercial o entrenar un modelo destinado a comercialización con esa referencia, resolver su permiso o regenerar con una fuente de derechos documentados. El usuario no quiere clonar su voz. Detalles y fuentes en docs/CHATTERBOX_COLAB_PILOT.md, sección «Licencias y alcance de uso».
+- Alternativas investigadas, aún no probadas: Dave, Joe y Kathleen de OHF-Voice/voice-datasets (CC0, destinados a TTS); Aldo mexicano de rmcpantoja (Unlicense, uso STT/TTS declarado). Considerar las grabaciones directamente como referencias, sin asumir la licencia de todos los modelos Piper derivados. Fuentes y límites en el documento del piloto; no presentar selección documental como corpus generado o autorización universal de identidad vocal.
+
 - Avanzar por fases acordadas; no presentar propuestas como funciones implementadas.
 - En cada cambio con un efecto medible, incorporar instrumentación y una prueba reproducible cuando sea viable. Si no se puede medir todavía, registrar el punto de medición, el motivo y la tarea pendiente en METRICS.md o EXPERIMENTS.md.
 - Antes de comparar variantes, definir hipótesis, métrica, unidades, inicio/final del intervalo, condiciones y criterio de aceptación. Conservar resultados favorables y desfavorables.
