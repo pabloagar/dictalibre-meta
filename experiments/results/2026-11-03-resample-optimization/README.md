@@ -24,3 +24,6 @@ CPU: `node scripts/benchmark-resampler.mjs BASELINE.mjs MANIFEST.json OUTPUT_NUE
 La sourceHash antigua del driver no incluía stream-audio.mjs, por lo que no distingue las dos variantes; no interpretarla como hash completo del backend. Los hashes separados de baseline/candidato están en cpuBenchmark y corresponden a las copias usadas. Driver corregido para incluir stream-audio en futuras ejecuciones; no se reescribe evidencia histórica. Árbol local sucio, build local null; no atribuir resultados a commit limpio.
 
 Cambios y resultados locales, sin push ni despliegue por instrucción del responsable.
+
+
+Actualización posterior: desplegado con autorización y probado en Render; ver [validación pública](../2026-11-03-render-optimized-concurrency/README.md). Mediana diez sesiones 4,686→0,502 s; el estado local anterior describe el momento previo al despliegue.
