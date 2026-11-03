@@ -880,3 +880,5 @@ Validación: pnpm check y pnpm test 267/267 aprobados; Python 21 pruebas, 19 apr
 
 ## 2026-11-03 · Dos fragmentos de contradicción
 Avisos enlazan evidencia de ambos fragmentos. Lateralidad explícita opuesta acota a lado y dos palabras de contexto compartidas; tarjeta destaca lado. Sin cambios de texto/IA. Evidencia no única no se enlaza; contradicciones genéricas conservan citas completas. check OK y268/268.
+
+Render verificado por API y recurso público: eb0b37cb17927e8c56ac164c03794bc1d6bf11fc, deployment7529782620. reviewEvidence presente en /shared/report-model.js; active=0 antes del push.
