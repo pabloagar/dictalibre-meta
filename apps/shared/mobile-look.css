@@ -1,0 +1,455 @@
+/*
+ * dicta · micrófono del teléfono · capa visual v2
+ * -------------------------------------------------
+ * Se carga DESPUÉS de /style.css en la página /mobile y solo actúa cuando
+ * mobile-look.js marca <body class="mobile-body"> con data-look, data-theme,
+ * data-mic y data-grab. Sin ese script, la página se ve exactamente como antes.
+ *
+ * Prefijo de alcance: .mobile-body[data-look][data-theme]  (especificidad 0,3,0)
+ * Las reglas del botón usan además #record.record-button para ganarle a las
+ * reglas antiguas con :has(#record.recording) y #prepare (especificidad 1,3,0).
+ *
+ * Paleta: guía «dicta — guía de colores», 3 nov 2026 (Día, Penumbra, Ámbar) y
+ * propuesta «dicta. · 3 temas nuevos», 3 nov 2026 (Sala, Negatoscopio, Contraste).
+ * Contraste calculado a partir de los hex en la especificación; verificar en dispositivo.
+ *
+ * Tokens de «cromo» (solo Negatoscopio los define; el resto usa el valor normal):
+ *   --m-c-ink / --m-c-muted / --m-c-line / --m-c-soft / --m-c-danger  → texto y bordes sobre el fondo y la barra
+ *   --m-core / --m-core-ink / --m-core-line                          → superficie del micrófono en espera
+ *   --m-field                                                         → campos y cajas dentro de tarjetas
+ * En Negatoscopio el fondo es oscuro y las tarjetas son papel claro: dos polaridades.
+ */
+
+/* ---------- 1. Temas (paleta vigente) ---------- */
+.mobile-body[data-look][data-theme="dia"] {
+  --m-bg: #E2DED4; --m-sheet: #EBE7DD; --m-bar: #E5E1D7;
+  --m-ink: #2B2823; --m-muted: #5B554B; --m-line: #C9C1B3; --m-soft: #DBD5C8;
+  --m-danger: #97392A; --m-scrim: rgba(28, 26, 23, .38); --m-logo-idle: #9A9286;
+  --m-act: #3E6256; --m-act-ink: #F2F0E9; --m-act-line: #537B6D;
+  --m-ok: #1F5A73;
+  --m-shadow: 0 -14px 36px rgba(0, 0, 0, .14);
+  color-scheme: light;
+}
+.mobile-body[data-look][data-theme="penumbra"] {
+  --m-bg: #131416; --m-sheet: #1C1F24; --m-bar: #181A1E;
+  --m-ink: #EDEDEB; --m-muted: #9AA1AD; --m-line: #292D34; --m-soft: #25292F;
+  --m-danger: #E08A7E; --m-scrim: rgba(0, 0, 0, .55); --m-logo-idle: #5D646C;
+  --m-act: #225C4F; --m-act-ink: #E9F3EF; --m-act-line: #4B937F;
+  --m-ok: #6FB7D6;
+  --m-shadow: 0 -14px 36px rgba(0, 0, 0, .45);
+  color-scheme: dark;
+}
+.mobile-body[data-look][data-theme="ambar"] {
+  --m-bg: #110E0A; --m-sheet: #18140F; --m-bar: #14110D;
+  --m-ink: #D8C9B0; --m-muted: #9D8F79; --m-line: #352E24; --m-soft: #251F17;
+  --m-danger: #E2846A; --m-scrim: rgba(0, 0, 0, .55); --m-logo-idle: #6E604C;
+  --m-act: #715125; --m-act-ink: #F5E9D5; --m-act-line: #A6834D;
+  --m-ok: #8FC0CF;
+  --m-shadow: 0 -14px 36px rgba(0, 0, 0, .45);
+  color-scheme: dark;
+}
+/* Sala: sala de lectura oscura junto al PACS. Gris neutro, texto limitado (~46 % de luminancia). */
+.mobile-body[data-look][data-theme="sala"] {
+  --m-bg: #18191A; --m-sheet: #1F2021; --m-bar: #1B1C1D;
+  --m-ink: #B4B5B1; --m-muted: #8B8D89; --m-line: #36383A; --m-soft: #2A2B2D;
+  --m-danger: #C98476; --m-scrim: rgba(0, 0, 0, .55); --m-logo-idle: #5E605D;
+  --m-act: #27463E; --m-act-ink: #CFE0D9; --m-act-line: #44706A;
+  --m-ok: #7EAEC0;
+  --m-shadow: 0 -14px 36px rgba(0, 0, 0, .5);
+  color-scheme: dark;
+}
+/* Negatoscopio: marco y barras oscuros, tarjetas y hoja de Ajustes en papel atenuado. */
+.mobile-body[data-look][data-theme="negatoscopio"] {
+  --m-bg: #161718; --m-sheet: #CDC8BC; --m-bar: #1D1E20;
+  --m-ink: #1D1B18; --m-muted: #4A463F; --m-line: #A39D90; --m-soft: #BFB9AC;
+  --m-danger: #8C2D20; --m-scrim: rgba(0, 0, 0, .55); --m-logo-idle: #5D646C;
+  --m-act: #2A5248; --m-act-ink: #E3EEE9; --m-act-line: #4B8073;
+  --m-ok: #6FB7D6;
+  --m-c-ink: #BCB9B2; --m-c-muted: #8C8981; --m-c-line: #34353A; --m-c-soft: #34363A; --m-c-danger: #D9897B;
+  --m-core: #1D1E20; --m-core-ink: #BCB9B2; --m-core-line: #8C8981;
+  --m-field: #D5D0C5;
+  --m-shadow: 0 -14px 36px rgba(0, 0, 0, .5);
+  color-scheme: dark;
+}
+/* Contraste: baja visión, monitores deslavados, mucha luz. Aquí la hoja sí es blanca. */
+.mobile-body[data-look][data-theme="contraste"] {
+  --m-bg: #ECEEF0; --m-sheet: #FFFFFF; --m-bar: #E2E5E8;
+  --m-ink: #0A0B0C; --m-muted: #33383D; --m-line: #6B7178; --m-soft: #E6E9EC;
+  --m-danger: #B3200E; --m-scrim: rgba(0, 0, 0, .45); --m-logo-idle: #6B7178;
+  --m-act: #0D4F3C; --m-act-ink: #FFFFFF; --m-act-line: #0A3A2C;
+  --m-ok: #00627A;
+  --m-shadow: 0 -14px 36px rgba(0, 0, 0, .18);
+  color-scheme: light;
+}
+
+/* ---------- 2. Color de grabación (data-grab: rec | acento | ia) ----------
+ * --m-rec       trazos, puntos, rótulo GRABANDO (≥4,5:1 sobre el fondo)
+ * --m-rec-fill  relleno grande; --m-rec-ink su texto/ícono (≥5:1)
+ * --m-rec-tint  mezcla 12 % sobre el fondo; --m-rec-tint2 22 %
+ * --m-rec-edge  borde del relleno cuando el relleno solo no llega a 3:1 con el fondo (IA en temas oscuros) */
+.mobile-body[data-look][data-theme="penumbra"][data-grab="rec"]    { --m-rec: #E08A7E; --m-rec-fill: #E08A7E; --m-rec-ink: #131416; --m-rec-tint: #2C2223; --m-rec-tint2: #402E2D; }
+.mobile-body[data-look][data-theme="penumbra"][data-grab="acento"] { --m-rec: #B7C5D7; --m-rec-fill: #B7C5D7; --m-rec-ink: #131416; --m-rec-tint: #27292D; --m-rec-tint2: #373B40; }
+.mobile-body[data-look][data-theme="penumbra"][data-grab="ia"]     { --m-rec: #4B937F; --m-rec-fill: #225C4F; --m-rec-ink: #E9F3EF; --m-rec-tint: #1A2323; --m-rec-tint2: #1F302D; --m-rec-edge: #4B937F; }
+.mobile-body[data-look][data-theme="dia"][data-grab="rec"]         { --m-rec: #97392A; --m-rec-fill: #97392A; --m-rec-ink: #F2F0E9; --m-rec-tint: #D9CAC0; --m-rec-tint2: #D2BAAF; }
+.mobile-body[data-look][data-theme="dia"][data-grab="acento"]      { --m-rec: #7A5217; --m-rec-fill: #7A5217; --m-rec-ink: #F2F0E9; --m-rec-tint: #D6CDBD; --m-rec-tint2: #CBBFAA; }
+.mobile-body[data-look][data-theme="dia"][data-grab="ia"]          { --m-rec: #3E6256; --m-rec-fill: #3E6256; --m-rec-ink: #F2F0E9; --m-rec-tint: #CECFC5; --m-rec-tint2: #BEC3B8; }
+.mobile-body[data-look][data-theme="ambar"][data-grab="rec"]       { --m-rec: #E2846A; --m-rec-fill: #E2846A; --m-rec-ink: #1A1208; --m-rec-tint: #2A1C16; --m-rec-tint2: #40281F; }
+.mobile-body[data-look][data-theme="ambar"][data-grab="acento"]    { --m-rec: #D6A04B; --m-rec-fill: #D6A04B; --m-rec-ink: #1A1208; --m-rec-tint: #281F12; --m-rec-tint2: #3C2E18; }
+.mobile-body[data-look][data-theme="ambar"][data-grab="ia"]        { --m-rec: #A6834D; --m-rec-fill: #715125; --m-rec-ink: #F5E9D5; --m-rec-tint: #231C12; --m-rec-tint2: #322819; --m-rec-edge: #A6834D; }
+.mobile-body[data-look][data-theme="sala"][data-grab="rec"]        { --m-rec: #C98476; --m-rec-fill: #C98476; --m-rec-ink: #18191A; --m-rec-tint: #2D2625; --m-rec-tint2: #3F312E; }
+.mobile-body[data-look][data-theme="sala"][data-grab="acento"]     { --m-rec: #A3B3AB; --m-rec-fill: #A3B3AB; --m-rec-ink: #18191A; --m-rec-tint: #292B2B; --m-rec-tint2: #373B3A; }
+.mobile-body[data-look][data-theme="sala"][data-grab="ia"]         { --m-rec: #5E968A; --m-rec-fill: #27463E; --m-rec-ink: #CFE0D9; --m-rec-tint: #202827; --m-rec-tint2: #273433; --m-rec-edge: #5E968A; }
+/* Negatoscopio «acento» = luz: al grabar, el micrófono se enciende como un negatoscopio (papel claro). */
+.mobile-body[data-look][data-theme="negatoscopio"][data-grab="rec"]    { --m-rec: #D9897B; --m-rec-fill: #8C2D20; --m-rec-ink: #EBE7DE; --m-rec-tint: #2D2524; --m-rec-tint2: #41302E; --m-rec-edge: #D9897B; }
+.mobile-body[data-look][data-theme="negatoscopio"][data-grab="acento"] { --m-rec: #BCB9B2; --m-rec-fill: #CDC8BC; --m-rec-ink: #1D1B18; --m-rec-tint: #2A2A2A; --m-rec-tint2: #3B3B3A; }
+.mobile-body[data-look][data-theme="negatoscopio"][data-grab="ia"]     { --m-rec: #5E968A; --m-rec-fill: #2A5248; --m-rec-ink: #E3EEE9; --m-rec-tint: #1F2626; --m-rec-tint2: #263331; --m-rec-edge: #5E968A; }
+.mobile-body[data-look][data-theme="contraste"][data-grab="rec"]       { --m-rec: #B3200E; --m-rec-fill: #B3200E; --m-rec-ink: #FFFFFF; --m-rec-tint: #E5D5D5; --m-rec-tint2: #DFC1BE; }
+.mobile-body[data-look][data-theme="contraste"][data-grab="acento"]    { --m-rec: #0040A8; --m-rec-fill: #0040A8; --m-rec-ink: #FFFFFF; --m-rec-tint: #D0D9E7; --m-rec-tint2: #B8C8E0; }
+.mobile-body[data-look][data-theme="contraste"][data-grab="ia"]        { --m-rec: #0D4F3C; --m-rec-fill: #0D4F3C; --m-rec-ink: #FFFFFF; --m-rec-tint: #D1DBDA; --m-rec-tint2: #BBCBC8; }
+
+/* ---------- 3. Base ---------- */
+.mobile-body[data-look][data-theme] {
+  --m-level: 0;
+  background: var(--m-bg);
+  color: var(--m-c-ink, var(--m-ink));
+  font-family: 'Public Sans', system-ui, sans-serif;
+}
+.mobile-body[data-look] [hidden] { display: none !important; }
+.mobile-body[data-look][data-theme] :focus-visible { outline: 2px solid var(--m-c-ink, var(--m-ink)); outline-offset: 2px; }
+.mobile-body[data-look][data-theme] .card :focus-visible,
+.mobile-body[data-look][data-theme] .confirm :focus-visible,
+.mobile-body[data-look][data-theme] .m-sheet :focus-visible { outline-color: var(--m-ink); }
+.mobile-body[data-look][data-theme="contraste"] :focus-visible { outline-width: 3px; }
+.mobile-body[data-look][data-theme] .phone-shell {
+  max-width: 500px; min-height: 100dvh; box-sizing: border-box;
+  display: flex; flex-direction: column; padding: 0 20px 12px;
+}
+.mobile-body[data-look][data-theme] .m-hidden-text {
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ---------- 4. Cabecera: logo + ES/EN en una línea, conexión a la derecha ---------- */
+.mobile-body[data-look][data-theme] header {
+  height: 52px; min-height: 52px; flex: 0 0 auto; flex-wrap: nowrap;
+  margin: 0 -20px; padding: 0 20px; box-sizing: border-box;
+  display: flex; align-items: center; gap: 14px;
+  background: var(--m-bar); border-bottom: 1px solid var(--m-c-line, var(--m-line));
+}
+.mobile-body[data-look][data-theme] .brand { order: 0; display: flex; align-items: center; color: var(--m-c-ink, var(--m-ink)); text-decoration: none; }
+.mobile-body[data-look][data-theme] .brand svg { display: block; width: 66px; height: 20px; }
+.mobile-body[data-look][data-theme] .brand .m-logo-dot { fill: var(--m-logo-idle); }
+.mobile-body[data-look][data-theme][data-state="rec"] .brand .m-logo-dot { fill: var(--m-rec); }
+.mobile-body[data-look][data-theme] header .tag { display: none; }
+.mobile-body[data-look][data-theme] .language-switch { order: 1; font-size: 0; display: flex; align-items: center; }
+.mobile-body[data-look][data-theme] .language-switch select {
+  appearance: none; -webkit-appearance: none; height: 32px; padding: 0 10px; box-sizing: border-box;
+  border: 1px solid var(--m-c-line, var(--m-line)); border-radius: 8px; background: transparent; color: var(--m-c-ink, var(--m-ink));
+  font: 600 12px/1 'Public Sans', system-ui, sans-serif; letter-spacing: .05em;
+}
+.mobile-body[data-look][data-theme] .m-conn {
+  order: 2; margin-left: auto; display: flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 600; color: var(--m-c-muted, var(--m-muted)); white-space: nowrap;
+}
+.mobile-body[data-look][data-theme] .m-conn::before {
+  content: ""; width: 8px; height: 8px; border-radius: 50%; box-sizing: border-box; border: 1.5px solid var(--m-c-muted, var(--m-muted));
+}
+/* Indicador pequeño de conexión. Espera: #D69E40 (guía). Conectado: --m-ok del tema, azul petróleo
+   en vez de verde, para que no se confunda con «grabando» en daltonismo rojo-verde (propuesta 3 temas). */
+.mobile-body[data-look][data-theme][data-conn="wait"] .m-conn::before { border: 0; background: #D69E40; }
+.mobile-body[data-look][data-theme][data-conn="on"] .m-conn { color: var(--m-c-ink, var(--m-ink)); }
+.mobile-body[data-look][data-theme][data-conn="on"] .m-conn::before { border: 0; background: var(--m-ok); }
+
+/* ---------- 5. Contenido principal y visor ---------- */
+.mobile-body[data-look][data-theme] main { flex: 1 1 auto; display: flex; flex-direction: column; gap: 18px; padding-top: 24px; min-height: 0; }
+.mobile-body[data-look][data-theme] .visor {
+  flex: 0 0 auto; background: transparent; color: var(--m-c-ink, var(--m-ink)); padding: 0; border-radius: 0;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.mobile-body[data-look][data-theme] .visor .status {
+  margin: 0; padding: 0; border: 0; background: none;
+  font-family: 'Source Serif 4', Georgia, serif; font-weight: 400; font-size: 26px; line-height: 1.25; color: var(--m-c-ink, var(--m-ink));
+}
+.mobile-body[data-look][data-theme][data-paired] .visor { align-items: center; text-align: center; }
+.mobile-body[data-look][data-theme][data-paired] .visor .status {
+  order: 1; font-family: 'Public Sans', system-ui, sans-serif; font-size: 14px; line-height: 1.45; color: var(--m-c-muted, var(--m-muted));
+}
+.mobile-body[data-look][data-theme] .visor .status.error { color: var(--m-c-danger, var(--m-danger)); }
+.mobile-body[data-look][data-theme] .visor .status.success { color: var(--m-c-ink, var(--m-ink)); }
+.mobile-body[data-look][data-theme] .visor .visor-live { order: 0; margin: 0; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.mobile-body[data-look][data-theme] .m-state { font-size: 12px; font-weight: 600; letter-spacing: .05em; color: var(--m-c-muted, var(--m-muted)); }
+.mobile-body[data-look][data-theme][data-state="rec"] .m-state { color: var(--m-rec); }
+.mobile-body[data-look][data-theme] .visor .timer {
+  font-family: 'Atkinson Hyperlegible Mono', ui-monospace, monospace; font-weight: 400;
+  font-size: 52px; line-height: 1.15; letter-spacing: 0; color: var(--m-c-muted, var(--m-muted));
+  font-variant-numeric: tabular-nums;
+}
+.mobile-body[data-look][data-theme][data-state="rec"] .visor .timer { color: var(--m-c-ink, var(--m-ink)); }
+/* El medidor nativo queda para lectores de pantalla; el nivel se dibuja en el micrófono. */
+.mobile-body[data-look][data-theme] .visor meter {
+  position: absolute; width: 1px; height: 1px; margin: 0; opacity: 0; pointer-events: none;
+}
+.mobile-body[data-look][data-theme] .verification { order: 2; margin: 0; font-size: 14px; color: var(--m-c-ink, var(--m-ink)); }
+/* Anula el marco rojo y el rótulo «Grabando» antiguos. */
+.mobile-body[data-look][data-theme]:has(#record.recording)::after { content: none; border: 0; }
+.mobile-body[data-look][data-theme]:has(#record.recording) .visor { background: transparent; }
+.mobile-body[data-look][data-theme]:has(#record.recording) .visor::before { content: none; display: none; }
+
+/* ---------- 6. Botones y tarjetas ---------- */
+.mobile-body[data-look][data-theme] .primary {
+  width: 100%; min-height: 52px; margin: 0; padding: 10px 16px; box-sizing: border-box;
+  border: 1px solid var(--m-act-line); border-radius: 10px;
+  background: var(--m-act); color: var(--m-act-ink);
+  font: 600 15px/1.2 'Public Sans', system-ui, sans-serif;
+}
+.mobile-body[data-look][data-theme] .primary:hover:not(:disabled) { background: var(--m-act); }
+.mobile-body[data-look][data-theme] .primary:disabled { opacity: .5; }
+/* Una sola acción rellena por vista: «Conectar con el PC» va en contorno. */
+.mobile-body[data-look][data-theme] #join.primary { background: transparent; color: var(--m-ink); border-color: var(--m-muted); }
+.mobile-body[data-look][data-theme] .card {
+  margin: 0; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px;
+  background: var(--m-sheet); border: 1px solid var(--m-line); border-radius: 14px; color: var(--m-ink);
+}
+.mobile-body[data-look][data-theme] .card .tiny { margin: 4px 0 0; text-align: center; }
+.mobile-body[data-look][data-theme] .input-label { font-size: 14px; font-weight: 600; }
+.mobile-body[data-look][data-theme] .code-input {
+  min-height: 52px; margin: 0; padding: 0 14px; box-sizing: border-box;
+  background: var(--m-field, var(--m-bg)); color: var(--m-ink); border: 1px solid var(--m-muted); border-radius: 10px;
+  font: 400 20px 'Atkinson Hyperlegible Mono', ui-monospace, monospace; letter-spacing: .12em;
+}
+.mobile-body[data-look][data-theme] #qr-video { width: 100%; height: auto; aspect-ratio: 1; border-radius: 10px; background: var(--m-bg); object-fit: cover; }
+.mobile-body[data-look][data-theme] #qr-message { margin: 0; font-size: 14px; color: var(--m-muted); text-align: center; }
+.mobile-body[data-look][data-theme] #qr-cancel {
+  min-height: 48px; border: 1px solid var(--m-muted); border-radius: 10px; background: transparent; color: var(--m-ink);
+  font: 600 15px 'Public Sans', system-ui, sans-serif;
+}
+.mobile-body[data-look][data-theme] .confirm {
+  margin: 0; padding: 28px 20px; text-align: center; background: var(--m-sheet);
+  border: 1px solid var(--m-line); border-radius: 14px; color: var(--m-muted); font-size: 14px;
+}
+.mobile-body[data-look][data-theme] .confirm p { margin: 0; }
+.mobile-body[data-look][data-theme] .confirm strong {
+  display: block; margin: 12px 0 0; color: var(--m-ink);
+  font: 400 48px/1.1 'Atkinson Hyperlegible Mono', ui-monospace, monospace; letter-spacing: .08em;
+}
+.mobile-body[data-look][data-theme] .tiny { font-size: 13px; line-height: 1.5; color: var(--m-c-muted, var(--m-muted)); }
+.mobile-body[data-look][data-theme] .card .tiny,
+.mobile-body[data-look][data-theme] .m-sheet .tiny { color: var(--m-muted); }
+.mobile-body[data-look][data-theme] .prototype-note { margin: 0; text-align: center; font-size: 12px; }
+
+/* ---------- 7. Tarjeta de control y micrófono ---------- */
+.mobile-body[data-look][data-theme] .control-card { flex: 1 1 auto; display: flex; flex-direction: column; align-items: stretch; gap: 16px; min-height: 0; }
+.mobile-body[data-look][data-theme] .prepare-note { margin: -6px 0 0; text-align: center; }
+.mobile-body[data-look][data-theme] #record.record-button {
+  flex: 1 1 auto; min-height: 0; margin: 0; padding: 8px 0; box-sizing: border-box;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  background: transparent; color: var(--m-c-ink, var(--m-ink)); border: 0; border-radius: 0;
+  touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+  font-family: 'Public Sans', system-ui, sans-serif;
+}
+.mobile-body[data-look][data-theme] #record.record-button:disabled { opacity: .45; border-style: none; }
+.mobile-body[data-look][data-theme] #prepare:not([hidden]) ~ #record.record-button { flex: 0 0 auto; min-height: 0; }
+.mobile-body[data-look][data-theme] #prepare:not([hidden]) ~ #record .m-viz { zoom: .62; }
+.mobile-body[data-look][data-theme] #record #record-label { font-size: 19px; line-height: 1.25; font-weight: 600; color: var(--m-c-ink, var(--m-ink)); text-align: center; }
+.mobile-body[data-look][data-theme] #record .m-sub { margin-top: -8px; font-size: 13px; font-weight: 400; color: var(--m-c-muted, var(--m-muted)); }
+.mobile-body[data-look][data-theme] #record .m-inline { display: none; }
+.mobile-body[data-look][data-theme] #record .m-viz {
+  position: relative; flex: 0 0 auto; width: 300px; height: 300px; display: grid; place-items: center;
+}
+.mobile-body[data-look][data-theme] #record .m-core {
+  position: relative; z-index: 1; width: 168px; height: 168px; box-sizing: border-box; border-radius: 50%;
+  display: grid; place-items: center; background: var(--m-core, var(--m-sheet)); border: 1.5px solid var(--m-core-line, var(--m-muted));
+}
+.mobile-body[data-look][data-theme] #record .m-core svg,
+.mobile-body[data-look][data-theme] #record .m-inline svg {
+  width: 52px; height: 52px; fill: none; stroke: var(--m-core-ink, var(--m-ink)); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
+.mobile-body[data-look][data-theme] #record .m-ring,
+.mobile-body[data-look][data-theme] #record .m-tick,
+.mobile-body[data-look][data-theme] #record .m-grill,
+.mobile-body[data-look][data-theme] .m-wave { display: none; }
+
+/* 7a · Punto de dicta. */
+.mobile-body[data-look][data-theme][data-mic="punto"] #record .m-ring {
+  display: block; position: absolute; left: 50%; top: 50%; border-radius: 50%;
+  translate: -50% -50%; scale: 0; transition: scale 90ms linear;
+}
+.mobile-body[data-look][data-theme][data-mic="punto"] #record .m-ring.r2 { width: 236px; height: 236px; background: var(--m-rec-tint2); }
+.mobile-body[data-look][data-theme][data-mic="punto"] #record .m-ring.r3 { width: 300px; height: 300px; background: var(--m-rec-tint); }
+.mobile-body[data-look][data-theme][data-mic="punto"][data-state="rec"] #record .m-ring.r2 { scale: calc(.86 + var(--m-level) * .14); }
+.mobile-body[data-look][data-theme][data-mic="punto"][data-state="rec"] #record .m-ring.r3 { scale: calc(.74 + var(--m-level) * .26); }
+.mobile-body[data-look][data-theme][data-mic="punto"][data-state="rec"] #record .m-core { background: var(--m-rec-fill); border: 2px solid var(--m-rec-edge, transparent); }
+.mobile-body[data-look][data-theme][data-mic="punto"][data-state="rec"] #record .m-core svg { stroke: var(--m-rec-ink); }
+
+/* 7b · Halo de nivel */
+.mobile-body[data-look][data-theme][data-mic="halo"] #record .m-tick {
+  display: block; position: absolute; left: calc(50% - 1.5px); top: 0; width: 3px; height: 12px;
+  border-radius: 2px; background: var(--m-c-line, var(--m-line)); transform-origin: 1.5px 150px; transform: rotate(var(--a));
+  transition: height 90ms linear;
+}
+.mobile-body[data-look][data-theme][data-mic="halo"] #record .m-core { width: 200px; height: 200px; }
+.mobile-body[data-look][data-theme][data-mic="halo"][data-state="rec"] #record .m-tick { background: var(--m-rec); height: calc(12px + var(--w) * var(--m-level) * 30px); }
+.mobile-body[data-look][data-theme][data-mic="halo"][data-state="rec"] #record .m-core { background: var(--m-rec-tint); border: 2px solid var(--m-rec); }
+.mobile-body[data-look][data-theme][data-mic="halo"][data-state="rec"] #record .m-core svg { stroke: var(--m-rec); }
+
+/* 7c · Tecla walkie-talkie */
+.mobile-body[data-look][data-theme][data-mic="tecla"] #record .m-viz {
+  width: 300px; height: 320px; box-sizing: border-box; border-radius: 28px;
+  border: 1px solid var(--m-core-line, var(--m-muted)); background: var(--m-core, var(--m-sheet)); box-shadow: 0 6px 0 var(--m-c-line, var(--m-line));
+  transition: transform 80ms ease-out;
+}
+.mobile-body[data-look][data-theme][data-mic="tecla"] #record .m-core { display: none; }
+.mobile-body[data-look][data-theme][data-mic="tecla"] #record .m-grill { display: grid; grid-template-columns: repeat(11, 10px); gap: 14px; }
+.mobile-body[data-look][data-theme] #record .m-grill > span { position: relative; width: 10px; height: 10px; border-radius: 50%; background: var(--m-c-line, var(--m-line)); }
+.mobile-body[data-look][data-theme] #record .m-grill > span::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--m-rec); opacity: 0;
+}
+.mobile-body[data-look][data-theme][data-mic="tecla"][data-state="rec"] #record .m-viz {
+  border: 2px solid var(--m-rec); background: var(--m-rec-tint);
+  box-shadow: inset 0 6px 18px rgba(0, 0, 0, .35); transform: translateY(4px);
+}
+.mobile-body[data-look][data-theme][data-mic="tecla"][data-state="rec"] #record .m-grill > span::after {
+  opacity: calc(clamp(0, (0.35 + var(--m-level) * 0.45 - var(--d)) * 5, 1) * (1 - var(--d) * 0.5));
+}
+
+/* 7d · Onda + píldora */
+.mobile-body[data-look][data-theme][data-mic="onda"] .m-wave {
+  display: flex; align-items: center; gap: 2px; flex: 1 1 auto; min-height: 120px; max-height: 170px;
+  padding: 0 12px; box-sizing: border-box; border-top: 1px solid var(--m-c-line, var(--m-line)); border-bottom: 1px solid var(--m-c-line, var(--m-line));
+}
+.mobile-body[data-look][data-theme] .m-wave > span { flex: 1; height: 3px; border-radius: 2px; background: var(--m-c-line, var(--m-line)); }
+.mobile-body[data-look][data-theme][data-state="rec"] .m-wave > span { background: var(--m-c-muted, var(--m-muted)); opacity: .4; }
+.mobile-body[data-look][data-theme][data-state="rec"] .m-wave > span.now { background: var(--m-rec); opacity: 1; }
+.mobile-body[data-look][data-theme][data-mic="onda"] #record .m-viz,
+.mobile-body[data-look][data-theme][data-mic="onda"] #record .m-sub { display: none; }
+.mobile-body[data-look][data-theme][data-mic="onda"] #record .m-inline { display: block; }
+.mobile-body[data-look][data-theme][data-mic="onda"] #record .m-inline svg { width: 34px; height: 34px; display: block; }
+.mobile-body[data-look][data-theme][data-mic="onda"] #record.record-button {
+  flex: 0 0 auto; height: 132px; flex-direction: row; gap: 14px;
+  border: 1px solid var(--m-core-line, var(--m-muted)); border-radius: 66px; background: var(--m-core, var(--m-sheet));
+}
+.mobile-body[data-look][data-theme][data-mic="onda"][data-state="rec"] #record.record-button { background: var(--m-rec-fill); border: 2px solid var(--m-rec-edge, transparent); }
+.mobile-body[data-look][data-theme][data-mic="onda"][data-state="rec"] #record #record-label { color: var(--m-rec-ink); }
+.mobile-body[data-look][data-theme][data-mic="onda"][data-state="rec"] #record .m-inline svg { stroke: var(--m-rec-ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-body[data-look][data-theme] #record .m-ring,
+  .mobile-body[data-look][data-theme] #record .m-tick,
+  .mobile-body[data-look][data-theme] #record .m-viz { transition: none; }
+}
+
+/* ---------- 8. Forma de grabar (se mantiene, solo se ajusta al tema) ---------- */
+.mobile-body[data-look][data-theme] .mode-selector {
+  flex: 0 0 auto; margin: 0; padding: 0; gap: 0; flex-wrap: nowrap; min-width: 0;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  border: 1px solid var(--m-c-line, var(--m-line)); border-radius: 10px; overflow: hidden;
+}
+.mobile-body[data-look][data-theme] .mode-selector legend {
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); padding: 0; margin: 0;
+}
+.mobile-body[data-look][data-theme] .mode-selector label { position: relative; display: block; }
+.mobile-body[data-look][data-theme] .mode-selector span {
+  display: flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 6px;
+  border: 0; border-radius: 0; background: transparent; color: var(--m-c-muted, var(--m-muted)); font-size: 14px; font-weight: 400;
+}
+.mobile-body[data-look][data-theme] .mode-selector label + label span { border-left: 1px solid var(--m-c-line, var(--m-line)); }
+.mobile-body[data-look][data-theme] .mode-selector input:checked + span { background: var(--m-c-soft, var(--m-soft)); color: var(--m-c-ink, var(--m-ink)); font-weight: 600; border-color: var(--m-c-line, var(--m-line)); }
+.mobile-body[data-look][data-theme] .mode-selector input:focus-visible + span { outline: 2px solid var(--m-c-ink, var(--m-ink)); outline-offset: -2px; }
+.mobile-body[data-look][data-theme] .mode-selector:disabled { opacity: .6; }
+
+/* ---------- 9. Ajustes (antes «Más opciones») ---------- */
+.mobile-body[data-look][data-theme] .more-options { flex: 0 0 auto; border-top: 0; margin-top: -10px; }
+.mobile-body[data-look][data-theme] .more-options > summary {
+  list-style: none; width: max-content; margin: 0 auto; min-height: 44px; padding: 0 18px;
+  display: flex; align-items: center; gap: 8px; cursor: pointer;
+  color: var(--m-c-muted, var(--m-muted)); font-size: 14px; font-weight: 600;
+}
+.mobile-body[data-look][data-theme] .more-options > summary::-webkit-details-marker { display: none; }
+.mobile-body[data-look][data-theme] .more-options > summary svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.mobile-body[data-look][data-theme] .more-options[open] > summary::before {
+  content: ""; position: fixed; inset: 0; z-index: 55; background: var(--m-scrim);
+}
+.mobile-body[data-look][data-theme] .m-sheet { display: none; }
+.mobile-body[data-look][data-theme] .more-options[open] .m-sheet {
+  display: flex; flex-direction: column; position: fixed; z-index: 60; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: min(100%, 500px); max-height: 88dvh; overflow-y: auto; box-sizing: border-box;
+  padding: 8px 20px calc(20px + env(safe-area-inset-bottom));
+  background: var(--m-sheet); color: var(--m-ink); border-top: 1px solid var(--m-line);
+  border-radius: 14px 14px 0 0; box-shadow: var(--m-shadow);
+}
+.mobile-body[data-look][data-theme] .m-grabber { align-self: center; width: 36px; height: 4px; border-radius: 2px; background: var(--m-line); }
+.mobile-body[data-look][data-theme] .m-sheet-head { min-height: 52px; display: flex; align-items: center; justify-content: space-between; }
+.mobile-body[data-look][data-theme] .m-sheet-head h2 { margin: 0; font-size: 18px; font-weight: 600; }
+.mobile-body[data-look][data-theme] .m-sheet-head button {
+  min-height: 44px; padding: 0 4px; border: 0; background: transparent; color: var(--m-muted);
+  font: 600 14px 'Public Sans', system-ui, sans-serif;
+}
+.mobile-body[data-look][data-theme] .m-section { display: flex; flex-direction: column; margin-top: 18px; }
+.mobile-body[data-look][data-theme] .m-section > h3 {
+  margin: 0 0 6px; font-size: 11px; font-weight: 600; letter-spacing: .08em; color: var(--m-muted);
+}
+.mobile-body[data-look][data-theme]:has(#controls[hidden]) .m-paired-only { display: none; }
+.mobile-body[data-look][data-theme] .m-sheet .phone-metrics {
+  margin: 4px 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;
+}
+.mobile-body[data-look][data-theme] .m-sheet .phone-metrics > div {
+  display: flex; flex-direction: column; gap: 4px; padding: 10px 12px;
+  background: var(--m-field, var(--m-bg)); border: 1px solid var(--m-line); border-radius: 10px;
+}
+.mobile-body[data-look][data-theme] .m-sheet .phone-metrics span { font-size: 11px; font-weight: 600; letter-spacing: .08em; color: var(--m-muted); }
+.mobile-body[data-look][data-theme] .m-sheet .phone-metrics strong { font: 400 17px 'Atkinson Hyperlegible Mono', ui-monospace, monospace; color: var(--m-ink); }
+.mobile-body[data-look][data-theme] .m-sheet .check-row {
+  min-height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  font-size: 15px; border-bottom: 1px solid var(--m-line);
+}
+.mobile-body[data-look][data-theme] .m-sheet .check-row input {
+  order: 2; appearance: none; -webkit-appearance: none; flex-shrink: 0; position: relative;
+  width: 46px; height: 28px; margin: 0; border-radius: 14px; background: var(--m-line); cursor: pointer;
+}
+.mobile-body[data-look][data-theme] .m-sheet .check-row input::before {
+  content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--m-sheet); transition: transform 120ms ease-out;
+}
+.mobile-body[data-look][data-theme] .m-sheet .check-row input:checked { background: var(--m-ink); }
+.mobile-body[data-look][data-theme] .m-sheet .check-row input:checked::before { transform: translateX(18px); }
+.mobile-body[data-look][data-theme] .m-sheet .check-row input:disabled { opacity: .5; }
+.mobile-body[data-look][data-theme] .m-sheet #haptics-note,
+.mobile-body[data-look][data-theme] .m-sheet #capture-info { margin: 8px 0 0; font-size: 12px; }
+.mobile-body[data-look][data-theme] .m-sheet .quiet {
+  width: 100%; min-height: 48px; margin: 0; padding: 0; display: flex; align-items: center; justify-content: space-between;
+  border: 0; border-bottom: 1px solid var(--m-line); border-radius: 0; background: transparent;
+  color: var(--m-ink); font: 400 15px 'Public Sans', system-ui, sans-serif; text-align: left; text-decoration: none;
+}
+.mobile-body[data-look][data-theme] .m-sheet .m-section .quiet::after { content: "›"; color: var(--m-muted); font-size: 18px; }
+.mobile-body[data-look][data-theme] .m-seg-row { display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 6px 0 4px; }
+.mobile-body[data-look][data-theme] .m-seg-row > span { font-size: 15px; }
+/* 6 temas en 3 × 2; el gap de 1 px sobre fondo --m-line dibuja las divisiones. */
+.mobile-body[data-look][data-theme] .m-seg {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; width: 100%; margin: 0; padding: 0;
+  background: var(--m-line); border: 1px solid var(--m-line); border-radius: 10px; overflow: hidden;
+}
+.mobile-body[data-look][data-theme] .m-seg label { position: relative; background: var(--m-sheet); }
+.mobile-body[data-look][data-theme] .m-seg input { position: absolute; opacity: 0; inset: 0; margin: 0; }
+.mobile-body[data-look][data-theme] .m-seg span {
+  height: 44px; display: flex; align-items: center; justify-content: center; font-size: 13px; color: var(--m-muted);
+}
+.mobile-body[data-look][data-theme] .m-seg input:checked + span { background: var(--m-soft); color: var(--m-ink); font-weight: 600; }
+.mobile-body[data-look][data-theme] .m-seg input:focus-visible + span { outline: 2px solid var(--m-ink); outline-offset: -2px; }
+.mobile-body[data-look][data-theme] .m-foot { margin-top: 22px; display: flex; flex-direction: column; gap: 8px; }
+.mobile-body[data-look][data-theme] .m-foot #export-lifecycle {
+  width: auto; min-height: 40px; margin: 0; padding: 0; align-self: flex-start; border: 0; background: transparent;
+  color: var(--m-muted); font: 400 13px 'Public Sans', system-ui, sans-serif; text-decoration: underline; text-underline-offset: 3px;
+}
+.mobile-body[data-look][data-theme] .m-foot .privacy-note { margin: 0; font-size: 12px; }
+.mobile-body[data-look][data-theme] .m-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 6px; }
+.mobile-body[data-look][data-theme] .m-actions .quiet {
+  width: 100%; min-height: 48px; margin: 0; padding: 6px 10px; box-sizing: border-box;
+  border: 1px solid var(--m-muted); border-radius: 10px; background: transparent; color: var(--m-ink);
+  font: 600 14px/1.25 'Public Sans', system-ui, sans-serif; text-align: center; text-decoration: none;
+  justify-content: center;
+}
+.mobile-body[data-look][data-theme] .m-actions #close { border-color: var(--m-danger); color: var(--m-danger); }
+
+/* Keep extra preference rows compact and preserve native focus targets. */
+.mobile-body[data-look] .m-seg-row:has(input[name=m-mic]) .m-seg{grid-template-columns:repeat(4,minmax(0,1fr))}
+.mobile-body[data-sheet]{overflow:hidden}
+.mobile-body[data-look] .m-seg-row + .m-seg-row{margin-top:16px}

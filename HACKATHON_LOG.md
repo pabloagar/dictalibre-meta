@@ -770,3 +770,7 @@ Activación verificada: Render deployment 7519823377 success 2026-11-03T13:20:44
 
 Activación temas verificada: Render deployment 7520014818 success 2026-11-03T13:29:15Z (10:29:15 Chile), build 9dd1007cf35d1fce7e2700c71d1d291ddc536bbf. API confirma versión; live.js, style.css y locale-en.js coinciden con checkout. GitHub y Render activos; laboratorio privado intacto. Guía visual ampliada con las tres paletas; capturas locales y adjuntos no publicados.
 
+
+## 2026-11-03 · Micrófono móvil v3
+Integración del ZIP solicitado: seis temas locales, cuatro representaciones del micrófono, tres colores de grabación y Ajustes inferior con vibración, conexión y controles existentes. Se conservan los nodos y eventos de mobile.js; ninguna captura nueva se inicia desde la capa visual. Ajustes bloquea interacción del fondo, Escape restaura foco; animación limitada a ~30 fps, detenida en segundo plano y reducida según preferencia de movimiento.
+Validación: pnpm check y 264/264 pruebas aprobadas en el árbol de trabajo; cuatro pruebas nuevas de identidad de controles, persistencia, estados y rutas. Chrome local aislado en 8804: emparejamiento QR y una toma de tono sintético de 3 s, recepción íntegra confirmada por la UI. No voz ni API de transcripción. Vista conectada y hoja de Ajustes inspeccionadas. Dispositivo físico Samsung/iPhone pendiente; versión exacta de Chrome y red física null. Publicación pendiente de verificar.

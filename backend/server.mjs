@@ -15,6 +15,7 @@ const paths = new Map([
   ['/shared/i18n.js','apps/shared/i18n.js'], ['/shared/locale-en.js','apps/shared/locale-en.js'], ['/shared/access-language.js','apps/shared/access-language.js'],
   ['/shared/protocol.js', 'apps/shared/protocol.js'], ['/shared/client.js', 'apps/shared/client.js'],
   ['/shared/metrics.js', 'apps/shared/metrics.js'],
+  ['/shared/mobile-look.css', 'apps/shared/mobile-look.css'], ['/shared/mobile-look.js', 'apps/shared/mobile-look.js'],
   ['/style.css', 'apps/shared/style.css'], ['/qr.js', 'node_modules/qrcode-generator/dist/qrcode.js'],
   ['/receiver.css','apps/shared/style.css'],
 ]);
