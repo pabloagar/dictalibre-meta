@@ -150,8 +150,8 @@ export function mountReport(parent,{build=null,sourceHash=null,globalReview=true
   const generation=++fitGeneration,text=model.text;
   Promise.resolve(document.fonts?.ready).then(()=>window.requestAnimationFrame(()=>{
    if(generation!==fitGeneration||model.text!==text||!editor.isConnected)return;
-   const started=performance.now();setFontSize(19);
-   if(!editor.clientHeight||!editor.clientWidth){event('template-fit',{pixels:19,fits:null,reason:'layout-unavailable'});return;}
+   const started=performance.now();setFontSize(16);
+   if(!editor.clientHeight||!editor.clientWidth){event('template-fit',{pixels:16,fits:null,reason:'layout-unavailable'});return;}
    while(fontSize>14&&(editor.scrollHeight>editor.clientHeight+1||editor.scrollWidth>editor.clientWidth+1))setFontSize(fontSize-1);
    const fits=editor.scrollHeight<=editor.clientHeight+1&&editor.scrollWidth<=editor.clientWidth+1;
    editor.scrollTop=0;editor.scrollLeft=0;editor.focus({preventScroll:true});setSelection({start:0,end:0});

@@ -55,7 +55,7 @@ test('selector compacto: cerrar fuera/Escape, ajustar solo al insertar y respeta
  document.body.click();assert.equal(panel.open,false);
  panel.open=true;panel.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));assert.equal(panel.open,false);
  panel.open=true;button('Cerrar').click();assert.equal(panel.open,false);
- let height=160;
+ let height=220;
  Object.defineProperties(editor.element,{clientHeight:{get:()=>height},clientWidth:{get:()=>600},scrollHeight:{get:()=>Number.parseInt(editor.element.style.fontSize||'19')*10},scrollWidth:{get:()=>600}});
  select.value='0';panel.open=true;button('Insertar plantilla').click();await new Promise(r=>setTimeout(r,0));
  assert.equal(panel.open,false);assert.equal(editor.element.style.fontSize,'16px');assert.match(editor.model.text,/CONCLUSIÓN/);
