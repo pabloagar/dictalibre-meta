@@ -75,3 +75,14 @@ Proponer pantallas coherentes para inicio con QR, edición y sugerencia de IA. M
 Fuente de implementación: [apps/shared/style.css](https://github.com/pabloagar/dictalibre-meta/blob/codex/capture-transport/apps/shared/style.css). Identidad de archivo Git verificada contra GitHub: `c56b2b316e004e2406152d9df0d4c18a394bd787`.
 
 El CSS contiene reglas históricas y sobrescrituras. Esta guía resume la paleta final del **escritorio**, no afirma que toda la interfaz del teléfono ya use estos mismos valores. El contraste de cada composición nueva debe verificarse; no se heredan automáticamente los cálculos de versiones anteriores.
+
+## Ampliación del 03-11-2026: seis temas
+Se añaden Sala, Negatoscopio y Contraste; los anteriores y Penumbra predeterminado se conservan. Fuente exacta: los selectores finales de style.css.
+
+| Tema | Fondo | Hoja | Texto | Texto secundario | CTA IA |
+| --- | --- | --- | --- | --- | --- |
+| Sala | #18191a | #1f2021 | #b4b5b1 | #8b8d89 | #27463e |
+| Negatoscopio | #161718 | #cdc8bc | #1d1b18 | #4a463f | #2a5248 |
+| Contraste | #eceef0 | #ffffff | #0a0b0c | #33383d | #0d4f3c |
+
+Negatoscopio mantiene barras oscuras #1d1e20 con texto #bcb9b2 y secundario #8c8981; no usar la tinta oscura de la hoja sobre esas barras. Sala se identifica internamente como sala-neutral para conservar la migración histórica sala→ambar. El blanco de Contraste es una opción explícita, no el tema inicial. Solo se adoptan los colores del archivo de referencia, no sus sugerencias clínicas ni controles esquemáticos.
