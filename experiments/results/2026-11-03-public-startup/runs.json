@@ -1,0 +1,314 @@
+{
+  "at": "2026-11-03T13:01:04.062Z",
+  "url": "https://dictalibre-demo.onrender.com/live",
+  "buildObservedAfter": "89484c46fea31096a02d189b4485aec176fafb4f",
+  "conditions": {
+    "browser": "Chrome",
+    "os": "Windows",
+    "viewportCss": {
+      "height": 678,
+      "width": 1280
+    },
+    "latencyAddedMs": 300,
+    "downloadBytesPerSecond": 200000,
+    "uploadBytesPerSecond": 93750,
+    "cacheDisabled": true,
+    "repetitions": 5
+  },
+  "method": "Read-only DOM rect polling after reload resolves, nominal 150 ms gap plus tool overhead. Host Date.now from before reload; does not measure CLS or every paint. No page script injection.",
+  "clockPrecisionMs": null,
+  "instrumentationOverheadMs": null,
+  "audio": null,
+  "runs": [
+    {
+      "run": 1,
+      "rows": [
+        {
+          "elapsedMs": 1774,
+          "logo": {
+            "height": 32,
+            "width": 80,
+            "x": 24,
+            "y": 9.666666984558104
+          },
+          "qr": false,
+          "sheet": {
+            "height": 366,
+            "width": 980,
+            "x": 150,
+            "y": 112
+          },
+          "state": "loading"
+        },
+        {
+          "elapsedMs": 2501,
+          "logo": {
+            "height": 32,
+            "width": 80,
+            "x": 24,
+            "y": 9.666666984558104
+          },
+          "qr": false,
+          "sheet": {
+            "height": 366,
+            "width": 980,
+            "x": 150,
+            "y": 112
+          },
+          "state": "ready"
+        },
+        {
+          "elapsedMs": 3368,
+          "logo": {
+            "height": 32,
+            "width": 80,
+            "x": 24,
+            "y": 9.666666984558104
+          },
+          "qr": true,
+          "sheet": {
+            "height": 366,
+            "width": 980,
+            "x": 150,
+            "y": 112
+          },
+          "state": "ready"
+        }
+      ],
+      "completed": true,
+      "elapsedMs": 4102
+    },
+    {
+      "run": 2,
+      "rows": [
+        {
+          "elapsedMs": 1848,
+          "logo": {
+            "height": 32,
+            "width": 80,
+            "x": 24,
+            "y": 9.666666984558104
+          },
+          "qr": false,
+          "sheet": {
+            "height": 366,
+            "width": 980,
+            "x": 150,
+            "y": 112
+          },
+          "state": "loading"
+        },
+        {
+          "elapsedMs": 2574,
+          "logo": {
+            "height": 32,
+            "width": 80,
+            "x": 24,
+            "y": 9.666666984558104
+          },
+          "qr": false,
+          "sheet": {
+            "height": 366,
+            "width": 980,
+            "x": 150,
+            "y": 112
+          },
+          "state": "ready"
+        },
+        {
+          "elapsedMs": 3337,
+          "logo": {
+            "height": 32,
+            "width": 80,
+            "x": 24,
+            "y": 9.666666984558104
+          },
+          "qr": true,
+          "sheet": {
+            "height": 366,
+            "width": 980,
+            "x": 150,
+            "y": 112
+          },
+          "state": "ready"
+        }
+      ],
+      "completed": true,
+      "elapsedMs": 4107
+    },
+    {
+      "run": 3,
+      "rows": [
+        {
+          "elapsedMs": 1692,
+          "logo": {
+            "height": 32,
+            "width": 80,
+            "x": 24,
+            "y": 9.666666984558104
+          },
+          "qr": false,
+          "sheet": {
+            "height": 366,
+            "width": 980,
+            "x": 150,
+            "y": 112
+          },
+          "state": "loading"
+        },
+        {
+          "elapsedMs": 2419,
+          "logo": {
+            "height": 32,
+            "width": 80,
+            "x": 24,
+            "y": 9.666666984558104
+          },
+          "qr": false,
+          "sheet": {
+            "height": 366,
+            "width": 980,
+            "x": 150,
+            "y": 112
+          },
+          "state": "ready"
+        },
+        {
+          "elapsedMs": 3114,
+          "logo": {
+            "height": 32,
+            "width": 80,
+            "x": 24,
+            "y": 9.666666984558104
+          },
+          "qr": true,
+          "sheet": {
+            "height": 366,
+            "width": 980,
+            "x": 150,
+            "y": 112
+          },
+          "state": "ready"
+        }
+      ],
+      "completed": true,
+      "elapsedMs": 3811
+    },
+    {
+      "run": 4,
+      "rows": [
+        {
+          "elapsedMs": 1695,
+          "logo": {
+            "height": 32,
+            "width": 80,
+            "x": 24,
+            "y": 9.666666984558104
+          },
+          "qr": false,
+          "sheet": {
+            "height": 366,
+            "width": 980,
+            "x": 150,
+            "y": 112
+          },
+          "state": "loading"
+        },
+        {
+          "elapsedMs": 2439,
+          "logo": {
+            "height": 32,
+            "width": 80,
+            "x": 24,
+            "y": 9.666666984558104
+          },
+          "qr": false,
+          "sheet": {
+            "height": 366,
+            "width": 980,
+            "x": 150,
+            "y": 112
+          },
+          "state": "ready"
+        },
+        {
+          "elapsedMs": 3297,
+          "logo": {
+            "height": 32,
+            "width": 80,
+            "x": 24,
+            "y": 9.666666984558104
+          },
+          "qr": true,
+          "sheet": {
+            "height": 366,
+            "width": 980,
+            "x": 150,
+            "y": 112
+          },
+          "state": "ready"
+        }
+      ],
+      "completed": true,
+      "elapsedMs": 4018
+    },
+    {
+      "run": 5,
+      "rows": [
+        {
+          "elapsedMs": 1677,
+          "logo": {
+            "height": 32,
+            "width": 80,
+            "x": 24,
+            "y": 9.666666984558104
+          },
+          "qr": false,
+          "sheet": {
+            "height": 366,
+            "width": 980,
+            "x": 150,
+            "y": 112
+          },
+          "state": "loading"
+        },
+        {
+          "elapsedMs": 2542,
+          "logo": {
+            "height": 32,
+            "width": 80,
+            "x": 24,
+            "y": 9.666666984558104
+          },
+          "qr": false,
+          "sheet": {
+            "height": 366,
+            "width": 980,
+            "x": 150,
+            "y": 112
+          },
+          "state": "ready"
+        },
+        {
+          "elapsedMs": 3231,
+          "logo": {
+            "height": 32,
+            "width": 80,
+            "x": 24,
+            "y": 9.666666984558104
+          },
+          "qr": true,
+          "sheet": {
+            "height": 366,
+            "width": 980,
+            "x": 150,
+            "y": 112
+          },
+          "state": "ready"
+        }
+      ],
+      "completed": true,
+      "elapsedMs": 3945
+    }
+  ]
+}
