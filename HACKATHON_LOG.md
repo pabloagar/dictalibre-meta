@@ -820,3 +820,5 @@ Render verificado: ad89628e41a4e658b61b4875e32d936176dea6a1, deployment 75263408
 
 ## 2026-11-03 · Acciones tras vista previa
 La barra live reubica los botones fuera de controls: el listener de cierre de preview no recibía sus clics. Se delega en document para conservar el cierre inmediato con Nuevo, Deshacer, Rehacer, Copiar y Revisar. Prueba reproducible clinical-ui abre preview y ejecuta undo/redo/new con barra reubicada; exige preview oculto y editor visible. Una ejecución Happy DOM, 266/266 y check OK. Audio/red/dispositivo: null; no validación física ni garantía de todas las combinaciones. Despliegue pendiente.
+
+Despliegue confirmado: 7526416278 success 2026-11-03T17:51:21Z; API build 34b9e0d1153cdbe91bc00e7cef5b4d9fccbd7135. active=0 antes del push.
