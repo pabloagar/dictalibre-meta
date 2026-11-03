@@ -102,9 +102,10 @@ for(const savedTheme of [null,'sala'])test('montaje completo, controles y tema g
  assert.equal(document.querySelectorAll('.clinical-record').length,1);
  assert.equal(document.querySelectorAll('.sex-control').length,1);assert.ok(document.querySelector('.dictation-canvas > .clinical-editbar .sex-control'));assert.equal(document.querySelector('header .sex-control'),null);
  assert.equal(document.querySelector('.clinical-settings').open,false);
+ assert.equal(document.querySelector('.report-undo').textContent,'↶');assert.equal(document.querySelector('.report-redo').textContent,'↷');assert.ok(document.querySelector('.brand-stack .language-buttons'));assert.equal(document.querySelectorAll('.language-buttons button').length,2);
  assert.ok(document.querySelector('.clinical-editbar .report-redo'));
- assert.equal(document.querySelector('.template-library-panel').nextElementSibling,document.querySelector('.clinical-settings'));
- assert.equal(document.querySelector('.template-library-panel summary').textContent,'Plantilla');
+ assert.equal(document.querySelector('.template-library-panel').nextElementSibling,document.querySelector('.report-new'));
+ assert.equal(document.querySelector('.template-library-panel summary').textContent,'Plantillas');
  assert.ok(document.querySelector('.clinical-notes .report-global-review'));
  const connection=document.querySelector('.connection-panel'),pairing=document.querySelector('.pairing');
  assert.equal(document.querySelector('.scan-home').hidden,false);assert.ok(document.querySelector('.scan-home').contains(pairing));assert.equal(document.querySelectorAll('#qr').length,1);

@@ -135,7 +135,8 @@ const settingsMain=make('div','settings-main'),settingsClose=make('button','sett
 const pages={dictado:dictationSettings,apariencia:appearance,ayuda:howTo};
 const showSettingsPage=name=>{for(const [key,page] of Object.entries(pages))page.hidden=key!==name;for(const button of settingsNav.querySelectorAll('button'))button.setAttribute('aria-current',button.dataset.page===name?'page':'false');track('settings-page',{page:name});};
 for(const [name,title] of [['dictado',tr('Dictado')],['apariencia',tr('Apariencia')],['ayuda',tr('Cómo usar')]]){const button=make('button','settings-tab',title);button.dataset.page=name;button.onclick=()=>showSettingsPage(name);settingsNav.append(button);}showSettingsPage('dictado');
-const brandLanguages=make('div','brand-languages');brand.after(brandLanguages);
+const brandStack=make('div','brand-stack');brand.before(brandStack);brandStack.append(brand);
+const brandLanguages=make('div','brand-languages');brandStack.append(brandLanguages);
 const languageSelect=mountLanguageSwitch(brandLanguages,()=>!reportEditor.model.pending&&!recordingEngine);
 languageSelect.parentElement.hidden=true;
 const languageButtons=make('div','language-buttons');languageButtons.setAttribute('role','group');languageButtons.setAttribute('aria-label','Language / Idioma');brandLanguages.append(languageButtons);
@@ -270,7 +271,10 @@ reportEditor.element.addEventListener('report-new',()=>{writeMode=false;syncScan
 connection.querySelector('summary').addEventListener('click',e=>{if(!scanHome.hidden){e.preventDefault();scanHome.scrollIntoView({block:'center',behavior:'smooth'});if(!connectButton.disabled)connectButton.click();}});
 syncScanHome();
 // Compact actions retain accessible names and keyboard behavior.
-for(const [selector,glyph] of [['.report-undo',tr('Deshacer')],['.report-redo',tr('Rehacer')]]){const b=editbar.querySelector(selector);b.setAttribute('aria-label',b.textContent);b.title=b.textContent;b.textContent=glyph;}
+for(const [selector,glyph] of [['.report-undo','↶'],['.report-redo','↷']]){const b=editbar.querySelector(selector);b.setAttribute('aria-label',b.textContent);b.title=b.textContent;b.textContent=glyph;}
+const newReportControl=editbar.querySelector('.report-new');newReportControl.setAttribute('aria-label',tr('Nuevo informe'));newReportControl.textContent='+ '+(language()==='en'?'New':'Nuevo');
+const templateSummary=templatePanel.querySelector('summary');templateSummary.textContent=language()==='en'?'Templates':'Plantillas';
+newReportControl.before(templatePanel);
 sizeControls.firstChild.textContent='';
 for(const [i,b] of [...sizeControls.querySelectorAll('button')].entries()){b.title=b.getAttribute('aria-label');b.textContent=i?'＋':'−';}
 const quickLabel=make('p','quick-template-label',tr('O empieza con una plantilla'));

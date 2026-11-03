@@ -827,4 +827,29 @@ body.clinical-workspace[data-theme=penumbra]{--dl-bg:#131416;--dl-sheet:#1c1f24;
 .clinical-workspace .language-buttons button{border:0;background:transparent;color:var(--dl-muted);font-size:10px;min-height:32px;padding:4px 5px;letter-spacing:.04em}
 .clinical-workspace .language-buttons button[aria-pressed=true]{color:var(--dl-ink);text-decoration:underline;text-underline-offset:4px;font-weight:600}
 .clinical-workspace .language-buttons button+button{border-left:1px solid var(--dl-line);border-radius:0}
-.clinical-workspace .clinical-editbar>.report-undo,.clinical-workspace .clinical-editbar>.report-redo{width:auto;font-size:12px;padding:4px 8px}
+/* Restore Stitch action geometry; language choice stays inside the brand column. */
+.clinical-workspace .clinical-editbar>.report-undo,.clinical-workspace .clinical-editbar>.report-redo{width:32px;font-size:20px;padding:0}
+.clinical-workspace .brand-stack{display:flex;flex-direction:column;align-items:flex-start;flex:0 0 80px;gap:0}
+.clinical-workspace .brand-stack .clinical-brand{min-height:0;padding:0;line-height:1}
+.clinical-workspace .brand-stack .language-buttons button{font-size:9px;min-height:18px;padding:0 5px;line-height:18px}
+.clinical-workspace .brand-stack .language-buttons button:first-child{padding-left:0}
+.clinical-workspace .clinical-start>.connection-panel{min-width:0}
+.clinical-workspace .clinical-start>.connection-panel>summary{max-width:100%;box-sizing:border-box}
+
+
+/* Compact Stitch geometry overrides legacy, more-specific toolbar rules. */
+.clinical-workspace .dictation-canvas>.clinical-editbar{min-height:28px;gap:6px;padding-bottom:12px}
+.clinical-workspace .dictation-canvas>.clinical-editbar>button,
+.clinical-workspace .dictation-canvas>.clinical-editbar>.template-library-panel>summary,
+.clinical-workspace .dictation-canvas>.clinical-editbar>.clinical-settings>summary{box-sizing:border-box;min-height:26px;height:26px;padding:3px 9px;font-size:11px;line-height:18px;font-weight:500}
+.clinical-workspace .dictation-canvas>.clinical-editbar>.report-undo,
+.clinical-workspace .dictation-canvas>.clinical-editbar>.report-redo{font-size:17px;padding:0;width:28px;border:0}
+.clinical-workspace .dictation-canvas>.clinical-editbar>.template-library-panel{margin-left:auto}
+.clinical-workspace .dictation-canvas>.clinical-editbar>.report-new,
+.clinical-workspace .dictation-canvas>.clinical-editbar>.clinical-settings{margin-left:0}
+.clinical-workspace .dictation-canvas .size-controls,.clinical-workspace .dictation-canvas .sex-control{height:26px;min-height:26px}
+.clinical-workspace .dictation-canvas .size-controls button,.clinical-workspace .dictation-canvas .sex-control button{height:24px;min-height:24px;padding:0 7px;font-size:10px}
+.clinical-workspace .dictation-canvas .size-controls{margin:0 8px;gap:0}
+.clinical-workspace .dictation-canvas .report-font-value{min-width:33px;font-size:10px}
+.clinical-workspace .clinical-topbar .primary-actions button{min-height:28px;height:28px;font-size:11px;padding:3px 12px;line-height:20px}
+.clinical-workspace .clinical-start>.connection-panel>summary{font-size:9px;padding:3px 8px;line-height:16px}
