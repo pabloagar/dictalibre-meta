@@ -459,3 +459,6 @@ Hipótesis: mostrar la hoja inicial desde el HTML elimina la pantalla centrada d
 
 ## Inicio estable — 2026-11-03
 Hipótesis: compartir logo, ancho y alturas de cabecera/hoja y reservar 226 px para emparejamiento evita el salto observado al llegar el QR. Criterio: hoja inicial y final vacía mantienen geometría a mismo viewport; ocultar QR no reduce hoja; logo usa idéntico SVG; aviso dicta-ready ocurre después de montar pie y conexión. Transición solo opacidad 180 ms, anulada con prefers-reduced-motion. Pruebas DOM reproducibles con pnpm test; comprobar rectángulos en Chrome antes/después a igual viewport. Latencia, CLS global y sobrecosto: null, no inferir aceleración. Sin audio ni datos clínicos.
+
+
+2026-11-03 · Recargas de inicio con red emulada: protocolo, condiciones y resultados en experiments/results/2026-11-03-startup-network/README.md. Seis cargas completas con delta de hoja 0 px; un error de arranque sin causa establecida. No aprobar globalmente todas las cargas ni descartar el fallo. Scripts de reproducción en scripts/test-startup-server.mjs y scripts/startup-observer.js.
