@@ -186,3 +186,6 @@ window.addEventListener('pagehide', () => client?.close());
 
 $('restart').onclick=()=>{window.dispatchEvent(new Event('dicta-new-session'));client?.send({type:'close'});client?.close();sessionStorage.setItem('dicta-restart','1');location.reload();};
 if(sessionStorage.getItem('dicta-restart')==='1'){sessionStorage.removeItem('dicta-restart');$('create').click();}
+
+// Begin the real pairing flow after all transport handlers are installed.
+if(location.pathname==='/live'&&!$('create').disabled&&$('pairing').hidden&&$('paired').hidden)$('create').click();

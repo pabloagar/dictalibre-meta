@@ -242,3 +242,29 @@ window.addEventListener('dicta-take',async event=>{
 // Reveal only after the complete workspace has mounted successfully.
 window.dispatchEvent(new window.Event('dicta-ready'));
 
+
+// Direct pairing uses the original controls and transport, never a sample QR.
+const scanHome=make('section','scan-home');
+scanHome.setAttribute('aria-label','Conectar teléfono');
+const scanTitle=make('h2','','Escanea para dictar');
+const scanHint=make('p','','Usa la cámara de tu teléfono. También puedes escribir directamente.');
+const writeInstead=make('button','write-without-phone','Escribir sin teléfono');
+writeInstead.type='button';
+scanHome.append(scanTitle,scanHint,writeInstead);sheetHead.after(scanHome);
+let writeMode=false;
+writeInstead.onclick=()=>{writeMode=true;syncScanHome();reportEditor.element.focus();};
+const syncScanHome=()=>{
+ const visible=reportEditor.element.dataset.empty==='true'&&document.querySelector('#paired').hidden&&!writeMode;
+ scanHome.hidden=!visible;sheet.classList.toggle('scan-first',visible);
+ if(visible&&pairing.parentElement!==scanHome){pairing.removeAttribute('style');scanHome.prepend(pairing);connection.open=false;}
+ else if(!visible&&pairing.parentElement===scanHome){connection.append(pairing);}
+};
+new MutationObserver(syncScanHome).observe(reportEditor.element,{attributes:true,attributeFilter:['data-empty']});
+new MutationObserver(syncScanHome).observe(document.querySelector('#paired'),{attributes:true,attributeFilter:['hidden']});
+reportEditor.element.addEventListener('report-new',()=>{writeMode=false;syncScanHome();});
+connection.querySelector('summary').addEventListener('click',e=>{if(!scanHome.hidden){e.preventDefault();scanHome.scrollIntoView({block:'center',behavior:'smooth'});if(!connectButton.disabled)connectButton.click();}});
+syncScanHome();
+const sheetFooter=make('footer','sheet-footer');sheet.append(sheetFooter);
+const updateCount=()=>{const text=reportEditor.model.text;sheetFooter.textContent=`${text.trim()?text.trim().split(/\s+/u).length:0} palabras · ${text.length} caracteres`;};
+new MutationObserver(updateCount).observe(reportEditor.element,{childList:true,subtree:true,characterData:true});updateCount();
+

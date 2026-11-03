@@ -107,7 +107,8 @@ for(const savedTheme of [null,'sala'])test('montaje completo, controles y tema g
  assert.equal(document.querySelector('.template-library-panel summary').textContent,'Plantilla');
  assert.ok(document.querySelector('.clinical-notes .report-global-review'));
  const connection=document.querySelector('.connection-panel'),pairing=document.querySelector('.pairing');
- const paired=document.querySelector('#paired');paired.hidden=false;paired.dataset.paused='true';await new Promise(r=>setTimeout(r,0));assert.equal(connection.querySelector('summary').textContent,'Teléfono en pausa');paired.dataset.paused='false';await new Promise(r=>setTimeout(r,0));assert.equal(connection.querySelector('summary').textContent,'Teléfono conectado');paired.hidden=true;
+ assert.equal(document.querySelector('.scan-home').hidden,false);assert.ok(document.querySelector('.scan-home').contains(pairing));assert.equal(document.querySelectorAll('#qr').length,1);
+ const paired=document.querySelector('#paired');paired.hidden=false;paired.dataset.paused='true';await new Promise(r=>setTimeout(r,0));assert.equal(connection.querySelector('summary').textContent,'Teléfono en pausa');paired.dataset.paused='false';await new Promise(r=>setTimeout(r,0));assert.equal(connection.querySelector('summary').textContent,'Teléfono conectado');assert.equal(document.querySelector('.scan-home').hidden,true);assert.ok(connection.contains(pairing));assert.equal(document.querySelector('.report-editor').textContent,'');paired.hidden=true;
  let sessionRequests=0;const create=document.querySelector('#create');create.onclick=()=>{sessionRequests++;create.disabled=true;};
  connection.querySelector('summary').getBoundingClientRect=()=>({left:240,bottom:60});
  connection.open=true;connection.dispatchEvent(new window.Event('toggle'));
