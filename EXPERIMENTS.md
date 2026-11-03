@@ -462,3 +462,7 @@ Hipótesis: compartir logo, ancho y alturas de cabecera/hoja y reservar 226 px p
 
 
 2026-11-03 · Recargas de inicio con red emulada: protocolo, condiciones y resultados en experiments/results/2026-11-03-startup-network/README.md. Seis cargas completas con delta de hoja 0 px; un error de arranque sin causa establecida. No aprobar globalmente todas las cargas ni descartar el fallo. Scripts de reproducción en scripts/test-startup-server.mjs y scripts/startup-observer.js.
+
+
+## Diagnóstico del arranque lento — 2026-11-03
+Hipótesis antes de comparar: el temporizador de 20 s declara error mientras el recurso sigue pendiente. Reproducción: servidor de prueba con STARTUP_DELAY_LIVE_MS=24000 y emulación Chrome 300 ms/200000 B/s. Antes: mensaje de error conservado aun después de carga correcta, QR a 26551 ms; la causa exacta del fallo original sigue sin determinar. Corrección: a los 20 s estado slow, continúa carga; error real conserva estado error y reintento. Criterio posterior: ensayo de demora forzada cruza slow, nunca error, finaliza con QR sin intervención; cinco recargas lentas completan con delta de hoja/logo <=1 px. Caché desactivada; observar estados y errores con scripts/startup-observer.js, sin datos de informes. Plazo observación 35 s, muestreo rAF más respaldo 250 ms para pestañas inactivas, costo de muestreo medido en sampleCostMs; no incluye todo el sobrecosto ni mide CLS. Conservar resultados fallidos.

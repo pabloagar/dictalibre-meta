@@ -24,9 +24,18 @@ test('arranque muestra hoja sin intersticial ni reintento, conserva tema y mide 
  window.dispatchEvent(new window.Event('dicta-ready'));assert.equal(root.hasAttribute('data-boot'),false);assert.equal(root.hasAttribute('data-boot-theme'),false);assert.equal(measures.length,1);
  await window.happyDOM.close();
 });
-test('error o espera agotada ofrece reintento sin mostrar interfaz antigua',async()=>{
- for(const kind of ['error','timeout']){const s=setup();if(kind==='error')s.window.dispatchEvent(new s.window.Event('dicta-startup-error'));else s.timeout();
- assert.equal(s.window.document.documentElement.dataset.boot,'error');assert.equal(s.window.getComputedStyle(s.window.document.querySelector('.boot-error')).display,'block');assert.match(s.window.document.querySelector('#dicta-boot-message').textContent,/No se pudo/);
+test('una carga lenta sigue pendiente y se recupera automáticamente al montar',async()=>{
+ const s=setup();s.timeout();const root=s.window.document.documentElement;
+ assert.equal(root.dataset.boot,'slow');assert.equal(s.window.getComputedStyle(s.window.document.querySelector('.boot-error')).display,'block');
+ assert.match(s.window.document.querySelector('#dicta-boot-message').textContent,/continuará automáticamente/);
+ assert.equal(s.window.document.querySelector('#dicta-boot-message').getAttribute('role'),'status');
+ s.window.dispatchEvent(new s.window.Event('dicta-ready'));assert.equal(root.hasAttribute('data-boot'),false);
+ assert.equal(s.measures.length,1);await s.window.happyDOM.close();
+});
+test('un error real incluso después de una espera permite reintentar',async()=>{
+ for(const slow of [false,true]){const s=setup();if(slow)s.timeout();s.window.dispatchEvent(new s.window.Event('dicta-startup-error'));s.timeout();
+ assert.equal(s.window.document.documentElement.dataset.boot,'error');assert.match(s.window.document.querySelector('#dicta-boot-message').textContent,/No se pudo/);
+ assert.equal(s.window.document.querySelector('#dicta-boot-message').getAttribute('role'),'alert');
  assert.equal(s.window.getComputedStyle(s.window.document.querySelector('.shell')).display,'none');assert.equal(s.window.document.querySelector('#dicta-boot a').getAttribute('href'),'/live');await s.window.happyDOM.close();}
 });
 

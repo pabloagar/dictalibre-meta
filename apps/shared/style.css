@@ -557,7 +557,7 @@ html[data-boot] #dicta-boot {display:block;min-height:100dvh;box-sizing:border-b
 #dicta-boot .boot-paper{margin:24px auto 0;width:calc(100% - 48px);max-width:1400px;min-height:calc(100dvh - 126px);box-sizing:border-box;border:1px solid #ffffff18;background:#ffffff04;padding:26px 44px}
 #dicta-boot .boot-paper-heading{height:32px;border-bottom:1px solid #ffffff18}
 #dicta-boot .boot-error{display:none}
-html[data-boot="error"] #dicta-boot .boot-error{display:block;position:fixed;bottom:24px;left:24px;right:24px;padding:16px;background:#191b1e;color:#c4c9ce;border:1px solid #646a70;border-radius:8px}
+html[data-boot="error"] #dicta-boot .boot-error,html[data-boot="slow"] #dicta-boot .boot-error{display:block;position:fixed;bottom:24px;left:24px;right:24px;padding:16px;background:#191b1e;color:#c4c9ce;border:1px solid #646a70;border-radius:8px}
 @media(max-width:760px){#dicta-boot .boot-paper{width:calc(100% - 16px);margin-top:8px;padding:20px 14px}}
 #dicta-boot a {color:inherit}
 html[data-boot-theme="penumbra"] {background:#0e0f10;color:#c4c9ce}
