@@ -1,5 +1,11 @@
 // English UI catalogue. Keys are application-owned Spanish literals; never report text.
 export const EN = {
+  "Escanea para dictar": "Scan to dictate",
+  "Tu teléfono funciona como micrófono.": "Your phone becomes your microphone.",
+  "Escribir sin teléfono": "Type without a phone",
+  "O empieza con una plantilla": "Or start with a template",
+  "Micrófono en espera": "Microphone on standby",
+  "{} palabras · {} caracteres": "{} words · {} characters",
   "DICTADO · MUSE / WHISPER": "DICTATION · MUSE / WHISPER",
   "dicta · CAPTURA → MOTOR ELEGIDO → TEXTO": "dicta · CAPTURE → SELECTED ENGINE → TEXT",
   "Por integrar:": "To integrate:",

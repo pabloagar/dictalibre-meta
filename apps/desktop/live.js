@@ -56,7 +56,7 @@ function showFigureDoubts(warnings){
 }
 // Hoja clínica: preserve the mounted editor, transport controls and listeners.
 document.body.classList.add('live-workspace','clinical-workspace');
-const layoutMetrics={language:language(),version:'propuesta-b-rev3+rediseno-v1',settingsVersion:'dictado-agrupado-v1',serverBuild:initialState.build??null,serverSourceHash:initialState.sourceHash??null,createdAt:new Date().toISOString(),browser:navigator.userAgent,device:null,network:null,audioSource:null,clockResolutionMs:null,instrumentationOverheadMs:null,audioMeter:{updates:0,totalPaintMs:0,maxPaintMs:0,source:'received-pcm-rms'},events:[]};
+const layoutMetrics={language:language(),version:'stitch-direct-dictation-v2',settingsVersion:'dictado-agrupado-v1',serverBuild:initialState.build??null,serverSourceHash:initialState.sourceHash??null,createdAt:new Date().toISOString(),browser:navigator.userAgent,device:null,network:null,audioSource:null,clockResolutionMs:null,instrumentationOverheadMs:null,audioMeter:{updates:0,totalPaintMs:0,maxPaintMs:0,source:'received-pcm-rms'},events:[]};
 const track=(type,data={})=>{layoutMetrics.events.push({type,atMs:performance.now(),...data});if(layoutMetrics.events.length>500)layoutMetrics.events.shift();};
 const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text)n.textContent=text;return n;};
 const makeDetails=(label,cls)=>{const d=make('details',cls);d.append(make('summary','',label));return d;};
@@ -78,10 +78,10 @@ new MutationObserver(syncConnection).observe(document.querySelector('#paired'),{
 const settings=makeDetails(tr('Ajustes'),'clinical-settings');const editbar=make('div','clinical-editbar');editbar.setAttribute('role','toolbar');editbar.setAttribute('aria-label',tr('Edición del informe'));report.prepend(editbar);editbar.append(controls.querySelector('.report-undo'),controls.querySelector('.report-redo'));
 const settingsBody=make('div','settings-body');settings.append(settingsBody);settingsBody.append(engineLabel,glossaryLabel,segmentationLabel,reviewLabel,commandsLabel,engineHint,commandHelp);
 const sizeControls=make('div','size-controls',tr('Texto '));sizeControls.append(controls.querySelector(tr('[aria-label="Reducir tamaño del informe"]')),controls.querySelector('.report-font-value'),controls.querySelector(tr('[aria-label="Aumentar tamaño del informe"]')));editbar.append(sizeControls,controls.querySelector('.report-new'),templatePanel,settings);
-function resolveTheme(saved){return saved==='sala'?'ambar':['dia','penumbra','ambar'].includes(saved)?saved:'dia';}
+function resolveTheme(saved){return saved==='sala'?'ambar':['dia','penumbra','ambar'].includes(saved)?saved:'penumbra';}
 const primaryActions=make('div','primary-actions');primaryActions.append(controls.querySelector('.report-review-button'),controls.querySelector('.report-copy'));
 const startControls=make('div','clinical-start');startControls.append(brand,connection);controls.classList.add('clinical-topbar');controls.replaceChildren(startControls,strip,primaryActions);
-let theme='dia';try{const saved=localStorage.getItem('dicta-theme-v1');theme=resolveTheme(saved);if(saved==='sala')localStorage.setItem('dicta-theme-v1',theme);}catch{}
+let theme='penumbra';try{const saved=localStorage.getItem('dicta-theme-v1');theme=resolveTheme(saved);if(saved==='sala')localStorage.setItem('dicta-theme-v1',theme);}catch{}
 const appearance=make('section','appearance-panel');appearance.append(make('h3','',tr('Apariencia')));
 const themeCards=make('div','theme-cards');themeCards.setAttribute('role','radiogroup');themeCards.setAttribute('aria-label',tr('Tema'));appearance.append(themeCards);
 const themeDescriptions={dia:tr('Hueso atenuado para una sala con luz.'),penumbra:tr('Grafito neutro y acento azul apagado.'),ambar:tr('Sepia profundo y acento ámbar.')};
@@ -101,7 +101,7 @@ const transcript=document.querySelector('.transcript');document.querySelector('.
 const desk=make('div','clinical-desk'),sheet=make('div','clinical-sheet'),sheetHead=make('div','sheet-head');
 sheetHead.append(make('span','',tr('Informe radiológico · documento en curso')));
 sizeControls.after(sex);
-reportEditor.element.before(desk);desk.append(sheet);sheet.append(editbar,sheetHead,reportEditor.element);
+reportEditor.element.before(desk);const canvas=make('div','dictation-canvas');desk.append(canvas);canvas.append(editbar,sheet);sheet.append(sheetHead,reportEditor.element);
 const margin=make('aside','clinical-notes');margin.setAttribute('aria-label',tr('Notas del estudio'));desk.append(margin);
 const connectionNote=make('section','clinical-note neutral');connectionNote.append(make('h2','',tr('Estado del teléfono')),document.querySelector('#record-help'));settingsBody.append(connectionNote);
 const glossaryText=make('p','tiny');
@@ -154,7 +154,7 @@ const syncFirstHelp=()=>{emptyGuide.hidden=reportEditor.element.dataset.empty!==
 // Segmented buttons drive the same selects; no changes to engine or transport logic.
 for(const select of [engineSelect,segmentationSelect,glossary]){const group=make('div','settings-segments');group.setAttribute('role','group');group.setAttribute('aria-label',select.getAttribute('aria-label'));if(select.hasAttribute('aria-describedby'))group.setAttribute('aria-describedby',select.getAttribute('aria-describedby'));select.hidden=true;select.after(group);const sync=()=>{group.replaceChildren();for(const option of select.options){const b=make('button','',option.textContent);b.type='button';b.disabled=select.disabled;b.setAttribute('aria-pressed',String(select.value===option.value));b.onclick=()=>{select.value=option.value;select.dispatchEvent(new window.Event('change'));sync();};group.append(b);}};sync();select.addEventListener('change',sync);new MutationObserver(sync).observe(select,{attributes:true,attributeFilter:['disabled']});}
 commandsToggle.setAttribute('role','switch');
-const status=document.querySelector('#status');status.classList.add('clinical-status');editbar.after(status);
+const status=document.querySelector('#status');status.classList.add('clinical-status');sheetHead.before(status);
 margin.append(reportEditor.reviewPanel);
 const level=document.querySelector('#level'),bars=make('span','audio-bars');bars.setAttribute('aria-hidden','true');for(let i=0;i<9;i++)bars.append(make('i',''));level.after(bars);
 const paintLevel=()=>{const paintStart=performance.now();const value=Math.max(0,Math.min(1,Number(level.value)||0));for(const [i,bar] of [...bars.children].entries()){const lit=value>(i+1)/12;bar.style.height=(3+(lit?value*(13-Math.abs(i-4)):0))+'px';bar.classList.toggle('lit',lit);}const elapsed=performance.now()-paintStart;layoutMetrics.audioMeter.updates++;layoutMetrics.audioMeter.totalPaintMs+=elapsed;layoutMetrics.audioMeter.maxPaintMs=Math.max(layoutMetrics.audioMeter.maxPaintMs,elapsed);};new MutationObserver(paintLevel).observe(level,{attributes:true,attributeFilter:['value']});paintLevel();
@@ -162,7 +162,7 @@ const layoutExport=make('button','',tr('Exportar mediciones de disposición'));d
 for(const [name,element] of [['connection',connection],['settings',settings],['templates',templatePanel],['takes-review',takes],['diagnostics',diagnostics],['advanced-settings',advanced]])element.addEventListener('toggle',()=>track('panel-toggle',{panel:name,open:element.open}));
 document.addEventListener('report-layer-open',()=>{for(const p of [connection,settings,templatePanel])p.open=false;});
 for(const popup of [connection,settings,templatePanel])popup.addEventListener('toggle',()=>{if(popup.open)document.dispatchEvent(new CustomEvent('report-close-confirm'));if(popup.open)for(const other of [connection,settings,templatePanel])if(other!==popup)other.open=false;});
-const positionPopup=(popup,body,right=false)=>{if(!popup.open)return;const anchor=popup.querySelector('summary').getBoundingClientRect(),top=Math.max(8,Math.min(anchor.bottom+8,window.innerHeight-100)),width=Math.min(right?780:420,window.innerWidth-32);body.style.width=width+'px';body.style.left=(right?Math.max(8,window.innerWidth-width-16):Math.max(8,Math.min(anchor.left,window.innerWidth-width-8)))+'px';body.style.top=top+'px';body.style.maxHeight=Math.max(80,window.innerHeight-top-12)+'px';};
+const positionPopup=(popup,body,right=false)=>{if(!popup.open||body.parentElement?.classList.contains('scan-home'))return;const anchor=popup.querySelector('summary').getBoundingClientRect(),top=Math.max(8,Math.min(anchor.bottom+8,window.innerHeight-100)),width=Math.min(right?780:420,window.innerWidth-32);body.style.width=width+'px';body.style.left=(right?Math.max(8,window.innerWidth-width-16):Math.max(8,Math.min(anchor.left,window.innerWidth-width-8)))+'px';body.style.top=top+'px';body.style.maxHeight=Math.max(80,window.innerHeight-top-12)+'px';};
 const positionPopups=()=>{positionPopup(connection,pairing);positionPopup(templatePanel,templatePanel.querySelector('.template-picker'),true);};
 for(const popup of [connection,templatePanel])popup.addEventListener('toggle',positionPopups);
 window.addEventListener('resize',positionPopups);window.addEventListener('scroll',positionPopups,{capture:true,passive:true});
@@ -246,11 +246,11 @@ window.dispatchEvent(new window.Event('dicta-ready'));
 // Direct pairing uses the original controls and transport, never a sample QR.
 const scanHome=make('section','scan-home');
 scanHome.setAttribute('aria-label','Conectar teléfono');
-const scanTitle=make('h2','','Escanea para dictar');
-const scanHint=make('p','','Usa la cámara de tu teléfono. También puedes escribir directamente.');
-const writeInstead=make('button','write-without-phone','Escribir sin teléfono');
+const scanTitle=make('h2','scan-title',tr('Escanea para dictar'));
+const scanHint=make('p','scan-hint',tr('Tu teléfono funciona como micrófono.'));
+const writeInstead=make('button','write-without-phone',tr('Escribir sin teléfono'));
 writeInstead.type='button';
-scanHome.append(scanTitle,scanHint,writeInstead);sheetHead.after(scanHome);
+pairing.querySelector('#code').before(scanTitle,scanHint);scanHome.append(writeInstead);sheetHead.after(scanHome);
 let writeMode=false;
 writeInstead.onclick=()=>{writeMode=true;syncScanHome();reportEditor.element.focus();};
 const syncScanHome=()=>{
@@ -264,7 +264,15 @@ new MutationObserver(syncScanHome).observe(document.querySelector('#paired'),{at
 reportEditor.element.addEventListener('report-new',()=>{writeMode=false;syncScanHome();});
 connection.querySelector('summary').addEventListener('click',e=>{if(!scanHome.hidden){e.preventDefault();scanHome.scrollIntoView({block:'center',behavior:'smooth'});if(!connectButton.disabled)connectButton.click();}});
 syncScanHome();
-const sheetFooter=make('footer','sheet-footer');sheet.append(sheetFooter);
-const updateCount=()=>{const text=reportEditor.model.text;sheetFooter.textContent=`${text.trim()?text.trim().split(/\s+/u).length:0} palabras · ${text.length} caracteres`;};
+// Compact actions retain accessible names and keyboard behavior.
+for(const [selector,glyph] of [['.report-undo','↶'],['.report-redo','↷']]){const b=editbar.querySelector(selector);b.setAttribute('aria-label',b.textContent);b.title=b.textContent;b.textContent=glyph;}
+sizeControls.firstChild.textContent='';
+for(const [i,b] of [...sizeControls.querySelectorAll('button')].entries()){b.title=b.getAttribute('aria-label');b.textContent=i?'＋':'−';}
+const quickLabel=make('p','quick-template-label',tr('O empieza con una plantilla'));
+reportEditor.quickTemplates.before(quickLabel);
+const sheetFooter=make('footer','sheet-footer'),countLabel=make('span',''),connectionLabel=make('span','');sheetFooter.append(countLabel,connectionLabel);sheet.append(sheetFooter);
+const updateFooterConnection=()=>{connectionLabel.textContent=document.querySelector('#paired').hidden?tr('Micrófono en espera'):document.querySelector('#paired').dataset.paused==='true'?tr('Teléfono en pausa'):tr('Teléfono conectado');};
+new MutationObserver(updateFooterConnection).observe(document.querySelector('#paired'),{attributes:true,attributeFilter:['hidden','data-paused']});updateFooterConnection();
+const updateCount=()=>{const text=reportEditor.model.text;countLabel.textContent=tr`${text.trim()?text.trim().split(/\s+/u).length:0} palabras · ${text.length} caracteres`;};
 new MutationObserver(updateCount).observe(reportEditor.element,{childList:true,subtree:true,characterData:true});updateCount();
 

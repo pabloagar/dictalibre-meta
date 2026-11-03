@@ -92,7 +92,7 @@ for(const savedTheme of [null,'sala'])test('montaje completo, controles y tema g
  live=live.replace(/^import .*;\r?\n/gm,'');
  live="import {t as tr,language,mountLanguageSwitch} from "+JSON.stringify(new URL('../apps/shared/i18n.js',import.meta.url).href)+";const {state,createTakeQueue}=globalThis.__clinicalTest;const mountReport=(p,o)=>globalThis.__clinicalTest.mountReport(p,{...o,globalReview:false});const sharedState=async()=>state;\n"+live;
  await import('data:text/javascript;base64,'+Buffer.from(live+'\n//# sourceURL=clinical-live-test-'+savedTheme+'.js').toString('base64'));
- assert.equal(document.body.dataset.theme,savedTheme==='sala'?'ambar':'dia');if(savedTheme==='sala')assert.equal(localStorage.getItem('dicta-theme-v1'),'ambar');
+ assert.equal(document.body.dataset.theme,savedTheme==='sala'?'ambar':'penumbra');if(savedTheme==='sala')assert.equal(localStorage.getItem('dicta-theme-v1'),'ambar');
  assert.equal(document.querySelector('.clinical-editbar .template-library-panel').open,false);
  assert.equal(document.querySelector('.clinical-sheet .report-editor').textContent,'');
  assert.equal(document.querySelectorAll('#create').length,1);
@@ -100,7 +100,7 @@ for(const savedTheme of [null,'sala'])test('montaje completo, controles y tema g
  assert.ok(document.querySelector('.clinical-status'));
  assert.ok(document.querySelector('.empty-guide .quick-templates'));assert.equal(document.querySelector('.first-use-help'),null);
  assert.equal(document.querySelectorAll('.clinical-record').length,1);
- assert.equal(document.querySelectorAll('.sex-control').length,1);assert.ok(document.querySelector('.clinical-sheet > .clinical-editbar .sex-control'));assert.equal(document.querySelector('header .sex-control'),null);
+ assert.equal(document.querySelectorAll('.sex-control').length,1);assert.ok(document.querySelector('.dictation-canvas > .clinical-editbar .sex-control'));assert.equal(document.querySelector('header .sex-control'),null);
  assert.equal(document.querySelector('.clinical-settings').open,false);
  assert.ok(document.querySelector('.clinical-editbar .report-redo'));
  assert.equal(document.querySelector('.template-library-panel').nextElementSibling,document.querySelector('.clinical-settings'));
@@ -109,6 +109,7 @@ for(const savedTheme of [null,'sala'])test('montaje completo, controles y tema g
  const connection=document.querySelector('.connection-panel'),pairing=document.querySelector('.pairing');
  assert.equal(document.querySelector('.scan-home').hidden,false);assert.ok(document.querySelector('.scan-home').contains(pairing));assert.equal(document.querySelectorAll('#qr').length,1);
  const paired=document.querySelector('#paired');paired.hidden=false;paired.dataset.paused='true';await new Promise(r=>setTimeout(r,0));assert.equal(connection.querySelector('summary').textContent,'Teléfono en pausa');paired.dataset.paused='false';await new Promise(r=>setTimeout(r,0));assert.equal(connection.querySelector('summary').textContent,'Teléfono conectado');assert.equal(document.querySelector('.scan-home').hidden,true);assert.ok(connection.contains(pairing));assert.equal(document.querySelector('.report-editor').textContent,'');paired.hidden=true;
+ document.querySelector('.write-without-phone').click();assert.equal(document.querySelector('.scan-home').hidden,true);assert.ok(connection.contains(pairing));
  let sessionRequests=0;const create=document.querySelector('#create');create.onclick=()=>{sessionRequests++;create.disabled=true;};
  connection.querySelector('summary').getBoundingClientRect=()=>({left:240,bottom:60});
  connection.open=true;connection.dispatchEvent(new window.Event('toggle'));
@@ -141,11 +142,11 @@ for(const savedTheme of [null,'sala'])test('montaje completo, controles y tema g
  await window.happyDOM.close();delete globalThis.__clinicalTest;
 });
 
-test('tema: Día por defecto, valores válidos y migración Sala a Ámbar',()=>{
+test('tema: Penumbra por defecto, valores válidos y migración Sala a Ámbar',()=>{
  const live=fs.readFileSync(new URL('../apps/desktop/live.js',import.meta.url),'utf8');
  const declaration=live.match(/function resolveTheme\(saved\)\{[^\n]+\}/)[0];
  const resolve=new Function(declaration+';return resolveTheme;')();
- for(const input of [null,undefined,'','invalid'])assert.equal(resolve(input),'dia');
+ for(const input of [null,undefined,'','invalid'])assert.equal(resolve(input),'penumbra');
  assert.equal(resolve('sala'),'ambar');for(const theme of ['dia','penumbra','ambar'])assert.equal(resolve(theme),theme);
 });
 
