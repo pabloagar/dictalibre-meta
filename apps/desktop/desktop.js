@@ -6,7 +6,7 @@ initializeLanguage();
 let mobileOrigin=location.origin;
 if(location.pathname==='/live'){
   $('create').disabled=true;
-  try{const response=await fetch('/api/live-info');if(!response.ok)throw Error();mobileOrigin=(await response.json()).mobileOrigin;await import('/live.js');$('create').disabled=false;}
+  try{await Promise.all([fetch('/api/live-info').then(async response=>{if(!response.ok)throw Error();mobileOrigin=(await response.json()).mobileOrigin;}),import('/live.js')]);$('create').disabled=false;}
   catch{window.dispatchEvent(new Event('dicta-startup-error'));status(tr('No se pudo preparar el dictado. Comprueba la conexión y recarga.'),'error');}
 }
 
