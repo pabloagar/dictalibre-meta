@@ -56,7 +56,7 @@ function showFigureDoubts(warnings){
 }
 // Hoja clínica: preserve the mounted editor, transport controls and listeners.
 document.body.classList.add('live-workspace','clinical-workspace');
-const layoutMetrics={language:language(),version:'stitch-integrated-toolbar-v3',settingsVersion:'dictado-agrupado-v1',serverBuild:initialState.build??null,serverSourceHash:initialState.sourceHash??null,createdAt:new Date().toISOString(),browser:navigator.userAgent,device:null,network:null,audioSource:null,clockResolutionMs:null,instrumentationOverheadMs:null,audioMeter:{updates:0,totalPaintMs:0,maxPaintMs:0,source:'received-pcm-rms'},events:[]};
+const layoutMetrics={language:language(),version:'compact-qr-keyboard-v4',settingsVersion:'dictado-agrupado-v1',serverBuild:initialState.build??null,serverSourceHash:initialState.sourceHash??null,createdAt:new Date().toISOString(),browser:navigator.userAgent,device:null,network:null,audioSource:null,clockResolutionMs:null,instrumentationOverheadMs:null,audioMeter:{updates:0,totalPaintMs:0,maxPaintMs:0,source:'received-pcm-rms'},events:[]};
 const track=(type,data={})=>{layoutMetrics.events.push({type,atMs:performance.now(),...data});if(layoutMetrics.events.length>500)layoutMetrics.events.shift();};
 const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text)n.textContent=text;return n;};
 const makeDetails=(label,cls)=>{const d=make('details',cls);d.append(make('summary','',label));return d;};
@@ -255,7 +255,7 @@ scanHome.setAttribute('aria-label','Conectar teléfono');
 const scanTitle=make('h2','scan-title',tr('Escanea para dictar'));
 const scanHint=make('p','scan-hint',tr('Escanea con la cámara de tu teléfono.'));
 scanHint.append(make('span','scan-subhint',tr('Tu teléfono funciona como micrófono.')));
-const writeInstead=make('button','write-without-phone',tr('Informe libre'));
+const writeInstead=make('button','write-without-phone',tr('Usar teclado'));
 writeInstead.type='button';
 pairing.querySelector('#code').before(scanTitle,scanHint);scanHome.append(writeInstead);sheetHead.after(scanHome);
 const readyHint=make('p','ready-hint',tr('Todo listo. Empieza a grabar desde tu teléfono.'));readyHint.setAttribute('role','status');readyHint.setAttribute('aria-live','polite');readyHint.hidden=true;reportEditor.element.before(readyHint);
@@ -276,7 +276,7 @@ new MutationObserver(syncScanHome).observe(document.querySelector('#paired'),{at
 window.addEventListener('dicta-recording-start',()=>{startedThisReport=true;syncScanHome();});
 reportEditor.element.addEventListener('input',()=>{startedThisReport=true;syncScanHome();});
 reportEditor.element.addEventListener('report-new',()=>{writeMode=false;startedThisReport=false;syncScanHome();});
-connection.querySelector('summary').addEventListener('click',e=>{if(!scanHome.hidden){e.preventDefault();scanHome.scrollIntoView({block:'center',behavior:'smooth'});if(!connectButton.disabled)connectButton.click();}});
+connection.querySelector('summary').addEventListener('click',()=>{if(!scanHome.hidden){writeMode=true;syncScanHome();}});
 syncScanHome();
 // Compact actions retain accessible names and keyboard behavior.
 for(const [selector,glyph] of [['.report-undo','↶'],['.report-redo','↷']]){const b=editbar.querySelector(selector);b.setAttribute('aria-label',b.textContent);b.title=b.textContent;b.textContent=glyph;}

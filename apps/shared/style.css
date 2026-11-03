@@ -879,3 +879,25 @@ body.clinical-workspace[data-theme=penumbra]{--dl-bg:#131416;--dl-sheet:#1c1f24;
 .clinical-workspace .dictation-canvas>.clinical-editbar>.clinical-settings>summary{color:var(--dl-muted)}
 .clinical-workspace .clinical-notes:has(>:not([hidden])){margin-top:0}
 @media(max-width:560px){.clinical-workspace .dictation-canvas>.clinical-editbar{padding:10px 12px;gap:5px}.clinical-workspace .dictation-canvas>.clinical-editbar>.template-library-panel{margin-left:0}.clinical-workspace .dictation-canvas>.clinical-editbar>.report-new{margin-left:auto}.clinical-workspace .dictation-canvas>.clinical-sheet{padding-top:18px}}
+
+/* Approved A: one pairing action; templates stay in the editing toolbar. */
+body.clinical-workspace header{height:52px;min-height:52px;padding:0 24px}
+.clinical-workspace .brand-stack{flex-direction:row;align-items:center;flex:0 0 auto;gap:10px}
+.clinical-workspace .brand-stack .language-buttons button{min-height:28px;line-height:28px}
+.clinical-workspace .clinical-desk,.clinical-workspace .clinical-desk:has(.clinical-notes>:not([hidden])){margin-top:12px}
+.clinical-workspace .dictation-canvas>.clinical-editbar{min-height:44px;padding:8px 18px;gap:4px}
+.clinical-workspace .dictation-canvas>.clinical-editbar>.report-undo,.clinical-workspace .dictation-canvas>.clinical-editbar>.report-redo{width:24px;font-size:16px}
+.clinical-workspace .dictation-canvas .report-font-value{min-width:22px}
+.clinical-workspace .dictation-canvas .size-controls{margin:0 5px}
+.clinical-workspace .sheet-head,.clinical-workspace .empty-guide{display:none!important}
+.clinical-workspace .dictation-canvas>.clinical-sheet.scan-first{min-height:0;padding:28px 32px 16px}
+.clinical-workspace .scan-first #status:not(.error){display:none}
+.clinical-workspace .scan-home{padding:4px 0 0;flex:none}
+.clinical-workspace .scan-home .scan-hint,.clinical-workspace .scan-home #code,.clinical-workspace .scan-home #expiry{display:none}
+.clinical-workspace .scan-home .qr-wrap{width:176px!important;padding:16px!important;margin-bottom:16px!important;border-radius:12px}
+.clinical-workspace .scan-home #qr svg,.clinical-workspace .scan-home #qr canvas,.clinical-workspace .scan-home #qr img{width:144px;height:144px}
+.clinical-workspace .scan-home h2{font-size:26px;margin:16px 0 0}
+.clinical-workspace .scan-home .write-without-phone{font-size:11px;margin-top:12px;min-height:28px;padding:4px}
+.clinical-workspace .sheet-footer{margin-top:24px;padding-top:12px}
+@media(max-width:900px){body.clinical-workspace header{height:auto;min-height:52px;padding:8px 14px}.clinical-workspace .clinical-topbar{gap:8px}.clinical-workspace .dictation-canvas>.clinical-sheet.scan-first{padding:22px 20px 16px}}
+@media(max-width:560px){.clinical-workspace .dictation-canvas>.clinical-editbar{padding:8px 10px}.clinical-workspace .brand-stack{gap:6px}.clinical-workspace .dictation-canvas>.clinical-editbar>.report-new{margin-left:auto}}

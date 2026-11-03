@@ -105,8 +105,8 @@ export function mountReport(parent,{build=null,sourceHash=null,globalReview=true
  section.querySelector('h2').textContent=tr('Informe');
  const smaller=node('button','A−'),larger=node('button','A+');smaller.setAttribute('aria-label',tr('Reducir tamaño del informe'));larger.setAttribute('aria-label',tr('Aumentar tamaño del informe'));let fontSize=19;
  let fitGeneration=0;
- const fontValue=node('output','19 px');fontValue.className='report-font-value';fontValue.setAttribute('aria-label',tr('Tamaño del informe'));
- const setFontSize=pixels=>{fontSize=Math.max(14,Math.min(28,pixels));editor.style.fontSize=fontSize+'px';fontValue.textContent=fontSize+' px';smaller.disabled=fontSize===14;larger.disabled=fontSize===28;};
+ const fontValue=node('output','19');fontValue.className='report-font-value';fontValue.setAttribute('aria-label',tr('Tamaño del informe'));
+ const setFontSize=pixels=>{fontSize=Math.max(14,Math.min(28,pixels));editor.style.fontSize=fontSize+'px';fontValue.textContent=String(fontSize);smaller.disabled=fontSize===14;larger.disabled=fontSize===28;};
  const resize=delta=>{fitGeneration++;setFontSize(fontSize+delta);event('font-size',{pixels:fontSize});};smaller.onclick=()=>resize(-1);larger.onclick=()=>resize(1);
  editor.addEventListener('input',()=>fitGeneration++);
  editor.addEventListener('template-applied',()=>{

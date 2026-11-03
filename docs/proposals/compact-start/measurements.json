@@ -1,0 +1,113 @@
+{
+  "source": "DOM geometry in Chrome local mockups",
+  "baseCommit": "ab87b2114e2f09117b4efa9d38f47ac638016e04",
+  "repetitions": 1,
+  "audio": null,
+  "physicalDevice": null,
+  "results": [
+    {
+      "name": "a-1280-es",
+      "paper": {
+        "bottom": 551.5494689941406,
+        "width": 980
+      },
+      "viewport": {
+        "height": 600,
+        "scrollWidth": 1261,
+        "width": 1261
+      },
+      "header": 51.9921875
+    },
+    {
+      "name": "a-1280-en",
+      "paper": {
+        "bottom": 551.5494689941406,
+        "width": 980
+      },
+      "viewport": {
+        "height": 600,
+        "scrollWidth": 1261,
+        "width": 1261
+      },
+      "header": 51.9921875
+    },
+    {
+      "name": "a-1024-es",
+      "paper": {
+        "bottom": 551.5494689941406,
+        "width": 972.9947509765624
+      },
+      "viewport": {
+        "height": 600,
+        "scrollWidth": 1005,
+        "width": 1005
+      },
+      "header": 51.9921875
+    },
+    {
+      "name": "a-1024-en",
+      "paper": {
+        "bottom": 551.5494689941406,
+        "width": 972.9947509765624
+      },
+      "viewport": {
+        "height": 600,
+        "scrollWidth": 1005,
+        "width": 1005
+      },
+      "header": 51.9921875
+    },
+    {
+      "name": "b-1280-es",
+      "paper": {
+        "bottom": 447.3958129882813,
+        "width": 980
+      },
+      "viewport": {
+        "height": 600,
+        "scrollWidth": 1280,
+        "width": 1280
+      },
+      "header": 51.9921875
+    },
+    {
+      "name": "b-1280-en",
+      "paper": {
+        "bottom": 447.3958129882813,
+        "width": 980
+      },
+      "viewport": {
+        "height": 600,
+        "scrollWidth": 1280,
+        "width": 1280
+      },
+      "header": 51.9921875
+    },
+    {
+      "name": "b-1024-es",
+      "paper": {
+        "bottom": 447.3958129882813,
+        "width": 980
+      },
+      "viewport": {
+        "height": 600,
+        "scrollWidth": 1024,
+        "width": 1024
+      },
+      "header": 51.9921875
+    },
+    {
+      "name": "b-1024-en",
+      "paper": {
+        "bottom": 447.3958129882813,
+        "width": 980
+      },
+      "viewport": {
+        "height": 600,
+        "scrollWidth": 1024,
+        "width": 1024
+      },
+      "header": 51.9921875
+    }
+  ]
+}
