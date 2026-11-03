@@ -662,3 +662,5 @@ Activación verificada: Render deployment 7509800035 success 2026-11-03T03:42:03
 
 ## 03-11-2026 · jerarquía Revisar con IA / Copiar al portapapeles
 Ajuste mínimo solicitado sobre checkpoint visual: revisión con fondo verde apagado (ámbar en tema Ámbar), borde y destello discreto; copiar como acción secundaria de contorno con nombre explícito Copiar al portapapeles / Copy to clipboard. La etiqueta se conserva después del feedback temporal de copia. Sin cambios en llamadas, confirmaciones o contenido. Chrome local revisado con texto sintético; pnpm check y 240/240 pruebas. No se ha medido aumento de uso de IA (null); no se incorporan analíticas. Pendiente verificación del despliegue.
+
+Verificado en Render: deployment 7509850362 success 2026-11-03T03:46:11Z, commit 9b581da7e9512969b3e6bb7ae4de19a29fd891b7. style.css y report-editor.js idénticos al checkout normalizando CRLF/LF, /health ok. GitHub y web actualizados; laboratorio privado no reiniciado.
