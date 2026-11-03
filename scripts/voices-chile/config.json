@@ -1,0 +1,138 @@
+{
+  "version": 1,
+  "hypothesis": "El diseño por descripción produce habla percibida como chilena y fiel al guion; no demuestra mejora ASR.",
+  "acceptance": "10 muestras por perfil, media acento y naturalidad >=4/5, cero errores en todos los campos; estabilidad 5 frases nuevas con mismo criterio e identidad estable. Un oyente exploratorio.",
+  "source_code_revision": "022e286b98fbec7e1e916cb940cdf532cd9f488e",
+  "models": {
+    "design": {
+      "id": "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+      "revision": "5ecdb67327fd37bb2e042aab12ff7391903235d3"
+    },
+    "base": {
+      "id": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+      "revision": "fd4b254389122332181a7c3db7f27e918eec64e3"
+    },
+    "chatterbox": {
+      "id": "ResembleAI/chatterbox",
+      "revision": "5bb1f6ee58e50c3b8d408bc82a6d3740c2db6e18",
+      "code_revision": "5de7a54aa4e5e2baadb0182dde554908b48b85c2"
+    }
+  },
+  "seeds": [
+    20261103,
+    20261104
+  ],
+  "generation": {
+    "do_sample": true,
+    "top_k": 50,
+    "top_p": 1.0,
+    "temperature": 0.9,
+    "repetition_penalty": 1.05,
+    "max_new_tokens": 1024
+  },
+  "voices": {
+    "cl_ficticia_f": {
+      "motor": "qwen3-tts",
+      "idioma": "es",
+      "acento_objetivo": "es-CL",
+      "acento_validado": null,
+      "requiere_gpu": true,
+      "descripcion": "Voz adulta femenina, timbre medio cálido, sin susurros. Habla en español de Chile, con acento chileno natural de registro profesional, entonación chilena suave y ritmo conversacional claro. Dicta todas las palabras literalmente, incluidos punto, coma y dos puntos. Sin exagerar el acento ni agregar palabras. Identidad vocal ficticia; no imites a ninguna persona concreta.",
+      "model_revision": "5ecdb67327fd37bb2e042aab12ff7391903235d3",
+      "semillas": [
+        20261103,
+        20261104
+      ],
+      "reference": null
+    },
+    "cl_ficticia_m": {
+      "motor": "qwen3-tts",
+      "idioma": "es",
+      "acento_objetivo": "es-CL",
+      "acento_validado": null,
+      "requiere_gpu": true,
+      "descripcion": "Voz adulta masculina, timbre medio grave, sin voz impostada. Habla en español de Chile, con acento chileno natural de registro profesional, entonación chilena suave y ritmo conversacional claro. Dicta todas las palabras literalmente, incluidos punto, coma y dos puntos. Sin exagerar el acento ni agregar palabras. Identidad vocal ficticia; no imites a ninguna persona concreta.",
+      "model_revision": "5ecdb67327fd37bb2e042aab12ff7391903235d3",
+      "semillas": [
+        20261103,
+        20261104
+      ],
+      "reference": null
+    }
+  },
+  "cases": [
+    {
+      "id": "p01",
+      "text": "Hallazgos dos puntos. Nódulo sólido de ocho milímetros en el lóbulo superior derecho. Punto.",
+      "formatted": "Hallazgos:\nNódulo sólido de 8 mm en el lóbulo superior derecho."
+    },
+    {
+      "id": "p02",
+      "text": "La lesión presenta una atenuación de menos diez unidades Hounsfield. Punto.",
+      "formatted": "La lesión presenta una atenuación de -10 UH."
+    },
+    {
+      "id": "p03",
+      "text": "Bronquiectasias cilíndricas en ambos lóbulos inferiores. Punto.",
+      "formatted": "Bronquiectasias cilíndricas en ambos lóbulos inferiores."
+    },
+    {
+      "id": "p04",
+      "text": "Quiste renal izquierdo de dos coma cinco centímetros. Punto.",
+      "formatted": "Quiste renal izquierdo de 2,5 cm."
+    },
+    {
+      "id": "p05",
+      "text": "No se observa derrame pleural ni neumotórax. Punto.",
+      "formatted": "No se observa derrame pleural ni neumotórax."
+    }
+  ],
+  "stability_cases": [
+    {
+      "id": "s01",
+      "text": "No se identifican adenopatías mediastínicas. Punto.",
+      "formatted": "No se identifican adenopatías mediastínicas."
+    },
+    {
+      "id": "s02",
+      "text": "La aorta abdominal mide dos coma ocho centímetros. Punto.",
+      "formatted": "La aorta abdominal mide 2,8 cm."
+    },
+    {
+      "id": "s03",
+      "text": "Se observa un pequeño quiste hepático en el segmento seis. Punto.",
+      "formatted": "Se observa un pequeño quiste hepático en el segmento VI."
+    },
+    {
+      "id": "s04",
+      "text": "Ambos riñones conservan su tamaño y morfología. Punto.",
+      "formatted": "Ambos riñones conservan su tamaño y morfología."
+    },
+    {
+      "id": "s05",
+      "text": "Conclusión dos puntos. Cambios degenerativos leves de la columna lumbar. Punto.",
+      "formatted": "Conclusión:\nCambios degenerativos leves de la columna lumbar."
+    }
+  ],
+  "metrics": {
+    "generation_s": "perf_counter con sincronización CUDA antes y después de generate; excluye carga y escritura",
+    "duration_s": "muestras/frecuencia",
+    "rtf": "segundos_generacion/duracion_audio",
+    "human": "escucha completa, autoinformada; no inferida de ASR",
+    "overhead": "no calibrado; resolución registrada en protocolo"
+  },
+  "slr71": {
+    "url": "https://openslr.org/71/",
+    "license": "CC BY-SA 4.0",
+    "role": "referencia documental y auditiva separada; no entrada del modelo ni entrenamiento"
+  },
+  "chatterbox_generation": {
+    "exaggeration": 0.5,
+    "cfg_weight": 0.5,
+    "temperature": 0.8,
+    "repetition_penalty": 1.2,
+    "min_p": 0.05,
+    "top_p": 1.0
+  },
+  "priority": "Chatterbox primary; Qwen only generates two artificial candidate references. User steering 2026-11-03. Explore corpus adaptation separately."
+}

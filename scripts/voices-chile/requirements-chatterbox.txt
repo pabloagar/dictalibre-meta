@@ -1,0 +1,21 @@
+# Install Chatterbox itself with --no-deps at the revision in config.json.
+# Its Perth dependency points to master upstream; this file pins it instead.
+pip==25.2
+torch==2.6.0
+torchaudio==2.6.0
+numpy==2.2.6; python_version >= '3.13'
+numpy==1.26.4; python_version < '3.13'
+scipy==1.15.3
+soundfile==0.13.1
+librosa==0.11.0
+transformers==5.2.0
+diffusers==0.29.0
+s3tokenizer==0.3.0
+conformer==0.3.2
+safetensors==0.5.3
+spacy-pkuseg==1.0.2
+pykakasi==2.3.0
+gradio==6.8.0
+pyloudnorm==0.2.0
+omegaconf==2.3.0
+resemble-perth @ git+https://github.com/resemble-ai/Perth.git@ff1c8ac55a976971245cdd53c18d6131ca00d993

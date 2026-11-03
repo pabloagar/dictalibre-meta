@@ -1,0 +1,15 @@
+pip==25.2
+torch==2.8.0
+torchaudio==2.8.0
+numpy==2.2.6
+scipy==1.15.3
+soundfile==0.13.1
+librosa==0.11.0
+transformers==4.57.3
+accelerate==1.12.0
+huggingface-hub==0.36.0
+gradio==6.8.0
+sox==1.5.0
+onnxruntime==1.31.1
+einops==0.8.2
+qwen-tts @ git+https://github.com/QwenLM/Qwen3-TTS.git@022e286b98fbec7e1e916cb940cdf532cd9f488e

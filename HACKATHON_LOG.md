@@ -799,3 +799,11 @@ Activación preview16: deployment7522360557 success2026-11-03T15:06:06Z, commit 
 Autorizado por el responsable: entrada Apariencia en cada apertura, Español/English trasladado a Idioma y ayuda reducida a cuatro pasos. Resto de controles conservados. pnpm check OK, pnpm test 266/266. Render previo d69612e con concurrency.active=0 antes de publicar. Despliegue pendiente de verificación; no se reinicia laboratorio privado. Archivos ajenos excluidos del commit.
 
 Verificado en Render: deployment 7522789094 success 2026-11-03T15:22:15Z; API build a2b0105f9cb4af2197fceb33a0c301e2e3f4363a y /live.js con appearance-language-v2. Cambios guardados en GitHub y activos en la demo. Sin prueba física adicional; laboratorio privado intacto.
+
+## 03-11-2026 · Piloto chileno y factibilidad Chatterbox
+
+Implementación aislada en scripts/voices-chile y copia privada en laboratorio_voces/piloto_chileno. Por preferencia explícita del responsable, Chatterbox V3 es prioritario; Qwen VoiceDesign queda como generador de dos referencias artificiales candidatas. Ruta inicial: dos perfiles, p01-p05, dos semillas, veinte muestras Chatterbox; revisión y exportación con hashes y criterios humanos, estabilidad posterior de cinco frases. Se conserva el modo Qwen original como alternativa explícita. No se entrena Whisper ni se cambia Studio/backend.
+
+Protocolo, licencias, mediciones y auditoría de factibilidad en docs/CHILEAN_VOICE_PILOT.md. SLR71: descargados ficha/licencia/índices; 1738/2636 líneas, sin audios ni entrenamiento. Receta comunitaria LoRA auditada estáticamente: referencias V2/árabe, requiere portado y verificación antes de V3 multihablante. No se ejecutó entrenamiento ni se presume identidad nueva por mezclar hablantes.
+
+Validación de implementación: pnpm check correcto; pnpm test 266/266; ocho pruebas Python (audio inválido, revisión pendiente, hashes, estabilidad, exportación y remuestreo); sintaxis de notebook y JavaScript correctas. Reproductor comprobado en Chrome con tono fixture marcado, puntuación 6 rechazada y ficha pendiente; no es audio de voz ni resultado perceptual. Colab T4 asignada, watchdog de una hora activo, instalación aislada y ejecución real en curso: resultado todavía pendiente. No se compraron unidades; estimación de consumo en protocolo, no factura.

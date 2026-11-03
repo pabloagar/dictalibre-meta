@@ -503,3 +503,7 @@ Criterio previo: seleccionar/filtrar no cambia model.text, borrador ni historial
 
 ## 2026-11-03 · Ajustes: apariencia e idioma
 Cambio acotado, sin comparación A/B. Criterio reproducible: cada apertura muestra Apariencia; Idioma contiene exactamente Español/English fuera de la cabecera; Cómo usar conserva cuatro pasos sin acciones duplicadas. Prueba clinical-ui con Happy DOM, una ejecución de suite (266/266). Se mantienen guardas de grabación y persistencia de idioma/borrador existentes. Instrumentación settings-page existente, versión appearance-language-v2, sin texto del informe. Latencia y mejora de comprensión: null; pendiente observación con usuarios. Dispositivo/red/audio: null; sin llamadas IA ni audio. No se atribuye validación física a esta prueba.
+
+## 03-11-2026 · Voz artificial chilena: dos rutas
+
+Protocolo previo y criterios en [piloto chileno](docs/CHILEAN_VOICE_PILOT.md). Chatterbox prioritario por preferencia comunicada del responsable; no conclusión causal frente a Qwen. Dos referencias candidatas artificiales y veinte salidas Chatterbox propuestas; revisión por un oyente, acento/naturalidad ≥4 de media y cero errores; estabilidad posterior de cinco frases. Tiempos sincronizados CUDA, hashes/configuración/entorno y salidas desfavorables conservados. Coste de reposición estimado separado de gasto directo. Auditoría documental LoRA/SLR71 no equivale a entrenamiento ni corpus aprobado. Estado real de ejecución en bitácora; métricas perceptuales null hasta escucha.
