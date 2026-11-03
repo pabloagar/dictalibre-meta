@@ -14,3 +14,5 @@ services:
         sync: false
       - key: DEMO_MAX_AUDIO_MINUTES_PER_DAY
         value: "60"
+      - key: DEMO_MAX_CONCURRENT_STREAMS
+        value: "10"

@@ -3,7 +3,7 @@ import {StreamResampler,pcmWav} from './stream-audio.mjs';
 import {hash} from './lab-core.mjs';
 import {SpeechTurns} from './speech-turns.mjs';
 
-export function attachMuseStream(server,{getKey,getConfig,start,finish,endpoint='wss://api.meta.ai/v1/asr/realtime',allowRequest=null,maxClients=1}){
+export function attachMuseStream(server,{getKey,getConfig,start,finish,endpoint='wss://api.meta.ai/v1/asr/realtime',allowRequest=null,maxClients=1,onAudio=null}){
   const cancellations=new Map();
   const wss=new WebSocketServer({noServer:true,maxPayload:65536,perMessageDeflate:false});
   server.on('upgrade',(req,socket,head)=>{
@@ -48,6 +48,7 @@ export function attachMuseStream(server,{getKey,getConfig,start,finish,endpoint=
           if(!run||ended)throw Error('Audio fuera de una toma activa.');
           const n=original.reduce((n,b)=>n+b.length,0)+bytes.length;
           if(!bytes.length||bytes.length%2||n>rate*2*180)throw Error('Audio fuera del límite de 180 segundos.');
+          onAudio?.(run,{durationMs:bytes.length/rate/2*1000});
           original.push(Buffer.from(bytes));const t=performance.now(),out=resampler.push(bytes);metrics.resampleMs+=performance.now()-t;
           derived.push(out);pending=Buffer.concat([pending,out]);metrics.maxBufferedAudioMs=Math.max(metrics.maxBufferedAudioMs,pending.length/48);
           if(pending.length>480000)throw Error('Retraso de streaming superior a diez segundos.');return;

@@ -49,7 +49,7 @@ Este comando detiene exclusivamente los procesos registrados de esta demo. La UR
 
 ## Demostración pública, sin depender de este PC
 
-`backend/demo.mjs` es un servidor aparte para que cualquiera con el código haga la demostración. Incluye dictado con Muse-streaming, informe, plantillas sintéticas y copiar. **No incluye** laboratorio, Whisper, Revisor Meta ni la biblioteca privada. El audio y los textos no se escriben en disco: los textos quedan en memoria hasta 4 horas, separados por visitante, y el audio se descarta al terminar cada toma. Sin `DEMO_ACCESS_CODE` no arranca.
+`backend/demo.mjs` es un servidor aparte para que cualquiera con el código haga la demostración. Incluye dictado con Muse-streaming, informe, quince plantillas públicas, revisión explícita con Muse Spark y copiar. **No incluye** laboratorio, Whisper ni la biblioteca privada. El audio y los textos no se escriben en disco: los textos quedan en memoria hasta 4 horas, separados por visitante, y el audio se descarta al terminar cada toma. Sin `DEMO_ACCESS_CODE` no arranca.
 
 **Publicar en Render (una vez, con la cuenta y la tarjeta del responsable):**
 
@@ -62,8 +62,8 @@ Cada push a esa rama vuelve a desplegar y corta las sesiones en curso: no public
 **Pautas de uso:**
 
 - Solo datos sintéticos, nunca datos de pacientes.
-- Una persona dicta a la vez; quien llega después ve «Otra persona está dictando».
-- Límite de audio diario: `DEMO_MAX_AUDIO_MINUTES_PER_DAY`, 60 minutos por defecto, con reinicio diario en UTC. Al reiniciarse el servidor, el contador también vuelve a cero.
+- Hasta diez dictados simultáneos, uno por sesión de visitante. `DEMO_MAX_CONCURRENT_STREAMS` permite un entero entre 1 y 10 (predeterminado 10). Al llenarse los cupos aparece un aviso; no hay cola automática. El relay admite hasta 30 parejas conectadas, aunque solo diez transcriban simultáneamente. No añadir réplicas: las sesiones y cuotas siguen en memoria de una única instancia.
+- Límite de audio diario compartido: `DEMO_MAX_AUDIO_MINUTES_PER_DAY`, 60 minutos por defecto, contado por bloque recibido antes de enviarlo al proveedor, incluso si se cancela o falla la toma. Un bloque que excede el saldo se rechaza y la toma queda fallida, nunca como final válido. Reinicio diario en UTC; al reiniciarse el servidor el contador también vuelve a cero. No es una cuota persistente ni un límite de gasto de toda la IA: Spark conserva su límite separado de 30 revisiones por visitante.
 - Esperar el texto antes de la siguiente toma y evitar decir «punto» seguido de un número al terminar una frase: la cifra se convierte igual, pero queda un aviso para confirmarla.
 - No proyectar el QR ni difundir el código: el QR empareja sin confirmación durante 2 minutos.
 - Ante un fallo, usar el video de respaldo o el PC.
@@ -147,3 +147,11 @@ Con demo y laboratorio iniciados, abrir **http://127.0.0.1:8789/live en el PC qu
 
 No abrir localhost en el celular: su enlace HTTPS lo entrega el QR. El enlace público anterior sirve solo para captura/transporte y puede caducar. Si se renueva el túnel, recargar receptor local antes de crear sesión. Inferencia GPU disponible únicamente con laboratorio y PC encendidos. No necesita clave Meta para Whisper.
 
+
+## Prueba reproducible de diez sesiones
+
+`node scripts/test-demo-concurrency.mjs --mode=mock --repetitions=3` abre diez parejas teléfono/PC, transmite diez tonos distintos por el relay a un proveedor simulado y comprueba hashes, resultados y aislamiento. No accede al micrófono. Cada ejecución crea evidencia en data/local, excluida de Git.
+
+Para probar Meta real: `powershell.exe -NoProfile -File scripts/build-concurrency-corpus.ps1 -OutputDirectory data/local/concurrency-tts` genera diez frases TTS no clínicas; después `node scripts/test-demo-concurrency.mjs --mode=local-meta --manifest=data/local/concurrency-tts/manifest.json`. La clave se lee de .env.local; consume API real. Para el despliegue: `--mode=remote --origin=https://dictalibre-demo.onrender.com` y el mismo manifiesto. El código existente se entrega solo por variable DEMO_ACCESS_CODE o archivo privado indicado por DEMO_TEST_ENV_FILE, nunca como argumento. No se modifican variables ni pagos de Render.
+
+El driver exige diez cupos y ninguna toma activa antes de empezar. Usa diez accesos desde una IP (límite actual por minuto): no encadenar ensayos remotos sin esperar la ventana. Simula diez clientes desde un equipo; no acredita diez dispositivos, redes móviles, sesiones largas, uso clínico ni rendimiento de Spark bajo carga. Resultado actual y límites en EXPERIMENTS.md.

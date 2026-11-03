@@ -23,9 +23,11 @@ const sameSecret=(a,b)=>timingSafeEqual(digest(a),digest(b));
 // El proxy del proveedor agrega la IP real; una IP falsificada solo evade este límite, no el código de acceso.
 const clientIp=req=>String(req.headers['x-forwarded-for']??'').split(',')[0].trim()||req.socket.remoteAddress||'desconocida';
 
-export function createDemo({accessCode,metaKey='',reviewProvider=reviewWithMeta,publicOrigin,museEndpoint,maxAudioMinutesPerDay=60,visitorTtlMs=4*3600_000,maxVisitors=200,build=null,templateFile=path.join(ROOT,'data','demo','plantillas-sinteticas.json'),glossaryDir=path.join(ROOT,'data','vocabulario','glosarios'),now=()=>Date.now()}){
+export function createDemo({accessCode,metaKey='',reviewProvider=reviewWithMeta,publicOrigin,museEndpoint,maxAudioMinutesPerDay=60,maxConcurrentStreams=10,visitorTtlMs=4*3600_000,maxVisitors=200,build=null,templateFile=path.join(ROOT,'data','demo','plantillas-sinteticas.json'),glossaryDir=path.join(ROOT,'data','vocabulario','glosarios'),now=()=>Date.now()}){
   if(!accessCode)throw Error('Falta DEMO_ACCESS_CODE: la demo no se expone sin código de acceso.');
   if(!publicOrigin)throw Error('Falta PUBLIC_ORIGIN.');
+  if(!Number.isInteger(maxConcurrentStreams)||maxConcurrentStreams<1||maxConcurrentStreams>10)throw Error('DEMO_MAX_CONCURRENT_STREAMS debe ser un entero entre 1 y 10.');
+  if(!Number.isFinite(maxAudioMinutesPerDay)||maxAudioMinutesPerDay<=0)throw Error('DEMO_MAX_AUDIO_MINUTES_PER_DAY debe ser positivo.');
   const origin=new URL(publicOrigin).origin;
   const secure=origin.startsWith('https:');
   const visitors=new Map(),logins=new Map();
@@ -34,7 +36,8 @@ export function createDemo({accessCode,metaKey='',reviewProvider=reviewWithMeta,
     {...configuration({engine:'muse',name:'Sin glosario'}),id:'demo-muse-no-glossary',createdAt:null,readOnly:true}
   ];
   if(fs.existsSync(glossaryDir))for(const f of fs.readdirSync(glossaryDir).filter(f=>f.endsWith('.json')).sort()){try{configs.push(glossaryToConfig(validateGlossary(JSON.parse(fs.readFileSync(path.join(glossaryDir,f),'utf8')))));}catch(e){console.error(`Glosario omitido (${f}): ${e.message}`);}}
-  const usage={day:null,audioMs:0};let activeStreams=0;
+  const usage={day:null,audioMs:0},activeVisitors=new Map(),runOwners=new Map();
+  const concurrency={limit:maxConcurrentStreams,active:0,peak:0,started:0,rejectedCapacity:0,rejectedVisitor:0,rejectedBudget:0};
   const usedToday=()=>{const day=new Date(now()).toISOString().slice(0,10);if(usage.day!==day){usage.day=day;usage.audioMs=0;}return usage.audioMs;};
 
   function visitorOf(req){
@@ -75,7 +78,7 @@ export function createDemo({accessCode,metaKey='',reviewProvider=reviewWithMeta,
       if(p.startsWith('/api/report-reviews/')){const r=visitor.reviews.find(r=>r.id===decodeURIComponent(p.slice('/api/report-reviews/'.length)));return r?json(r):json({error:'Revisión desconocida.'},404);}
       if(p==='/api/live-info')return json({mobileOrigin:origin});
       if(p==='/api/templates')return sendFile(path.relative(ROOT,templateFile),'application/json; charset=utf-8');
-      if(p==='/api/state')return json({demo:true,audios:[],configs,runs:visitor.runs,reviews:visitor.reviews,reviewDocuments:[],reportReviewAvailable:!!metaKey,metaConfigured:!!metaKey,modelPresent:false,build,sourceHash:null});
+      if(p==='/api/state')return json({demo:true,audios:[],configs,runs:visitor.runs,reviews:visitor.reviews,reviewDocuments:[],reportReviewAvailable:!!metaKey,metaConfigured:!!metaKey,modelPresent:false,build,sourceHash:null,concurrency:{...concurrency}});
       return json({error:'No disponible en la demostración.'},404);
     }
     if(req.method!=='POST'||!originOk(req))return json({error:'Origen no permitido.'},403);
@@ -89,21 +92,27 @@ export function createDemo({accessCode,metaKey='',reviewProvider=reviewWithMeta,
     return json({error:'No disponible en la demostración.'},404);
   }
 
-  const relay=createRelay({publicOrigin:origin,maxSessions:10,route,clientIp,canCreate:req=>!!visitorOf(req),passUpgrade:req=>req.url==='/asr-stream'});
-  const closeStream=attachMuseStream(relay.server,{endpoint:museEndpoint,maxClients:3,getKey:()=>metaKey,getConfig:id=>configs.find(c=>c.id===id),
+  const relay=createRelay({publicOrigin:origin,maxSessions:30,route,clientIp,canCreate:req=>!!visitorOf(req),passUpgrade:req=>req.url==='/asr-stream'});
+  const closeStream=attachMuseStream(relay.server,{endpoint:museEndpoint,maxClients:maxConcurrentStreams*2+2,getKey:()=>metaKey,getConfig:id=>configs.find(c=>c.id===id),
     allowRequest:req=>originOk(req)&&!!visitorOf(req),
     start(config,m,req){
       const visitor=visitorOf(req);if(!visitor)throw Error('La sesión de la demostración venció. Vuelve a ingresar el código.');
-      if(activeStreams>=1)throw Error('Otra persona está dictando en la demostración. Intenta en unos minutos.');
-      if(usedToday()>=maxAudioMinutesPerDay*60_000)throw Error('La demostración alcanzó su límite de uso de hoy.');
-      activeStreams++;
+      if(activeVisitors.has(visitor)){concurrency.rejectedVisitor++;throw Error('Ya tienes un dictado en curso. Espera a que termine.');}
+      if(concurrency.active>=maxConcurrentStreams){concurrency.rejectedCapacity++;throw Error('Los '+maxConcurrentStreams+' cupos de dictado están ocupados. Intenta nuevamente al terminar una toma.');}
+      if(usedToday()>=maxAudioMinutesPerDay*60_000){concurrency.rejectedBudget++;throw Error('La demostración alcanzó su límite de uso de hoy.');}
       const r={id:randomUUID(),configId:config.id,configuration:{model:config.model,name:config.name,mode:'streaming',segmentation:m.segmentation},createdAt:new Date(now()).toISOString(),status:'running',text:null,error:null,commandsEnabled:m.commandsEnabled!==false,numbersEnabled:m.numbersEnabled!==false,termsEnabled:m.termsEnabled!==false,numberVersion:NUMBER_VERSION,termVersion:TERM_VERSION,commandVersion:COMMAND_VERSION,build,reviewEnabled:false,environment:{source:'demo-stream'},timings:{queueMs:0,requestMs:null,totalMs:null}};
+      activeVisitors.set(visitor,r.id);runOwners.set(r.id,visitor);concurrency.active++;concurrency.started++;concurrency.peak=Math.max(concurrency.peak,concurrency.active);
       visitor.runs.push(r);if(visitor.runs.length>20)visitor.runs.shift();
       return r;
     },
+    onAudio(r,{durationMs}){
+      // Contabilizar cada bloque antes de enviarlo: presupuesto compartido, incluso en tomas fallidas.
+      if(usedToday()+durationMs>maxAudioMinutesPerDay*60_000){concurrency.rejectedBudget++;throw Error('La demostración alcanzó su límite de uso de hoy.');}
+      usage.audioMs+=durationMs;
+    },
     finish(r,result){
-      activeStreams=Math.max(0,activeStreams-1);
-      usedToday();usage.audioMs+=result.metrics.inputDurationMs||0;
+      const owner=runOwners.get(r.id);if(owner){activeVisitors.delete(owner);runOwners.delete(r.id);concurrency.active--;}
+
       r.status=result.status;r.error=result.error;r.text=result.text;
       // Los buffers de audio y los eventos del proveedor se descartan: en la demo nada se guarda.
       const {segments:_segments,...metrics}=result.metrics;r.stream=metrics;r.result={text:r.text,device:'Meta API realtime',cold:null};
@@ -112,13 +121,13 @@ export function createDemo({accessCode,metaKey='',reviewProvider=reviewWithMeta,
       return r;
     }});
   const sweep=setInterval(()=>{
-    for(const [id,visitor] of visitors)if(now()-visitor.seen>=visitorTtlMs){visitor.reviewer.close();visitors.delete(id);}
+    for(const [id,visitor] of visitors)if(!activeVisitors.has(visitor)&&now()-visitor.seen>=visitorTtlMs){visitor.reviewer.close();visitors.delete(id);}
     for(const [ip,bucket] of logins)if(now()-bucket.start>60_000)logins.delete(ip);
   },60_000);sweep.unref();
-  return {server:relay.server,visitors,usage,async close(){clearInterval(sweep);for(const v of visitors.values())v.reviewer.close();closeStream();await relay.close();}};
+  return {server:relay.server,visitors,usage,concurrency,async close(){clearInterval(sweep);for(const v of visitors.values())v.reviewer.close();closeStream();await relay.close();}};
 }
 
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
-  const demo=createDemo({accessCode:process.env.DEMO_ACCESS_CODE,metaKey:(process.env.META_API_KEY||'').trim(),publicOrigin:process.env.PUBLIC_ORIGIN||process.env.RENDER_EXTERNAL_URL,maxAudioMinutesPerDay:Number(process.env.DEMO_MAX_AUDIO_MINUTES_PER_DAY||60),build:process.env.RENDER_GIT_COMMIT||null});
+  const demo=createDemo({accessCode:process.env.DEMO_ACCESS_CODE,metaKey:(process.env.META_API_KEY||'').trim(),publicOrigin:process.env.PUBLIC_ORIGIN||process.env.RENDER_EXTERNAL_URL,maxAudioMinutesPerDay:Number(process.env.DEMO_MAX_AUDIO_MINUTES_PER_DAY||60),maxConcurrentStreams:Number(process.env.DEMO_MAX_CONCURRENT_STREAMS||10),build:process.env.RENDER_GIT_COMMIT||null});
   demo.server.listen(Number(process.env.PORT||8787),process.env.HOST||'0.0.0.0',()=>console.log('Dicta Libre: demostración lista.'));
 }

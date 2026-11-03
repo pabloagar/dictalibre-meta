@@ -10,11 +10,11 @@ import {hash} from '../backend/lab-core.mjs';
 const freePort=async()=>{const s=net.createServer();s.listen(0,'127.0.0.1');await once(s,'listening');const {port}=s.address();s.close();await once(s,'close');return port;};
 function fakeMuse(final='categoría biurads cuatro a punto'){
   const provider=new WebSocketServer({port:0});const seen={keys:[],keywords:[],hold:false,sockets:[]};
-  provider.on('connection',s=>{seen.sockets.push(s);let open=false;s.on('message',(b,binary)=>{if(binary)return;const m=JSON.parse(b);if(!open){open=true;seen.keys.push(m.authorization.accessToken);seen.keywords.push(m.keywords);s.send(JSON.stringify({sessionId:'fixture'}));s.send(JSON.stringify({type:'transcript',transcript:'categoría',final:false}));}else if(m.type==='endStream'&&!seen.hold)s.send(JSON.stringify({type:'transcript',transcript:final,final:true,audioProcessedMs:100}));});});
+  provider.on('connection',s=>{seen.sockets.push(s);const number=seen.sockets.length;let open=false;s.on('message',(b,binary)=>{if(binary)return;const m=JSON.parse(b);if(!open){open=true;seen.keys.push(m.authorization.accessToken);seen.keywords.push(m.keywords);s.send(JSON.stringify({sessionId:'fixture'}));s.send(JSON.stringify({type:'transcript',transcript:'categoría',final:false}));}else if(m.type==='endStream'&&!seen.hold)s.send(JSON.stringify({type:'transcript',transcript:typeof final==='function'?final(number):final,final:true,audioProcessedMs:100}));});});
   return {provider,seen};
 }
 async function start(options={}){
-  const {provider,seen}=fakeMuse();await once(provider,'listening');
+  const {provider,seen}=fakeMuse(options.syntheticFinal);await once(provider,'listening');
   const port=await freePort(),origin=`http://127.0.0.1:${port}`;
   const demo=createDemo({accessCode:'codigo-de-prueba',metaKey:'clave-secreta',publicOrigin:origin,museEndpoint:`ws://127.0.0.1:${provider.address().port}`,...options});
   demo.server.listen(port,'127.0.0.1');await once(demo.server,'listening');
@@ -108,14 +108,14 @@ test('demo: dictado sin código o con origen ajeno se rechaza; crear sesión exi
   }finally{await d.stop();}
 });
 
-test('demo: una persona dicta a la vez y respeta el límite diario',async()=>{
-  const d=await start({maxAudioMinutesPerDay:0.001});
+test('demo: límite configurable y presupuesto diario cobrado antes de enviar audio',async()=>{
+  const d=await start({maxAudioMinutesPerDay:0.1/60,maxConcurrentStreams:1});
   try{
     const a=(await d.login()).cookie,b=(await d.login()).cookie;
     d.seen.hold=true;
     const first=await d.dictate(a,{end:false});await new Promise(r=>setTimeout(r,60));
     const second=await d.dictate(b,{end:false});await second.closed;
-    assert.match(second.messages.at(-1).message,/Otra persona está dictando/);
+    assert.match(second.messages.at(-1).message,/cupos de dictado están ocupados/);
     first.ws.send(JSON.stringify({type:'cancel'}));await first.closed;
     assert.equal((await (await d.get('/api/state',a)).json()).runs[0].status,'cancelled');
     d.seen.hold=false;
@@ -190,3 +190,81 @@ test('demo: revisor sin clave, cancelación y fallo del proveedor no alteran el 
  assert.deepEqual(d.seen.keywords,[expected,[]]);
  }finally{await d.stop();}
  });
+
+const waitUntil=async predicate=>{for(let i=0;i<200;i++){if(predicate())return;await new Promise(r=>setTimeout(r,5));}throw Error('Condition timed out');};
+
+test('demo: diez dictados solapados, aislamiento, undécimo rechazado y cupos recuperados',async()=>{
+ const d=await start({syntheticFinal:n=>'Resultado sintético '+n});
+ try{
+  const cookies=[];for(let i=0;i<11;i++)cookies.push((await d.login('codigo-de-prueba','10.0.1.'+i)).cookie);
+  for(let repetition=0;repetition<3;repetition++){
+   const takes=[];
+   for(let i=0;i<10;i++){
+    takes.push(await d.dictate(cookies[i],{end:false}));
+    await waitUntil(()=>takes[i].messages.some(m=>m.type==='ready'));
+   }
+   assert.equal(d.demo.concurrency.active,10);assert.equal(d.demo.concurrency.peak,10);
+   const excess=await d.dictate(cookies[10],{end:false});await excess.closed;
+   assert.match(excess.messages.at(-1).message,/10 cupos/);assert.equal(d.demo.concurrency.active,10);
+   const duplicate=await d.dictate(cookies[0],{end:false});await duplicate.closed;
+   assert.match(duplicate.messages.at(-1).message,/Ya tienes un dictado/);
+   const firstId=takes[0].messages.find(m=>m.type==='started').runId;
+   assert.equal((await d.post('/api/cancel',cookies[1],{id:firstId})).status,404);
+   const pcm=Buffer.alloc(9600);
+   for(const take of takes){take.ws.send(pcm);take.ws.send(JSON.stringify({type:'end',pcmHash:hash(pcm)}));}
+   await Promise.all(takes.map(t=>t.closed));assert.equal(d.demo.concurrency.active,0);
+   for(let i=0;i<10;i++){
+    assert.equal(takes[i].messages.at(-1).status,'completed');
+    const state=await (await d.get('/api/state',cookies[i])).json();
+    assert.equal(state.runs.length,repetition+1);
+    assert.equal(state.runs.at(-1).id,takes[i].messages.find(m=>m.type==='started').runId);
+    assert.equal(state.runs.at(-1).text,'Resultado sintético '+(repetition*10+i+1));
+    assert.equal(state.runs.at(-1).stream.integrityVerified,true);
+    assert.equal(state.concurrency.limit,10);assert.equal(state.concurrency.active,0);
+   }
+   assert.deepEqual((await (await d.get('/api/state',cookies[10])).json()).runs,[]);
+  }
+  assert.equal(d.demo.concurrency.started,30);assert.equal(d.demo.usage.audioMs,3000);
+  assert.equal(d.demo.concurrency.rejectedCapacity,3);assert.equal(d.demo.concurrency.rejectedVisitor,3);
+ }finally{await d.stop();}
+});
+
+test('demo: presupuesto compartido durante tomas simultáneas, cancelación y cambio de día',async()=>{
+ let now=Date.UTC(2026,10,2,23,59);
+ const d=await start({maxAudioMinutesPerDay:0.2/60,now:()=>now});
+ try{
+  const a=(await d.login()).cookie,b=(await d.login()).cookie;
+  const first=await d.dictate(a,{end:false}),second=await d.dictate(b,{end:false});
+  await waitUntil(()=>d.demo.concurrency.active===2);
+  first.ws.send(Buffer.alloc(9600));second.ws.send(Buffer.alloc(9600));
+  await waitUntil(()=>d.demo.usage.audioMs===200);
+  first.ws.send(Buffer.alloc(9600));await first.closed;
+  assert.equal(first.messages.at(-1).status,'error');assert.equal(d.demo.usage.audioMs,200);
+  const refused=await d.dictate(a,{end:false});await refused.closed;assert.match(refused.messages.at(-1).message,/límite de uso/);
+  second.ws.send(JSON.stringify({type:'cancel'}));await second.closed;assert.equal(d.demo.concurrency.active,0);
+  now+=120000;
+  const next=await d.dictate(a);await next.closed;assert.equal(next.messages.at(-1).status,'completed');
+  assert.equal(d.demo.usage.audioMs,100);assert.equal(d.demo.usage.day,'2026-11-03');
+ }finally{await d.stop();}
+});
+
+test('demo: desconexión, error de proveedor y cancelación liberan exactamente un cupo',async()=>{
+ const d=await start({maxConcurrentStreams:1});
+ try{
+  const cookie=(await d.login()).cookie;
+  for(const kind of ['disconnect','provider','cancel']){
+   const take=await d.dictate(cookie,{end:false});await waitUntil(()=>take.messages.some(m=>m.type==='ready'));
+   if(kind==='disconnect')take.ws.terminate();
+   else if(kind==='provider')d.seen.sockets.at(-1).send(JSON.stringify({type:'error'}));
+   else take.ws.send(JSON.stringify({type:'cancel'}));
+   await take.closed;await waitUntil(()=>d.demo.concurrency.active===0);
+  }
+  const next=await d.dictate(cookie);await next.closed;assert.equal(next.messages.at(-1).status,'completed');
+  assert.equal(d.demo.concurrency.active,0);assert.equal(d.demo.concurrency.started,4);
+ }finally{await d.stop();}
+});
+
+test('demo: rechaza límites inválidos antes de arrancar',()=>{
+ for(const maxConcurrentStreams of [0,11,1.5,NaN])assert.throws(()=>createDemo({accessCode:'fixture',publicOrigin:'http://localhost',maxConcurrentStreams}),/DEMO_MAX_CONCURRENT_STREAMS/);
+ for(const maxAudioMinutesPerDay of [0,-1,NaN,Infinity])assert.throws(()=>createDemo({accessCode:'fixture',publicOrigin:'http://localhost',maxAudioMinutesPerDay}),/DEMO_MAX_AUDIO/);
+});
