@@ -281,3 +281,25 @@ test('demo: language catalogues share favorites; English provider and formatter 
  for(const asset of ['/shared/i18n.js','/shared/locale-en.js','/shared/access-language.js'])assert.equal((await d.get(asset)).status,200);
  }finally{await d.stop();}
 });
+
+
+test('demo abierta: entrada directa, sesión reutilizada, aislamiento y límite de visitantes',async()=>{
+  const d=await start({openAccess:true,accessCode:undefined,maxVisitors:2});
+  try{
+    assert.equal((await d.get('/api/state')).status,401);
+    const a=await d.get('/live?lang=es');
+    assert.equal(a.status,200);assert.match(await a.text(),/id="create"/);
+    const cookieA=a.headers.get('set-cookie').split(';')[0];
+    assert.match(a.headers.get('set-cookie'),/HttpOnly; SameSite=Lax/);
+    assert.equal((await d.get('/live',cookieA)).headers.get('set-cookie'),null);
+    const b=await d.get('/live'),cookieB=b.headers.get('set-cookie').split(';')[0];
+    assert.notEqual(cookieA,cookieB);
+    const take=await d.dictate(cookieA);await take.closed;
+    assert.equal((await (await d.get('/api/state',cookieA)).json()).runs.length,1);
+    assert.equal((await (await d.get('/api/state',cookieB)).json()).runs.length,0);
+    assert.equal((await d.get('/live')).status,503);
+    assert.equal((await d.get('/live',cookieA)).status,200);
+    assert.equal((await fetch(d.origin+'/api/cancel',{method:'POST',headers:{Origin:'https://evil.invalid',Cookie:cookieA},body:'{}'})).status,403);
+    assert.equal((await d.get('/api/export',cookieA)).status,404);
+  }finally{await d.stop();}
+});

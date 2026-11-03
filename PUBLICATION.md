@@ -39,3 +39,6 @@ Las secciones Hackathon Submission y Release of Information conceden derechos am
 02-11-2026 · Cambio preparado para publicación: la demo incorpora el revisor global Muse Spark con envío explícito, aislamiento de visitantes y retención temporal en memoria. La afirmación histórica «solo en laboratorio» describe la versión anterior. Activación en Render pendiente de coordinación para no interrumpir las pruebas del responsable; consultar HACKATHON_LOG.md para el estado verificado.
 
 Activado y verificado tras coordinación: Render ecf0da79ba76dac272eadf721bf01adeed316999, 02-11-2026, con revisor global Muse Spark disponible. Una revisión sintética real completada desde la web pública, texto original intacto; sin validación clínica. Código 95f4c5d y registro ecf0da7 en GitHub; detalles en HACKATHON_LOG.md. Auto-Deploy restaurado a On Commit; registros usan skip render.
+
+
+2026-11-03 · Por solicitud del responsable, el arranque de la demo pública abre /live con sesión individual automática, sin código inicial. DEMO_REQUIRE_ACCESS_CODE=true restaura el acceso por código. Se mantienen aislamiento, límites y exclusión del laboratorio. Estado de activación y pruebas en HACKATHON_LOG.md.
