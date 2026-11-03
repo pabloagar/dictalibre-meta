@@ -245,8 +245,7 @@ window.addEventListener('dicta-take',async event=>{
  finally{if(streamTake){streams.delete(streamTake);if(!streamTake.done)streamTake.cancel();}takeSlot?.release();takeSlots.delete(reportAnchor);jobs.delete(job);cancel.remove();delete card.dataset.pending;trimTakeCards(panel);}
 });
 
-// Reveal only after the complete workspace has mounted successfully.
-window.dispatchEvent(new window.Event('dicta-ready'));
+
 
 
 // Direct pairing uses the original controls and transport, never a sample QR.
@@ -293,3 +292,6 @@ new MutationObserver(updateFooterConnection).observe(document.querySelector('#pa
 const updateCount=()=>{const text=reportEditor.model.text;countLabel.textContent=tr`${text.trim()?text.trim().split(/\s+/u).length:0} palabras · ${text.length} caracteres`;};
 new MutationObserver(updateCount).observe(reportEditor.element,{childList:true,subtree:true,characterData:true});updateCount();
 
+
+// Reveal after the scan layout and footer have their final geometry.
+window.dispatchEvent(new window.Event('dicta-ready'));

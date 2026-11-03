@@ -908,3 +908,25 @@ body.clinical-workspace header{height:52px;min-height:52px;padding:0 24px}
 .clinical-workspace .sheet-footer{margin-top:24px;padding-top:12px}
 @media(max-width:900px){body.clinical-workspace header{height:auto;min-height:52px;padding:8px 14px}.clinical-workspace .clinical-topbar{gap:8px}.clinical-workspace .dictation-canvas>.clinical-sheet.scan-first{padding:22px 20px 16px}}
 @media(max-width:560px){.clinical-workspace .dictation-canvas>.clinical-editbar{padding:8px 10px}.clinical-workspace .brand-stack{gap:6px}.clinical-workspace .dictation-canvas>.clinical-editbar>.report-new{margin-left:auto}}
+
+/* Stable first paint: shared geometry for the initial sheet and QR-first editor. */
+:root{--startup-toolbar-height:48px;--startup-sheet-height:366px}
+html[data-boot]{--boot-bg:#e2ded4;--boot-bar:#e5e1d7;--boot-sheet:#ebe7dd;--boot-line:#c9c1b3;background:var(--boot-bg)}
+html[data-boot-theme="penumbra"]{--boot-bg:#131416;--boot-bar:#181a1e;--boot-sheet:#1c1f24;--boot-line:#292d34}
+html[data-boot-theme="ambar"]{--boot-bg:#110e0a;--boot-bar:#14110d;--boot-sheet:#18140f;--boot-line:#352e24}
+#dicta-boot .boot-header{height:52px;padding:0 24px;background:var(--boot-bar);border-bottom:1px solid var(--boot-line)}
+#dicta-boot .dicta-wordmark>img{width:60px;height:32px;max-height:32px}
+html[data-boot-theme="penumbra"] #dicta-boot .dicta-logo-light,html[data-boot-theme="ambar"] #dicta-boot .dicta-logo-light{display:none}
+html[data-boot-theme="penumbra"] #dicta-boot .dicta-logo-dark,html[data-boot-theme="ambar"] #dicta-boot .dicta-logo-dark{display:block}
+#dicta-boot .boot-desk{width:100%;max-width:1012px;padding:0 16px;box-sizing:border-box;margin:12px auto 36px}
+#dicta-boot .boot-toolbar{height:var(--startup-toolbar-height);box-sizing:border-box;background:var(--boot-sheet);border:1px solid var(--boot-line);border-radius:14px 14px 0 0}
+#dicta-boot .boot-paper{margin:0;width:100%;max-width:none;height:var(--startup-sheet-height);min-height:var(--startup-sheet-height);padding:0;background:var(--boot-sheet);border:1px solid var(--boot-line);border-top:0;border-radius:0 0 14px 14px;box-shadow:0 12px 40px #0003}
+.clinical-workspace .dictation-canvas>.clinical-editbar{min-height:var(--startup-toolbar-height)}
+.clinical-workspace .dictation-canvas>.clinical-sheet.scan-first{min-height:var(--startup-sheet-height)}
+.clinical-workspace .scan-home .pairing{min-height:226px}
+html:not([data-boot]) .clinical-workspace>.shell,.clinical-workspace .scan-home #pairing:not([hidden]){animation:dicta-content-in 180ms ease-out}
+@keyframes dicta-content-in{from{opacity:.65}to{opacity:1}}
+@media(max-width:900px){#dicta-boot .boot-header,body.clinical-workspace header{height:90px;min-height:90px;padding:8px 14px}#dicta-boot .boot-header{align-items:flex-start}}
+@media(max-width:560px){:root{--startup-toolbar-height:80px}}
+@media(max-width:700px){#dicta-boot .boot-desk{padding:0 16px}}
+@media(prefers-reduced-motion:reduce){html:not([data-boot]) .clinical-workspace>.shell,.clinical-workspace .scan-home #pairing:not([hidden]){animation:none}}

@@ -31,3 +31,10 @@ test('error o espera agotada ofrece reintento sin mostrar interfaz antigua',asyn
 });
 
 test('arranque compatible con CSP sin scripts ni estilos inline',()=>{assert.ok(html.includes('src="/startup.js"'));assert.doesNotMatch(html,/<script>/);assert.doesNotMatch(html,/<style>/);});
+
+
+test('inicio usa el mismo arte del logo y respeta el tema día',async()=>{
+ const s=setup('dia');assert.equal(s.window.document.documentElement.dataset.bootTheme,'dia');
+ const logos=[...s.window.document.querySelectorAll('.dicta-wordmark')];assert.equal(logos.length,2);
+ assert.equal(logos[0].innerHTML,logos[1].innerHTML);await s.window.happyDOM.close();
+});
