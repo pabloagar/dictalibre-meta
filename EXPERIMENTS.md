@@ -528,5 +528,21 @@ Ejecutado núcleo LoRA con PyTorch2.6.0+cpu en entorno aislado Windows, Python3.
 
 Auditoría de audio posterior: bloque femenino SLR71 descargado y decodificado localmente, 1738 WAV/10211,498667s (2,8365h), todos finitos/no silencio total/no recorte según regla del piloto. Segunda auditoría local sin red12,438657s; tiempo combinado de descarga no concluido y no usado como benchmark. Bloque masculino no recuperado; revisión auditiva/transcripción y permisos siguen pendientes. Evidencia privada en slr71_female_verified_20261103/audit.json.
 
+
+### Chatterbox: smoke privado SLR71, 03-11-2026
+
+Hipótesis mecánica antes de ejecución: LoRA T3 V3 puede actualizar parámetros con audio chileno en T4, manteniendo pesos base congelados y recargando el adaptador. Criterio: 20 pasos, pérdidas/gradientes finitos y no nulos, adaptador modificado, recarga con logits atol/rtol 1e-4. No exige pérdida monótona: los ejemplos cambian entre pasos. No demuestra mejora de acento.
+
+Condiciones: subconjunto femenino SLR71, semilla 20261103; 13 hablantes, 52 grabaciones (44 train/8 validation), cuatro por hablante, primera selección lexicográfica tras excluir textos compartidos; WAV originales y SHA256 privados. Fuente y transcripciones revisadas por proveedor según OpenSLR; ninguna escucha propia declarada. Modo explícito private_research_smoke con comercialización/redistribución/ASR pendientes. No usa es_mx_f1 ni la voz del responsable.
+
+Unidades e intervalos: segundos perf_counter sincronizado CUDA por forward/backward/optimizer; carga/descarga/preparación por separado; memoria pico en bytes. Precisión y sobrecosto de instrumentación no calibrados. Saldo al conectar observado 147,71 unidades, tasa 1,15 unidades/h; watchdog 3.600 s. Precio de referencia observado hoy US$0,0999/unidad, estimación no factura. Se reserva conservadoramente US$9,90 del techo original para este intento. No se compra saldo. Resultados pendientes de ejecución; conservar fallos.
+
 ## 2026-11-03 · Contenido sin JavaScript
 Criterio: respuesta HTML /live sin afirmaciones de ASR no integrado/fases antiguas, descripción de dictado/plantillas/revisión opcional y aviso JavaScript. Reproducible con Invoke-WebRequest y tests/startup.test.mjs. Una suite267/267, sintaxis OK. Fuente observada HTTP Render; no audio ni medición de SEO o evaluación del jurado. Dispositivo,latencia,sobrecosto:null. No se mide compresión de video.
+
+
+Resultado real: 20/20 pasos completados en Tesla T4, torch 2.6.0+cu124, Python 3.13.16. Tiempo de pasos 6,095640 s (no incluye instalación, descarga, carga ni preparación); descarga 17,695528 s, carga 19,085028 s, preparación 22,070645 s. Pérdidas 2,022552–3,968077 entre ejemplos diferentes; no es una curva de validación ni evidencia de mejora. Pico allocated 3.359.423.488 bytes. Adaptador de 3.944.904 bytes, SHA256 dc41ed85a39d33f5bbee6d18f39563ce41ab7f0c2baf615cb36103954739061f. Trainer SHA256 78c68721ecc8057dfad85aac48d9a0822039f43f9ee0f6af7839bf7d3cfdb7a2 (árbol de trabajo; no atribuido retrospectivamente a commit).
+
+Recarga en proceso nuevo y comparación base/adaptado: dos frases médicas ficticias por variante, misma referencia de hablante reservado y semilla. 4/4 WAV técnicos correctos; escucha, acento, fidelidad e identidad nueva no validados. Las referencias del corpus no se convierten en identidades artificiales por entrenar LoRA. Advertencias de diferencia entre longitud mel y tokens del referente conservadas en logs; no se consideran revisión de calidad aprobada.
+
+ZIP privado descargado y comprobado: SHA256 151f4cb01993775d1645c5fe8697299d1700aa6e4264c34ea4d466b7ebd35ecf. Incluye pesos, código ejecutado, manifiestos, licencia/atribución, métricas y WAV. Saldo visible 147,71→147,67 unidades: estimación US$0,003996 por diferencia mostrada, provisional por redondeo/latencia del panel; no factura. Techo estimado del watchdog de una hora US$0,114885 a tasa observada. GPU desconectada verificada: cero sesiones, tasa cero. No se entrenó Whisper ni se exportó un corpus comercial.

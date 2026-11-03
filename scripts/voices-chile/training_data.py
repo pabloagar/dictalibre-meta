@@ -43,7 +43,7 @@ def inventory(indices, seed=20261103):
             'rows': rows, 'purpose': 'candidate_inventory_not_training_authorization'}
 
 
-def validate(manifest, audio_root=None):
+def validate(manifest, audio_root=None, research_source_qc=False):
     rows = [r for r in manifest['rows'] if r['split'] in ('train', 'validation')]
     if len({r['id'] for r in manifest['rows']}) != len(manifest['rows']):
         raise ValueError('duplicate_ids')
@@ -68,16 +68,28 @@ def validate(manifest, audio_root=None):
             x, sr = sf.read(p)
             if pilot.inspeccionar(np.asarray(x), sr)['estado'] != 'ok' or not 1 <= len(x)/sr <= 12:
                 raise ValueError('audio_invalid_or_outside_1_to_12_seconds:' + r['id'])
-            if r.get('transcript_reviewed') is not True:
+            source_qc = (research_source_qc and manifest.get('purpose') == 'private_research_smoke'
+                         and manifest.get('source') == 'https://openslr.org/71/'
+                         and r.get('transcript_provenance') == 'provider_manual_qc'
+                         and bool(manifest.get('indices')))
+            if r.get('transcript_reviewed') is not True and not source_qc:
                 raise ValueError('transcript_not_reviewed:' + r['id'])
     return {'rows': len(manifest['rows']), 'speakers': len({r['speaker'] for r in manifest['rows']}),
             'partitions': dict(Counter(r['split'] for r in manifest['rows'])),
             'audio_verified': bool(audio_root), 'duration_seconds': None}
 
 
-def check_training_rights(manifest_path, rights):
+def check_training_rights(manifest_path, rights, research_source_qc=False):
     if rights.get('manifest_sha256') != pilot.sha(manifest_path):
         raise ValueError('rights_manifest_mismatch')
+    if research_source_qc:
+        if (rights.get('scope') != 'private_research_smoke' or
+                rights.get('copyright_basis') != 'CC BY-SA 4.0' or
+                rights.get('source') != 'https://openslr.org/71/' or
+                not rights.get('evidence') or not rights.get('reviewed_on') or
+                rights.get('commercial_use', {}).get('status') != 'unverified'):
+            raise ValueError('research_basis_required')
+        return
     for purpose in ('tts_adaptation', 'voice_conditioning'):
         permission = rights.get(purpose, {})
         if permission.get('status') != 'verified' or not all(

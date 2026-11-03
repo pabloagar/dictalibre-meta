@@ -7,9 +7,9 @@ Repositorio de trabajo: https://github.com/pabloagar/dictalibre-meta/tree/codex/
 ## Estado verificable
 
 - Implementado inventario reproducible de índices SLR71 y separación de hablantes y textos. Ejecutado: 4.374 registros, 31 identificadores de hablante, 2.564 entradas train, 275 validation y 1.535 excluidas por texto compartido entre particiones. No son 4.374 ejemplos ya revisados para entrenar.
-- Implementada receta experimental LoRA de 1–20 pasos para Chatterbox Multilingual V3 fijado en config.json. No se ha ejecutado contra el modelo completo en GPU ni existe checkpoint chileno aprobado.
+- Implementada receta experimental LoRA de 1–20 pasos para Chatterbox Multilingual V3 fijado en config.json. Ejecutada contra el modelo completo en Colab T4: 20/20 pasos y adaptador guardado/recargado. Acento chileno aún no aprobado.
 - Pruebas CPU con tensores artificiales verifican gradientes, pesos base intactos, actualización de adaptador, guardado/recarga y pérdida desplazada al siguiente token. No son entrenamiento de una voz ni prueba de memoria GPU.
-- Preflight real del inventario se detiene en `training_rights_unverified:tts_adaptation`, antes de importar torch o asignar GPU. Los audios y transcripciones también necesitan revisión antes de entrenamiento. La descarga/auditoría de audio es lectura local, no entrenamiento.
+- El preflight inicial del inventario se detuvo en `training_rights_unverified:tts_adaptation`, antes de importar torch o asignar GPU. El modo privado posterior admite el control del proveedor, explícitamente separado de escucha propia; ver actualización inferior. La descarga/auditoría de audio es lectura local, no entrenamiento.
 - Auditoría de audio ejecutada sobre bloque femenino: 1.738 WAV, 10.211,498667 segundos (~2,84 h), todos técnicamente válidos con el criterio del piloto. Corpus masculino, escucha y revisión literal pendientes. ZIP y controles privados conservados.
 - Whisper, calidad del acento, identidad nueva y permiso comercial siguen pendientes. Los 20 pasos prueban funcionamiento mecánico; no bastan para declarar aprendizaje del acento.
 
@@ -47,7 +47,7 @@ La pérdida propia alinea logits `[batch, tiempo, vocabulario]` con **el siguien
 
 Éxito de la prueba: pérdidas y gradientes finitos/no nulos, ningún gradiente en pesos congelados, adaptador cambia, se guarda y sus logits coinciden tras restauración (atol/rtol 1e-4). Se registran tiempos por paso con sincronización CUDA, memoria allocated/reserved máxima, carga/descarga/preparación por separado, pip freeze, dispositivo, semillas, hashes y errores. Sobrecosto de instrumentación, tarifa facturada y calidad perceptual quedan null/no validados donde no hay medida.
 
-Salidas previstas, aún no obtenidas: `adapter.safetensors`, `adapter_config.json`, `steps.json`, `environment.json`, `status.json`. El adaptador necesita la revisión exacta del modelo base y wrappers LoRA; no es un motor autónomo. La recarga de esta prueba ocurre sobre el mismo proceso y base restaurada: queda pendiente comprobar un proceso nuevo e inferencia WAV antes de declararlo reutilizable.
+Salidas obtenidas en la prueba privada: `adapter.safetensors`, `adapter_config.json`, `steps.json`, `environment.json`, `status.json`. El adaptador necesita la revisión exacta del modelo base y wrappers LoRA; no es un motor autónomo. La recarga de esta prueba ocurre sobre el mismo proceso y base restaurada: también se completó recarga en proceso nuevo y generación de cuatro WAV comparativos (ver resultado inferior). La calidad de voz reutilizable sigue pendiente de evaluación.
 
 ## Después de la prueba técnica
 
@@ -57,3 +57,18 @@ Salidas previstas, aún no obtenidas: `adapter.safetensors`, `adapter_config.jso
 4. Entrenar Whisper como experimento separado; comparar B0 original, B1 glosario, B2 sintético general y B3 sintético chileno, con textos/cantidades comparables y test real independiente. No afirmar mejora clínica por WER sintético.
 
 Referencias técnicas inspeccionadas: [T3 oficial fijado](https://github.com/resemble-ai/chatterbox/blob/5de7a54aa4e5e2baadb0182dde554908b48b85c2/src/chatterbox/models/t3/t3.py), [carga y condicionamiento V3](https://github.com/resemble-ai/chatterbox/blob/5de7a54aa4e5e2baadb0182dde554908b48b85c2/src/chatterbox/mtl_tts.py), [SLR71](https://openslr.org/71/), [publicación del corpus](https://aclanthology.org/2020.lrec-1.801/).
+
+## Actualización: prueba privada con revisión del proveedor (03-11-2026)
+
+El responsable solicitó ejecutar el entrenamiento. Se incorpora `--research-source-qc`, limitado al smoke privado SLR71. La base documental es la licencia pública CC BY-SA 4.0 y la publicación del corpus específicamente para TTS; esto permite fundamentar el experimento sin afirmar permisos universales de identidad o producto comercial. Se preservan atribución y licencia. El registro de derechos conserva comercialización, redistribución y ASR pendientes; no se rellenan como verificados.
+
+La transcripción conserva `transcript_reviewed=false` y añade `transcript_provenance=provider_manual_qc`: OpenSLR declara control manual, con posibles errores. La opción exige propósito privado, fuente e índices. Sin ella sigue vigente la revisión propia. La exportación de corpus conserva sus requisitos humanos. No usar esta opción para etiquetar una voz como aprobada.
+
+Subconjunto determinista preparado localmente: inventario femenino con semilla 20261103, primeras cuatro entradas por hablante tras excluir textos compartidos entre particiones: 52 WAV de 13 hablantes; 44 train y 8 validation. WAV sin transformar, SHA256 comprobados, controles técnicos aprobados. Los 20 pasos usan selección round-robin del entrenador; validation aún no mide acento. Estado GPU y resultados se registrarán al terminar la ejecución, sin sustituir resultados por preparativos.
+
+
+Resultado real: 20/20 pasos completados en Tesla T4, torch 2.6.0+cu124, Python 3.13.16. Tiempo de pasos 6,095640 s (no incluye instalación, descarga, carga ni preparación); descarga 17,695528 s, carga 19,085028 s, preparación 22,070645 s. Pérdidas 2,022552–3,968077 entre ejemplos diferentes; no es una curva de validación ni evidencia de mejora. Pico allocated 3.359.423.488 bytes. Adaptador de 3.944.904 bytes, SHA256 dc41ed85a39d33f5bbee6d18f39563ce41ab7f0c2baf615cb36103954739061f. Trainer SHA256 78c68721ecc8057dfad85aac48d9a0822039f43f9ee0f6af7839bf7d3cfdb7a2 (árbol de trabajo; no atribuido retrospectivamente a commit).
+
+Recarga en proceso nuevo y comparación base/adaptado: dos frases médicas ficticias por variante, misma referencia de hablante reservado y semilla. 4/4 WAV técnicos correctos; escucha, acento, fidelidad e identidad nueva no validados. Las referencias del corpus no se convierten en identidades artificiales por entrenar LoRA. Advertencias de diferencia entre longitud mel y tokens del referente conservadas en logs; no se consideran revisión de calidad aprobada.
+
+ZIP privado descargado y comprobado: SHA256 151f4cb01993775d1645c5fe8697299d1700aa6e4264c34ea4d466b7ebd35ecf. Incluye pesos, código ejecutado, manifiestos, licencia/atribución, métricas y WAV. Saldo visible 147,71→147,67 unidades: estimación US$0,003996 por diferencia mostrada, provisional por redondeo/latencia del panel; no factura. Techo estimado del watchdog de una hora US$0,114885 a tasa observada. GPU desconectada verificada: cero sesiones, tasa cero. No se entrenó Whisper ni se exportó un corpus comercial.

@@ -15,8 +15,8 @@ import training_data
 def preflight(args):
     manifest = pilot.leer(args.manifest)
     training_data.validate(manifest)
-    training_data.check_training_rights(args.manifest, pilot.leer(args.rights))
-    return training_data.validate(manifest, args.audio_root)
+    training_data.check_training_rights(args.manifest, pilot.leer(args.rights), args.research_source_qc)
+    return training_data.validate(manifest, args.audio_root, args.research_source_qc)
 
 
 def run(args, out):
@@ -155,6 +155,7 @@ def main():
     p.add_argument('--output', required=True)
     p.add_argument('--budget')
     p.add_argument('--run', action='store_true', help='Without this flag only preflight runs, before importing torch')
+    p.add_argument('--research-source-qc', action='store_true', help='Private SLR71 smoke only; provider QC is not human approval or commercial clearance')
     p.add_argument('--steps', type=int, choices=range(1, 21), default=20)
     p.add_argument('--max-seconds', type=int, default=600)
     p.add_argument('--seed', type=int, default=20261103)
