@@ -760,3 +760,6 @@ Activación separación/copia verificada: Render deployment 7519671169 success 2
 
 Validación previa a publicar: pnpm check y 253/253 pruebas aprobadas. Render previo 8757e5f con cero dictados activos. Las seis pruebas inicialmente incompatibles con el nuevo paso fueron adaptadas para confirmar explícitamente antes de revisar; repetición completa aprobada.
 
+
+Activación verificada: Render deployment 7519823377 success 2026-11-03T13:20:44Z (10:20:44 America/Santiago), build 52d47e70ea39db8bf3e361a0ccc3ff9b706b1c1b. API confirma build; live.js, report-editor.js, report-review.js y style.css coinciden con checkout. Revisión real de texto sintético completada con muse-spark-1.3, context.patientSex=female conservado y cero avisos. Las cuatro elecciones se validaron automatizadamente; una revisión real remota, sin audio. GitHub y Render activos; laboratorio privado sin reiniciar; maquetas y capturas solo locales.
+
