@@ -19,7 +19,7 @@
  */
 
 const STORE_KEY = 'dicta-mobile-look';
-const THEMES = ['dia', 'penumbra', 'ambar', 'sala', 'negatoscopio', 'contraste'];
+const THEMES = ['dia', 'penumbra', 'negatoscopio'];
 const MICS = ['punto', 'halo', 'tecla', 'onda'];
 const GRABS = ['rec', 'acento', 'ia'];
 /* Estilo de micrófono por defecto: el mismo en los tres temas («misma geometría»). */
@@ -216,7 +216,7 @@ function buildSheet() {
   const lookSec = section('secLook');
   const row = el('div', 'm-seg-row');
   const rowLabel = el('span'); rowLabel.dataset.mText = 'theme'; rowLabel.id = 'm-theme-label';
-  const seg = el('div', 'm-seg');
+  const seg = el('div', 'm-seg m-theme-previews');
   seg.setAttribute('role', 'radiogroup');
   seg.setAttribute('aria-labelledby', 'm-theme-label');
   for (const value of THEMES) {
@@ -224,17 +224,11 @@ function buildSheet() {
     const input = el('input'); input.type = 'radio'; input.name = 'm-theme'; input.value = value;
     input.addEventListener('change', () => { if (input.checked) setLook({ theme: value }); });
     const text = el('span'); text.dataset.mText = value;
-    option.append(input, text);
+    const sample=el('span','m-theme-preview');sample.dataset.preview=value;sample.setAttribute('aria-hidden','true');sample.innerHTML='<i class="m-preview-bar"></i><i class="m-preview-mic">♩</i><i class="m-preview-line"></i>';option.append(input, sample, text);
     seg.append(option);
   }
   row.append(rowLabel, seg);
   lookSec.append(row);
-  for(const [key,titleKey,values] of [['mic','micStyle',MICS.map(v=>[v,v])],['grab','grabColor',[['rec','recColor'],['acento','accentColor'],['ia','actionColor']]]]){
-    const row=el('div','m-seg-row'),label=el('span');label.dataset.mText=titleKey;label.id='m-'+key+'-label';
-    const group=el('div','m-seg');group.setAttribute('role','radiogroup');group.setAttribute('aria-labelledby',label.id);
-    for(const [value,textKey] of values){const option=el('label'),input=el('input'),text=el('span');input.type='radio';input.name='m-'+key;input.value=value;text.dataset.mText=textKey;input.onchange=()=>{if(input.checked)setLook({[key]:value});};option.append(input,text);group.append(option);}
-    row.append(label,group);lookSec.append(row);
-  }
 
   const foot = el('div', 'm-foot');
   const actions = el('div', 'm-actions');

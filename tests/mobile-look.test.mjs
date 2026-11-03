@@ -7,11 +7,11 @@ function setup(saved=null){const window=new Window({url:'http://localhost/mobile
 test('capa móvil conserva nodos, IDs y eventos existentes; no abre captura',async()=>{
  const w=setup(),d=w.document,ids=[...d.querySelectorAll('[id]')].map(n=>[n.id,n]);let clicks=0;d.getElementById('test-haptics').onclick=()=>clicks++;w.eval(source);
  for(const [id,node] of ids)assert.equal(d.getElementById(id),node,id);
- d.getElementById('test-haptics').click();assert.equal(clicks,1);assert.equal(d.getElementById('record').disabled,true);assert.equal(d.querySelectorAll('.m-viz').length,1);assert.equal(d.querySelectorAll('input[name=m-theme]').length,6);assert.equal(d.querySelectorAll('input[name=m-mic]').length,4);assert.equal(d.querySelectorAll('input[name=m-grab]').length,3);
+ d.getElementById('test-haptics').click();assert.equal(clicks,1);assert.equal(d.getElementById('record').disabled,true);assert.equal(d.querySelectorAll('.m-viz').length,1);assert.equal(d.querySelectorAll('input[name=m-theme]').length,3);assert.equal(d.querySelectorAll('input[name=m-mic]').length,0);assert.equal(d.querySelectorAll('input[name=m-grab]').length,0);
  assert.ok(d.querySelector('.m-sheet #haptics'));assert.ok(d.querySelector('.m-sheet #close'));await w.happyDOM.close();
 });
-test('preferencias móviles: seis temas, cuatro estilos y color sobreviven al montaje',async()=>{
- for(const theme of ['dia','penumbra','ambar','sala','negatoscopio','contraste']){const w=setup(JSON.stringify({theme,mic:'onda',grab:{[theme]:'ia'}}));w.eval(source);assert.equal(w.document.body.dataset.theme,theme);assert.equal(w.document.body.dataset.mic,'onda');assert.equal(w.document.body.dataset.grab,'ia');w.dictaLook.set({mic:'halo'});assert.equal(JSON.parse(w.localStorage.getItem('dicta-mobile-look')).mic,'halo');await w.happyDOM.close();}
+test('preferencias móviles: tres temas y preferencias anteriores sobreviven al montaje',async()=>{
+ for(const theme of ['dia','penumbra','negatoscopio']){const w=setup(JSON.stringify({theme,mic:'onda',grab:{[theme]:'ia'}}));w.eval(source);assert.equal(w.document.body.dataset.theme,theme);assert.equal(w.document.body.dataset.mic,'onda');assert.equal(w.document.body.dataset.grab,'ia');w.dictaLook.set({mic:'halo'});assert.equal(JSON.parse(w.localStorage.getItem('dicta-mobile-look')).mic,'halo');await w.happyDOM.close();}
  const w=setup('"inválido"');w.eval(source);assert.equal(w.document.body.dataset.mic,'punto');await w.happyDOM.close();
 });
 test('estado visual depende de captura real y Ajustes no deja actuar debajo',async()=>{

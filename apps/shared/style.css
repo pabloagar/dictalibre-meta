@@ -963,3 +963,29 @@ body.clinical-workspace[data-theme=negatoscopio] .dictation-canvas>.clinical-edi
 body.clinical-workspace:is([data-theme=sala-neutral],[data-theme=negatoscopio]) .dicta-wordmark>.dicta-logo-light{display:none}
 body.clinical-workspace:is([data-theme=sala-neutral],[data-theme=negatoscopio]) .dicta-wordmark>.dicta-logo-dark{display:block}
 body.clinical-workspace[data-theme=negatoscopio] header{--dl-rec:#e08a7e;--dl-ok:#7eaec0}
+/* Minimal empty report and template browser, shared by all themes. */
+.clinical-workspace .report-editor[data-empty=true]::before{content:none!important}
+.clinical-workspace .report-start-prompt{margin:0 0 24px;font:italic 400 26px/1.5 var(--dl-font-doc);color:var(--dl-muted)}
+.clinical-workspace .report-start-prompt button{display:inline;padding:0;min-height:0;border:0;background:transparent;color:inherit;font:inherit;white-space:normal}
+.clinical-workspace .report-start-prompt .inline-template-link{color:var(--dl-accent);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:5px}
+.clinical-workspace .report-start-prompt[hidden],.clinical-workspace .scan-first .report-start-prompt,.clinical-workspace .ready-hint{display:none!important}
+.clinical-workspace .template-picker{grid-template-columns:250px minmax(0,1fr);height:490px;border-radius:14px;box-shadow:0 16px 48px #0003}
+.clinical-workspace .template-left{padding:16px;gap:8px;background:var(--dl-sheet)}
+.clinical-workspace .template-left>strong{display:none}
+.clinical-workspace .template-picker input[type=search]{border-radius:8px;font-size:13px;padding:10px;background:var(--dl-bg)}
+.clinical-workspace .template-group{font-size:10px;margin:14px 0 6px;letter-spacing:.06em}
+.clinical-workspace .template-row{border-radius:8px;padding:0 8px}
+.clinical-workspace .template-row .template-choice{font-size:13px;min-height:36px}
+.clinical-workspace .template-row[data-selected=true]{background:var(--dl-soft);border-color:transparent}
+.clinical-workspace .template-right{padding:18px;gap:12px}
+.clinical-workspace .template-picker-head{font-size:16px}
+.clinical-workspace .template-right>details:first-of-type{border:0;background:transparent;padding:12px 0;min-height:100px}
+.clinical-workspace .template-picker pre{font-size:15px;line-height:1.7}
+.clinical-workspace .template-right>details:not(:first-of-type){font-size:11px;color:var(--dl-muted);border-top:1px solid var(--dl-line);padding-top:8px}
+.clinical-workspace .template-picker-actions{border-top:1px solid var(--dl-line);padding-top:12px!important}
+.clinical-workspace .template-picker-actions .save-current-template{font-size:11px;min-height:28px}
+.clinical-workspace .template-picker-actions button:last-child{border-radius:8px;font-size:13px}
+@media(max-width:600px){.clinical-workspace .template-picker{grid-template-columns:1fr;height:auto}.clinical-workspace .template-left{max-height:220px;border-right:0;border-bottom:1px solid var(--dl-line)}.clinical-workspace .report-start-prompt{font-size:22px}}
+.clinical-workspace .report-start-prompt .inline-template-link{margin-left:.22em}
+.clinical-workspace .template-right>details:not(:first-of-type){flex:0;min-height:0;margin:0;padding:8px 0 0}
+.clinical-workspace .template-right>details:not(:first-of-type)>summary{padding:4px 0;margin:0;min-height:0}
