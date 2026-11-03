@@ -1026,3 +1026,14 @@ body.clinical-workspace .template-picker [hidden]{display:none!important}
 .clinical-workspace .language-panel .language-buttons{gap:10px;margin-top:24px}
 .clinical-workspace .language-panel .language-buttons button{min-height:44px;padding:10px 24px;font-size:14px;border:1px solid var(--dl-line);border-radius:6px;letter-spacing:0}
 .clinical-workspace .language-panel .language-buttons button[aria-pressed=true]{background:var(--dl-act);color:var(--dl-act-ink);text-decoration:none}
+
+/* Stable settings frame: tabs change content, never the dialog geometry. */
+body.clinical-workspace:has(.clinical-settings[open]){overflow:hidden}
+.clinical-workspace .clinical-settings[open]>.settings-body{box-sizing:border-box;width:960px;height:min(680px,calc(100dvh - 48px));min-height:0;max-height:calc(100dvh - 48px);top:50%;left:50%;transform:translate(-50%,-50%);overflow:hidden}
+.clinical-workspace .settings-main{min-height:0;overflow-y:auto;scrollbar-gutter:stable;flex:1}
+.clinical-workspace .settings-nav{overflow-y:auto;min-height:0;flex-shrink:0}
+@media(max-width:900px){
+ .clinical-workspace .clinical-settings[open]>.settings-body{height:calc(100dvh - 48px);overflow:hidden}
+ .clinical-workspace .settings-nav{flex:0 0 auto}
+ .clinical-workspace .settings-main{overflow-y:auto;min-height:0}
+}
