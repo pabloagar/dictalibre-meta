@@ -652,3 +652,5 @@ Verificado en Render: deployment 7509322170 success 2026-11-03T03:07:59Z (00:07:
 
 ## 03-11-2026 · restaurar proporciones compactas de Stitch
 El cambio ENG/ES no quitaba el CSS de Stitch, pero la sustitución de iconos por etiquetas ensanchó Deshacer/Rehacer y reglas heredadas más específicas imponían 40px a Plantilla. Se restauran iconos con nombres accesibles, toolbar de 26px, Plantillas antes de + Nuevo, acciones superiores de 28px y ENG/ES debajo de marca en columna de ancho fijo. Flechas decorativas de desplegables siguen ocultas. Validación: pnpm check, 239/239 tests, Chrome local con borrador sintético, comparación visual inglés/español. No se mide ganancia de tiempo; tiempos humanos null. Despliegue pendiente de verificar. Trabajo paralelo Chatterbox no incluido.
+
+Verificado: Render deployment 7509730290 success 2026-11-03T03:36:43Z (00:36:43 Chile), commit be08c4ab4ac3df175a381b81108a3c9b02fc3fc0. live.js actualizado, style.css idéntico al checkout normalizando CRLF/LF, /health ok. GitHub y Render actualizados; laboratorio no reiniciado.
