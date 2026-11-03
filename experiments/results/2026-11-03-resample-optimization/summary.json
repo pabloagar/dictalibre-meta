@@ -1,0 +1,292 @@
+{
+  "remote_original": {
+    "build": "eb0b37cb17927e8c56ac164c03794bc1d6bf11fc",
+    "started": "2026-11-03T22:12:51.127Z",
+    "driverHash": "4cf706b2d0ab5447081f964f7b302145f1118ee6199e13f02cf11cab66380f6d",
+    "sourceHash": "96050d6c0b157128f84dc2afb29be3c69de7183775c2407263ad7b6b719c0cab",
+    "count": 10,
+    "passed": 10,
+    "wordsExactIgnoringCasePunctuation": 8,
+    "stopToDoneMs": {
+      "median": 4735.0664000000015,
+      "min": 4560.277700000002,
+      "max": 4993.663400000001
+    },
+    "resampleMs": {
+      "median": 938.6249475018121,
+      "min": 800.4532229974866,
+      "max": 1133.3556529991329
+    },
+    "maxBufferedAudioMs": {
+      "median": 6144.5,
+      "min": 5709.5,
+      "max": 6399.5
+    },
+    "endToFinalMs": {
+      "median": 2179.551566499751,
+      "min": 1742.0434060003608,
+      "max": 2903.062226000242
+    },
+    "endStreamToFinalMs": {
+      "median": 145.59680450009182,
+      "min": 91.81688200030476,
+      "max": 192.0521590001881
+    }
+  },
+  "local_original": {
+    "build": null,
+    "started": "2026-11-03T22:14:08.179Z",
+    "driverHash": "4cf706b2d0ab5447081f964f7b302145f1118ee6199e13f02cf11cab66380f6d",
+    "sourceHash": "96050d6c0b157128f84dc2afb29be3c69de7183775c2407263ad7b6b719c0cab",
+    "count": 30,
+    "passed": 30,
+    "wordsExactIgnoringCasePunctuation": 27,
+    "stopToDoneMs": {
+      "median": 299.73469999999907,
+      "min": 259.13500000000204,
+      "max": 377.3764999999985
+    },
+    "resampleMs": {
+      "median": 324.98170000000016,
+      "min": 294.73520000002463,
+      "max": 356.617500000001
+    },
+    "maxBufferedAudioMs": {
+      "median": 120.0,
+      "min": 120,
+      "max": 140
+    },
+    "endToFinalMs": {
+      "median": 283.1999999999989,
+      "min": 243.4390000000003,
+      "max": 368.66479999999865
+    },
+    "endStreamToFinalMs": {
+      "median": 232.3777999999993,
+      "min": 202.1128000000026,
+      "max": 282.35070000000087
+    }
+  },
+  "local_optimized": {
+    "build": null,
+    "started": "2026-11-03T22:14:46.449Z",
+    "driverHash": "4cf706b2d0ab5447081f964f7b302145f1118ee6199e13f02cf11cab66380f6d",
+    "sourceHash": "96050d6c0b157128f84dc2afb29be3c69de7183775c2407263ad7b6b719c0cab",
+    "count": 30,
+    "passed": 30,
+    "wordsExactIgnoringCasePunctuation": 27,
+    "stopToDoneMs": {
+      "median": 289.6841999999997,
+      "min": 247.63940000000002,
+      "max": 433.01000000000204
+    },
+    "resampleMs": {
+      "median": 67.80970000000525,
+      "min": 59.156399999988935,
+      "max": 83.69750000000204
+    },
+    "maxBufferedAudioMs": {
+      "median": 110.0,
+      "min": 100,
+      "max": 120
+    },
+    "endToFinalMs": {
+      "median": 282.0974499999993,
+      "min": 241.79509999999937,
+      "max": 420.20760000000155
+    },
+    "endStreamToFinalMs": {
+      "median": 236.2175500000012,
+      "min": 201.1340999999993,
+      "max": 379.5935999999965
+    }
+  },
+  "cpuBenchmark": {
+    "createdAt": "2026-11-03T22:15:48.746Z",
+    "node": "v26.13.0",
+    "platform": "win32",
+    "baselineHash": "b674779b60211b7a7063ed80913ad0917409cc6a1a5e6bd323df1f3dc19fe682",
+    "candidateHash": "ed7a08d763ba4593103be125b3c0890e3a6787a2f34ba96a70f2c9506253ba6e",
+    "clock": "performance.now ms",
+    "precisionMs": null,
+    "overheadMs": null,
+    "rounds": [
+      {
+        "round": 1,
+        "order": "baseline,candidate",
+        "before": {
+          "elapsedMs": 3272.1462,
+          "hashes": [
+            "9539d1289848a244be6ca945a4b629b3126ec7604086ef16ee7178e051409d7e",
+            "c9c234172c79abfdb0e53f74a636ab07abd83df5d225539233a843c3c5201b75",
+            "7a2c2b4d8a09ff934659407a865bbd4b5488094f7d10f1b85936ec4031c04f16",
+            "d69fb7f8740166abc4e4e16b990657da84cdd872f0973668e1d029b71018e8a6",
+            "8c0159fbc641420ea0837b669e7e61936ee3f090b7c540205910fa6e5bb4c7fd",
+            "326649bab88c7cb4491cfe355876cf8c8fda6ef6c90d63da6f6c8390e5cfd317",
+            "5e8608a91097a9acae38d3dc0c60b6de53613025c5608cf2a08a4e30c6b3c220",
+            "5ff16efe90abaeba84cf0a7e08f01bea98176dbe4cb19223b7f831429ae25e97",
+            "d55e60001f7eb06864c2de8b3fa2c92a25e8f5f669e730457304343b0a4f0ecd",
+            "44d26235901f884c4829ee84031d6dceae4858bce26e2a1207f8a1ebdf076f16"
+          ]
+        },
+        "after": {
+          "elapsedMs": 740.5393000000004,
+          "hashes": [
+            "9539d1289848a244be6ca945a4b629b3126ec7604086ef16ee7178e051409d7e",
+            "c9c234172c79abfdb0e53f74a636ab07abd83df5d225539233a843c3c5201b75",
+            "7a2c2b4d8a09ff934659407a865bbd4b5488094f7d10f1b85936ec4031c04f16",
+            "d69fb7f8740166abc4e4e16b990657da84cdd872f0973668e1d029b71018e8a6",
+            "8c0159fbc641420ea0837b669e7e61936ee3f090b7c540205910fa6e5bb4c7fd",
+            "326649bab88c7cb4491cfe355876cf8c8fda6ef6c90d63da6f6c8390e5cfd317",
+            "5e8608a91097a9acae38d3dc0c60b6de53613025c5608cf2a08a4e30c6b3c220",
+            "5ff16efe90abaeba84cf0a7e08f01bea98176dbe4cb19223b7f831429ae25e97",
+            "d55e60001f7eb06864c2de8b3fa2c92a25e8f5f669e730457304343b0a4f0ecd",
+            "44d26235901f884c4829ee84031d6dceae4858bce26e2a1207f8a1ebdf076f16"
+          ]
+        },
+        "equal": true
+      },
+      {
+        "round": 2,
+        "order": "candidate,baseline",
+        "before": {
+          "elapsedMs": 3378.9485999999997,
+          "hashes": [
+            "9539d1289848a244be6ca945a4b629b3126ec7604086ef16ee7178e051409d7e",
+            "c9c234172c79abfdb0e53f74a636ab07abd83df5d225539233a843c3c5201b75",
+            "7a2c2b4d8a09ff934659407a865bbd4b5488094f7d10f1b85936ec4031c04f16",
+            "d69fb7f8740166abc4e4e16b990657da84cdd872f0973668e1d029b71018e8a6",
+            "8c0159fbc641420ea0837b669e7e61936ee3f090b7c540205910fa6e5bb4c7fd",
+            "326649bab88c7cb4491cfe355876cf8c8fda6ef6c90d63da6f6c8390e5cfd317",
+            "5e8608a91097a9acae38d3dc0c60b6de53613025c5608cf2a08a4e30c6b3c220",
+            "5ff16efe90abaeba84cf0a7e08f01bea98176dbe4cb19223b7f831429ae25e97",
+            "d55e60001f7eb06864c2de8b3fa2c92a25e8f5f669e730457304343b0a4f0ecd",
+            "44d26235901f884c4829ee84031d6dceae4858bce26e2a1207f8a1ebdf076f16"
+          ]
+        },
+        "after": {
+          "elapsedMs": 736.9763000000003,
+          "hashes": [
+            "9539d1289848a244be6ca945a4b629b3126ec7604086ef16ee7178e051409d7e",
+            "c9c234172c79abfdb0e53f74a636ab07abd83df5d225539233a843c3c5201b75",
+            "7a2c2b4d8a09ff934659407a865bbd4b5488094f7d10f1b85936ec4031c04f16",
+            "d69fb7f8740166abc4e4e16b990657da84cdd872f0973668e1d029b71018e8a6",
+            "8c0159fbc641420ea0837b669e7e61936ee3f090b7c540205910fa6e5bb4c7fd",
+            "326649bab88c7cb4491cfe355876cf8c8fda6ef6c90d63da6f6c8390e5cfd317",
+            "5e8608a91097a9acae38d3dc0c60b6de53613025c5608cf2a08a4e30c6b3c220",
+            "5ff16efe90abaeba84cf0a7e08f01bea98176dbe4cb19223b7f831429ae25e97",
+            "d55e60001f7eb06864c2de8b3fa2c92a25e8f5f669e730457304343b0a4f0ecd",
+            "44d26235901f884c4829ee84031d6dceae4858bce26e2a1207f8a1ebdf076f16"
+          ]
+        },
+        "equal": true
+      },
+      {
+        "round": 3,
+        "order": "baseline,candidate",
+        "before": {
+          "elapsedMs": 3308.081699999999,
+          "hashes": [
+            "9539d1289848a244be6ca945a4b629b3126ec7604086ef16ee7178e051409d7e",
+            "c9c234172c79abfdb0e53f74a636ab07abd83df5d225539233a843c3c5201b75",
+            "7a2c2b4d8a09ff934659407a865bbd4b5488094f7d10f1b85936ec4031c04f16",
+            "d69fb7f8740166abc4e4e16b990657da84cdd872f0973668e1d029b71018e8a6",
+            "8c0159fbc641420ea0837b669e7e61936ee3f090b7c540205910fa6e5bb4c7fd",
+            "326649bab88c7cb4491cfe355876cf8c8fda6ef6c90d63da6f6c8390e5cfd317",
+            "5e8608a91097a9acae38d3dc0c60b6de53613025c5608cf2a08a4e30c6b3c220",
+            "5ff16efe90abaeba84cf0a7e08f01bea98176dbe4cb19223b7f831429ae25e97",
+            "d55e60001f7eb06864c2de8b3fa2c92a25e8f5f669e730457304343b0a4f0ecd",
+            "44d26235901f884c4829ee84031d6dceae4858bce26e2a1207f8a1ebdf076f16"
+          ]
+        },
+        "after": {
+          "elapsedMs": 746.4275000000016,
+          "hashes": [
+            "9539d1289848a244be6ca945a4b629b3126ec7604086ef16ee7178e051409d7e",
+            "c9c234172c79abfdb0e53f74a636ab07abd83df5d225539233a843c3c5201b75",
+            "7a2c2b4d8a09ff934659407a865bbd4b5488094f7d10f1b85936ec4031c04f16",
+            "d69fb7f8740166abc4e4e16b990657da84cdd872f0973668e1d029b71018e8a6",
+            "8c0159fbc641420ea0837b669e7e61936ee3f090b7c540205910fa6e5bb4c7fd",
+            "326649bab88c7cb4491cfe355876cf8c8fda6ef6c90d63da6f6c8390e5cfd317",
+            "5e8608a91097a9acae38d3dc0c60b6de53613025c5608cf2a08a4e30c6b3c220",
+            "5ff16efe90abaeba84cf0a7e08f01bea98176dbe4cb19223b7f831429ae25e97",
+            "d55e60001f7eb06864c2de8b3fa2c92a25e8f5f669e730457304343b0a4f0ecd",
+            "44d26235901f884c4829ee84031d6dceae4858bce26e2a1207f8a1ebdf076f16"
+          ]
+        },
+        "equal": true
+      },
+      {
+        "round": 4,
+        "order": "candidate,baseline",
+        "before": {
+          "elapsedMs": 3316.035500000002,
+          "hashes": [
+            "9539d1289848a244be6ca945a4b629b3126ec7604086ef16ee7178e051409d7e",
+            "c9c234172c79abfdb0e53f74a636ab07abd83df5d225539233a843c3c5201b75",
+            "7a2c2b4d8a09ff934659407a865bbd4b5488094f7d10f1b85936ec4031c04f16",
+            "d69fb7f8740166abc4e4e16b990657da84cdd872f0973668e1d029b71018e8a6",
+            "8c0159fbc641420ea0837b669e7e61936ee3f090b7c540205910fa6e5bb4c7fd",
+            "326649bab88c7cb4491cfe355876cf8c8fda6ef6c90d63da6f6c8390e5cfd317",
+            "5e8608a91097a9acae38d3dc0c60b6de53613025c5608cf2a08a4e30c6b3c220",
+            "5ff16efe90abaeba84cf0a7e08f01bea98176dbe4cb19223b7f831429ae25e97",
+            "d55e60001f7eb06864c2de8b3fa2c92a25e8f5f669e730457304343b0a4f0ecd",
+            "44d26235901f884c4829ee84031d6dceae4858bce26e2a1207f8a1ebdf076f16"
+          ]
+        },
+        "after": {
+          "elapsedMs": 769.6055000000015,
+          "hashes": [
+            "9539d1289848a244be6ca945a4b629b3126ec7604086ef16ee7178e051409d7e",
+            "c9c234172c79abfdb0e53f74a636ab07abd83df5d225539233a843c3c5201b75",
+            "7a2c2b4d8a09ff934659407a865bbd4b5488094f7d10f1b85936ec4031c04f16",
+            "d69fb7f8740166abc4e4e16b990657da84cdd872f0973668e1d029b71018e8a6",
+            "8c0159fbc641420ea0837b669e7e61936ee3f090b7c540205910fa6e5bb4c7fd",
+            "326649bab88c7cb4491cfe355876cf8c8fda6ef6c90d63da6f6c8390e5cfd317",
+            "5e8608a91097a9acae38d3dc0c60b6de53613025c5608cf2a08a4e30c6b3c220",
+            "5ff16efe90abaeba84cf0a7e08f01bea98176dbe4cb19223b7f831429ae25e97",
+            "d55e60001f7eb06864c2de8b3fa2c92a25e8f5f669e730457304343b0a4f0ecd",
+            "44d26235901f884c4829ee84031d6dceae4858bce26e2a1207f8a1ebdf076f16"
+          ]
+        },
+        "equal": true
+      },
+      {
+        "round": 5,
+        "order": "baseline,candidate",
+        "before": {
+          "elapsedMs": 3357.8603999999978,
+          "hashes": [
+            "9539d1289848a244be6ca945a4b629b3126ec7604086ef16ee7178e051409d7e",
+            "c9c234172c79abfdb0e53f74a636ab07abd83df5d225539233a843c3c5201b75",
+            "7a2c2b4d8a09ff934659407a865bbd4b5488094f7d10f1b85936ec4031c04f16",
+            "d69fb7f8740166abc4e4e16b990657da84cdd872f0973668e1d029b71018e8a6",
+            "8c0159fbc641420ea0837b669e7e61936ee3f090b7c540205910fa6e5bb4c7fd",
+            "326649bab88c7cb4491cfe355876cf8c8fda6ef6c90d63da6f6c8390e5cfd317",
+            "5e8608a91097a9acae38d3dc0c60b6de53613025c5608cf2a08a4e30c6b3c220",
+            "5ff16efe90abaeba84cf0a7e08f01bea98176dbe4cb19223b7f831429ae25e97",
+            "d55e60001f7eb06864c2de8b3fa2c92a25e8f5f669e730457304343b0a4f0ecd",
+            "44d26235901f884c4829ee84031d6dceae4858bce26e2a1207f8a1ebdf076f16"
+          ]
+        },
+        "after": {
+          "elapsedMs": 744.5183999999972,
+          "hashes": [
+            "9539d1289848a244be6ca945a4b629b3126ec7604086ef16ee7178e051409d7e",
+            "c9c234172c79abfdb0e53f74a636ab07abd83df5d225539233a843c3c5201b75",
+            "7a2c2b4d8a09ff934659407a865bbd4b5488094f7d10f1b85936ec4031c04f16",
+            "d69fb7f8740166abc4e4e16b990657da84cdd872f0973668e1d029b71018e8a6",
+            "8c0159fbc641420ea0837b669e7e61936ee3f090b7c540205910fa6e5bb4c7fd",
+            "326649bab88c7cb4491cfe355876cf8c8fda6ef6c90d63da6f6c8390e5cfd317",
+            "5e8608a91097a9acae38d3dc0c60b6de53613025c5608cf2a08a4e30c6b3c220",
+            "5ff16efe90abaeba84cf0a7e08f01bea98176dbe4cb19223b7f831429ae25e97",
+            "d55e60001f7eb06864c2de8b3fa2c92a25e8f5f669e730457304343b0a4f0ecd",
+            "44d26235901f884c4829ee84031d6dceae4858bce26e2a1207f8a1ebdf076f16"
+          ]
+        },
+        "equal": true
+      }
+    ]
+  },
+  "cpuReductionPercent": 77.5479363836727
+}

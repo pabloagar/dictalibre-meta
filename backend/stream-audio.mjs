@@ -1,7 +1,21 @@
 // Stateful windowed-sinc resampling. Fixed output: signed PCM16 mono at 24 kHz.
 export const STREAM_PREPARATION='sinc-hann-64-mono-24k-v1';
 export class StreamResampler {
-  constructor(rate){if(!Number.isInteger(rate)||rate<8000||rate>96000)throw Error('Frecuencia inválida.');this.rate=rate;this.data=[];this.base=0;this.total=0;this.out=0;}
+  constructor(rate){
+    if(!Number.isInteger(rate)||rate<8000||rate>96000)throw Error('Frecuencia inválida.');
+    this.rate=rate;this.data=[];this.base=0;this.total=0;this.out=0;
+    // Integer input positions always use the same kernel. Preserve the exact
+    // coefficient formula and summation order; fractional rates keep the original path.
+    this.kernel=null;
+    if(rate%24000===0){
+      const cutoff=.45*Math.min(1,24000/rate);this.kernel=[];this.kernelWeight=0;
+      for(let distance=-32;distance<=32;distance++){
+        const x=2*Math.PI*cutoff*distance;
+        const w=(Math.abs(x)<1e-10?2*cutoff:Math.sin(x)/(Math.PI*distance))*(.5+.5*Math.cos(Math.PI*distance/32));
+        this.kernel.push(w);this.kernelWeight+=w;
+      }
+    }
+  }
   push(bytes,final=false){
     if(bytes.length%2)throw Error('PCM16 incompleto.');
     for(let i=0;i<bytes.length;i+=2)this.data.push(bytes.readInt16LE(i));
@@ -9,7 +23,11 @@ export class StreamResampler {
     while(this.out<Math.floor(this.total*24000/this.rate)){
       const pos=this.out*this.rate/24000;if(!final&&pos+32>=this.total)break;
       let sum=0,weight=0;
-      for(let j=Math.ceil(pos-32);j<=Math.floor(pos+32);j++){
+      if(this.kernel){
+        const offset=pos-32-this.base;
+        for(let k=0;k<65;k++)sum+=(this.data[offset+k]??0)*this.kernel[k];
+        weight=this.kernelWeight;
+      }else for(let j=Math.ceil(pos-32);j<=Math.floor(pos+32);j++){
         const distance=j-pos,x=2*Math.PI*cutoff*distance;
         const w=(Math.abs(x)<1e-10?2*cutoff:Math.sin(x)/(Math.PI*distance))*(.5+.5*Math.cos(Math.PI*distance/32));
         sum+=(this.data[j-this.base]??0)*w;weight+=w;

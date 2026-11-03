@@ -9,6 +9,20 @@ import {createLab} from '../backend/lab.mjs';
 import {hash,wavInfo} from '../backend/lab-core.mjs';
 import {StreamResampler,pcmWav} from '../backend/stream-audio.mjs';
 
+test('kernel optimizado coincide byte a byte con referencias del remuestreador original',()=>{
+ const fixture=JSON.parse(fs.readFileSync(new URL('./fixtures/resampler-v1-golden.json',import.meta.url),'utf8'));
+ for(const c of fixture.cases){
+  const pcm=Buffer.alloc(c.samples*2);let seed=123456789;
+  for(let i=0;i<c.samples;i++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;pcm.writeInt16LE((seed>>>16)-32768,i*2);}
+  for(const block of [74,9600,pcm.length]){
+   const r=new StreamResampler(c.rate),parts=[];
+   for(let offset=0;offset<pcm.length;offset+=block)parts.push(r.push(pcm.subarray(offset,offset+block)));
+   parts.push(r.push(Buffer.alloc(0),true));const out=Buffer.concat(parts);
+   assert.equal(out.length,c.bytes);assert.equal(hash(out),c.sha256,`${c.rate} Hz / ${c.samples} samples / block ${block}`);
+  }
+ }
+});
+
 test('resampler conserva duración y no depende de los límites de bloques',()=>{
  for(const rate of [8000,16000,22050,24000,44100,48000,96000]){
   const pcm=Buffer.alloc(rate*2/10);for(let i=0;i<pcm.length/2;i++)pcm.writeInt16LE(Math.round(5000*Math.sin(2*Math.PI*440*i/rate)),i*2);

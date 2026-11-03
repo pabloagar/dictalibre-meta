@@ -15,7 +15,8 @@ import {StreamResampler} from '../backend/stream-audio.mjs';
 import {encodeChunk,decodeChunk} from '../apps/shared/protocol.js';
 
 const args=Object.fromEntries(process.argv.slice(2).map(v=>{const i=v.indexOf('=');return [v.slice(2,i),v.slice(i+1)];}));
-const mode=args.mode??'mock',repetitions=Number(args.repetitions??1),count=10;
+const mode=args.mode??'mock',repetitions=Number(args.repetitions??1),count=Number(args.count??10);
+if(!Number.isInteger(count)||count<1||count>10)throw Error('count must be 1..10');
 if(!['mock','local-meta','remote'].includes(mode)||![1,2,3].includes(repetitions))throw Error('Use --mode=mock|local-meta|remote --repetitions=1|2|3');
 const output=args.output??'data/local/concurrency-'+Date.now();
 if(fs.existsSync(output))throw Error('Output must be a new directory; previous evidence is preserved.');
@@ -29,7 +30,7 @@ const fixtures=args.manifest?JSON.parse(fs.readFileSync(args.manifest,'utf8').re
 }):words.map((word,i)=>{const rate=48000,pcm=Buffer.alloc(rate*2*2);for(let n=0;n<rate*2;n++)pcm.writeInt16LE(Math.round(5000*Math.sin(2*Math.PI*(220+i*37)*n/rate)),n*2);return {word,rate,pcm,source:'synthetic sine; not speech'};});
 if(fixtures.length!==10||new Set(fixtures.map(f=>f.word)).size!==10)throw Error('Exactly ten distinct synthetic fixtures required');
 if(mode!=='mock'&&!args.manifest)throw Error('Real Meta requires an explicit synthetic speech manifest');
-const protocol={schema:'dicta-concurrency-v1',mode,count,repetitions,createdAt:new Date().toISOString(),checkout:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),dirty:!!execFileSync('git',['status','--porcelain'],{encoding:'utf8'}).trim(),sourceHash:hash(Buffer.concat(['backend/demo.mjs','backend/muse-stream.mjs','backend/server.mjs'].map(f=>fs.readFileSync(f)))),driverHash:hash(fs.readFileSync(new URL(import.meta.url))),node:process.version,os:os.platform(),arch:os.arch(),hardware:null,browser:null,physicalPhones:0,network:mode==='remote'?'single driver to Render over HTTPS/WSS; local connection type unknown':mode==='local-meta'?'loopback plus Meta WSS; local connection type unknown':'loopback',clock:'performance.now milliseconds',clockPrecisionMs:null,instrumentationOverheadMs:null,config:'demo-muse/manual',hypothesis:'Ten overlapping streams complete without mixing sessions; relay audio hashes and per-visitor run ownership remain exact.',acceptance:'10 simultaneous active streams; all completed with verified hashes; unique expected marker per session; no foreign runs or cancellation permission; no residual active streams.',fixtures:fixtures.map(f=>({rate:f.rate,durationMs:f.pcm.length/f.rate/2*1000,pcmHash:hash(f.pcm),source:f.source,marker:f.word}))};
+const protocol={schema:'dicta-concurrency-v1',mode,count,repetitions,createdAt:new Date().toISOString(),checkout:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),dirty:!!execFileSync('git',['status','--porcelain'],{encoding:'utf8'}).trim(),sourceHash:hash(Buffer.concat(['backend/demo.mjs','backend/muse-stream.mjs','backend/server.mjs','backend/stream-audio.mjs'].map(f=>fs.readFileSync(f)))),driverHash:hash(fs.readFileSync(new URL(import.meta.url))),node:process.version,os:os.platform(),arch:os.arch(),hardware:null,browser:null,physicalPhones:0,network:mode==='remote'?'single driver to Render over HTTPS/WSS; local connection type unknown':mode==='local-meta'?'loopback plus Meta WSS; local connection type unknown':'loopback',clock:'performance.now milliseconds',clockPrecisionMs:null,instrumentationOverheadMs:null,config:'demo-muse/manual',hypothesis:'The selected number of overlapping streams complete without mixing sessions; relay audio hashes and per-visitor run ownership remain exact.',acceptance:'count simultaneous active streams; all completed with verified hashes; unique expected marker per session; no foreign runs or cancellation permission; no residual active streams.',fixtures:fixtures.map(f=>({rate:f.rate,durationMs:f.pcm.length/f.rate/2*1000,pcmHash:hash(f.pcm),source:f.source,marker:f.word}))};
 fs.writeFileSync(path.join(output,'protocol.json'),JSON.stringify(protocol,null,2));
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const clients=[],rows=[];let demo,provider,origin=args.origin,accessCode,providerActive=0,providerPeak=0;
@@ -49,7 +50,7 @@ try{
  if(mode==='remote'){
   if(!origin||new URL(origin).protocol!=='https:')throw Error('Remote origin must be explicit HTTPS');
   const env=process.env.DEMO_TEST_ENV_FILE?parseEnv(fs.readFileSync(process.env.DEMO_TEST_ENV_FILE,'utf8').replace(/^\uFEFF/,'')):{};
-  accessCode=env.DEMO_ACCESS_CODE??process.env.DEMO_ACCESS_CODE;if(!accessCode)throw Error('Missing DEMO_ACCESS_CODE');
+  accessCode=env.DEMO_ACCESS_CODE??process.env.DEMO_ACCESS_CODE;if(!accessCode&&args['open-access']!=='true')throw Error('Missing DEMO_ACCESS_CODE or --open-access=true');
  }else{
   origin='http://127.0.0.1:8899';accessCode='local-concurrency-fixture';
   demo=createDemo({accessCode,publicOrigin:origin,metaKey:mode==='mock'?'synthetic-key':loadMetaKey('.env.local'),museEndpoint:provider?'ws://127.0.0.1:'+provider.address().port:undefined,build:protocol.dirty?null:protocol.checkout});
@@ -57,8 +58,8 @@ try{
  }
  const pairs=[];
  for(let i=0;i<count;i++){
-  const response=await fetch(origin+'/demo/access',{method:'POST',redirect:'manual',headers:{Origin:origin,'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({code:accessCode}),signal:AbortSignal.timeout(15000)});
-  if(response.status!==303)throw Error('Login HTTP '+response.status);
+  const response=mode==='remote'&&args['open-access']==='true'?await fetch(origin+'/live',{signal:AbortSignal.timeout(15000)}):await fetch(origin+'/demo/access',{method:'POST',redirect:'manual',headers:{Origin:origin,'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({code:accessCode}),signal:AbortSignal.timeout(15000)});
+  if(response.status!==(mode==='remote'&&args['open-access']==='true'?200:303))throw Error('Login HTTP '+response.status);
   const cookie=response.headers.get('set-cookie').split(';')[0];
   if(i===0){const current=await state(cookie);if(current.concurrency?.limit!==10||current.concurrency.active!==0)throw Error('Need deployed limit 10 and no active dictation');protocol.activeBuild=current.build;fs.writeFileSync(path.join(output,'protocol.json'),JSON.stringify(protocol,null,2));}
   const pc=await connect(origin.replace(/^http/,'ws')+'/ws',cookie);pc.send({type:'create'});
@@ -86,9 +87,9 @@ try{
    const text=normalize(run?.text??''),tokens=text.match(/[a-z]+/g)??[];
    const expectedMarker=tokens.includes(normalize(f.word)),foreignMarker=fixtures.some((other,j)=>j!==i&&tokens.includes(normalize(other.word)));
    const neighbor=pairs[(i+1)%count];
-   const forbidden=done.runId?await fetch(origin+'/api/cancel',{method:'POST',headers:{Origin:origin,Cookie:neighbor.cookie,'Content-Type':'application/json'},body:JSON.stringify({id:done.runId}),signal:AbortSignal.timeout(15000)}):null;
-   const row={repetition:repetition+1,session:i+1,simultaneouslyActive:overlap,completed:done.status==='completed',error:run?.error??done.message??null,syntheticTranscript:run?.text??null,relayHashMatches:t.relayHashMatches??false,asrIntegrity:run?.stream?.integrityVerified??false,expectedMarker,foreignMarker,ownRunCount:own.runs.length,foreignCancellationStatus:forbidden?.status??null,handshakeMs:t.readyAt-t.startedAt,stopToDoneMs:t.doneAt===null?null:t.doneAt-t.endAt,providerEndToFinalMs:run?.stream?.endToFinalMs??null,build:own.build};
-   row.passed=row.simultaneouslyActive===10&&row.completed&&row.relayHashMatches&&row.asrIntegrity&&expectedMarker&&!foreignMarker&&row.ownRunCount===repetition+1&&row.foreignCancellationStatus===404;
+   const forbidden=done.runId&&count>1?await fetch(origin+'/api/cancel',{method:'POST',headers:{Origin:origin,Cookie:neighbor.cookie,'Content-Type':'application/json'},body:JSON.stringify({id:done.runId}),signal:AbortSignal.timeout(15000)}):null;
+   const row={repetition:repetition+1,session:i+1,simultaneouslyActive:overlap,completed:done.status==='completed',error:run?.error??done.message??null,syntheticTranscript:run?.text??null,relayHashMatches:t.relayHashMatches??false,asrIntegrity:run?.stream?.integrityVerified??false,expectedMarker,foreignMarker,ownRunCount:own.runs.length,foreignCancellationStatus:forbidden?.status??null,handshakeMs:t.readyAt-t.startedAt,stopToDoneMs:t.doneAt===null?null:t.doneAt-t.endAt,providerEndToFinalMs:run?.stream?.endToFinalMs??null,streamMetrics:run?.stream??null,build:own.build};
+   row.passed=row.simultaneouslyActive===count&&row.completed&&row.relayHashMatches&&row.asrIntegrity&&expectedMarker&&!foreignMarker&&row.ownRunCount===repetition+1&&(count===1||row.foreignCancellationStatus===404);
    rows.push(row);p.pc.ws.off('message',t.listener);fs.writeFileSync(path.join(output,'results.json'),JSON.stringify(rows,null,2));
   }));
   const final=await state(pairs[0].cookie);if(final.concurrency.active!==0)throw Error('Stream slots not released');
