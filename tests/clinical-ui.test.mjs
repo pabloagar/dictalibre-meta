@@ -77,7 +77,7 @@ test('A compacta: rehacer contexto, letra y copia limpia de anotaciones; edicion
  await button('Revisar con IA').onclick();
  assert.equal(editor.element.querySelector('.report-annotation').textContent,'izquierdo');assert.equal(editor.element.textContent,editor.model.text);
  button('Nuevo informe').click();button('Vaciar y empezar').click();assert.equal(editor.model.text,'');assert.equal(editor.reviewPanel.hidden,true);button('Deshacer').click();assert.equal(editor.element.querySelector('.report-annotation').textContent,'izquierdo');assert.equal(editor.reviewPanel.hidden,false);
- await button('Copiar para RIS').onclick();assert.equal(copied,'Hallazgo derecho. Resumen izquierdo.');
+ await button('Copiar al portapapeles').onclick();assert.equal(copied,'Hallazgo derecho. Resumen izquierdo.');
  button('Es correcto').click();assert.equal(editor.element.querySelector('.report-annotation'),null);assert.equal(editor.model.text,copied);
  await button('Revisar de nuevo').onclick();assert.ok(editor.element.querySelector('.report-annotation'));
  input('Edición nueva');assert.equal(editor.element.querySelector('.report-annotation'),null);assert.equal(document.querySelector('.report-global-review').dataset.stale,'true');
@@ -249,7 +249,7 @@ test('rediseño: aviso anclado, teclado, copia limpia y acciones compartidas',as
  await button('Revisar con IA').onclick();
  let mark=editor.element.querySelector('.report-annotation');mark.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
  let popup=document.querySelector('.review-popover');assert.ok(popup);assert.equal(editor.element.contains(popup),false);assert.equal(document.activeElement,popup.querySelector('button'));
- await button('Copiar para RIS').onclick();assert.equal(copied,'Hallazgo secuenzia derecho.');
+ await button('Copiar al portapapeles').onclick();assert.equal(copied,'Hallazgo secuenzia derecho.');
  popup.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));assert.equal(document.querySelector('.review-popover'),null);assert.equal(document.activeElement,mark);
  button('Ir al texto').click();popup=document.querySelector('.review-popover');assert.ok(popup);popup.querySelector('.accept-correction').click();
  assert.equal(editor.model.text,'Hallazgo secuencia derecho.');assert.equal(document.querySelector('.review-popover'),null);assert.equal(editor.reviewPanel.dataset.stale,'true');
@@ -387,7 +387,7 @@ test('English editor: five favorites, empty history dictation, undo, copy and Sp
  editor.quickTemplates.firstChild.click();assert.equal(editor.model.text,library[0].text);assert.equal(editor.element.querySelectorAll('.report-heading').length,4);
  assert.equal(editor.element.querySelector('.report-placeholder'),null);const history=[...editor.element.querySelectorAll('.report-heading')].find(n=>n.textContent.trim()==='CLINICAL HISTORY');const range=document.createRange();range.setStartAfter(history);range.collapse(true);window.getSelection().removeAllRanges();window.getSelection().addRange(range);editor.begin('en');editor.preview('en','Synthetic case.');await editor.finish('en','Synthetic case.','fixture');
  assert.equal(editor.model.text,library[0].text.replace('CLINICAL HISTORY\n','CLINICAL HISTORY\nSynthetic case.'));button('Undo').click();assert.equal(editor.model.text,library[0].text);
- let copied;Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{copied=text;}},configurable:true});await button('Copy for RIS').onclick();assert.equal(copied,library[0].text);
+ let copied;Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{copied=text;}},configurable:true});await button('Copy to clipboard').onclick();assert.equal(copied,library[0].text);
  assert.equal(JSON.parse(localStorage.getItem('dicta-editor-metrics-v1')).language,'en');await window.happyDOM.close();
  const restored=setup({language:'en',savedDraft:'ANTECEDENTES\nTexto español sin traducir.'});assert.equal(restored.editor.model.text,'ANTECEDENTES\nTexto español sin traducir.');assert.ok(restored.button('New report'));await restored.window.happyDOM.close();
 });

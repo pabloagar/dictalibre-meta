@@ -1,5 +1,6 @@
 // English UI catalogue. Keys are application-owned Spanish literals; never report text.
 export const EN = {
+  "Copiar al portapapeles": "Copy to clipboard",
   "Informe libre": "Free report",
   "Escanea para dictar": "Scan to dictate",
   "Tu teléfono funciona como micrófono.": "Your phone becomes your microphone.",
