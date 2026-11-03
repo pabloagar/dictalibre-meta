@@ -46,6 +46,28 @@ Hallazgos de código a resolver antes de entrenar:
 
 **Decisión de factibilidad:** ruta A ejecutable como piloto de inferencia; calidad/acento pendientes de escucha. Ruta B plausible, pero no lista para entrenamiento directo. Siguiente experimento, aún no autorizado como entrenamiento comercial: auditar audio/permisos, portar una receta mínima, medir 20 pasos con batch 1 y clips cortos, pérdida finita, gradientes LoRA, memoria, tiempo y recarga; presupuestar después con medidas reales. No se promete que US$10 alcancen para entrenar una voz.
 
+También se inspeccionaron dos alternativas comunitarias, sin ejecución: [99eren99](https://github.com/99eren99/chatterbox-multilingual-finetuning/tree/bf2017ddc1266acedb23189a4e9c823c91be8586), que se declara WIP y propone ajustar T3 y S3/flow; y [gokhaneraslan](https://github.com/gokhaneraslan/chatterbox-finetuning/tree/fac31c46ec96b37283a363a1a96c2a0e56640e03), con preprocesamiento offline, ajuste completo y LoRA. Sus descripciones no constituyen validación propia de V3 chileno multihablante. No se seleccionó ni ejecutó un entrenador solo por su popularidad o cifras promocionales de memoria.
+
 ## Estado
 
-Implementación y verificación en curso. No interpretar código, notebook ni referencias documentales como muestras generadas, corpus autorizado o modelo entrenado. Resultados reales y publicación se registran al terminar en HACKATHON_LOG.md.
+Ejecución real completada el 03-11-2026 en Colab T4. Dos referencias Qwen y veinte muestras Chatterbox recuperadas en el laboratorio privado; todos los WAV pasan lectura, finitud, ausencia de silencio total y pico menor que 1. Hashes del ZIP y de los veinte WAV comprobados tras descargar. No equivale a ausencia de distorsión audible ni a fidelidad al guion.
+
+| Medida directa | Qwen, 2 referencias | Chatterbox, 20 muestras |
+|---|---:|---:|
+| Audio total (s) | 15,28 | 108,44 |
+| Generación total (s) | 173,894 | 163,159 |
+| RTF agregado, suma generación / suma duración | 11,380 | 1,505 |
+| Carga (s) | 45,183 | 24,261 |
+| Descarga snapshot (s) | 63,690 | 31,395 |
+| dtype observado | bfloat16 | float32 |
+| CUDA | 12.8 | 12.4 |
+
+Python 3.13.16, T4 15.360 MiB. No es una comparación controlada de velocidad o calidad: distintos textos, muestras, modelos y dtype. La carga de Chatterbox incluyó una descarga auxiliar del tokenizador; no representa exclusivamente cómputo local. Sobrecosto de instrumentación no calibrado. Cada corrida conserva entorno, pip freeze y hash del generador; commit de ejecución permanece null. El archivo requirements de la corrida Chatterbox original era el de Qwen por un fallo de archivado: pip freeze y execution_source/requirements-chatterbox.txt preservan las dependencias realmente utilizadas. Corregido para futuras corridas sin modificar la evidencia original.
+
+**Resultado perceptual comunicado por el responsable:** «ninguna chilena», sobre las dos referencias Qwen. No se inventan puntuaciones 1–5, naturalidad ni transcripciones; siguen null. Referencias no aprobadas para el objetivo de acento. Las veinte salidas Chatterbox quedan pendientes de escucha, conservadas como experimento. No se ejecutó estabilidad ni exportación de corpus ni entrenamiento de Whisper. La ruta por descripción utilizada falló la impresión inicial de acento; no demuestra que toda configuración de Qwen sea incapaz de producirlo.
+
+Fallos conservados: primer intento de referencias sin pip; instalación duplicada de Chatterbox sobre un entorno compartido y posterior importación con SIGBUS. Se detuvo el duplicado y se instaló en un entorno nuevo; importación y veinte inferencias completas exitosas. La concurrencia del instalador es una causa sospechada, no demostrada, del SIGBUS.
+
+Saldo mostrado: 148,50 → 147,96 unidades; diferencia aproximada 0,54, equivalente a US$0,053946 a tarifa de reposición. No es factura, precisión limitada por redondeo y actualización del panel; coste facturado null. Sin compras. Tras recuperar archivos, runtime.unassign y panel verificado con **0 sesiones activas**, tasa 0/h, alrededor de 17:13 UTC. ZIP privado SHA256 `28e99ae82f0b3a6ebd713b777e409b8bd6bab4da0db251223930d291738533fa`.
+
+Conclusión: inferencia de Chatterbox con referencias nuevas técnicamente factible, acento chileno aún no logrado/validado. La ruta de adaptación con corpus queda preparada documentalmente, pendiente de auditoría de audio/permisos y prueba mínima V3 multihablante antes de presupuestar entrenamiento. Audios y exportaciones privadas no se publican. Estado GitHub y web en HACKATHON_LOG.md.

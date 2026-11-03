@@ -236,7 +236,8 @@ def generar(args):
                 'instrumentation_overhead_s': None, 'network': None, 'browser': None,
                 'dictalibre_commit': None, 'generator_sha256': sha(__file__)}
     guardar(run / 'protocol.json', protocol)
-    shutil.copy2(HERE / 'requirements.txt', run / 'requirements.txt')
+    requirements_name = 'requirements-chatterbox.txt' if use_chatterbox else 'requirements.txt'
+    shutil.copy2(HERE / requirements_name, run / requirements_name)
     rows = []
     guardar(run / 'manifest.json', rows)
     try:
