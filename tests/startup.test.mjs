@@ -47,3 +47,9 @@ test('inicio usa el mismo arte del logo y respeta el tema día',async()=>{
  const logos=[...s.window.document.querySelectorAll('.dicta-wordmark')];assert.equal(logos.length,2);
  assert.equal(logos[0].innerHTML,logos[1].innerHTML);await s.window.happyDOM.close();
 });
+
+test('HTML sin ejecutar JS describe el producto actual y sus requisitos',()=>{
+ assert.doesNotMatch(html,/RECONOCIMIENTO PENDIENTE|FASES 01 \+ 02|aún no está integrado|speech recognition not integrated|To integrate: ASR/);
+ assert.match(html,/<meta name="description" content="dicta: radiology dictation/);
+ assert.match(html,/<noscript>[\s\S]*optional AI review[\s\S]*Enable JavaScript/);
+});
