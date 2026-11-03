@@ -98,7 +98,7 @@ const transcript=document.querySelector('.transcript');document.querySelector('.
 const desk=make('div','clinical-desk'),sheet=make('div','clinical-sheet'),sheetHead=make('div','sheet-head');
 sheetHead.append(make('span','',tr('Informe radiológico · documento en curso')));
 
-reportEditor.element.before(desk);const canvas=make('div','dictation-canvas');desk.append(canvas);canvas.append(editbar,sheet);sheet.append(sheetHead,reportEditor.element);
+reportEditor.element.before(desk);const canvas=make('div','dictation-canvas');desk.append(canvas);canvas.append(editbar,sheet);sheet.append(sheetHead,reportEditor.templatePreview,reportEditor.element);
 const margin=make('aside','clinical-notes');margin.setAttribute('aria-label',tr('Notas del estudio'));desk.append(margin);
 const connectionNote=make('section','clinical-note neutral');connectionNote.append(make('h2','',tr('Estado del teléfono')),document.querySelector('#record-help'));settingsBody.append(connectionNote);
 const glossaryText=make('p','tiny');
@@ -166,7 +166,7 @@ const layoutExport=make('button','',tr('Exportar mediciones de disposición'));d
 for(const [name,element] of [['connection',connection],['settings',settings],['templates',templatePanel],['takes-review',takes],['diagnostics',diagnostics],['advanced-settings',advanced]])element.addEventListener('toggle',()=>track('panel-toggle',{panel:name,open:element.open}));
 document.addEventListener('report-layer-open',()=>{for(const p of [connection,settings,templatePanel])p.open=false;});
 for(const popup of [connection,settings,templatePanel])popup.addEventListener('toggle',()=>{if(popup.open)document.dispatchEvent(new CustomEvent('report-close-confirm'));if(popup.open)for(const other of [connection,settings,templatePanel])if(other!==popup)other.open=false;});
-const positionPopup=(popup,body,right=false)=>{if(!popup.open||body.parentElement?.classList.contains('scan-home'))return;const anchor=popup.querySelector('summary').getBoundingClientRect(),top=Math.max(8,Math.min(anchor.bottom+8,window.innerHeight-100)),width=Math.min(right?780:420,window.innerWidth-32);body.style.width=width+'px';body.style.left=(right?Math.max(8,window.innerWidth-width-16):Math.max(8,Math.min(anchor.left,window.innerWidth-width-8)))+'px';body.style.top=top+'px';body.style.maxHeight=Math.max(80,window.innerHeight-top-12)+'px';};
+const positionPopup=(popup,body,right=false)=>{if(!popup.open||body.parentElement?.classList.contains('scan-home'))return;const anchor=popup.querySelector('summary').getBoundingClientRect(),top=Math.max(8,Math.min(anchor.bottom+8,window.innerHeight-100)),width=Math.min(right?360:420,window.innerWidth-32);body.style.width=width+'px';body.style.left=(right?Math.max(8,window.innerWidth-width-16):Math.max(8,Math.min(anchor.left,window.innerWidth-width-8)))+'px';body.style.top=top+'px';body.style.maxHeight=Math.max(80,window.innerHeight-top-12)+'px';};
 const positionPopups=()=>{positionPopup(connection,pairing);positionPopup(templatePanel,templatePanel.querySelector('.template-picker'),true);};
 for(const popup of [connection,templatePanel])popup.addEventListener('toggle',positionPopups);
 window.addEventListener('resize',positionPopups);window.addEventListener('scroll',positionPopups,{capture:true,passive:true});

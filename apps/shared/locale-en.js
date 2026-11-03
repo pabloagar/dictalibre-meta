@@ -1,5 +1,7 @@
 // English UI catalogue. Keys are application-owned Spanish literals; never report text.
 export const EN = {
+ "Mis plantillas":"My templates",
+ "Insertar plantilla":"Insert template", "Todas":"All", "Volver al informe":"Back to report", "VISTA PREVIA · aún no insertada":"PREVIEW · not inserted yet",
  "Empieza a escribir, dictar o ": "Start typing, dictating or ", "insertar plantilla": "insert a template",
  "Sala": "Reading room", "Negatoscopio": "Lightbox", "Contraste": "Contrast",
  "Gris neutro y texto suave para una sala oscura.": "Neutral grey and soft text for a dark room.",

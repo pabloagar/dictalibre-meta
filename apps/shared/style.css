@@ -989,3 +989,27 @@ body.clinical-workspace[data-theme=negatoscopio] header{--dl-rec:#e08a7e;--dl-ok
 .clinical-workspace .report-start-prompt .inline-template-link{margin-left:.22em}
 .clinical-workspace .template-right>details:not(:first-of-type){flex:0;min-height:0;margin:0;padding:8px 0 0}
 .clinical-workspace .template-right>details:not(:first-of-type)>summary{padding:4px 0;margin:0;min-height:0}
+/* Approved template drawer: preview is a separate, read-only sheet. */
+.clinical-workspace .template-picker{display:flex;flex-direction:column;width:360px;height:auto;max-height:calc(100dvh - 130px);padding:16px;border-radius:14px;gap:12px;background:var(--dl-sheet);color:var(--dl-ink)}
+.clinical-workspace .template-picker-head{flex:none;font-size:15px;margin:0;padding-bottom:8px;border-bottom:1px solid var(--dl-line)}
+.clinical-workspace .template-left{padding:0;background:transparent;border:0;min-height:120px;overflow:hidden;gap:10px}
+.clinical-workspace .template-list{max-height:330px;min-height:80px;overflow:auto;scrollbar-width:thin}
+.clinical-workspace .template-category-chips{display:flex;gap:5px;flex-wrap:wrap}
+.clinical-workspace .template-category-chips button{min-height:24px;font-size:10px;padding:4px 8px;border:0;border-radius:20px;background:var(--dl-soft)}
+.clinical-workspace .template-category-chips button[aria-pressed=true]{background:var(--dl-ink);color:var(--dl-sheet)}
+.clinical-workspace .template-picker-actions{flex:none;margin:0;padding:10px 0 0!important}
+.clinical-workspace .template-picker-actions button:last-child{width:100%;min-height:38px}
+.clinical-workspace .template-manage{font-size:11px;color:var(--dl-muted);flex:none}
+.clinical-workspace .template-manage>summary{font-size:11px;padding:4px 0}
+.clinical-workspace .template-manage[open]{max-height:180px;overflow:auto}
+.clinical-workspace .template-manage input,.clinical-workspace .template-manage textarea{width:100%}
+.clinical-workspace .template-sheet-preview{color:var(--dl-ink);font:19px/1.65 var(--dl-font-doc)}
+.clinical-workspace .template-sheet-preview[hidden]{display:none!important}
+.clinical-workspace .template-preview-head{display:flex;align-items:center;justify-content:space-between;gap:12px;font:10px var(--dl-font-ui);color:var(--dl-muted);border-bottom:1px solid var(--dl-line);padding-bottom:16px;margin-bottom:24px;letter-spacing:.04em}
+.clinical-workspace .template-preview-head button{background:transparent;border:0;font-size:11px;color:var(--dl-muted);padding:0;min-height:26px}
+.clinical-workspace .template-sheet-preview>details{border:0;background:transparent;padding:0;margin:0}
+.clinical-workspace .template-sheet-preview pre{font:inherit;white-space:pre-wrap;overflow:visible;max-height:none;margin:0;color:inherit}
+.clinical-workspace .template-sheet-preview .tiny{display:none}
+.clinical-workspace .template-preview-hidden,.clinical-workspace.template-previewing .report-start-prompt,.clinical-workspace.template-previewing .scan-home,.clinical-workspace.template-previewing .sheet-footer{display:none!important}
+.clinical-workspace.templates-drawer-open .clinical-desk{margin-right:400px;grid-template-columns:minmax(0,1fr)}
+@media(max-width:850px){.clinical-workspace.templates-drawer-open .clinical-desk{margin-right:12px}.clinical-workspace.templates-drawer-open .clinical-sheet{padding-bottom:40px}.clinical-workspace .template-picker{max-height:60dvh}.clinical-workspace.template-previewing .template-sheet-preview{padding-top:12px}}
