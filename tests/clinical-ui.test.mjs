@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {Window} from 'happy-dom';
 const source=fs.readFileSync(new URL('../apps/desktop/report-editor.js',import.meta.url),'utf8').replace("'../shared/i18n.js'",JSON.stringify(new URL('../apps/shared/i18n.js',import.meta.url).href)).replace("'/report-review.js'",JSON.stringify(new URL('../apps/desktop/report-review.js',import.meta.url).href)).replace("'/shared/report-model.js'",JSON.stringify(new URL('../apps/shared/report-model.js',import.meta.url).href));
-const {mountReport}=await import('data:text/javascript;base64,'+Buffer.from(source+'\n//# sourceURL=clinical-editor-test.js').toString('base64'));
+const {mountReport,copyReportText}=await import('data:text/javascript;base64,'+Buffer.from(source+'\n//# sourceURL=clinical-editor-test.js').toString('base64'));
 function setup(options={}){
  const window=new Window({url:'http://127.0.0.1:8799'});
  for(const key of ['window','document','localStorage','NodeFilter','Option','MutationObserver','CustomEvent'])globalThis[key]=key==='window'?window:window[key];
@@ -409,4 +409,18 @@ test('informe libre conserva confirmación y deshacer al vaciar una plantilla',a
  button('Reemplazar informe actual').click();assert.equal(editor.model.text,'');assert.equal(editor.model.templateContext,null);
  button('Deshacer').click();assert.equal(editor.model.text,previous);
  await window.happyDOM.close();
+});
+
+
+test('copia verifica cuando tiene permiso y usa selección nativa si la API falla',async()=>{
+ const {window}=setup();let copied='';const clipboard={writeText:async()=>{throw Error('denied');},readText:async()=>copied};
+ document.execCommand=cmd=>{assert.equal(cmd,'copy');copied=document.activeElement.value;return true;};
+ const result=await copyReportText('Informe sintético',{clipboard,permissions:{query:async()=>({state:'granted'})}});
+ assert.equal(copied,'Informe sintético');assert.equal(result.verified,true);assert.equal(result.method,'selection');assert.equal(document.querySelector('textarea[aria-label="Copy report"]'),null);await window.happyDOM.close();
+});
+test('copia no anuncia éxito si la lectura autorizada no coincide ni pide permiso de lectura',async()=>{
+ const {window}=setup();document.execCommand=()=>true;
+ await assert.rejects(()=>copyReportText('Prueba',{clipboard:{writeText:async()=>{},readText:async()=>''},permissions:{query:async()=>({state:'granted'})}}),/clipboard-mismatch/);
+ let reads=0;const result=await copyReportText('Prueba',{clipboard:{writeText:async()=>{},readText:async()=>{reads++;}},permissions:{query:async()=>({state:'prompt'})}});
+ assert.equal(reads,0);assert.equal(result.verified,null);await window.happyDOM.close();
 });

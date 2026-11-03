@@ -472,3 +472,7 @@ Hipótesis antes de comparar: el temporizador de 20 s declara error mientras el 
 
 
 2026-11-03 · Flujo público y clics dirigidos: conexión de teléfono y toma sintética observadas, plantilla/editor/ajustes/revisión ejercitados. Sin caída, pero separación dictado-título pendiente y copia no confirmada fuera del navegador integrado. Detalles y límites: experiments/results/2026-11-03-public-flow/README.md.
+
+
+## Separación y copia — 2026-11-03
+Hipótesis: dictar antes de título ya no concatena palabras; copia rechazada o discordante recupera vía selección nativa y no informa éxito si ambas fallan. Criterio: separación conservada en provisional/final/revisión/cancelación/deshacer; selección reemplazada sin alterar texto vecino; lectura de clipboard solo con permiso ya concedido; pegado sintético coincide en navegador real. Pruebas reproducibles report-model.test.mjs y clinical-ui.test.mjs. Instrumentación copy registra método, verified true/false/null y elapsedMs, sin texto; null si no hay permiso de verificación. No se garantiza portapapeles universal. Entorno/dispositivo/red y resultados se registran tras la prueba.

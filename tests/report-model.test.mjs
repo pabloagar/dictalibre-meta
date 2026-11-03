@@ -52,3 +52,13 @@ test('contexto por toma: ficha y sección, sin texto de plantilla ni informe com
  const g=reportContext({template});
  assert.deepEqual(g,{templateName:'TC de tórax',templateCategory:'TC',templateOrigin:'importada'});
 });
+
+
+test('dictado antes de título separa párrafos y conserva cancelación, revisión y deshacer',()=>{
+ const m=new ReportModel('RX DE TÓRAX\nHallazgos.');m.begin('a',0,0);m.preview('a','Sin derrame');m.preview('a','Sin neumotórax.');
+ assert.equal(m.text,'Sin neumotórax.\n\nRX DE TÓRAX\nHallazgos.');m.cancel('a');assert.equal(m.text,'RX DE TÓRAX\nHallazgos.');
+ m.begin('b',0,0);m.finish('b','Sin derrame.');m.review('b','Sin derrame.','Sin neumotórax.');assert.equal(m.text,'Sin neumotórax.\n\nRX DE TÓRAX\nHallazgos.');m.undo();m.undo();assert.equal(m.text,'RX DE TÓRAX\nHallazgos.');
+});
+test('inserción media separa palabras sin agregar espacio antes de puntuación ni duplicar saltos',()=>{
+ for(const [base,at,text,expected] of [['uno dos',4,'tres','uno tres dos'],['Hallazgo.',8,' leve','Hallazgo leve.'],['RX DE TÓRAX',0,'Prueba.\n','Prueba.\nRX DE TÓRAX']]){const m=new ReportModel(base);m.begin('a',at,at);m.finish('a',text);assert.equal(m.text,expected);}
+});

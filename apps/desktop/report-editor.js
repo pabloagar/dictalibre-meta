@@ -2,6 +2,16 @@ import {t as tr, language} from '../shared/i18n.js';
 import {mountReportReview} from '/report-review.js';
 import {ReportModel,EDITOR_VERSION,takeContext,reportContext,reviewRanges} from '/shared/report-model.js';
 const node=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
+// Read-back only when permission is already granted; never prompt to read a clipboard.
+export async function copyReportText(text,{clipboard=navigator.clipboard,permissions=navigator.permissions,doc=document}={}){
+ let canVerify=false;try{canVerify=(await permissions?.query({name:'clipboard-read'}))?.state==='granted';}catch{}
+ const matches=async()=>{if(!canVerify||!clipboard?.readText)return null;try{return await clipboard.readText()===text;}catch{return null;}};
+ try{await clipboard.writeText(text);const verified=await matches();if(verified!==false)return {method:'clipboard',verified};}catch{}
+ const active=doc.activeElement,selection=doc.getSelection(),ranges=[];if(selection)for(let i=0;i<selection.rangeCount;i++)ranges.push(selection.getRangeAt(i).cloneRange());
+ const field=doc.createElement('textarea');field.value=text;field.readOnly=true;field.setAttribute('aria-label','Copy report');field.style.position='fixed';field.style.top='0';field.style.left='0';field.style.opacity='0';doc.body.append(field);
+ let copied=false;try{field.focus();field.select();copied=doc.execCommand?.('copy')===true;}finally{field.remove();active?.focus({preventScroll:true});if(selection){selection.removeAllRanges();for(const r of ranges)selection.addRange(r);}}
+ if(!copied)throw Error('clipboard-unavailable');const verified=await matches();if(verified===false)throw Error('clipboard-mismatch');return {method:'selection',verified};
+}
 export function mountReport(parent,{build=null,sourceHash=null,globalReview=true}={}){
  const key='dicta-report-v1',templatesKey='dicta-templates-v1';let templates=[];
  try{templates=JSON.parse(localStorage.getItem(templatesKey)??'[]');if(!Array.isArray(templates))templates=[];}catch{}
@@ -86,7 +96,7 @@ export function mountReport(parent,{build=null,sourceHash=null,globalReview=true
 
  let copyFeedbackTimer;
  copy.setAttribute('aria-live','polite');
- const copyReport=async(skipReview=false)=>{const start=performance.now();if(model.pending)return;if(!skipReview&&reportReview&&!reportReview.beforeCopy())return;clearTimeout(copyFeedbackTimer);const text=model.text;try{await navigator.clipboard.writeText(text);copy.textContent=tr('✓ Informe copiado');status.textContent=tr('Informe copiado. Puedes pegarlo en el RIS.');event('copy',{elapsedMs:performance.now()-start,characters:text.length,ok:true,feedback:'button-and-status'});}catch{copy.textContent=tr('No se pudo copiar');status.textContent=tr('No se pudo copiar automáticamente. Selecciona el informe y copia con Ctrl+C.');event('copy',{elapsedMs:performance.now()-start,ok:false,feedback:'button-and-status'});}copyFeedbackTimer=setTimeout(()=>{copy.textContent=tr('Copiar al portapapeles');},3000);};
+ const copyReport=async(skipReview=false)=>{const start=performance.now();if(model.pending)return;if(!skipReview&&reportReview&&!reportReview.beforeCopy())return;clearTimeout(copyFeedbackTimer);const text=model.text;try{const result=await copyReportText(text);copy.textContent=tr('✓ Informe copiado');status.textContent=tr('Informe copiado. Puedes pegarlo en el RIS.');event('copy',{elapsedMs:performance.now()-start,characters:text.length,ok:true,method:result.method,verified:result.verified,feedback:'button-and-status'});}catch{copy.textContent=tr('No se pudo copiar');status.textContent=tr('No se pudo copiar automáticamente. Selecciona el informe y copia con Ctrl+C.');event('copy',{elapsedMs:performance.now()-start,ok:false,feedback:'button-and-status'});}copyFeedbackTimer=setTimeout(()=>{copy.textContent=tr('Copiar al portapapeles');},3000);};
  exportButton.onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(metrics,null,2)],{type:'application/json'}));const a=node('a');a.href=url;a.download='dicta-editor-metricas.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
  const templatePanel=node('details');templatePanel.className='template-library-panel';templatePanel.append(node('summary',tr('Plantilla')));
  const templateBody=node('div');templateBody.className='template-picker';templateBody.setAttribute('role','region');templateBody.setAttribute('aria-label',tr('Elegir plantilla'));
