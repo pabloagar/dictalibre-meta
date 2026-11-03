@@ -68,7 +68,7 @@ def validate(manifest, audio_root=None, research_source_qc=False):
             x, sr = sf.read(p)
             if pilot.inspeccionar(np.asarray(x), sr)['estado'] != 'ok' or not 1 <= len(x)/sr <= 12:
                 raise ValueError('audio_invalid_or_outside_1_to_12_seconds:' + r['id'])
-            source_qc = (research_source_qc and manifest.get('purpose') == 'private_research_smoke'
+            source_qc = (research_source_qc and manifest.get('purpose') in ('private_research_smoke', 'private_research_adaptation')
                          and manifest.get('source') == 'https://openslr.org/71/'
                          and r.get('transcript_provenance') == 'provider_manual_qc'
                          and bool(manifest.get('indices')))
@@ -83,7 +83,7 @@ def check_training_rights(manifest_path, rights, research_source_qc=False):
     if rights.get('manifest_sha256') != pilot.sha(manifest_path):
         raise ValueError('rights_manifest_mismatch')
     if research_source_qc:
-        if (rights.get('scope') != 'private_research_smoke' or
+        if (rights.get('scope') not in ('private_research_smoke', 'private_research_adaptation') or
                 rights.get('copyright_basis') != 'CC BY-SA 4.0' or
                 rights.get('source') != 'https://openslr.org/71/' or
                 not rights.get('evidence') or not rights.get('reviewed_on') or

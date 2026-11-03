@@ -72,3 +72,17 @@ Resultado real: 20/20 pasos completados en Tesla T4, torch 2.6.0+cu124, Python 3
 Recarga en proceso nuevo y comparación base/adaptado: dos frases médicas ficticias por variante, misma referencia de hablante reservado y semilla. 4/4 WAV técnicos correctos; escucha, acento, fidelidad e identidad nueva no validados. Las referencias del corpus no se convierten en identidades artificiales por entrenar LoRA. Advertencias de diferencia entre longitud mel y tokens del referente conservadas en logs; no se consideran revisión de calidad aprobada.
 
 ZIP privado descargado y comprobado: SHA256 151f4cb01993775d1645c5fe8697299d1700aa6e4264c34ea4d466b7ebd35ecf. Incluye pesos, código ejecutado, manifiestos, licencia/atribución, métricas y WAV. Saldo visible 147,71→147,67 unidades: estimación US$0,003996 por diferencia mostrada, provisional por redondeo/latencia del panel; no factura. Techo estimado del watchdog de una hora US$0,114885 a tasa observada. GPU desconectada verificada: cero sesiones, tasa cero. No se entrenó Whisper ni se exportó un corpus comercial.
+
+
+## Continuación ampliada con validación
+
+`train_extended.py` continúa los pesos del adaptador anterior (verifica SHA256, rango y base), con optimizador nuevo. No es reanudación exacta del estado AdamW del smoke. Admite hasta 5.000 pasos y techo propio US$5; esta prueba solicita 2.000 adicionales, lr 3e-5, evaluación cada 250 y máximo 2.400 s. Plan y fuentes se registran antes de actualizar pesos. `schedule` cubre cada clip train antes de repetir; ningún clip validation entra al optimizador.
+
+Se retienen en CPU tokens y condiciones sin gradientes, transfiriendo únicamente el ejemplo actual a GPU. Validación eval/no_grad sobre conjunto fijo elegido por semilla, pérdida ponderada por tokens. Se preservan checkpoints y optimizador del último control; mejor y último adaptador se guardan separados. Tres controles sin un nuevo mínimo detienen el entrenamiento. El mínimo puede ser el adaptador inicial; no se fuerza una mejora. La validación se utiliza para seleccionar y no es un test independiente.
+
+El modo documental `private_research_adaptation` extiende el experimento privado solicitado; comercialización y exportación continúan pendientes. No se cambia el significado de transcript_reviewed=false.
+
+`compare_extended.py` se ejecuta después en otro proceso y genera cinco frases idénticas por variante: base, 20 pasos, mejor adaptador. Guarda también resultados técnicamente defectuosos. `build_comparison.py --source CARPETA_COMPARISON --output REPRODUCTOR.html --description TEXTO` verifica hashes y crea un reproductor portátil de tres columnas. La lectura JSON es UTF-8 explícita para conservar tildes en Windows; archivos WAV y manifiesto original no cambian. La evaluación visible es exploratoria, no ciega ni aprobación automática para exportar corpus.
+
+
+Ejecución ampliada completada: 2.000 pasos adicionales sobre 1.264 clips / 2,04 h. Mejor adaptador: 1.520 pasos acumulados, pérdida de validación 2,154837 frente a 2,256562 a los 20 pasos. Comparación recargada en proceso nuevo: 15 WAV, 12 técnicamente correctos, una saturación por variante; revisión perceptual pendiente. Coste estimado por saldo ~US$0,048; GPU desconectada, cero sesiones. Checkpoints y muestras privados respaldados; metodología, hashes y límites en EXPERIMENTS.md y HACKATHON_LOG.md.
