@@ -482,3 +482,7 @@ Hipótesis: preguntar junto a Revisar con IA elimina el control permanente sin p
 
 
 2026-11-03 · Reprueba pública separación/copia: separación observada y confirmada por usuario. Botón de copia no aprobado: pegó texto antiguo (47 caracteres), control manual Ctrl+C/Ctrl+V pegó informe completo (426). No ocultar regresión con éxito local previo. Evidencia y límites en experiments/results/2026-11-03-public-copy-followup/README.md.
+
+
+## Copia síncrona — 2026-11-03
+Hipótesis: ejecutar copia nativa dentro del clic y establecer text/plain explícito evita conservar contenido anterior. Lectura autorizada y fallback asíncrono solo después. Criterio: dos informes distintos copiados y pegados desde Render deben coincidir íntegramente, y el segundo debe sustituir al primero. Sin audio ni datos clínicos. Test reproducible tests/clipboard-activation.test.mjs comprueba orden y contenido, sin permisos nuevos. Métrica directa: igualdad del texto; latencia y sobrecosto null. Conservar fallo público previo.

@@ -2,15 +2,17 @@ import {t as tr, language} from '../shared/i18n.js';
 import {mountReportReview} from '/report-review.js';
 import {ReportModel,EDITOR_VERSION,takeContext,reportContext,reviewRanges} from '/shared/report-model.js';
 const node=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
-// Read-back only when permission is already granted; never prompt to read a clipboard.
+// Copy synchronously during the click, before any permission query can lose activation.
 export async function copyReportText(text,{clipboard=navigator.clipboard,permissions=navigator.permissions,doc=document}={}){
- let canVerify=false;try{canVerify=(await permissions?.query({name:'clipboard-read'}))?.state==='granted';}catch{}
- const matches=async()=>{if(!canVerify||!clipboard?.readText)return null;try{return await clipboard.readText()===text;}catch{return null;}};
- try{await clipboard.writeText(text);const verified=await matches();if(verified!==false)return {method:'clipboard',verified};}catch{}
  const active=doc.activeElement,selection=doc.getSelection(),ranges=[];if(selection)for(let i=0;i<selection.rangeCount;i++)ranges.push(selection.getRangeAt(i).cloneRange());
  const field=doc.createElement('textarea');field.value=text;field.readOnly=true;field.setAttribute('aria-label','Copy report');field.style.position='fixed';field.style.top='0';field.style.left='0';field.style.opacity='0';doc.body.append(field);
- let copied=false;try{field.focus();field.select();copied=doc.execCommand?.('copy')===true;}finally{field.remove();active?.focus({preventScroll:true});if(selection){selection.removeAllRanges();for(const r of ranges)selection.addRange(r);}}
- if(!copied)throw Error('clipboard-unavailable');const verified=await matches();if(verified===false)throw Error('clipboard-mismatch');return {method:'selection',verified};
+ const onCopy=e=>{if(e.clipboardData){e.clipboardData.setData('text/plain',text);e.preventDefault();}};
+ let copied=false;doc.addEventListener('copy',onCopy,true);
+ try{field.focus();field.select();copied=doc.execCommand?.('copy')===true;}catch{}finally{doc.removeEventListener('copy',onCopy,true);field.remove();active?.focus({preventScroll:true});if(selection){selection.removeAllRanges();for(const r of ranges)selection.addRange(r);}}
+ let method='selection';if(!copied){await clipboard.writeText(text);method='clipboard';}
+ let canVerify=false;try{canVerify=(await permissions?.query({name:'clipboard-read'}))?.state==='granted';}catch{}
+ let verified=null;if(canVerify&&clipboard?.readText){try{verified=await clipboard.readText()===text;}catch{}}
+ if(verified===false)throw Error('clipboard-mismatch');return {method,verified};
 }
 export function mountReport(parent,{build=null,sourceHash=null,globalReview=true}={}){
  const key='dicta-report-v1',templatesKey='dicta-templates-v1';let templates=[];

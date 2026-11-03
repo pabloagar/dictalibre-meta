@@ -763,3 +763,5 @@ Validación previa a publicar: pnpm check y 253/253 pruebas aprobadas. Render pr
 
 Activación verificada: Render deployment 7519823377 success 2026-11-03T13:20:44Z (10:20:44 America/Santiago), build 52d47e70ea39db8bf3e361a0ccc3ff9b706b1c1b. API confirma build; live.js, report-editor.js, report-review.js y style.css coinciden con checkout. Revisión real de texto sintético completada con muse-spark-1.3, context.patientSex=female conservado y cero avisos. Las cuatro elecciones se validaron automatizadamente; una revisión real remota, sin audio. GitHub y Render activos; laboratorio privado sin reiniciar; maquetas y capturas solo locales.
 
+
+2026-11-03 · Corrección adicional de copia: selección/copy síncronos antes de await, evento entrega text/plain actual. API asíncrona solo alternativa; verificación con permiso existente. pnpm check y 253 pruebas del árbol de trabajo aprobadas, más test nuevo de dos informes consecutivos aprobado por separado. Render previo 52d47e7 sin dictados activos. Validación pública pendiente; sin atribuir causa confirmada al fallo previo.
