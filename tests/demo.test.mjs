@@ -138,8 +138,9 @@ test('demo: el contenedor incluye lo necesario y las plantillas públicas son in
   for(const t of templates){
     assert.doesNotMatch(t.name,/sintético|ejemplo|completo/i);assert.deepEqual(t.sources,[]);
     assert.ok(t.text.startsWith(t.name.toUpperCase()+'\n\n'));
-    assert.ok(t.text.includes('ANTECEDENTES\n[Completar antecedentes clínicos.]\n\n'));
-    for(const heading of ['ANTECEDENTES','TÉCNICA','HALLAZGOS','CONCLUSIÓN'])assert.ok(t.text.split(heading+'\n')[1]?.split('\n\n')[0].trim(),`${t.id}: ${heading} con contenido`);
+    assert.ok(t.text.includes('ANTECEDENTES\n\n\n'));
+    assert.doesNotMatch(t.text,/Completar antecedentes/);assert.doesNotMatch(t.locales.en.text,/Enter clinical history/);
+    for(const heading of ['TÉCNICA','HALLAZGOS','CONCLUSIÓN'])assert.ok(t.text.split(heading+'\n')[1]?.split('\n\n')[0].trim(),`${t.id}: ${heading} con contenido`);
     assert.doesNotMatch(t.text,/\d|\b(?:mm|cm|milímetros|centímetros)\b/iu);
     assert.ok(t.text.trim().split(/\s+/u).length<=100,`${t.id}: informe breve`);
   }

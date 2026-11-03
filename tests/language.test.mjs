@@ -26,7 +26,7 @@ test('English catalogue placeholders preserve count and all fifteen templates ha
  for(const [key,value]of Object.entries(EN))assert.equal((key.match(/\{\}/g)||[]).length,(value.match(/\{\}/g)||[]).length,key);
  const c=JSON.parse(fs.readFileSync('data/demo/plantillas-sinteticas.json','utf8'));
  assert.equal(c.templates.length,15);assert.equal(c.templates.filter(t=>t.defaultFavorite).length,5);
- for(const t of c.templates){const en=t.locales.en;assert.ok(en.name&&en.category);for(const title of ['CLINICAL HISTORY','TECHNIQUE','FINDINGS','IMPRESSION'])assert.ok(en.text.includes('\n'+title+'\n'));assert.ok(en.text.includes('[Enter clinical history.]'));assert.doesNotMatch(en.text,/\d|\b(?:mm|cm)\b/);assert.ok(en.text.split(/\s+/).length<100);}
+ for(const t of c.templates){const en=t.locales.en;assert.ok(en.name&&en.category);for(const title of ['CLINICAL HISTORY','TECHNIQUE','FINDINGS','IMPRESSION'])assert.ok(en.text.includes('\n'+title+'\n'));assert.ok(en.text.includes('CLINICAL HISTORY\n\n\n'));assert.doesNotMatch(en.text,/Enter clinical history/);assert.doesNotMatch(en.text,/\d|\b(?:mm|cm)\b/);assert.ok(en.text.split(/\s+/).length<100);}
 });
 test('English commands avoid anatomical colon and clinical period; Spanish format stays separate',()=>{
  assert.equal(formatEnglishDictation('findings colon no effusion full stop new paragraph impression colon no acute findings full stop').text,'Findings: no effusion.\n\nImpression: no acute findings.');

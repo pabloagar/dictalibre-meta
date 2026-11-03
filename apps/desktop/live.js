@@ -254,7 +254,7 @@ const scanHome=make('section','scan-home');
 scanHome.setAttribute('aria-label','Conectar teléfono');
 const scanTitle=make('h2','scan-title',tr('Escanea para dictar'));
 const scanHint=make('p','scan-hint',tr('Tu teléfono funciona como micrófono.'));
-const writeInstead=make('button','write-without-phone',tr('Escribir sin teléfono'));
+const writeInstead=make('button','write-without-phone',tr('Informe libre'));
 writeInstead.type='button';
 pairing.querySelector('#code').before(scanTitle,scanHint);scanHome.append(writeInstead);sheetHead.after(scanHome);
 let writeMode=false;

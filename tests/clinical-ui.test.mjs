@@ -380,14 +380,25 @@ test('campo de plantilla: teclado, lateralidad, dictado y corchetes ordinarios',
 });
 
 
-test('English editor: five favorites, placeholder dictation, undo, copy and Spanish draft preserved',async()=>{
+test('English editor: five favorites, empty history dictation, undo, copy and Spanish draft preserved',async()=>{
  const library=JSON.parse(fs.readFileSync(new URL('../data/demo/plantillas-sinteticas.json',import.meta.url),'utf8')).templates.map(t=>({...t,...t.locales.en}));
  const {window,editor,button}=setup({language:'en',library});await new Promise(r=>setTimeout(r,0));
  assert.deepEqual([...editor.quickTemplates.children].map(b=>b.textContent),library.filter(t=>t.defaultFavorite).map(t=>t.name));
  editor.quickTemplates.firstChild.click();assert.equal(editor.model.text,library[0].text);assert.equal(editor.element.querySelectorAll('.report-heading').length,4);
- editor.element.querySelector('.report-placeholder').click();assert.equal(window.getSelection().toString(),'[Enter clinical history.]');editor.begin('en');editor.preview('en','Synthetic case.');await editor.finish('en','Synthetic case.','fixture');
- assert.equal(editor.model.text,library[0].text.replace('[Enter clinical history.]','Synthetic case.'));button('Undo').click();assert.equal(editor.model.text,library[0].text);
+ assert.equal(editor.element.querySelector('.report-placeholder'),null);const history=[...editor.element.querySelectorAll('.report-heading')].find(n=>n.textContent.trim()==='CLINICAL HISTORY');const range=document.createRange();range.setStartAfter(history);range.collapse(true);window.getSelection().removeAllRanges();window.getSelection().addRange(range);editor.begin('en');editor.preview('en','Synthetic case.');await editor.finish('en','Synthetic case.','fixture');
+ assert.equal(editor.model.text,library[0].text.replace('CLINICAL HISTORY\n','CLINICAL HISTORY\nSynthetic case.'));button('Undo').click();assert.equal(editor.model.text,library[0].text);
  let copied;Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{copied=text;}},configurable:true});await button('Copy for RIS').onclick();assert.equal(copied,library[0].text);
  assert.equal(JSON.parse(localStorage.getItem('dicta-editor-metrics-v1')).language,'en');await window.happyDOM.close();
  const restored=setup({language:'en',savedDraft:'ANTECEDENTES\nTexto español sin traducir.'});assert.equal(restored.editor.model.text,'ANTECEDENTES\nTexto español sin traducir.');assert.ok(restored.button('New report'));await restored.window.happyDOM.close();
+});
+
+
+test('informe libre conserva confirmación y deshacer al vaciar una plantilla',async()=>{
+ const {window,editor,button}=setup();
+ editor.quickTemplates.firstChild.click();const previous=editor.model.text;assert.ok(previous);
+ document.querySelector('.template-choice').click();assert.equal(document.querySelector('.template-choice').textContent,'Informe libre');
+ button('Aplicar plantilla').click();assert.equal(editor.model.text,previous);
+ button('Reemplazar informe actual').click();assert.equal(editor.model.text,'');assert.equal(editor.model.templateContext,null);
+ button('Deshacer').click();assert.equal(editor.model.text,previous);
+ await window.happyDOM.close();
 });
