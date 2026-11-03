@@ -815,3 +815,16 @@ body.clinical-workspace[data-theme=penumbra]{--dl-bg:#131416;--dl-sheet:#1c1f24;
 .clinical-workspace .connection-panel .scan-title,.clinical-workspace .connection-panel .scan-hint{display:none}
 .clinical-workspace .scan-home #expiry{margin:5px 0 0!important;font-size:10px}
 .clinical-workspace .scan-home .write-without-phone{margin-top:12px}
+
+/* Quiet disclosure controls: keep native keyboard/toggle semantics without arrows. */
+.clinical-workspace summary,.mobile-body summary{list-style:none}
+.clinical-workspace summary::marker,.mobile-body summary::marker{content:''}
+.clinical-workspace summary::-webkit-details-marker,.mobile-body summary::-webkit-details-marker{display:none}
+.clinical-workspace .clinical-settings>summary::after,.clinical-workspace .connection-panel>summary::after{content:none}
+.clinical-workspace summary:focus-visible,.mobile-body summary:focus-visible{outline:2px solid var(--dl-accent,var(--ink));outline-offset:3px}
+.clinical-workspace .brand-languages{flex:none}
+.clinical-workspace .language-buttons{display:flex;align-items:center;gap:0}
+.clinical-workspace .language-buttons button{border:0;background:transparent;color:var(--dl-muted);font-size:10px;min-height:32px;padding:4px 5px;letter-spacing:.04em}
+.clinical-workspace .language-buttons button[aria-pressed=true]{color:var(--dl-ink);text-decoration:underline;text-underline-offset:4px;font-weight:600}
+.clinical-workspace .language-buttons button+button{border-left:1px solid var(--dl-line);border-radius:0}
+.clinical-workspace .clinical-editbar>.report-undo,.clinical-workspace .clinical-editbar>.report-redo{width:auto;font-size:12px;padding:4px 8px}

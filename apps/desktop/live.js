@@ -70,7 +70,7 @@ reportEditor.element.addEventListener('editor-study-state',e=>{for(const b of se
 reportEditor.element.addEventListener('report-new',()=>{figureAlert.hidden=true;});
 const connection=makeDetails(tr('Conecta tu teléfono para empezar'),'connection-panel'),pairing=document.querySelector('.pairing');connection.append(pairing);
 const closeConnection=make('button','connection-close',tr('Cerrar'));closeConnection.setAttribute('aria-label',tr('Cerrar conexión'));pairing.prepend(closeConnection);closeConnection.onclick=()=>{connection.open=false;connection.querySelector('summary').focus();};
-const connectButton=pairing.querySelector('#create');connectButton.textContent=tr('Mostrar QR');
+const connectButton=pairing.querySelector('#create');connectButton.textContent=tr('Mostrar QR');pairing.querySelector('#phone-link').textContent=tr('Abrir vista del teléfono ↗').replace('↗','').trim();
 const strip=document.querySelector('.record-strip');strip.classList.add('clinical-record');
 controls.prepend(connection,strip);connection.addEventListener('toggle',()=>{if(connection.open&&document.querySelector('#paired').hidden&&document.querySelector('#pairing').hidden&&document.querySelector('#confirm-panel').hidden&&!connectButton.disabled)connectButton.click();});
 const syncConnection=()=>{const connected=!document.querySelector('#paired').hidden;connection.classList.toggle('is-connected',connected);connection.querySelector('summary').textContent=connected?(document.querySelector('#paired').dataset.paused==='true'?tr('Teléfono en pausa'):tr('Teléfono conectado')):tr('Conecta tu teléfono para empezar');if(connected)connection.open=false;};
@@ -135,7 +135,12 @@ const settingsMain=make('div','settings-main'),settingsClose=make('button','sett
 const pages={dictado:dictationSettings,apariencia:appearance,ayuda:howTo};
 const showSettingsPage=name=>{for(const [key,page] of Object.entries(pages))page.hidden=key!==name;for(const button of settingsNav.querySelectorAll('button'))button.setAttribute('aria-current',button.dataset.page===name?'page':'false');track('settings-page',{page:name});};
 for(const [name,title] of [['dictado',tr('Dictado')],['apariencia',tr('Apariencia')],['ayuda',tr('Cómo usar')]]){const button=make('button','settings-tab',title);button.dataset.page=name;button.onclick=()=>showSettingsPage(name);settingsNav.append(button);}showSettingsPage('dictado');
-const languageSelect=mountLanguageSwitch(settingsNav,()=>!reportEditor.model.pending&&!recordingEngine);
+const brandLanguages=make('div','brand-languages');brand.after(brandLanguages);
+const languageSelect=mountLanguageSwitch(brandLanguages,()=>!reportEditor.model.pending&&!recordingEngine);
+languageSelect.parentElement.hidden=true;
+const languageButtons=make('div','language-buttons');languageButtons.setAttribute('role','group');languageButtons.setAttribute('aria-label','Language / Idioma');brandLanguages.append(languageButtons);
+for(const [value,label,name] of [['en','ENG','English'],['es','ES','Español']]){const button=make('button','',label);button.type='button';button.lang=value;button.setAttribute('aria-label',name);button.setAttribute('aria-pressed',String(language()===value));button.onclick=()=>{if(languageSelect.disabled||language()===value)return;languageSelect.value=value;languageSelect.dispatchEvent(new window.Event('change'));};languageButtons.append(button);}
+new MutationObserver(()=>{for(const button of languageButtons.children)button.disabled=languageSelect.disabled;}).observe(languageSelect,{attributes:true,attributeFilter:['disabled']});
 window.addEventListener('dicta-language-change',e=>{if(reportEditor.model.pending||recordingEngine)e.preventDefault();});
 window.addEventListener('dicta-recording-start',()=>{languageSelect.disabled=true;});
 window.addEventListener('dicta-recording-stop',()=>{languageSelect.disabled=reportEditor.model.pending;});
@@ -265,7 +270,7 @@ reportEditor.element.addEventListener('report-new',()=>{writeMode=false;syncScan
 connection.querySelector('summary').addEventListener('click',e=>{if(!scanHome.hidden){e.preventDefault();scanHome.scrollIntoView({block:'center',behavior:'smooth'});if(!connectButton.disabled)connectButton.click();}});
 syncScanHome();
 // Compact actions retain accessible names and keyboard behavior.
-for(const [selector,glyph] of [['.report-undo','↶'],['.report-redo','↷']]){const b=editbar.querySelector(selector);b.setAttribute('aria-label',b.textContent);b.title=b.textContent;b.textContent=glyph;}
+for(const [selector,glyph] of [['.report-undo',tr('Deshacer')],['.report-redo',tr('Rehacer')]]){const b=editbar.querySelector(selector);b.setAttribute('aria-label',b.textContent);b.title=b.textContent;b.textContent=glyph;}
 sizeControls.firstChild.textContent='';
 for(const [i,b] of [...sizeControls.querySelectorAll('button')].entries()){b.title=b.getAttribute('aria-label');b.textContent=i?'＋':'−';}
 const quickLabel=make('p','quick-template-label',tr('O empieza con una plantilla'));
