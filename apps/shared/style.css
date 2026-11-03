@@ -936,3 +936,9 @@ html:not([data-boot]) .clinical-workspace>.shell,.clinical-workspace .scan-home 
 @media(prefers-reduced-motion:no-preference){.clinical-workspace .qr-attention{animation:dicta-qr-cue 1.3s ease-in-out 2}@keyframes dicta-qr-cue{50%{outline-offset:9px}}}
 .clinical-workspace .scan-inline .scan-home{border-bottom:1px solid var(--dl-line);margin-bottom:22px;padding-bottom:18px}
 .clinical-workspace .scan-inline .scan-home .write-without-phone{margin-top:6px}
+
+/* Optional context at the point of AI review. */
+
+.sex-question{position:fixed;z-index:2000;width:300px;max-width:calc(100vw - 24px);box-sizing:border-box;padding:18px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;box-shadow:0 12px 35px #0003;font:13px/1.5 'Public Sans',sans-serif}
+.sex-question[hidden]{display:none}.sex-question h2{font-size:15px;margin:0 0 4px;font-weight:600}.sex-question p{margin:0 0 16px;color:var(--muted)}
+.sex-question .choices{display:flex;gap:7px}.sex-question button{font:inherit;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:5px;padding:9px 8px;cursor:pointer}.sex-question .choices button{flex:1}.sex-question button:hover{background:var(--mint)}.sex-question button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}.sex-question .skip{display:block;margin:16px auto 0;border:0;padding:2px;text-decoration:underline;text-underline-offset:3px;color:var(--focus)}

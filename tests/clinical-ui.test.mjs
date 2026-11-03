@@ -74,12 +74,12 @@ test('A compacta: rehacer contexto, letra y copia limpia de anotaciones; edicion
  input('Hallazgo derecho. Resumen izquierdo.');button('Deshacer').click();assert.equal(editor.model.text,'');button('Rehacer').click();assert.equal(editor.model.text,'Hallazgo derecho. Resumen izquierdo.');
  document.querySelector('[aria-label="Aumentar tamaño del informe"]').click();assert.equal(editor.element.style.fontSize,'20px');
  globalThis.fetch=async()=>({ok:true,json:async()=>({id:'synthetic-review',status:'completed',suggestions:[{original:'izquierdo',reason:'Comprobar lateralidad.',evidence:['derecho','izquierdo']}]})});
- await button('Revisar con IA').onclick();
+ await button('Revisar con IA').onclick();if(document.querySelector('.sex-question'))await button('No indicar y revisar').onclick();
  assert.equal(editor.element.querySelector('.report-annotation').textContent,'izquierdo');assert.equal(editor.element.textContent,editor.model.text);
  button('Nuevo informe').click();button('Vaciar y empezar').click();assert.equal(editor.model.text,'');assert.equal(editor.reviewPanel.hidden,true);button('Deshacer').click();assert.equal(editor.element.querySelector('.report-annotation').textContent,'izquierdo');assert.equal(editor.reviewPanel.hidden,false);
  await button('Copiar al portapapeles').onclick();assert.equal(copied,'Hallazgo derecho. Resumen izquierdo.');
  button('Es correcto').click();assert.equal(editor.element.querySelector('.report-annotation'),null);assert.equal(editor.model.text,copied);
- await button('Revisar de nuevo').onclick();assert.ok(editor.element.querySelector('.report-annotation'));
+ await button('Revisar de nuevo').onclick();if(document.querySelector('.sex-question'))await button('No indicar y revisar').onclick();assert.ok(editor.element.querySelector('.report-annotation'));
  input('Edición nueva');assert.equal(editor.element.querySelector('.report-annotation'),null);assert.equal(document.querySelector('.report-global-review').dataset.stale,'true');
  await window.happyDOM.close();
 });
@@ -100,7 +100,7 @@ for(const savedTheme of [null,'sala'])test('montaje completo, controles y tema g
  assert.ok(document.querySelector('.clinical-status'));
  assert.ok(document.querySelector('.empty-guide .quick-templates'));assert.equal(document.querySelector('.first-use-help'),null);
  assert.equal(document.querySelectorAll('.clinical-record').length,1);
- assert.equal(document.querySelectorAll('.sex-control').length,1);assert.ok(document.querySelector('.dictation-canvas > .clinical-editbar .sex-control'));assert.equal(document.querySelector('header .sex-control'),null);
+ assert.equal(document.querySelectorAll('.sex-control').length,0);
  assert.equal(document.querySelector('.clinical-settings').open,false);
  assert.equal(document.querySelector('.report-undo').textContent,'↶');assert.equal(document.querySelector('.report-redo').textContent,'↷');assert.ok(document.querySelector('.brand-stack .language-buttons'));assert.equal(document.querySelectorAll('.language-buttons button').length,2);
  assert.ok(document.querySelector('.clinical-editbar .report-redo'));
@@ -202,7 +202,7 @@ test('aceptar propuesta global conserva el resto y permite deshacer',async()=>{
  const original='Engrosamiento de 24 mili. Milímetros de espesor.';
  editor.element.textContent=original;editor.element.dispatchEvent(new window.Event('input'));
  globalThis.fetch=async()=>({ok:true,json:async()=>({id:'synthetic-proposal',status:'completed',suggestions:[{original:'mili. Milímetros',replacement:'milímetros',reason:'Unidad truncada y repetida.',kind:'format',category:'grammar',evidence:['mili. Milímetros']}]})});
- await button('Revisar con IA').onclick();
+ await button('Revisar con IA').onclick();if(document.querySelector('.sex-question'))await button('No indicar y revisar').onclick();
  assert.equal(editor.model.text,original);
  button('Aceptar').click();
  assert.equal(editor.model.text,'Engrosamiento de 24 milímetros de espesor.');
@@ -233,7 +233,7 @@ test('interpretación protegida exige confirmar y conserva deshacer; edición in
  const input=t=>{editor.element.textContent=t;editor.element.dispatchEvent(new window.Event('input'));};
  input(original);
  globalThis.fetch=async()=>({ok:true,json:async()=>({id:'guarded-test',status:'completed',suggestions:[{original:'milimetrijilos',replacement:null,proposedReplacement:'milímetros',guarded:true,kind:'ambiguous_term',reason:'Comprobar unidad.',evidence:['milimetrijilos']}]})});
- await button('Revisar con IA').onclick();
+ await button('Revisar con IA').onclick();if(document.querySelector('.sex-question'))await button('No indicar y revisar').onclick();
  assert.match(editor.reviewPanel.textContent,/Posible interpretación/);
  assert.equal(editor.model.text,original);
  button('Confirmo el dato y aplico el cambio').onclick();assert.equal(editor.model.text,original);
@@ -242,7 +242,7 @@ test('interpretación protegida exige confirmar y conserva deshacer; edición in
  button('Revisar y confirmar').click();button('Confirmo el dato y aplico el cambio').click();
  assert.equal(editor.model.text,'Lesión de siete milímetros.');
  button('Deshacer').click();assert.equal(editor.model.text,original);
- await button('Revisar de nuevo').onclick();
+ await button('Revisar de nuevo').onclick();if(document.querySelector('.sex-question'))await button('No indicar y revisar').onclick();
  button('Revisar y confirmar').click();input('Texto modificado.');
  button('Confirmo el dato y aplico el cambio').onclick();assert.equal(editor.model.text,'Texto modificado.');
  await window.happyDOM.close();
@@ -254,7 +254,7 @@ test('rediseño: aviso anclado, teclado, copia limpia y acciones compartidas',as
  editor.element.textContent='Hallazgo secuenzia derecho.';editor.element.dispatchEvent(new window.Event('input'));
  let copied=null;Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{copied=text;}},configurable:true});
  globalThis.fetch=async()=>({ok:true,json:async()=>({id:'redesign-fixture',status:'completed',suggestions:[{kind:'ambiguous_term',original:'secuenzia',replacement:'secuencia',reason:'Ejemplo sintético.',evidence:[]}]})});
- await button('Revisar con IA').onclick();
+ await button('Revisar con IA').onclick();if(document.querySelector('.sex-question'))await button('No indicar y revisar').onclick();
  let mark=editor.element.querySelector('.report-annotation');mark.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
  let popup=document.querySelector('.review-popover');assert.ok(popup);assert.equal(editor.element.contains(popup),false);assert.equal(document.activeElement,popup.querySelector('button'));
  await button('Copiar al portapapeles').onclick();assert.equal(copied,'Hallazgo secuenzia derecho.');
@@ -271,7 +271,7 @@ test('rediseño: confirmación protegida en letrero y conteo al reconocer aviso'
  const {window,editor,button}=setup({globalReview:true});
  editor.element.textContent='Doce milímetros.';editor.element.dispatchEvent(new window.Event('input'));
  globalThis.fetch=async()=>({ok:true,json:async()=>({id:'protected-fixture',status:'completed',suggestions:[{kind:'ambiguous_term',original:'Doce milímetros',replacement:null,guarded:true,proposedReplacement:'12 mm',reason:'Interpretación sintética.',evidence:[]}]})});
- await button('Revisar con IA').onclick();editor.element.querySelector('.report-annotation').click();
+ await button('Revisar con IA').onclick();if(document.querySelector('.sex-question'))await button('No indicar y revisar').onclick();editor.element.querySelector('.report-annotation').click();
  assert.equal(editor.model.text,'Doce milímetros.');assert.equal(document.querySelector('.review-popover .accept-correction').textContent,'Confirmo el dato y aplico el cambio');
  document.querySelector('.review-popover .accept-correction').click();assert.equal(editor.model.text,'12 mm.');
  button('Deshacer').click();button('Es correcto').click();assert.equal(editor.element.querySelector('.report-annotation'),null);assert.match(editor.reviewPanel.querySelector('[role=status]').textContent,/0 avisos/);
@@ -282,7 +282,7 @@ test('rediseño: reloj y carga visibles, cancelación y respuesta tardía no rea
  const {window,editor,button}=setup({globalReview:true});
  editor.element.textContent='Informe sintético.';editor.element.dispatchEvent(new window.Event('input'));
  let finish;globalThis.fetch=async()=>({ok:true,json:()=>new Promise(resolve=>{finish=resolve;})});
- const reviewing=button('Revisar con IA').onclick();await new Promise(r=>setTimeout(r,0));
+ button('Revisar con IA').onclick();const reviewing=button('No indicar y revisar').onclick();await new Promise(r=>setTimeout(r,0));
  assert.equal(editor.reviewPanel.dataset.busy,'true');assert.equal(document.querySelector('.review-progress').hidden,false);assert.equal(button('Revisando…').getAttribute('aria-busy'),'true');
  await new Promise(r=>setTimeout(r,1050));assert.match(document.querySelector('.review-elapsed').textContent,/00:01/);
  button('Cancelar revisión').click();assert.equal(editor.reviewPanel.dataset.busy,'false');assert.equal(document.querySelector('.review-progress').hidden,true);assert.equal(document.querySelector('.review-elapsed').hidden,true);
@@ -423,4 +423,17 @@ test('copia no anuncia éxito si la lectura autorizada no coincide ni pide permi
  await assert.rejects(()=>copyReportText('Prueba',{clipboard:{writeText:async()=>{},readText:async()=>''},permissions:{query:async()=>({state:'granted'})}}),/clipboard-mismatch/);
  let reads=0;const result=await copyReportText('Prueba',{clipboard:{writeText:async()=>{},readText:async()=>{reads++;}},permissions:{query:async()=>({state:'prompt'})}});
  assert.equal(reads,0);assert.equal(result.verified,null);await window.happyDOM.close();
+});
+
+for(const [choice,expected] of [['Mujer','female'],['Hombre','male'],['Otro','other'],['No indicar y revisar',null]])test('revisión: elección '+choice+' llega al contexto sin alterar el texto',async()=>{
+ const {window,editor,button}=setup({globalReview:true});editor.element.textContent='Informe sintético.';editor.element.dispatchEvent(new window.Event('input'));editor.setSex('F');
+ const requests=[];globalThis.fetch=async(url,options)=>{requests.push(JSON.parse(options.body));return {ok:true,json:async()=>({id:'sex-fixture',status:'completed',suggestions:[]})};};
+ await button('Revisar con IA').onclick();assert.equal(requests.length,0);assert.ok(document.querySelector('.sex-question'));assert.equal(editor.reviewPanel.hidden,true);
+ const select=button(choice);await select.onclick();await select.onclick();assert.equal(requests.length,1);assert.equal(requests[0].context.patientSex,expected);assert.equal(requests[0].text,'Informe sintético.');assert.equal(editor.model.text,'Informe sintético.');assert.equal(document.querySelector('.sex-question'),null);
+ await button('Revisar con IA').onclick();assert.equal(requests.length,1);assert.equal(document.querySelector('.sex-question'),null);await window.happyDOM.close();
+});
+test('pregunta opcional: Escape no envía; nuevo informe cierra la pregunta',async()=>{
+ const {window,editor,button}=setup({globalReview:true});editor.element.textContent='Informe sintético.';editor.element.dispatchEvent(new window.Event('input'));let calls=0;globalThis.fetch=async()=>{calls++;throw Error('No debe llamar');};
+ button('Revisar con IA').onclick();document.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Escape'}));assert.equal(document.querySelector('.sex-question'),null);assert.equal(calls,0);
+ button('Revisar con IA').onclick();button('Nuevo informe').click();button('Vaciar y empezar').click();assert.equal(document.querySelector('.sex-question'),null);assert.equal(editor.getSex(),'—');assert.equal(calls,0);await window.happyDOM.close();
 });

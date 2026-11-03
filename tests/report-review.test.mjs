@@ -119,3 +119,5 @@ test('global contabiliza dudas suprimidas y no reutiliza resultado de otro esfue
  await wait(()=>next.status==='completed');
  }finally{q.close();}
 });
+
+test('contexto conserva solo elecciones de sexo válidas y explícitas',()=>{for(const sex of ['female','male','other',null])assert.equal(reviewContext({patientSex:sex}).patientSex,sex);assert.equal(reviewContext({}).patientSex,null);assert.throws(()=>reviewContext({patientSex:'inventado'}));});

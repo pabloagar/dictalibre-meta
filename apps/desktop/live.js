@@ -64,9 +64,6 @@ const report=reportEditor.element.closest('.report-workspace'),controls=report.q
 const header=document.querySelector('header'),brandArtwork=header.querySelector('.dicta-wordmark');header.replaceChildren();
 const brand=make('div','clinical-brand');brand.append(brandArtwork??make('span','','dicta.'));brand.append(make('small','',tr('prototipo · solo material sintético')));header.append(brand,controls);
 const templatePanel=report.querySelector('.template-library-panel')??controls.querySelector('.template-library-panel');
-const sex=make('div','sex-control');sex.setAttribute('role','group');sex.setAttribute('aria-label',tr('Sexo del estudio'));sex.append(make('span','',tr('Sexo')));
-for(const value of ['F','M','—']){const button=make('button','',value);button.setAttribute('aria-pressed',String(value===reportEditor.getSex()));button.onclick=()=>reportEditor.setSex(value);sex.append(button);}
-reportEditor.element.addEventListener('editor-study-state',e=>{for(const b of sex.querySelectorAll('button')){b.setAttribute('aria-pressed',String(b.textContent===e.detail.sex));b.disabled=reportEditor.model.pending;}});
 reportEditor.element.addEventListener('report-new',()=>{figureAlert.hidden=true;});
 const connection=makeDetails(tr('Conecta tu teléfono para empezar'),'connection-panel'),pairing=document.querySelector('.pairing');connection.append(pairing);
 const closeConnection=make('button','connection-close',tr('Cerrar'));closeConnection.setAttribute('aria-label',tr('Cerrar conexión'));pairing.prepend(closeConnection);closeConnection.onclick=()=>{connection.open=false;connection.querySelector('summary').focus();};
@@ -100,7 +97,7 @@ const recordings=document.querySelector('#recordings').closest('details');settin
 const transcript=document.querySelector('.transcript');document.querySelector('.section-head').remove();
 const desk=make('div','clinical-desk'),sheet=make('div','clinical-sheet'),sheetHead=make('div','sheet-head');
 sheetHead.append(make('span','',tr('Informe radiológico · documento en curso')));
-sizeControls.after(sex);
+
 reportEditor.element.before(desk);const canvas=make('div','dictation-canvas');desk.append(canvas);canvas.append(editbar,sheet);sheet.append(sheetHead,reportEditor.element);
 const margin=make('aside','clinical-notes');margin.setAttribute('aria-label',tr('Notas del estudio'));desk.append(margin);
 const connectionNote=make('section','clinical-note neutral');connectionNote.append(make('h2','',tr('Estado del teléfono')),document.querySelector('#record-help'));settingsBody.append(connectionNote);

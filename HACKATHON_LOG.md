@@ -747,6 +747,16 @@ Activación recuperación: antes del push Render 0bfdbc14a13258bf30d3b5ebbcced77
 
 2026-11-03 · Solicitada prueba lenta del enlace público: cinco recargas reales de Render, todas correctas; rectángulos de hoja/logo constantes y QR visible. Build activo 89484c46fea31096a02d189b4485aec176fafb4f verificado 13:00:52Z (10:00:52 America/Santiago). Red/caché restauradas; sin audio, sin modificaciones a borradores, sin cambios de aplicación ni reinicio. Evidencia pública experiments/results/2026-11-03-public-startup. Registro [skip render].
 
+## 2026-11-03 · Muestra local: sexo al revisar
+- Propuesta en docs/proposals/review-sex/README.md; solo cambia la pregunta opcional y oculta el selector permanente. Sin cambios en la aplicación publicada, GitHub ni Render; pendiente aprobación visual.
+- Comprobadas en Chrome local las cuatro opciones, cierre con Escape y presentación en Penumbra/Día. La continuación se simula, no envía una revisión. Sin medir tiempo de usuario (null).
+
+
 2026-11-03 · Corrección dictado/copia: separación automática entre palabras y doble salto antes de título al insertar, conservando reemplazo/cancelación/revisión/deshacer. Copia con verificación solo bajo permiso ya concedido, alternativa de selección nativa si falla o no coincide; fallo explícito si ambas vías fallan. Instrumentación registra método y verified null cuando no se puede leer, sin texto. Chrome local: copiar frase sintética y pegar con Ctrl+V en búsqueda produjo coincidencia exacta, una repetición. No confirma la causa del clipboard vacío del navegador integrado anterior. Node v24.22.1 Windows x64; pnpm check y 247/247 pruebas aprobadas. Un primer test falló porque el cargador VM no retiraba export async; adaptado y repetido. Render previo 89484c4 con cero dictados activos. Publicación pendiente de verificar.
 
 Activación separación/copia verificada: Render deployment 7519671169 success 2026-11-03T13:13:41Z (10:13:41 America/Santiago), build 8757e5f57b257ec3499fa05ae3c99639d0dc9f14. A las 13:14:07Z API confirma commit; report-editor.js y report-model.js coinciden con checkout. Chrome remoto monta editor sin pantalla de espera. Pegado real se comprobó en instancia local con archivos idénticos, no con informe privado de producción. GitHub y Render actualizados; laboratorio privado sin reiniciar. Captura sintética privada fuera del repo.
+
+2026-11-03 · Elección opcional de sexo aprobada: se retira F/M/— de la barra. Revisar con IA pregunta Mujer/Hombre/Otro/No indicar; al elegir empieza una única revisión. Contexto validado female/male/other/null, sin inferencias anatómicas. Cierre exterior/Escape y reinicio conservados; EN/ES y temas existentes. Pruebas de las cuatro opciones, omisión de selección anterior, duplicados, reset y contexto. Chrome local con proveedor simulado; texto sintético intacto. Autorización de actualización de Render explícita en este turno. Publicación pendiente de verificar.
+
+Validación previa a publicar: pnpm check y 253/253 pruebas aprobadas. Render previo 8757e5f con cero dictados activos. Las seis pruebas inicialmente incompatibles con el nuevo paso fueron adaptadas para confirmar explícitamente antes de revisar; repetición completa aprobada.
+
