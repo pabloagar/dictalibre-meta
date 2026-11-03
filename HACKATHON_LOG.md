@@ -852,3 +852,6 @@ Resultado real: 20/20 pasos completados en Tesla T4, torch 2.6.0+cu124, Python 3
 Recarga en proceso nuevo y comparación base/adaptado: dos frases médicas ficticias por variante, misma referencia de hablante reservado y semilla. 4/4 WAV técnicos correctos; escucha, acento, fidelidad e identidad nueva no validados. Las referencias del corpus no se convierten en identidades artificiales por entrenar LoRA. Advertencias de diferencia entre longitud mel y tokens del referente conservadas en logs; no se consideran revisión de calidad aprobada.
 
 ZIP privado descargado y comprobado: SHA256 151f4cb01993775d1645c5fe8697299d1700aa6e4264c34ea4d466b7ebd35ecf. Incluye pesos, código ejecutado, manifiestos, licencia/atribución, métricas y WAV. Saldo visible 147,71→147,67 unidades: estimación US$0,003996 por diferencia mostrada, provisional por redondeo/latencia del panel; no factura. Techo estimado del watchdog de una hora US$0,114885 a tasa observada. GPU desconectada verificada: cero sesiones, tasa cero. No se entrenó Whisper ni se exportó un corpus comercial.
+
+## 2026-11-03 · Avisos IA concisos
+Por petición del responsable: tarjeta con título corto, evidencia sin cita duplicada y explicación plegada; pie de información Meta desplegable; estado sin párrafo repetido. No cambia solicitudes ni aceptación de correcciones o guardas sensibles. UI es/en. check y267/267 OK.

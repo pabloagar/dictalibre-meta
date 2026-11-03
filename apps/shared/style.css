@@ -1037,3 +1037,11 @@ body.clinical-workspace:has(.clinical-settings[open]){overflow:hidden}
  .clinical-workspace .settings-nav{flex:0 0 auto}
  .clinical-workspace .settings-main{overflow-y:auto;min-height:0}
 }
+
+/* Review cards: one message, evidence, then action; explanation on demand. */
+.clinical-workspace .report-global-review .note-head{display:flex;align-items:flex-start;gap:8px}
+.clinical-workspace .report-global-review .note-head .note-term{font:600 15px/1.4 var(--dl-font-ui);flex:1}
+.clinical-workspace .report-global-review .note-head>small{display:none}
+.clinical-workspace .report-global-review .evidence-label{display:block;font:600 10px/1.5 var(--dl-font-ui);color:var(--dl-muted);margin-bottom:4px}
+.clinical-workspace .report-global-review .review-explanation,.clinical-workspace .report-global-review .review-foot{border:0;background:transparent;padding:0;font-size:12px}
+.clinical-workspace .report-global-review .review-explanation summary,.clinical-workspace .report-global-review .review-foot summary{font:400 12px/1.5 var(--dl-font-ui);color:var(--dl-muted);padding:4px 0;cursor:pointer}

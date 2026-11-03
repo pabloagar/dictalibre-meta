@@ -1,5 +1,12 @@
 // English UI catalogue. Keys are application-owned Spanish literals; never report text.
 export const EN = {
+ "{} {} para comprobar.":"{} {} to check.",
+ "Acerca de esta revisión":"About this review",
+ "Meta recibe el informe y su contexto. Tú decides los cambios.":"Meta receives the report and its context. You decide the changes.",
+ "Sin sugerencias. Puedes continuar con tu informe.":"No suggestions. You can continue with your report.",
+ "Estos fragmentos no coinciden":"These passages do not match",
+ "Revisa esta corrección":"Review this correction",
+ "Por qué se señala":"Why it was flagged", "Fragmento ":"Passage ",
  "Idioma":"Language",
  "Elige el idioma de la interfaz. Tu informe se conserva sin traducir.":"Choose the interface language. Your report is kept without translation.",
  "1 · Conectar":"1 · Connect", "2 · Dictar":"2 · Dictate", "3 · Revisar":"3 · Review", "4 · Copiar":"4 · Copy",

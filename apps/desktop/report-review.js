@@ -9,7 +9,7 @@ export function mountReportReview({controls,section,copyButton,snapshot,onCopy,e
   const close=el('button',tr('Cerrar'));close.className='review-close';close.onclick=()=>{closeNote('button');box.hidden=true;button.focus?.();};head.append(close);
   const status=el('p',available?tr('Revisa una copia del informe con Meta. Los cambios requieren tu aceptación.'):tr('La revisión con IA no está habilitada en esta demo pública. El dictado con Muse sí está disponible.'));status.setAttribute('role','status');box.append(status);
   const send=el('button',tr('Revisar de nuevo'));send.hidden=!available;head.insertBefore(send,close);
-  const foot=el('div');foot.className='review-foot';if(available)foot.append(el('p',tr('Se envía el informe completo y la ficha de la plantilla. Comprueba las contradicciones, términos o comandos señalados. No es una lista de datos que debas añadir.')));
+  const foot=el('details');foot.className='review-foot';if(available)foot.append(el('summary',tr('Acerca de esta revisión')),el('p',tr('Meta recibe el informe y su contexto. Tú decides los cambios.')));
   const cancel=el('button',tr('Cancelar revisión'));cancel.hidden=true;box.append(cancel);
   const progress=el('div');progress.className='review-progress';progress.setAttribute('role','progressbar');progress.setAttribute('aria-label',tr('Revisión en curso'));progress.append(el('i'));head.after(progress);
   const elapsed=el('span');elapsed.className='review-elapsed';status.after(elapsed);
@@ -41,7 +41,7 @@ export function mountReportReview({controls,section,copyButton,snapshot,onCopy,e
     popover=el('div');popover.className='review-popover';popover.setAttribute('role','dialog');popover.setAttribute('aria-label',tr('Aviso ')+id);
     popover.append(el('strong',id+' · '+note.label));
     if(typeof note.replacement==='string'){const fix=el('div');fix.className='fix';fix.append(el('s',note.s.original),' → ',el('b',note.replacement));popover.append(fix);}
-    popover.append(el('p',note.s.reason));for(const quote of note.s.evidence??[])popover.append(el('blockquote',quote));
+    const explanation=el('details');explanation.className='review-explanation';explanation.append(el('summary',tr('Por qué se señala')),el('p',note.s.reason));for(const quote of note.s.evidence??[])explanation.append(el('blockquote',quote));popover.append(explanation);
     if(note.requiresConfirmation)popover.append(el('p',tr('Este cambio afecta una cifra, unidad, negación o lado. Comprueba lo que dictaste antes de aplicarlo. No se ha modificado el informe.')));
     const acts=el('div');acts.className='note-acts';
     if(note.apply){const apply=el('button',note.requiresConfirmation?tr('Confirmo el dato y aplico el cambio'):tr('Aceptar'));apply.className='accept-correction';apply.onclick=()=>{note.apply();closeNote('action');};acts.append(apply);if(note.requiresConfirmation)event('report-sensitive-confirmation-opened',{reviewId:result.id,warning:Number(id)-1});}
@@ -68,7 +68,7 @@ export function mountReportReview({controls,section,copyButton,snapshot,onCopy,e
     if(busy){button.textContent=tr('Revisando…');status.textContent=same&&!s.pending?tr('Meta está revisando una copia del informe. Puedes seguir editando.'):tr('Informe modificado: la revisión en curso corresponde al texto anterior.');return;}
     if(result){
       const stale=!same||s.pending;
-      status.textContent=stale?tr('Revisión desactualizada: el informe cambió. Revisa de nuevo antes de interpretar estos avisos.'):result.status==='completed'?(result.suggestions.length?tr`${result.suggestions.length-acknowledged.size} ${(result.suggestions.length-acknowledged.size)===1?tr('aviso'):tr('avisos')} para comprobar. No se aplican cambios automáticamente.`:tr('No hay correcciones concretas ni contradicciones señaladas. Esto no valida clínicamente el informe.')):tr`Revisión ${result.status}: ${result.error??''}`;
+      status.textContent=stale?tr('Revisión desactualizada: el informe cambió. Revisa de nuevo antes de interpretar estos avisos.'):result.status==='completed'?(result.suggestions.length?tr`${result.suggestions.length-acknowledged.size} ${(result.suggestions.length-acknowledged.size)===1?tr('aviso'):tr('avisos')} para comprobar.`:tr('Sin sugerencias. Puedes continuar con tu informe.')):tr`Revisión ${result.status}: ${result.error??''}`;
       box.dataset.stale=String(stale);
     }
   }
@@ -91,8 +91,19 @@ export function mountReportReview({controls,section,copyButton,snapshot,onCopy,e
         row.append(apply);if(requiresConfirmation)row.append(confirmation);
       }
       const accept=el('button',tr('Es correcto'));accept.onclick=()=>{if(requested!==signature(current())||current().pending)return;acknowledged.add(id);row.hidden=true;changed();event('report-warning-acknowledged',{reviewId:r.id,warning:index});};note.acknowledge=accept.onclick;row.append(accept);
-      const title=row.querySelector('strong');if(title){const noteHead=el('div');noteHead.className='note-head';const num=el('span',id);num.className='note-num';const term=el('span','«'+s.original+'»');term.className='note-term';const kind=el('small',requiresConfirmation?tr('Confirmar dato'):({contradiction:tr('Contradicción'),ambiguous_term:tr('Término'),format:tr('Comando')}[s.kind]??tr('Aviso')));noteHead.append(num,term,kind);row.querySelector('small')?.remove();title.replaceWith(noteHead);}
-      const actions=el('div');actions.className='note-acts';for(const b of [...row.children].filter(n=>n.tagName==='BUTTON'))actions.append(b);row.append(actions);warnings.append(row);}
+      const title=row.querySelector('strong');if(title){const noteHead=el('div');noteHead.className='note-head';const num=el('span',id);num.className='note-num';const term=el('span',s.kind==='contradiction'?tr('Estos fragmentos no coinciden'):tr('Revisa esta corrección'));term.className='note-term';const kind=el('small',requiresConfirmation?tr('Confirmar dato'):({contradiction:tr('Contradicción'),ambiguous_term:tr('Término'),format:tr('Comando')}[s.kind]??tr('Aviso')));noteHead.append(num,term,kind);row.querySelector('small')?.remove();title.replaceWith(noteHead);}
+      const actions=el('div');actions.className='note-acts';for(const b of [...row.children].filter(n=>n.tagName==='BUTTON'))actions.append(b);row.append(actions);
+      const explanation=el('details');explanation.className='review-explanation';explanation.append(el('summary',tr('Por qué se señala')));
+      const reason=row.querySelector('p');if(reason)explanation.append(reason);
+      const quotes=[...row.querySelectorAll('blockquote')];
+      if(s.kind==='contradiction'){
+        if(!quotes.length)row.insertBefore(el('blockquote',s.original),actions);
+        for(const [i,quote]of quotes.entries()){const label=el('small',tr('Fragmento ')+String(i+1));label.className='evidence-label';quote.prepend(label);}
+      }else{
+        for(const quote of quotes)explanation.append(quote);
+        const original=el('blockquote',s.original);original.className='review-original';row.insertBefore(original,row.querySelector('.note-sug')??actions);
+      }
+      row.insertBefore(explanation,actions);warnings.append(row);}
     changed();
     if(r.status==='completed'&&lastShown!==r.id){lastShown=r.id;event('report-review-shown',{reviewId:r.id,elapsedMs:performance.now()-started,stale:signature(current())!==requested,warningCount:r.suggestions.length});}
   }

@@ -73,9 +73,10 @@ test('A compacta: rehacer contexto, letra y copia limpia de anotaciones; edicion
  const input=text=>{editor.element.textContent=text;editor.element.dispatchEvent(new window.Event('input'));};
  input('Hallazgo derecho. Resumen izquierdo.');button('Deshacer').click();assert.equal(editor.model.text,'');button('Rehacer').click();assert.equal(editor.model.text,'Hallazgo derecho. Resumen izquierdo.');
  document.querySelector('[aria-label="Aumentar tamaño del informe"]').click();assert.equal(editor.element.style.fontSize,'20px');
- globalThis.fetch=async()=>({ok:true,json:async()=>({id:'synthetic-review',status:'completed',suggestions:[{original:'izquierdo',reason:'Comprobar lateralidad.',evidence:['derecho','izquierdo']}]})});
+ globalThis.fetch=async()=>({ok:true,json:async()=>({id:'synthetic-review',status:'completed',suggestions:[{kind:'contradiction',original:'izquierdo',reason:'Comprobar lateralidad.',evidence:['derecho','izquierdo']}]})});
  await button('Revisar con IA').onclick();if(document.querySelector('.sex-question'))await button('No indicar y revisar').onclick();
  assert.equal(editor.element.querySelector('.report-annotation').textContent,'izquierdo');assert.equal(editor.element.textContent,editor.model.text);
+ const card=document.querySelector('.review-warnings article');assert.equal(card.querySelector('.note-term').textContent,'Estos fragmentos no coinciden');assert.equal(card.querySelector('.review-explanation').open,false);assert.equal(card.querySelector('.review-explanation p').textContent,'Comprobar lateralidad.');assert.equal(card.querySelectorAll(':scope > blockquote').length,2);assert.equal(document.querySelector('.review-foot').tagName,'DETAILS');assert.equal(document.querySelector('.review-foot').open,false);
  button('Nuevo informe').click();button('Vaciar y empezar').click();assert.equal(editor.model.text,'');assert.equal(editor.reviewPanel.hidden,true);button('Deshacer').click();assert.equal(editor.element.querySelector('.report-annotation').textContent,'izquierdo');assert.equal(editor.reviewPanel.hidden,false);
  await button('Copiar al portapapeles').onclick();assert.equal(copied,'Hallazgo derecho. Resumen izquierdo.');
  button('Es correcto').click();assert.equal(editor.element.querySelector('.report-annotation'),null);assert.equal(editor.model.text,copied);
