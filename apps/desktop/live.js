@@ -56,7 +56,7 @@ function showFigureDoubts(warnings){
 }
 // Hoja clínica: preserve the mounted editor, transport controls and listeners.
 document.body.classList.add('live-workspace','clinical-workspace');
-const layoutMetrics={language:language(),version:'qr-attention-v5',settingsVersion:'dictado-agrupado-v1',serverBuild:initialState.build??null,serverSourceHash:initialState.sourceHash??null,createdAt:new Date().toISOString(),browser:navigator.userAgent,device:null,network:null,audioSource:null,clockResolutionMs:null,instrumentationOverheadMs:null,audioMeter:{updates:0,totalPaintMs:0,maxPaintMs:0,source:'received-pcm-rms'},events:[]};
+const layoutMetrics={language:language(),version:'qr-attention-v5',settingsVersion:'appearance-language-v2',serverBuild:initialState.build??null,serverSourceHash:initialState.sourceHash??null,createdAt:new Date().toISOString(),browser:navigator.userAgent,device:null,network:null,audioSource:null,clockResolutionMs:null,instrumentationOverheadMs:null,audioMeter:{updates:0,totalPaintMs:0,maxPaintMs:0,source:'received-pcm-rms'},events:[]};
 const track=(type,data={})=>{layoutMetrics.events.push({type,atMs:performance.now(),...data});if(layoutMetrics.events.length>500)layoutMetrics.events.shift();};
 const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text)n.textContent=text;return n;};
 const makeDetails=(label,cls)=>{const d=make('details',cls);d.append(make('summary','',label));return d;};
@@ -124,20 +124,19 @@ for(const child of [labLink,recordings,takes,diagnostics,connectionNote])if(chil
 advanced.hidden=isDemo;
 dictationSettings.append(transcriptionSettings,textSettings,advanced);
 const howTo=make('section','howto-panel');howTo.append(make('h3','',tr('Cómo usar')));const steps=make('div','help-steps');
-for(const [title,description] of [[(language()==='en'?'1 · Connect':'1 · Conectar'),tr('Conecta tu teléfono con el QR o código. También puedes escribir directamente sin teléfono.')],[(language()==='en'?'2 · Dictate':'2 · Dictar'),tr('Inicia y detén la grabación desde el teléfono. Espera a que termine el texto provisional.')],[(language()==='en'?'3 · Review':'3 · Revisar'),tr('Lee el informe y sus medidas. Si está disponible, usa Revisar con IA y comprueba cada aviso.')],[(language()==='en'?'4 · Copy':'4 · Copiar'),tr('Copia el texto para pegarlo en el RIS. Usa Nuevo informe para empezar el siguiente estudio.')]]){const step=make('article','help-step');step.append(make('h4','',title),make('p','',description));steps.append(step);}howTo.append(steps,editorHelp);
-const helpConnect=make('button','',tr('Empezar: conectar mi teléfono')),helpWrite=make('button','',tr('Escribir sin teléfono'));howTo.append(helpConnect,helpWrite);
-helpConnect.onclick=()=>{settings.open=false;connection.open=true;connection.querySelector('summary').focus();};helpWrite.onclick=()=>{settings.open=false;reportEditor.element.focus();};
+for(const [title,description] of [[tr('1 · Conectar'),tr('Escanea el QR con tu teléfono o elige Usar teclado.')],[tr('2 · Dictar'),tr('Pulsa grabar en el teléfono. Habla cuando indique Grabando.')],[tr('3 · Revisar'),tr('Lee el informe. Revisar con IA propone cambios que tú aceptas.')],[tr('4 · Copiar'),tr('Copia al portapapeles. Nuevo informe deja la hoja vacía y mantiene el teléfono conectado.')]]){const step=make('article','help-step');step.append(make('h4','',title),make('p','',description));steps.append(step);}howTo.append(steps);
+const languagePage=make('section','language-panel');languagePage.append(make('h3','',tr('Idioma')),make('p','',tr('Elige el idioma de la interfaz. Tu informe se conserva sin traducir.')));
 const settingsNav=make('nav','settings-nav');settingsNav.setAttribute('aria-label',tr('Secciones de ajustes'));settingsNav.append(make('h2','',tr('Ajustes')));
-const settingsMain=make('div','settings-main'),settingsClose=make('button','settings-close',tr('Cerrar'));settingsClose.onclick=()=>{settings.open=false;settings.querySelector('summary').focus();};settingsMain.append(settingsClose,dictationSettings,appearance,howTo);
-const pages={dictado:dictationSettings,apariencia:appearance,ayuda:howTo};
+const settingsMain=make('div','settings-main'),settingsClose=make('button','settings-close',tr('Cerrar'));settingsClose.onclick=()=>{settings.open=false;settings.querySelector('summary').focus();};settingsMain.append(settingsClose,appearance,languagePage,dictationSettings,howTo);
+const pages={apariencia:appearance,idioma:languagePage,dictado:dictationSettings,ayuda:howTo};
 const showSettingsPage=name=>{for(const [key,page] of Object.entries(pages))page.hidden=key!==name;for(const button of settingsNav.querySelectorAll('button'))button.setAttribute('aria-current',button.dataset.page===name?'page':'false');track('settings-page',{page:name});};
-for(const [name,title] of [['dictado',tr('Dictado')],['apariencia',tr('Apariencia')],['ayuda',tr('Cómo usar')]]){const button=make('button','settings-tab',title);button.dataset.page=name;button.onclick=()=>showSettingsPage(name);settingsNav.append(button);}showSettingsPage('dictado');
+for(const [name,title] of [['apariencia',tr('Apariencia')],['idioma',tr('Idioma')],['dictado',tr('Dictado')],['ayuda',tr('Cómo usar')]]){const button=make('button','settings-tab',title);button.dataset.page=name;button.onclick=()=>showSettingsPage(name);settingsNav.append(button);}showSettingsPage('apariencia');
 const brandStack=make('div','brand-stack');brand.before(brandStack);brandStack.append(brand);
-const brandLanguages=make('div','brand-languages');brandStack.append(brandLanguages);
+const brandLanguages=languagePage;
 const languageSelect=mountLanguageSwitch(brandLanguages,()=>!reportEditor.model.pending&&!recordingEngine);
 languageSelect.parentElement.hidden=true;
-const languageButtons=make('div','language-buttons');languageButtons.setAttribute('role','group');languageButtons.setAttribute('aria-label','Language / Idioma');brandLanguages.append(languageButtons);
-for(const [value,label,name] of [['en','ENG','English'],['es','ES','Español']]){const button=make('button','',label);button.type='button';button.lang=value;button.setAttribute('aria-label',name);button.setAttribute('aria-pressed',String(language()===value));button.onclick=()=>{if(languageSelect.disabled||language()===value)return;languageSelect.value=value;languageSelect.dispatchEvent(new window.Event('change'));};languageButtons.append(button);}
+const languageButtons=make('div','language-buttons settings-segments');languageButtons.setAttribute('role','group');languageButtons.setAttribute('aria-label','Language / Idioma');brandLanguages.append(languageButtons);
+for(const [value,label,name] of [['es','Español','Español'],['en','English','English']]){const button=make('button','',label);button.type='button';button.lang=value;button.setAttribute('aria-label',name);button.setAttribute('aria-pressed',String(language()===value));button.onclick=()=>{if(languageSelect.disabled||language()===value)return;languageSelect.value=value;languageSelect.dispatchEvent(new window.Event('change'));};languageButtons.append(button);}
 new MutationObserver(()=>{for(const button of languageButtons.children)button.disabled=languageSelect.disabled;}).observe(languageSelect,{attributes:true,attributeFilter:['disabled']});
 window.addEventListener('dicta-language-change',e=>{if(reportEditor.model.pending||recordingEngine)e.preventDefault();});
 window.addEventListener('dicta-recording-start',()=>{languageSelect.disabled=true;});
@@ -145,7 +144,7 @@ window.addEventListener('dicta-recording-stop',()=>{languageSelect.disabled=repo
 new MutationObserver(()=>{languageSelect.disabled=reportEditor.model.pending||!!recordingEngine;}).observe(reportEditor.element,{childList:true,subtree:true});
 settingsBody.replaceChildren(settingsNav,settingsMain);settingsBody.setAttribute('role','dialog');settingsBody.setAttribute('aria-modal','true');settingsBody.setAttribute('aria-label',tr('Ajustes'));settingsBody.tabIndex=-1;
 const settingsBackdrop=make('div','settings-backdrop');settingsBackdrop.setAttribute('aria-hidden','true');settingsBody.before(settingsBackdrop);settingsBackdrop.onclick=()=>{settings.open=false;settings.querySelector('summary').focus();};
-settings.addEventListener('toggle',()=>{if(settings.open)settingsClose.focus();});
+settings.addEventListener('toggle',()=>{if(settings.open){showSettingsPage('apariencia');settingsClose.focus();}});
 settingsBody.addEventListener('keydown',e=>{if(e.key!=='Tab')return;const items=[...settingsBody.querySelectorAll('button,input,select,a[href],summary')].filter(n=>!n.disabled&&!n.closest('[hidden]')&&!n.hidden&&n.tabIndex!==-1&&!(n.matches('summary')?n.parentElement.parentElement:n.parentElement)?.closest('details:not([open])'));const first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}});
 const emptyGuide=make('div','empty-guide');
 const guideText=make('p','',tr('Conecta tu teléfono para dictar, o escribe aquí directamente. Usa ')),templateShortcut=make('button','inline-template-link',tr('Plantilla'));templateShortcut.type='button';

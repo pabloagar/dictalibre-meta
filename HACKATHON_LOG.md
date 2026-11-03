@@ -794,3 +794,6 @@ Activación16 verificada: deployment7522282048 success2026-11-03T15:03:03Z; API 
 
 2026-11-03 · Vista previa de plantillas ajustada a16px, alineada con tamaño inicial al insertar. Solo regla tipográfica, sin cambios de texto o flujo. pnpm check y266/266 pruebas aprobadas; cero tomas activas antes de publicar. Legibilidad humana pendiente, sin medición adicional por cambio CSS de bajo impacto.
 Activación preview16: deployment7522360557 success2026-11-03T15:06:06Z, commit d69612efffa11f64e1f3700e72e41f2696c5de30; CSS público confirma regla16px. GitHub/Render actualizados; laboratorio privado intacto.
+
+## 2026-11-03 · Ajustes simplificados
+Autorizado por el responsable: entrada Apariencia en cada apertura, Español/English trasladado a Idioma y ayuda reducida a cuatro pasos. Resto de controles conservados. pnpm check OK, pnpm test 266/266. Render previo d69612e con concurrency.active=0 antes de publicar. Despliegue pendiente de verificación; no se reinicia laboratorio privado. Archivos ajenos excluidos del commit.

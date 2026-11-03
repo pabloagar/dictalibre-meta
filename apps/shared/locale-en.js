@@ -1,5 +1,12 @@
 // English UI catalogue. Keys are application-owned Spanish literals; never report text.
 export const EN = {
+ "Idioma":"Language",
+ "Elige el idioma de la interfaz. Tu informe se conserva sin traducir.":"Choose the interface language. Your report is kept without translation.",
+ "1 · Conectar":"1 · Connect", "2 · Dictar":"2 · Dictate", "3 · Revisar":"3 · Review", "4 · Copiar":"4 · Copy",
+ "Escanea el QR con tu teléfono o elige Usar teclado.":"Scan the QR with your phone or choose Use keyboard.",
+ "Pulsa grabar en el teléfono. Habla cuando indique Grabando.":"Press record on your phone. Speak when it says Recording.",
+ "Lee el informe. Revisar con IA propone cambios que tú aceptas.":"Read the report. Review with AI suggests changes for you to accept.",
+ "Copia al portapapeles. Nuevo informe deja la hoja vacía y mantiene el teléfono conectado.":"Copy to clipboard. New report clears the page and keeps your phone connected.",
  "Mis plantillas":"My templates",
  "Insertar plantilla":"Insert template", "Todas":"All", "Volver al informe":"Back to report", "VISTA PREVIA · aún no insertada":"PREVIEW · not inserted yet",
  "Empieza a escribir, dictar o ": "Start typing, dictating or ", "insertar plantilla": "insert a template",
