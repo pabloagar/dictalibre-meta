@@ -423,3 +423,16 @@ Prueba real `data/local/english-smoke-1793667225125`: 1 toma TTS Microsoft Zira 
 Reproducción opcional con Meta real: `powershell -NoProfile -File scripts/build-english-fixture.ps1 -OutputDirectory data/local/english-fixture-N` y `node scripts/test-english-demo.mjs data/local/english-fixture-N/manifest.json`; requiere voz inglesa de Windows y clave local ya configurada. Consume una toma sintética y una revisión; guarda protocolo, resultado y fallos en carpeta nueva ignorada. Confirmación humana del idioma del reason se registra aparte (null hasta revisión). Pruebas sin proveedor: `node --test tests/language.test.mjs tests/clinical-ui.test.mjs tests/demo.test.mjs`.
 
 Fuente técnica verificada: https://dev.meta.ai/docs/speech-to-text y /docs/api-reference/voice/schemas, consultadas 02-11-2026: languageBias recibe nombres English/Spanish; es preferencia, no garantía de idioma ni exactitud. Sobrecosto de traducción y precisión del reloj permanecen null; tarea pendiente medir arranque bilingüe y dictado humano en ambos idiomas antes de afirmar equivalencia.
+
+
+## Piloto Chatterbox Colab · 03-11-2026
+
+Protocolo de factibilidad de 12 guiones, intervalos, métricas y aceptación en [docs/CHATTERBOX_COLAB_PILOT.md](docs/CHATTERBOX_COLAB_PILOT.md). Resultados y revisión auditiva pendientes; no es una comparación ASR.
+
+Actualización 03-11-2026: piloto original técnicamente 12/12, pero revisión cualitativa del responsable desfavorable por pronunciación y tropiezos. Comparación correctiva predefinida en docs/CHATTERBOX_COLAB_PILOT.md, 3 guiones por 2 condiciones, 1 repetición. No se declara mejora hasta evaluación auditiva.
+
+
+Preferencia humana A/B (03-11-2026): responsable prefiere A en las tres frases p02/p03/p09. Resultado comunicado: 3/3 preferencias por A; puntuaciones y errores null. A seleccionada como base de siguiente prueba; criterio absoluto pendiente. Evidencia detallada privada en human_preference.json junto a los WAV extraídos.
+
+
+Lote A completo (03-11-2026): run_20261103T040001Z, 12/12 WAV técnicamente correctos, 64,52 s de audio. Recuperación local verificada por hashes individuales y de pista concatenada (75,52 s con pausas). Aprobación humana completa null. Protocolo, entorno y límites en docs/CHATTERBOX_COLAB_PILOT.md.

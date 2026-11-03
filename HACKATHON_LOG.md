@@ -650,6 +650,11 @@ Se retiran los marcadores nativos de desplegables y los indicadores decorativos 
 Validación: pnpm check y 239/239 pruebas aprobadas. Chrome local 8798: cambio English→Español conserva frase sintética de 49 caracteres; inspección visual del panel Dictado sin triángulos. No hubo audio ni llamadas de IA. No se mide mejora de tiempo (null); modificación visual de bajo impacto. Publicación en curso.
 Verificado en Render: deployment 7509322170 success 2026-11-03T03:07:59Z (00:07:59 America/Santiago), commit b7de447638f3cc65d93c8985675646acba34f90b. live.js sirve brand-languages, style.css coincide con checkout normalizando CRLF/LF; /health ok. GitHub y Render actualizados; laboratorio privado no reiniciado.
 
+
+## 03-11-2026 · Inicio de piloto Chatterbox V3 en Colab
+
+Autorizado por el responsable: notebook de 12 guiones sintéticos, una voz, sin ruido. Creado en Colab y configurado con T4. Se corrigió el fallo de creación de venv usando virtualenv; se observó también un fallo transitorio del panel de resultados y una interrupción de instalación. Código y protocolo en docs/CHATTERBOX_COLAB_PILOT.md. Generación todavía en curso; sin aprobación auditiva. No se modificó ni reinició la web.
+
 ## 03-11-2026 · restaurar proporciones compactas de Stitch
 El cambio ENG/ES no quitaba el CSS de Stitch, pero la sustitución de iconos por etiquetas ensanchó Deshacer/Rehacer y reglas heredadas más específicas imponían 40px a Plantilla. Se restauran iconos con nombres accesibles, toolbar de 26px, Plantillas antes de + Nuevo, acciones superiores de 28px y ENG/ES debajo de marca en columna de ancho fijo. Flechas decorativas de desplegables siguen ocultas. Validación: pnpm check, 239/239 tests, Chrome local con borrador sintético, comparación visual inglés/español. No se mide ganancia de tiempo; tiempos humanos null. Despliegue pendiente de verificar. Trabajo paralelo Chatterbox no incluido.
 
@@ -665,8 +670,23 @@ Ajuste mínimo solicitado sobre checkpoint visual: revisión con fondo verde apa
 
 Verificado en Render: deployment 7509850362 success 2026-11-03T03:46:11Z, commit 9b581da7e9512969b3e6bb7ae4de19a29fd891b7. style.css y report-editor.js idénticos al checkout normalizando CRLF/LF, /health ok. GitHub y web actualizados; laboratorio privado no reiniciado.
 
+## 03-11-2026 · Revisión desfavorable de pronunciación sintética
+Piloto original completado: 12 WAV, 53,64 s; hashes PCM16 del ZIP verificados. El responsable comunica acento anglófono y tropiezos: voz no aprobada. Se inicia en Colab comparación de p02/p03/p09 con referencia oficial es-MX, parámetros originales y variante suave. Protocolo previo en docs/CHATTERBOX_COLAB_PILOT.md; valoración humana y superioridad aún null. Sin cambios de aplicación ni reinicios.
+
+
+## 03-11-2026 · Selección humana de voz A
+
+Responsable: «la a siempre en todas». A preferida en las tres comparaciones; se conserva B y se registra la preferencia relativa, sin inferir ausencia de errores. Configuración A documentada en docs/CHATTERBOX_COLAB_PILOT.md. Solo registro de experimento local; sin nueva generación, cambios de aplicación ni despliegue.
+
 ## 03-11-2026 · siguiente paso contextual sin ventanas
 Inicio: Escanea para dictar con instrucción de cámara y subtítulo. Teléfono conectado + hoja vacía: Todo listo. Empieza a grabar desde tu teléfono, en la hoja. Oculta al escribir, iniciar toma o elegir informe libre; no reaparece por deshacer y se reinicia con Nuevo informe. Pausa no se presenta como listo. Móvil: ayuda inicial breve que desaparece tras preparar, estado confirmado Grabando. Puedes hablar y texto de entrega/otra toma. Sin cambios de permisos, captura, cola o vibración. Inglés/español.
 Validación: check + 240 tests; pruebas de conexión/pausa, escritura/deshacer y ocultamiento de ayuda móvil. Chrome local: emparejamiento real entre vistas desktop/mobile, verificación visual de la indicación y permiso inicial, sin activar micrófono ni enviar audio. Dispositivo móvil físico pendiente.
 
 Activación verificada: Render deployment 7510129467 success 2026-11-03T04:06:28Z (01:06:28 America/Santiago), commit 584310e2828ef15089254759fab96f53ad1fe2eb. /mobile.js y /live.js coinciden con checkout normalizando CRLF/LF; /health ok. GitHub y web actualizados. Validación visual local en Chrome con emparejamiento entre dos pestañas, sin grabación; no equivale a prueba física móvil.
+
+
+## 03-11-2026 · Lote completo de 12 guiones con voz A
+
+Generados en Colab y recuperados por Drive: 12/12 PCM16, 64,52 s, pista de escucha de 75,52 s; todos los hashes coinciden con origen. Revisión auditiva del lote pendiente. Se prepara publicación del notebook sin salidas, scripts y metodología; audios, exportaciones y metadatos personales excluidos. Sin cambios de aplicación ni reinicio de web. Validación y publicación pendientes.
+
+Validación del lote y código: pnpm check aprobado, pnpm test 240/240, sintaxis de Python y todas las celdas aprobada. Notebook público sin salidas ni metadatos personales; revisión de archivos nuevos sin audio embebido ni patrones de credenciales. Publicación usa [skip render]: no hay código de aplicación que activar en la web; audios permanecen privados.
