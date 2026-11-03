@@ -1,0 +1,53 @@
+{
+  "schema": "dicta-ten-concurrent-public-summary-v1",
+  "observedAtUtc": "2026-11-03T00:07:42.527Z",
+  "deploymentId": 7506671636,
+  "deployedBuild": "2d8aaa80f4b0074d79c93900ce34455aa9635122",
+  "sourceHash": "3398012c8956285a737df1b4fae3cf59c78247f93efb2add420bee7a959e4a91",
+  "driverHash": "ad60b9fd92b13d4632ac420e9f6b2db7a913219abd284b1a4d3ee7e0d49eaf9a",
+  "node": "v24.22.1",
+  "os": "win32",
+  "arch": "x64",
+  "network": "single driver to Render over HTTPS/WSS; local connection type unknown",
+  "browser": null,
+  "physicalPhones": 0,
+  "physicalPeople": 0,
+  "hardware": null,
+  "audioSource": "Windows System.Speech / Microsoft Helena Desktop / es-ES / ten distinct nonclinical sentences",
+  "sampleRate": 48000,
+  "repetitions": 1,
+  "totalSyntheticAudioSeconds": 80.885,
+  "clipSeconds": {
+    "min": 7.8145,
+    "max": 8.2845
+  },
+  "concurrentActive": 10,
+  "completed": 10,
+  "verifiedRelayHashes": 10,
+  "verifiedAsrIntegrity": 10,
+  "expectedMarkerMatches": 10,
+  "foreignMarkers": 0,
+  "foreignCancellationBlocked": 10,
+  "activeAfter": 0,
+  "stopToDoneMs": {
+    "min": 4707.963,
+    "max": 5186.658199999998,
+    "mean": 4886.34629,
+    "median": 4825.762200000001
+  },
+  "startToReadyMs": {
+    "min": 505.09739999999874,
+    "max": 762.0686000000023
+  },
+  "cpu": null,
+  "ram": null,
+  "cost": null,
+  "clockPrecisionMs": null,
+  "instrumentationOverheadMs": null,
+  "limits": [
+    "One short run from one driver host, not ten physical people or networks",
+    "Server sessions and daily audio budget reset on restart",
+    "No simultaneous Spark load or clinical accuracy validation",
+    "First remote attempt failed authentication with HTTP 401 before audio; later check succeeded; cause not established"
+  ]
+}
