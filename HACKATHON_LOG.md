@@ -797,3 +797,5 @@ Activación preview16: deployment7522360557 success2026-11-03T15:06:06Z, commit 
 
 ## 2026-11-03 · Ajustes simplificados
 Autorizado por el responsable: entrada Apariencia en cada apertura, Español/English trasladado a Idioma y ayuda reducida a cuatro pasos. Resto de controles conservados. pnpm check OK, pnpm test 266/266. Render previo d69612e con concurrency.active=0 antes de publicar. Despliegue pendiente de verificación; no se reinicia laboratorio privado. Archivos ajenos excluidos del commit.
+
+Verificado en Render: deployment 7522789094 success 2026-11-03T15:22:15Z; API build a2b0105f9cb4af2197fceb33a0c301e2e3f4363a y /live.js con appearance-language-v2. Cambios guardados en GitHub y activos en la demo. Sin prueba física adicional; laboratorio privado intacto.
