@@ -793,3 +793,4 @@ Activación verificada: deployment 7522044649 success 2026-11-03T14:53:35Z; /api
 Activación16 verificada: deployment7522282048 success2026-11-03T15:03:03Z; API confirma acd1b41ddd24736ef2b191f6af632a5e720c6e4c. Primera consulta durante transición401, repetida con sesión nueva correctamente. GitHub y Render activos; laboratorio privado sin reiniciar.
 
 2026-11-03 · Vista previa de plantillas ajustada a16px, alineada con tamaño inicial al insertar. Solo regla tipográfica, sin cambios de texto o flujo. pnpm check y266/266 pruebas aprobadas; cero tomas activas antes de publicar. Legibilidad humana pendiente, sin medición adicional por cambio CSS de bajo impacto.
+Activación preview16: deployment7522360557 success2026-11-03T15:06:06Z, commit d69612efffa11f64e1f3700e72e41f2696c5de30; CSS público confirma regla16px. GitHub/Render actualizados; laboratorio privado intacto.
