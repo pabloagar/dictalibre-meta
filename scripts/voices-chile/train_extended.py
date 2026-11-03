@@ -30,6 +30,26 @@ def schedule(rows, steps, seed):
     return result
 
 
+def balanced_schedule(rows, steps, seed):
+    """Equal updates per speaker, cycling each speaker's shuffled clips."""
+    rng=random.Random(seed); groups={}
+    for row in rows:
+        if row['split']=='train': groups.setdefault(row['speaker'],[]).append(row)
+    queues={s:[] for s in groups}; result=[]
+    while len(result)<steps:
+        for speaker in rng.sample(sorted(groups),len(groups)):
+            if not queues[speaker]: queues[speaker]=rng.sample(groups[speaker],len(groups[speaker]))
+            result.append(queues[speaker].pop())
+            if len(result)==steps: break
+    return result
+
+
+def balanced_validation(rows, count, seed):
+    candidates=[{**r,'split':'train'} for r in rows if r['split']=='validation']
+    # Round robin without repetitions; no speaker can disappear through random sampling.
+    return schedule(candidates,min(count,len(candidates)),seed)
+
+
 def check_budget(budget):
     rate, price, seconds, remaining = (budget.get(k) for k in
         ('units_per_hour', 'usd_per_unit', 'max_runtime_s', 'remaining_cap_usd'))
@@ -89,14 +109,14 @@ def run(args, out):
             refs[row['id']] = group[(i+1) % len(group)]
     validation = sorted((r for r in rows if r['split']=='validation'), key=lambda r:r['id'])
     rng = random.Random(args.seed)
-    validation = rng.sample(validation, min(args.validation_samples, len(validation)))
-    plan = schedule(rows, args.steps, args.seed)
+    validation = balanced_validation(rows,args.validation_samples,args.seed) if args.balance_speakers else rng.sample(validation, min(args.validation_samples, len(validation)))
+    plan = (balanced_schedule if args.balance_speakers else schedule)(rows, args.steps, args.seed)
     pilot.guardar(out/'protocol.json', {'trainer_sha256':pilot.sha(__file__), 'steps_requested':args.steps,
         'lr':args.lr, 'eval_every':args.eval_every, 'validation_ids':[r['id'] for r in validation],
         'manifest_sha256':pilot.sha(args.manifest), 'rights_sha256':pilot.sha(args.rights),
         'resume_sha256':pilot.sha(args.resume), 'resume_steps':parent['steps'], 'budget':budget,
         'scope':'private_research_adaptation', 'accent_validated':False, 'commercial_ready':False,
-        'training_ids':[r['id'] for r in plan], 'optimizer_resumed':False})
+        'training_ids':[r['id'] for r in plan], 'optimizer_resumed':False, 'balance_speakers':args.balance_speakers})
     cache = {}
     prep_s = 0.0
     deadline = time.perf_counter()+args.max_seconds
@@ -160,7 +180,7 @@ def run(args, out):
     base_loss = evaluate(0,'base')
     load_adapter(model.t3,load_file(args.resume))
     initial = adapter_state(model.t3)
-    best = evaluate(0,'resume_20')
+    best = evaluate(0,'resume_'+str(parent['steps']))
     save_file(initial,str(out/'best.safetensors'))
     best_step, stale = 0, 0
     params = [p for p in model.t3.parameters() if p.requires_grad]
@@ -218,6 +238,7 @@ def main():
     for name in ('manifest','audio-root','rights','output','budget','resume'):
         p.add_argument('--'+name,required=True)
     p.add_argument('--research-source-qc',action='store_true')
+    p.add_argument('--balance-speakers',action='store_true')
     p.add_argument('--steps',type=int,default=2000)
     p.add_argument('--max-seconds',type=int,default=2400)
     p.add_argument('--seed',type=int,default=20261103)

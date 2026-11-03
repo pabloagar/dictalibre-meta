@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import pilot
 from build_comparison import build
-from train_extended import schedule, check_budget
+from train_extended import schedule, check_budget, balanced_schedule, balanced_validation
 
 
 class ExtendedTests(unittest.TestCase):
@@ -30,6 +30,16 @@ class ExtendedTests(unittest.TestCase):
         self.assertEqual(len({r['id'] for r in result[10:20]}),10)
         self.assertNotIn('reserved',[r['id'] for r in result])
         self.assertEqual(result,schedule(rows,23,42))
+
+    def test_balanced_speakers_and_validation(self):
+        from collections import Counter
+        rows=[{'id':f'{s}_{i}','speaker':s,'split':'train'} for s,n in [('a',2),('b',17)] for i in range(n)]
+        result=balanced_schedule(rows,100,42)
+        self.assertEqual(Counter(r['speaker'] for r in result),{'a':50,'b':50})
+        reserved=[{**r,'split':'validation'} for r in rows]
+        chosen=balanced_validation(reserved,8,42)
+        self.assertEqual(len({r['id'] for r in chosen}),8)
+        self.assertEqual({r['speaker'] for r in chosen},{'a','b'})
 
     def test_five_dollar_finite_budget_with_watchdog(self):
         b=dict(units_per_hour=1.15,usd_per_unit=.0999,max_runtime_s=3600,

@@ -86,3 +86,8 @@ El modo documental `private_research_adaptation` extiende el experimento privado
 
 
 Ejecución ampliada completada: 2.000 pasos adicionales sobre 1.264 clips / 2,04 h. Mejor adaptador: 1.520 pasos acumulados, pérdida de validación 2,154837 frente a 2,256562 a los 20 pasos. Comparación recargada en proceso nuevo: 15 WAV, 12 técnicamente correctos, una saturación por variante; revisión perceptual pendiente. Coste estimado por saldo ~US$0,048; GPU desconectada, cero sesiones. Checkpoints y muestras privados respaldados; metodología, hashes y límites en EXPERIMENTS.md y HACKATHON_LOG.md.
+
+
+La continuación mixta incorpora --balance-speakers: igual cantidad de actualizaciones por hablante (diferencia máxima de una), reciclando cada lista barajada cuando se agota. Esto puede repetir clips de hablantes con pocos datos antes de consumir todos los de quienes tienen más; cobertura real se registra y no se presupone. Validación round-robin sin repetir clips hasta completar la cantidad pedida. --references permite comparación de varios hablantes reservados; pasos del adaptador anterior se leen de su configuración. Para esta prueba se seleccionan dos mujeres y dos hombres, con 60 generaciones totales. Las voces son referencias reales del corpus, no identidades artificiales nuevas.
+
+Resultado mixto: 4.000 pasos nuevos, parada por tres controles sin mejora; mejor 4.020 acumulados. Usó 2.737 clips de 26 hablantes. Validación 0,949 % menor que el adaptador 1.520; no demuestra acento. Comparación 60 WAV, 45 técnicamente correctos, 15 con picos fuera de rango (base 4, anterior 5, mixto 6). Respaldo privado verificado y GPU apagada; coste estimado US$0,081. Detalles, hashes y límites en EXPERIMENTS.md.
