@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "status": "prepared_not_generated",
+  "clinical_reviewer": null,
+  "purpose": "Fictional speech evaluation, not diagnostic templates",
+  "cases": [
+    {"id":"c01","category":"negacion","spoken":"No se identifica neumotórax. Punto.","targets":{"negation":"No","finding":"neumotórax"}},
+    {"id":"c02","category":"negacion","spoken":"Se identifica un pequeño derrame pleural derecho. Punto.","targets":{"negation":null,"side":"derecho"}},
+    {"id":"c03","category":"lateralidad","spoken":"Nódulo sólido en el lóbulo superior izquierdo. Punto.","targets":{"side":"izquierdo","location":"superior"}},
+    {"id":"c04","category":"lateralidad","spoken":"Quiste en el polo inferior del riñón derecho. Punto.","targets":{"side":"derecho","location":"inferior"}},
+    {"id":"c05","category":"cifras_unidades","spoken":"La lesión mide dos coma cinco centímetros. Punto.","targets":{"value":2.5,"unit":"centímetros"}},
+    {"id":"c06","category":"cifras_unidades","spoken":"La atenuación es de menos diez unidades Hounsfield. Punto.","targets":{"value":-10,"unit":"unidades Hounsfield"}},
+    {"id":"c07","category":"terminologia","spoken":"Bronquiectasias cilíndricas bibasales. Punto.","targets":{"term":"Bronquiectasias"}},
+    {"id":"c08","category":"terminologia","spoken":"Nódulo tiroideo hipoecogénico sin microcalcificaciones. Punto.","targets":{"negation":"sin","term":"microcalcificaciones"}},
+    {"id":"c09","category":"autocorreccion","spoken":"El hallazgo es izquierdo, perdón, derecho. Punto.","targets":{"literal_required":true,"final_side":"derecho"}},
+    {"id":"c10","category":"comandos","spoken":"Conclusión dos puntos. No hay derrame pleural. Punto. Nueva línea.","targets":{"literal_required":true,"commands":["dos puntos","Punto","Nueva línea"]}}
+  ],
+  "partition_rule": "All variants of one case stay together; future real test speakers and texts remain separate.",
+  "transcript_rule": "Review actual spoken content; do not replace literal corrections or commands with a formatted report."
+}

@@ -15,7 +15,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-ERRORS = ('terminos', 'cifras', 'negaciones', 'comandos', 'cortes', 'repeticiones', 'otras_palabras')
+ERRORS = ('terminos', 'cifras', 'unidades', 'lateralidad', 'negaciones', 'comandos', 'cortes', 'repeticiones', 'otras_palabras')
 
 
 def guardar(path, value):
@@ -62,7 +62,7 @@ def revision_valida(row, review):
             return False
     if any(type(review.get(k)) is not int or review[k] < 0 for k in ERRORS):
         return False
-    return bool(str(review.get('transcripcion', '')).strip())
+    return isinstance(review.get('transcripcion'), str) and bool(review['transcripcion'].strip())
 
 
 def evaluar(rows, reviews, etapa):
@@ -334,6 +334,12 @@ def exportar(args):
     selected = [r for r in rows if verdict[r['voz']]['aprobada']]
     if not selected:
         raise ValueError('sin_muestras_aprobadas_no_exportar')
+    from review_workflow import rights_check
+    if not getattr(args, 'rights', None):
+        raise ValueError('falta_registro_de_permisos')
+    rights = rights_check(root, leer(args.rights))
+    if not rights['allowed']:
+        raise ValueError('permisos_no_verificados: ' + ', '.join(rights['problems']))
     out = Path(args.output)
     out.mkdir(parents=True, exist_ok=False)
     exported = []
@@ -358,6 +364,7 @@ def exportar(args):
             'training_whisper_executed': False})
     guardar(out / 'manifest.json', exported)
     guardar(out / 'approval.json', {'verdict': verdict, 'review_sha256': sha(args.review),
+                                  'rights_sha256': sha(args.rights), 'rights_verdict': rights,
                                   'source_manifest_sha256': sha(root / 'manifest.json')})
 
 
@@ -378,6 +385,7 @@ def main():
     exp.add_argument('--review', required=True)
     exp.add_argument('--output', required=True)
     exp.add_argument('--reference-review')
+    exp.add_argument('--rights', help='Registro vinculado al lote: permisos comercial, ASR y redistribución')
     args = parser.parse_args()
     if args.command == 'generate':
         generar(args)

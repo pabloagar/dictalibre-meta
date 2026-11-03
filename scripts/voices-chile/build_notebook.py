@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 files = {name: (ROOT / name).read_text(encoding='utf-8') for name in
-         ('pilot.py', 'config.json', 'requirements.txt', 'requirements-chatterbox.txt', 'review.html', 'test_pilot.py')}
+         ('pilot.py', 'review_workflow.py', 'config.json', 'requirements.txt', 'requirements-chatterbox.txt', 'review.html', 'test_pilot.py')}
 payload = base64.b64encode(gzip.compress(json.dumps(files).encode(), mtime=0)).decode()
 
 

@@ -76,6 +76,15 @@ class Tests(unittest.TestCase):
                 pilot.exportar(args)
             self.assertFalse(args.output.exists())
             pilot.guardar(review, {'manifest_sha256': pilot.sha(root / 'manifest.json'), 'registros': reviews})
+            with self.assertRaisesRegex(ValueError, 'permisos'):
+                pilot.exportar(args)
+            from review_workflow import rights_template
+            registry = rights_template(root)
+            for asset in registry['assets'].values():
+                for permission in asset.values():
+                    permission.update(status='verified', evidence='synthetic test fixture', reviewer='test', reviewed_on='2026-11-03')
+            args.rights = root / 'rights.json'
+            pilot.guardar(args.rights, registry)
             pilot.exportar(args)
             exported = pilot.leer(args.output / 'manifest.json')
             self.assertEqual(len(exported), 10)

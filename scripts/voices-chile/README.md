@@ -22,3 +22,21 @@ python -m unittest discover -s . -p test_pilot.py -v
 Las ejecuciones requieren carpetas nuevas y no sobrescriben muestras anteriores. Manifiesto JSON/CSV, protocolo, entorno, freeze y reproductor quedan junto a los WAV privados. La revisión se descarga desde `ESCUCHAR.html`; no basta marcar reproducido. No exportar referencias candidatas como entrenamiento. No subir salidas, audios ni notebooks con resultados al repo público.
 
 Compatibilidad original: `--stage design` permite el piloto Qwen de 20 muestras; ya no es el recorrido predeterminado. La fase estabilidad usa el motor del perfil aprobado. No se entrenan pesos en ninguna de estas fases.
+
+## Evaluación ciega y permisos por finalidad
+
+Primera fase implementada: reutiliza el lote privado, sin GPU ni entrenamiento. Preparar tres carpetas de escucha:
+
+```bash
+python review_workflow.py prepare --source RUTA_LOTE --output RUTA_REVISION_NUEVA
+python review_workflow.py import-review --source RUTA_LOTE --key RUTA_REVISION/oyente_1/CLAVE_PRIVADA.json --reviews revision-chile-blind.json --output oyente1-importado.json
+python review_workflow.py report --source RUTA_LOTE --reviews oyente1-importado.json oyente2-importado.json oyente3-importado.json --output resultado-nuevo.json
+```
+
+Compartir únicamente `para_oyente/ESCUCHAR.html`, nunca CLAVE_PRIVADA.json. El HTML incluye audios y debe permanecer privado. Cada oyente tiene su identificador anónimo y orden reproducible; el motor, perfil y semilla se omiten del HTML. Si el oyente ya conoce las muestras, el cegamiento es parcial y no puede restaurarse. Tres archivos no equivalen a tres personas: reclutamiento y escucha siguen siendo humanos. No se enviaron invitaciones.
+
+La evaluación añade lateralidad y unidades a los errores de contenido. Revisiones anteriores sin esos campos quedan incompletas, no se rellenan con cero. Importar vincula evaluación, clave, oyente y manifiesto; conservar el JSON descargado original. El informe presenta resultados descriptivos, medias por oyente, rango de desacuerdo y errores por 100 evaluaciones completas (no por 100 frases independientes). Para aprobación por panel de una muestra exige al menos tres oyentes, medias >=4 y ningún error de contenido en sus revisiones. Un informe parcial no constituye validación del perfil ni de Whisper.
+
+`rights.json` empieza pendiente. Cada finalidad admite estados documentales `verified`, `conditional`, `unverified`, `restricted`; solo `verified` con evidencia, revisor y fecha permite exportar. Revisar toda la cadena de código, pesos, textos, referencias, identidad y condiciones de salida. No basta cambiar una etiqueta: el software comprueba campos y vinculación, no interpreta contratos ni verifica la autenticidad de la evidencia. `pilot.py export` ahora requiere `--rights RUTA/rights.json` además de sus revisiones humanas existentes. Mantiene el criterio original de perfil por un oyente; el informe de tres oyentes es una evaluación adicional, no se transforma automáticamente en ese archivo de aprobación. No hay exportación ni aprobación del lote actual.
+
+`clinical_cases_v2.json` prepara diez guiones ficticios con negaciones, lados, números, unidades, términos y autocorrecciones; no se generaron nuevos audios. Revisión clínica de los guiones pendiente. Fuentes candidatas y límites: [auditoría documental](../../docs/CHILEAN_REFERENCE_SOURCES.md).
