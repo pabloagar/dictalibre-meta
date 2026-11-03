@@ -1,5 +1,15 @@
 # Piloto Chatterbox V3 en Colab
 
+## Extensión Joe y Kathleen en español · 03-11-2026
+
+Autorizada para comparar las cuatro voces con p01-p05 idénticos en español. Referencias Joe y Kathleen copiadas de run_20261103T052215Z y verificadas por SHA256; se conserva su idioma de referencia inglés. Salida language_id=es, mismas semillas y parámetros de A/cuatro voces, una toma por caso. Protocolo guardado antes de inferencia. El responsable considera A anterior mejor que Aldo mexicano; se registra como opinión comunicada, sin puntuaciones ni conteos inferidos. El adjunto del responsable coincide exactamente con el SHA256 de p01 PCM16 de A; no se usó como referencia de esta generación y no cambia su estado de permisos.
+
+Resultado: run_20261103T055347Z, 10/10 técnicamente correctos; completado 05:55:00 UTC (02:55 America/Santiago). Joe 28,12 s y Kathleen 25,52 s; total 53,64 s, suma de intervalos de generación 55,6218 s. Tesla T4, Python 3.13.16, CUDA 12.4, chatterbox-tts 0.1.7, torch/torchaudio 2.6.0, mismas revisiones fijadas de código/modelo. Generador ejecutado SHA256 776145e15dfd06b030aafa0d6a2aba281ee0e8e2676bf9ba1da6f9c6130e43a8. No se atribuye la ejecución al commit documental posterior.
+
+Recuperados 10 WAV PCM16 mono 24 kHz vía notebook/Drive, hashes cotejados con Colab. Originales FLOAT y referencias permanecen en el disco temporal de Colab. ZIP privado adicional de comparación: 10 WAV españoles previos de Aldo/Dave y 10 nuevos de Joe/Kathleen, con manifiestos separados por ejecución. No se regeneraron Aldo/Dave. Revisión humana de las voces nuevas pendiente; no se afirma pronunciación correcta ni mejora ASR. Colab presentó errores de carga de resultados y reconexión del navegador, resueltos sin duplicar la inferencia.
+
+Reproducción: scripts/chatterbox-spanish-extension.py se ejecuta después de la prueba de cuatro voces en el mismo entorno Colab; verifica los hashes de las referencias anteriores y crea una carpeta de ejecución nueva. No descarga ni publica voces personales. No hay cambios de aplicación/backend.
+
 ## Prueba de cuatro voces completada · 03-11-2026
 
 Solicitud explícita: cinco audios por Aldo, Dave, Joe y Kathleen en Colab. Ejecución run_20261103T052215Z, completada 05:24:24 UTC (02:24:24 America/Santiago). Resultado técnico 20/20, una toma por voz y caso, guiones p01-p05; Aldo/Dave en español y Joe/Kathleen con traducciones inglesas guardadas en el protocolo. Sin datos de pacientes, sin referencia del responsable y sin entrenamiento Whisper.

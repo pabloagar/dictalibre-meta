@@ -699,6 +699,10 @@ Barra y hoja comparten superficie y borde, sin espacio entre ellas. Nuevo inform
 Activación verificada: Render deployment 7510288430 success 2026-11-03T04:18:08Z, commit 4bfbb1d6b0b7c775c9013395ddcea28a36ec8f2a. /live.js y /style.css idénticos al checkout normalizando CRLF/LF; /health ok. GitHub y Render actualizados.
 # 03-11-2026 · Revisión documental de licencias del laboratorio
 
+## 03-11-2026 · Joe y Kathleen, cinco guiones españoles cada una
+
+Solicitud ejecutada en Colab: run_20261103T055347Z, 10/10 WAV técnicamente correctos, 53,64 s de audio y 55,6218 s de generación sincronizada. Mismos p01-p05, semillas, parámetros y referencias verificadas; solo cambia el idioma de salida a español frente a sus tomas inglesas. Protocolo previo y evidencia privada guardados. Diez copias PCM16 recuperadas y verificadas por hash; ZIP de comparación reúne Aldo/Dave previos y Joe/Kathleen nuevos. Preferencia cualitativa del usuario A > Aldo registrada, sin métricas inventadas. Código de extensión y documentación preparados para publicación; audios y notebook con salidas privados. pnpm check y pnpm test aprobados (240/240). No cambia la web ni requiere reinicio; publicación se verifica después del push.
+
 ## 03-11-2026 · Cuatro voces en Colab, veinte muestras entregables
 
 Publicación verificada: 37b5a024dc7b89a73073c84226363df8dcf9c807 en origin/codex/capture-transport, sin forzar; incluye script, notebook sin salidas y documentación de licencias/protocolo. Los 20 WAV y el ZIP permanecen privados en Descargas y en la evidencia local, no en GitHub. Commit con [skip render], sin despliegue ni reinicio. GET de /health de la demo: status ok, phase capture-transport; commit activo no expuesto por ese endpoint (null), no se atribuye la web al commit del experimento.
