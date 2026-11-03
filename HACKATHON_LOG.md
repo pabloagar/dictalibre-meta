@@ -701,6 +701,8 @@ Activación verificada: Render deployment 7510288430 success 2026-11-03T04:18:08
 
 ## 03-11-2026 · Joe y Kathleen, cinco guiones españoles cada una
 
+Publicado y verificado en GitHub: b121739 en origin/codex/capture-transport, sin forzar, con [skip render]. Audios y exportaciones permanecen privados. Sin despliegue/reinicio; demo /health responde status ok y phase capture-transport. Commit activo web no expuesto por el endpoint: null; el commit del experimento no se presenta como versión desplegada.
+
 Solicitud ejecutada en Colab: run_20261103T055347Z, 10/10 WAV técnicamente correctos, 53,64 s de audio y 55,6218 s de generación sincronizada. Mismos p01-p05, semillas, parámetros y referencias verificadas; solo cambia el idioma de salida a español frente a sus tomas inglesas. Protocolo previo y evidencia privada guardados. Diez copias PCM16 recuperadas y verificadas por hash; ZIP de comparación reúne Aldo/Dave previos y Joe/Kathleen nuevos. Preferencia cualitativa del usuario A > Aldo registrada, sin métricas inventadas. Código de extensión y documentación preparados para publicación; audios y notebook con salidas privados. pnpm check y pnpm test aprobados (240/240). No cambia la web ni requiere reinicio; publicación se verifica después del push.
 
 ## 03-11-2026 · Cuatro voces en Colab, veinte muestras entregables
