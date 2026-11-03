@@ -953,7 +953,7 @@ body.clinical-workspace[data-theme=negatoscopio] header,
 body.clinical-workspace[data-theme=negatoscopio] .clinical-editbar{
  --dl-ink:var(--dl-chrome-ink);--dl-muted:var(--dl-chrome-muted);--dl-line:var(--dl-chrome-line);--dl-soft:#34363a;--dl-accent:#bcb9b2;--ink:var(--dl-chrome-ink);--muted:var(--dl-chrome-muted);--line:var(--dl-chrome-line);color:var(--dl-chrome-ink);
 }
-body.clinical-workspace[data-theme=negatoscopio] :is(.settings-body,.template-library-panel .template-picker,.report-global-review,.connection-panel .pairing){--dl-ink:#1d1b18;--dl-muted:#4a463f;--dl-line:#a39d90;--dl-soft:#bfb9ac;--dl-bg:#cdc8bc;--dl-bar:#bfb9ac;--dl-accent:#6b4914;--ink:#1d1b18;--muted:#4a463f;--line:#a39d90;color:var(--dl-ink)}
+body.clinical-workspace[data-theme=negatoscopio] :is(.settings-body,.template-picker,.report-global-review,.connection-panel .pairing){--dl-ink:#1d1b18;--dl-muted:#4a463f;--dl-line:#a39d90;--dl-soft:#bfb9ac;--dl-bg:#cdc8bc;--dl-bar:#bfb9ac;--dl-accent:#6b4914;--ink:#1d1b18;--muted:#4a463f;--line:#a39d90;color:var(--dl-ink)}
 body.clinical-workspace[data-theme=negatoscopio] .report-status{color:var(--dl-chrome-muted)}
 .clinical-workspace .theme-sample[data-theme=negatoscopio] .sample-actions span+span{background:var(--review-cta);color:var(--review-cta-ink);border-color:var(--review-cta-border)}
 body.clinical-workspace[data-theme=contraste] :focus-visible{outline:3px solid var(--dl-accent);outline-offset:2px}
@@ -1013,3 +1013,11 @@ body.clinical-workspace[data-theme=negatoscopio] header{--dl-rec:#e08a7e;--dl-ok
 .clinical-workspace .template-preview-hidden,.clinical-workspace.template-previewing .report-start-prompt,.clinical-workspace.template-previewing .scan-home,.clinical-workspace.template-previewing .sheet-footer{display:none!important}
 .clinical-workspace.templates-drawer-open .clinical-desk{margin-right:400px;grid-template-columns:minmax(0,1fr)}
 @media(max-width:850px){.clinical-workspace.templates-drawer-open .clinical-desk{margin-right:12px}.clinical-workspace.templates-drawer-open .clinical-sheet{padding-bottom:40px}.clinical-workspace .template-picker{max-height:60dvh}.clinical-workspace.template-previewing .template-sheet-preview{padding-top:12px}}
+
+/* Real layout columns: the library never floats over the report. */
+body.clinical-workspace.templates-drawer-open .clinical-desk{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,360px);gap:24px;margin:12px auto 0;width:calc(100% - 48px);max-width:1440px;align-items:start}
+body.clinical-workspace.templates-drawer-open .dictation-canvas{min-width:0;width:100%;grid-column:1}
+body.clinical-workspace.templates-drawer-open .clinical-desk>.template-picker{position:sticky;inset:auto;top:12px;width:100%;grid-column:2;grid-row:1;max-height:calc(100dvh - 90px);box-sizing:border-box}
+body.clinical-workspace.templates-drawer-open .clinical-notes{grid-column:1;grid-row:2}
+body.clinical-workspace .template-picker [hidden]{display:none!important}
+@media(max-width:850px){body.clinical-workspace.templates-drawer-open .clinical-desk{grid-template-columns:minmax(0,1fr);width:calc(100% - 24px);gap:16px}body.clinical-workspace.templates-drawer-open .clinical-desk>.template-picker{position:static;grid-column:1;grid-row:1;max-height:58dvh}body.clinical-workspace.templates-drawer-open .dictation-canvas{grid-column:1;grid-row:2}body.clinical-workspace.templates-drawer-open .clinical-notes{grid-row:3}}

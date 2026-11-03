@@ -167,7 +167,10 @@ for(const [name,element] of [['connection',connection],['settings',settings],['t
 document.addEventListener('report-layer-open',()=>{for(const p of [connection,settings,templatePanel])p.open=false;});
 for(const popup of [connection,settings,templatePanel])popup.addEventListener('toggle',()=>{if(popup.open)document.dispatchEvent(new CustomEvent('report-close-confirm'));if(popup.open)for(const other of [connection,settings,templatePanel])if(other!==popup)other.open=false;});
 const positionPopup=(popup,body,right=false)=>{if(!popup.open||body.parentElement?.classList.contains('scan-home'))return;const anchor=popup.querySelector('summary').getBoundingClientRect(),top=Math.max(8,Math.min(anchor.bottom+8,window.innerHeight-100)),width=Math.min(right?360:420,window.innerWidth-32);body.style.width=width+'px';body.style.left=(right?Math.max(8,window.innerWidth-width-16):Math.max(8,Math.min(anchor.left,window.innerWidth-width-8)))+'px';body.style.top=top+'px';body.style.maxHeight=Math.max(80,window.innerHeight-top-12)+'px';};
-const positionPopups=()=>{positionPopup(connection,pairing);positionPopup(templatePanel,templatePanel.querySelector('.template-picker'),true);};
+if(isDemo)templatePicker.querySelector('.template-manage').hidden=true;
+templatePicker.querySelector('.template-category-chips').hidden=true;
+templatePicker.querySelector('.report-controls label').hidden=true;
+const positionPopups=()=>{positionPopup(connection,pairing);if(templatePanel.open){if(templatePicker.parentElement!==desk)desk.append(templatePicker);templatePicker.removeAttribute('style');templatePicker.hidden=false;}else{templatePicker.hidden=true;if(templatePicker.parentElement!==templatePanel)templatePanel.append(templatePicker);}};
 for(const popup of [connection,templatePanel])popup.addEventListener('toggle',positionPopups);
 window.addEventListener('resize',positionPopups);window.addEventListener('scroll',positionPopups,{capture:true,passive:true});
 document.addEventListener('click',e=>{for(const popup of [connection,settings])if(popup.open&&!e.composedPath().includes(popup)){popup.open=false;track('panel-dismiss',{panel:popup===connection?'connection':'settings',reason:'outside'});}},{capture:true});

@@ -124,8 +124,8 @@ for(const savedTheme of [null,'sala','sala-neutral','negatoscopio','contraste'])
  const templates=document.querySelector('.template-library-panel'),shortcut=document.querySelector('.inline-template-link');shortcut.click();assert.equal(templates.open,true);templates.dispatchEvent(new window.Event('toggle'));
  assert.equal(shortcut.getAttribute('aria-expanded'),'true');assert.equal(document.querySelector('.report-editor').textContent,'');
  assert.equal(shortcut.getAttribute('aria-controls'),document.querySelector('.template-picker').id);
- assert.equal(document.querySelector('.template-picker').style.width,'360px');
- assert.equal(document.querySelector('.template-picker').style.left,Math.max(8,window.innerWidth-360-16)+'px');
+ assert.equal(document.querySelector('.template-picker').parentElement,document.querySelector('.clinical-desk'));assert.equal(document.querySelector('.template-category-chips').hidden,true);
+ assert.equal(document.querySelector('.template-picker').style.position,'');
  const settings=document.querySelector('.clinical-settings');settings.open=true;settings.dispatchEvent(new window.Event('toggle'));await new Promise(r=>setTimeout(r,0));assert.equal(templates.open,false);
  const engine=document.querySelector('select[aria-label="Motor para dictar"]'),segments=document.querySelector('select[aria-label="Segmentación de Muse-streaming"]'),glossary=document.querySelector('select[aria-label="Glosario de Muse"]');
  assert.equal(segments.parentElement.hidden,true);assert.equal(glossary.parentElement.hidden,true);
