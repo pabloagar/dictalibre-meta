@@ -815,3 +815,5 @@ Saldo Colab 148,50→147,96 unidades (aproximado); reposición estimada US$0,053
 
 ## 2026-11-03 · Corrección de saltos en Ajustes
 Altura estable limitada al viewport, scroll en contenido y espacio reservado para barra vertical. Fondo inmóvil durante diálogo. Cuatro pestañas medidas en Chrome local: geometría idéntica (ver EXPERIMENTS.md). Sin cambios de funciones ni paleta. 266/266 pruebas y sintaxis OK; publicación pendiente de verificar.
+
+Render verificado: ad89628e41a4e658b61b4875e32d936176dea6a1, deployment 7526340867 success 2026-11-03T17:48:02Z. API build y CSS estable confirmados; active=0 antes del push. Laboratorio privado no reiniciado.
