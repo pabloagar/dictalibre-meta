@@ -56,7 +56,7 @@ function showFigureDoubts(warnings){
 }
 // Hoja clínica: preserve the mounted editor, transport controls and listeners.
 document.body.classList.add('live-workspace','clinical-workspace');
-const layoutMetrics={language:language(),version:'stitch-direct-dictation-v2',settingsVersion:'dictado-agrupado-v1',serverBuild:initialState.build??null,serverSourceHash:initialState.sourceHash??null,createdAt:new Date().toISOString(),browser:navigator.userAgent,device:null,network:null,audioSource:null,clockResolutionMs:null,instrumentationOverheadMs:null,audioMeter:{updates:0,totalPaintMs:0,maxPaintMs:0,source:'received-pcm-rms'},events:[]};
+const layoutMetrics={language:language(),version:'stitch-integrated-toolbar-v3',settingsVersion:'dictado-agrupado-v1',serverBuild:initialState.build??null,serverSourceHash:initialState.sourceHash??null,createdAt:new Date().toISOString(),browser:navigator.userAgent,device:null,network:null,audioSource:null,clockResolutionMs:null,instrumentationOverheadMs:null,audioMeter:{updates:0,totalPaintMs:0,maxPaintMs:0,source:'received-pcm-rms'},events:[]};
 const track=(type,data={})=>{layoutMetrics.events.push({type,atMs:performance.now(),...data});if(layoutMetrics.events.length>500)layoutMetrics.events.shift();};
 const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text)n.textContent=text;return n;};
 const makeDetails=(label,cls)=>{const d=make('details',cls);d.append(make('summary','',label));return d;};
@@ -280,7 +280,7 @@ connection.querySelector('summary').addEventListener('click',e=>{if(!scanHome.hi
 syncScanHome();
 // Compact actions retain accessible names and keyboard behavior.
 for(const [selector,glyph] of [['.report-undo','↶'],['.report-redo','↷']]){const b=editbar.querySelector(selector);b.setAttribute('aria-label',b.textContent);b.title=b.textContent;b.textContent=glyph;}
-const newReportControl=editbar.querySelector('.report-new');newReportControl.setAttribute('aria-label',tr('Nuevo informe'));newReportControl.textContent='+ '+(language()==='en'?'New':'Nuevo');
+const newReportControl=editbar.querySelector('.report-new');newReportControl.setAttribute('aria-label',tr('Nuevo informe'));newReportControl.textContent='+ '+tr('Nuevo informe');newReportControl.title=tr('Nuevo informe');
 const templateSummary=templatePanel.querySelector('summary');templateSummary.textContent=language()==='en'?'Templates':'Plantillas';
 newReportControl.before(templatePanel);
 sizeControls.firstChild.textContent='';

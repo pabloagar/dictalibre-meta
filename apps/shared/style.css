@@ -869,3 +869,13 @@ body.clinical-workspace[data-theme=penumbra]{--dl-bg:#131416;--dl-sheet:#1c1f24;
 .clinical-workspace .ready-hint{color:var(--dl-muted);font:400 15px/1.6 var(--dl-font-ui);text-align:center;margin:70px 0 30px}
 .clinical-workspace .ready-to-dictate .report-editor[data-empty=true]::before{content:none}
 .clinical-workspace .ready-to-dictate .empty-guide>p:not(.quick-template-label){display:none}
+
+/* The toolbar and document form one continuous surface; popovers stay unclipped. */
+.clinical-workspace .dictation-canvas>.clinical-editbar{box-sizing:border-box;margin:0;padding:12px 20px;min-height:50px;background:var(--dl-sheet);border:1px solid var(--dl-line);border-radius:14px 14px 0 0;gap:6px}
+.clinical-workspace .dictation-canvas>.clinical-sheet{margin-top:0;border-top:0;border-radius:0 0 14px 14px;padding-top:22px}
+.clinical-workspace .dictation-canvas>.clinical-editbar>.report-new{height:30px;min-height:30px;padding:4px 12px;background:var(--dl-soft);color:var(--dl-ink);border:1px solid var(--dl-muted);font-weight:600;white-space:nowrap}
+.clinical-workspace .dictation-canvas>.clinical-editbar>.report-new:hover:not(:disabled){background:var(--dl-accent-bg);border-color:var(--dl-accent)}
+.clinical-workspace .dictation-canvas>.clinical-editbar>.report-new:disabled{opacity:.55}
+.clinical-workspace .dictation-canvas>.clinical-editbar>.clinical-settings>summary{color:var(--dl-muted)}
+.clinical-workspace .clinical-notes:has(>:not([hidden])){margin-top:0}
+@media(max-width:560px){.clinical-workspace .dictation-canvas>.clinical-editbar{padding:10px 12px;gap:5px}.clinical-workspace .dictation-canvas>.clinical-editbar>.template-library-panel{margin-left:0}.clinical-workspace .dictation-canvas>.clinical-editbar>.report-new{margin-left:auto}.clinical-workspace .dictation-canvas>.clinical-sheet{padding-top:18px}}
