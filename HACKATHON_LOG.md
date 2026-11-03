@@ -695,3 +695,5 @@ Publicación verificada: ea8a86c enviado a origin/codex/capture-transport sin fo
 
 ## 03-11-2026 · barra unida al documento
 Barra y hoja comparten superficie y borde, sin espacio entre ellas. Nuevo informe con nombre completo, fondo y borde de mayor contraste; Ajustes secundario. Mismos controles y confirmaciones, sin alterar conexión ni borrador. Versión de métricas stitch-integrated-toolbar-v3. pnpm check y 240/240 tests aprobados. Chrome local, Penumbra/español, viewport 1600x777: ancho de barra/hoja 980.013 CSS px, hueco 0.000008 CSS px (redondeo), altura barra 55.651 CSS px, una lectura DOM; precisión visual práctica 1 CSS px. Texto sintético, sin audio. Comparación temporal humana y ahorro contra versión previa no medidos; no se afirma mejora cuantificada. Despliegue pendiente de verificar.
+
+Activación verificada: Render deployment 7510288430 success 2026-11-03T04:18:08Z, commit 4bfbb1d6b0b7c775c9013395ddcea28a36ec8f2a. /live.js y /style.css idénticos al checkout normalizando CRLF/LF; /health ok. GitHub y Render actualizados.
