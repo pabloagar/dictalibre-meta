@@ -83,7 +83,7 @@ test('A compacta: rehacer contexto, letra y copia limpia de anotaciones; edicion
  input('Edición nueva');assert.equal(editor.element.querySelector('.report-annotation'),null);assert.equal(document.querySelector('.report-global-review').dataset.stale,'true');
  await window.happyDOM.close();
 });
-for(const savedTheme of [null,'sala'])test('montaje completo, controles y tema guardado '+savedTheme,async()=>{
+for(const savedTheme of [null,'sala','sala-neutral','negatoscopio','contraste'])test('montaje completo, controles y tema guardado '+savedTheme,async()=>{
  const {window}=setup();document.body.innerHTML=fs.readFileSync(new URL('../apps/desktop/index.html',import.meta.url),'utf8').split('<body>')[1].split('</body>')[0];
  globalThis.requestAnimationFrame=()=>0;
  const state={configs:[{id:'synthetic',engine:'muse',keywords:[],name:'Prueba'}],metaConfigured:false};
@@ -92,7 +92,7 @@ for(const savedTheme of [null,'sala'])test('montaje completo, controles y tema g
  live=live.replace(/^import .*;\r?\n/gm,'');
  live="import {t as tr,language,mountLanguageSwitch} from "+JSON.stringify(new URL('../apps/shared/i18n.js',import.meta.url).href)+";const {state,createTakeQueue}=globalThis.__clinicalTest;const mountReport=(p,o)=>globalThis.__clinicalTest.mountReport(p,{...o,globalReview:false});const sharedState=async()=>state;\n"+live;
  await import('data:text/javascript;base64,'+Buffer.from(live+'\n//# sourceURL=clinical-live-test-'+savedTheme+'.js').toString('base64'));
- assert.equal(document.body.dataset.theme,savedTheme==='sala'?'ambar':'penumbra');if(savedTheme==='sala')assert.equal(localStorage.getItem('dicta-theme-v1'),'ambar');
+ assert.equal(document.body.dataset.theme,savedTheme==='sala'?'ambar':savedTheme??'penumbra');if(savedTheme==='sala')assert.equal(localStorage.getItem('dicta-theme-v1'),'ambar');
  assert.equal(document.querySelector('.clinical-editbar .template-library-panel').open,false);
  assert.equal(document.querySelector('.clinical-sheet .report-editor').textContent,'');
  assert.equal(document.querySelectorAll('#create').length,1);
@@ -156,7 +156,7 @@ test('tema: Penumbra por defecto, valores válidos y migración Sala a Ámbar',(
  const declaration=live.match(/function resolveTheme\(saved\)\{[^\n]+\}/)[0];
  const resolve=new Function(declaration+';return resolveTheme;')();
  for(const input of [null,undefined,'','invalid'])assert.equal(resolve(input),'penumbra');
- assert.equal(resolve('sala'),'ambar');for(const theme of ['dia','penumbra','ambar'])assert.equal(resolve(theme),theme);
+ assert.equal(resolve('sala'),'ambar');for(const theme of ['dia','penumbra','ambar','sala-neutral','negatoscopio','contraste'])assert.equal(resolve(theme),theme);
 });
 
 test('paleta: favorita por fila y guardar el informe actual como plantilla',async()=>{

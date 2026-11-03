@@ -942,3 +942,24 @@ html:not([data-boot]) .clinical-workspace>.shell,.clinical-workspace .scan-home 
 .sex-question{position:fixed;z-index:2000;width:300px;max-width:calc(100vw - 24px);box-sizing:border-box;padding:18px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;box-shadow:0 12px 35px #0003;font:13px/1.5 'Public Sans',sans-serif}
 .sex-question[hidden]{display:none}.sex-question h2{font-size:15px;margin:0 0 4px;font-weight:600}.sex-question p{margin:0 0 16px;color:var(--muted)}
 .sex-question .choices{display:flex;gap:7px}.sex-question button{font:inherit;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:5px;padding:9px 8px;cursor:pointer}.sex-question .choices button{flex:1}.sex-question button:hover{background:var(--mint)}.sex-question button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}.sex-question .skip{display:block;margin:16px auto 0;border:0;padding:2px;text-decoration:underline;text-underline-offset:3px;color:var(--focus)}
+
+/* Three additive themes from the supplied palette (2026-11-03). */
+body.clinical-workspace[data-theme="sala-neutral"], .clinical-workspace [data-theme="sala-neutral"]{--dl-bg:#18191a;--dl-sheet:#1f2021;--dl-bar:#1b1c1d;--dl-popover:#262728;--dl-ink:#b4b5b1;--dl-muted:#8b8d89;--dl-line:#36383a;--dl-soft:#2a2b2d;--dl-accent:#a3b3ab;--dl-accent-bg:#26302c;--dl-act:#34393b;--dl-act-ink:#cdd1cf;--dl-rec:#c98476;--dl-ok:#7eaec0;--review-cta:#27463e;--review-cta-ink:#cfe0d9;--review-cta-border:#44706a;--dl-scrim:#0009;--dl-shadow-pop:0 14px 36px #0006;--dl-shadow-dialog:0 24px 60px #0008;}
+body.clinical-workspace[data-theme="negatoscopio"], .clinical-workspace [data-theme="negatoscopio"]{--dl-bg:#161718;--dl-sheet:#cdc8bc;--dl-bar:#1d1e20;--dl-popover:#d5d0c5;--dl-ink:#1d1b18;--dl-muted:#4a463f;--dl-line:#a39d90;--dl-soft:#bfb9ac;--dl-accent:#6b4914;--dl-accent-bg:#dccfb5;--dl-act:#2c2a27;--dl-act-ink:#ebe7de;--dl-rec:#8c2d20;--dl-ok:#245a6b;--dl-chrome-ink:#bcb9b2;--dl-chrome-muted:#8c8981;--dl-chrome-line:#34353a;--review-cta:#2a5248;--review-cta-ink:#e3eee9;--review-cta-border:#4b8073;--dl-scrim:#0009;--dl-shadow-pop:0 14px 36px #0006;--dl-shadow-dialog:0 24px 60px #0008;}
+body.clinical-workspace[data-theme="contraste"], .clinical-workspace [data-theme="contraste"]{--dl-bg:#eceef0;--dl-sheet:#ffffff;--dl-bar:#e2e5e8;--dl-popover:#ffffff;--dl-ink:#0a0b0c;--dl-muted:#33383d;--dl-line:#6b7178;--dl-soft:#e6e9ec;--dl-accent:#0040a8;--dl-accent-bg:#dce6f7;--dl-act:#0a0b0c;--dl-act-ink:#ffffff;--dl-rec:#b3200e;--dl-ok:#00627a;--review-cta:#0d4f3c;--review-cta-ink:#ffffff;--review-cta-border:#0a3a2c;--dl-scrim:#0009;--dl-shadow-pop:0 14px 36px #0006;--dl-shadow-dialog:0 24px 60px #0008;}
+
+/* Mixed polarity: light document controls, dark navigation controls. */
+body.clinical-workspace[data-theme=negatoscopio] header,
+body.clinical-workspace[data-theme=negatoscopio] .clinical-editbar{
+ --dl-ink:var(--dl-chrome-ink);--dl-muted:var(--dl-chrome-muted);--dl-line:var(--dl-chrome-line);--dl-soft:#34363a;--dl-accent:#bcb9b2;--ink:var(--dl-chrome-ink);--muted:var(--dl-chrome-muted);--line:var(--dl-chrome-line);color:var(--dl-chrome-ink);
+}
+body.clinical-workspace[data-theme=negatoscopio] :is(.settings-body,.template-library-panel .template-picker,.report-global-review,.connection-panel .pairing){--dl-ink:#1d1b18;--dl-muted:#4a463f;--dl-line:#a39d90;--dl-soft:#bfb9ac;--dl-bg:#cdc8bc;--dl-bar:#bfb9ac;--dl-accent:#6b4914;--ink:#1d1b18;--muted:#4a463f;--line:#a39d90;color:var(--dl-ink)}
+body.clinical-workspace[data-theme=negatoscopio] .report-status{color:var(--dl-chrome-muted)}
+.clinical-workspace .theme-sample[data-theme=negatoscopio] .sample-actions span+span{background:var(--review-cta);color:var(--review-cta-ink);border-color:var(--review-cta-border)}
+body.clinical-workspace[data-theme=contraste] :focus-visible{outline:3px solid var(--dl-accent);outline-offset:2px}
+body.clinical-workspace:is([data-theme=sala-neutral],[data-theme=negatoscopio],[data-theme=contraste]) .connection-panel.is-connected>summary::before{background:var(--dl-ok)}
+
+body.clinical-workspace[data-theme=negatoscopio] .dictation-canvas>.clinical-editbar{background:var(--dl-bar)}
+body.clinical-workspace:is([data-theme=sala-neutral],[data-theme=negatoscopio]) .dicta-wordmark>.dicta-logo-light{display:none}
+body.clinical-workspace:is([data-theme=sala-neutral],[data-theme=negatoscopio]) .dicta-wordmark>.dicta-logo-dark{display:block}
+body.clinical-workspace[data-theme=negatoscopio] header{--dl-rec:#e08a7e;--dl-ok:#7eaec0}

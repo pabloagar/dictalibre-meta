@@ -765,3 +765,5 @@ Activación verificada: Render deployment 7519823377 success 2026-11-03T13:20:44
 
 
 2026-11-03 · Corrección adicional de copia: selección/copy síncronos antes de await, evento entrega text/plain actual. API asíncrona solo alternativa; verificación con permiso existente. pnpm check y 253 pruebas del árbol de trabajo aprobadas, más test nuevo de dos informes consecutivos aprobado por separado. Render previo 52d47e7 sin dictados activos. Validación pública pendiente; sin atribuir causa confirmada al fallo previo.
+
+2026-11-03 · Añadidos Sala (sala-neutral para no colisionar con migración histórica), Negatoscopio y Contraste a Apariencia, preservando los tres temas existentes y el predeterminado. Tokens tomados del HTML entregado, sin incorporar otras propuestas del documento. Negatoscopio separa texto de barras y hoja; ajustes/plantillas y logo adaptados. EN/ES, persistencia, 260/260 pruebas y pnpm check aprobados. Cero dictados activos en Render antes de publicar. Capturas locales sintéticas; activación pendiente de verificar.

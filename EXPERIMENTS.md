@@ -486,3 +486,6 @@ Hipótesis: preguntar junto a Revisar con IA elimina el control permanente sin p
 
 ## Copia síncrona — 2026-11-03
 Hipótesis: ejecutar copia nativa dentro del clic y establecer text/plain explícito evita conservar contenido anterior. Lectura autorizada y fallback asíncrono solo después. Criterio: dos informes distintos copiados y pegados desde Render deben coincidir íntegramente, y el segundo debe sustituir al primero. Sin audio ni datos clínicos. Test reproducible tests/clipboard-activation.test.mjs comprueba orden y contenido, sin permisos nuevos. Métrica directa: igualdad del texto; latencia y sobrecosto null. Conservar fallo público previo.
+
+## 2026-11-03 · Tres temas adicionales
+Hipótesis: las paletas suministradas pueden añadirse sin perder preferencias ni legibilidad de controles. Criterios: seis opciones, restauración por clave, migración antigua sala→ambar conservada, texto principal/secundario y CTA >=4.5:1 en pares de tokens. Contraste calculado desde sRGB en tests/theme-palette.test.mjs (sin unidades, no brillo físico ni validación clínica); pruebas de restauración en clinical-ui. Chrome local: selección de Sala/Negatoscopio/Contraste y comprobación visual de barras, hoja y Apariencia. Latencia de elección, lux, dispositivo/monitor y confort: null. No se implementan simuladores ni sugerencias clínicas de la maqueta.

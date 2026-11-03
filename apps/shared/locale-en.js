@@ -1,5 +1,9 @@
 // English UI catalogue. Keys are application-owned Spanish literals; never report text.
 export const EN = {
+ "Sala": "Reading room", "Negatoscopio": "Lightbox", "Contraste": "Contrast",
+ "Gris neutro y texto suave para una sala oscura.": "Neutral grey and soft text for a dark room.",
+ "Hoja clara atenuada y barras oscuras.": "Dimmed light paper with dark toolbars.",
+ "Texto y bordes definidos para ambientes luminosos.": "Defined text and borders for bright rooms.",
   "¿Sexo del paciente?": "Patient sex?",
   "Ayuda a revisar si lo dictado es coherente. Es opcional.": "Helps check the consistency of the dictation. Optional.",
   "Mujer": "Woman", "Hombre": "Man", "Otro": "Other",
