@@ -22,7 +22,25 @@ export class ReportModel {
 }
 
 // Only exact, unique, non-overlapping quotes are linked to text. Ambiguous quotes remain notes.
-export function reviewRanges(text,suggestions){const ranges=[];for(const [index,s] of suggestions.entries()){const start=s.original?text.indexOf(s.original):-1,end=start+(s.original?.length??0);if(start<0||text.indexOf(s.original,start+1)!==-1||ranges.some(r=>start<r.end&&end>r.start))continue;ranges.push({id:String(index+1),start,end});}return ranges.sort((a,b)=>a.start-b.start);}
+// Locate both quoted passages. Narrow lateral contradictions only when each quote
+// has one explicit, opposing side; otherwise preserve the complete evidence.
+export function reviewEvidence(text,s){
+ const quotes=[...new Set((s.evidence??[]).filter(q=>typeof q==='string'&&q.trim()))];
+ const sides=quotes.map(q=>[...q.matchAll(/\b(derech[oa]s?|izquierd[oa]s?|right|left)\b/giu)]);
+ const narrow=s.kind==='contradiction'&&quotes.length===2&&sides.every(m=>m.length===1)&&/^(derech|right)/i.test(sides[0][0][0])!==/^(derech|right)/i.test(sides[1][0][0]);
+ return quotes.map((quote,i)=>{
+  let from=0,to=quote.length;
+  if(narrow){const m=sides[i][0],other=quotes[1-i],om=sides[1-i][0];const words=[...quote.slice(0,m.index).matchAll(/[\p{L}]+/gu)].slice(-2);const ow=[...other.slice(0,om.index).matchAll(/[\p{L}]+/gu)].slice(-2);if(words.length===2&&ow.length===2&&words.map(w=>w[0].toLowerCase()).join(' ')===ow.map(w=>w[0].toLowerCase()).join(' '))from=words[0].index;else from=m.index;to=m.index+m[0].length;}
+  const at=text.indexOf(quote),unique=at>=0&&text.indexOf(quote,at+1)<0;
+  return {text:quote.slice(from,to),start:unique?at+from:null,end:unique?at+to:null};
+ });
+}
+export function reviewRanges(text,suggestions){const ranges=[];for(const [index,s] of suggestions.entries()){
+ const evidence=s.kind==='contradiction'?reviewEvidence(text,s).filter(e=>e.start!==null):[];
+ const candidates=evidence.length?evidence:[{start:s.original?text.indexOf(s.original):-1,end:(s.original?text.indexOf(s.original):-1)+(s.original?.length??0)}];
+ for(const {start,end} of candidates){if(start===null||start<0||(!evidence.length&&text.indexOf(s.original,start+1)!==-1)||ranges.some(r=>start<r.end&&end>r.start))continue;ranges.push({id:String(index+1),start,end});}
+ }return ranges.sort((a,b)=>a.start-b.start);}
+
 // Contexto para el Revisor: ficha del estudio y sección de destino, sin texto de plantilla ni informe completo.
 const SECTION_LABELS=new Set(['clinical history','history','technique','findings','impression','comparison','indication','recommendations','tecnica','tecnica del examen','hallazgos','hallazgo','conclusion','conclusiones','impresion','impresion diagnostica','comparacion','antecedentes','antecedentes clinicos','indicacion','indicaciones','indicacion clinica','historia clinica','examen','estudio','comentario','comentarios','sugerencia','sugerencias','recomendacion','recomendaciones','diagnostico','observaciones','resultado','resultados','informe']);
 const plain=t=>t.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();

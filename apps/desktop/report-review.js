@@ -1,3 +1,4 @@
+import {reviewEvidence} from '../shared/report-model.js';
 import {t as tr, language} from '../shared/i18n.js';
 const el=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
 async function api(path,data){const r=await fetch(path,data===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});const value=await r.json();if(!r.ok)throw Error(tr(value.error)||tr('Revisión no disponible.'));return value;}
@@ -46,7 +47,7 @@ export function mountReportReview({controls,section,copyButton,snapshot,onCopy,e
     const acts=el('div');acts.className='note-acts';
     if(note.apply){const apply=el('button',note.requiresConfirmation?tr('Confirmo el dato y aplico el cambio'):tr('Aceptar'));apply.className='accept-correction';apply.onclick=()=>{note.apply();closeNote('action');};acts.append(apply);if(note.requiresConfirmation)event('report-sensitive-confirmation-opened',{reviewId:result.id,warning:Number(id)-1});}
     const acknowledge=el('button',tr('Es correcto'));acknowledge.onclick=()=>{note.acknowledge();closeNote('action');};const dismiss=el('button',note.requiresConfirmation?tr('Conservar original'):tr('Cerrar'));dismiss.onclick=()=>closeNote('button');acts.append(acknowledge,dismiss);popover.append(acts);sheet.append(popover);
-    note.row.classList.add('is-active');anchor?.classList.add('is-active');positionNote();acts.querySelector('button')?.focus();
+    note.row.classList.add('is-active');for(const linked of section.querySelectorAll('.report-annotation'))if(linked.dataset.reviewId===id)linked.classList.add('is-active');positionNote();acts.querySelector('button')?.focus();
     event('review-note-open',{reviewId:result.id,warning:Number(id)-1,source});
   }
   section.ownerDocument.addEventListener('keydown',e=>{if(e.key==='Escape'&&popover){e.preventDefault();closeNote('escape');}});
@@ -74,7 +75,7 @@ export function mountReportReview({controls,section,copyButton,snapshot,onCopy,e
   }
   function render(r){
     closeNote('result',false);result=r;warnings.replaceChildren();notes.clear();
-    for(const [index,s] of (r.suggestions??[]).entries()){const id=String(index+1),row=el('article');row.dataset.reviewId=id;row.tabIndex=-1;const label={contradiction:tr('Contradicción entre fragmentos'),ambiguous_term:tr('Término para comprobar'),format:tr('Formato o comando')}[s.kind];if(label)row.append(el('small',label));row.append(el('strong',id+' · «'+s.original+'»'),el('p',s.reason));for(const quote of s.evidence??[])row.append(el('blockquote',quote));
+    for(const [index,s] of (r.suggestions??[]).entries()){const id=String(index+1),row=el('article');row.dataset.reviewId=id;row.tabIndex=-1;const label={contradiction:tr('Contradicción entre fragmentos'),ambiguous_term:tr('Término para comprobar'),format:tr('Formato o comando')}[s.kind];if(label)row.append(el('small',label));row.append(el('strong',id+' · «'+s.original+'»'),el('p',s.reason));for(const evidence of (s.kind==='contradiction'?reviewEvidence(current().text,s):(s.evidence??[]).map(text=>({text})))){const quote=el('blockquote');const side=/\b(derech[oa]s?|izquierd[oa]s?|right|left)\b/giu;let offset=0;for(const match of evidence.text.matchAll(side)){quote.append(evidence.text.slice(offset,match.index),el('mark',match[0]));offset=match.index+match[0].length;}quote.append(evidence.text.slice(offset));row.append(quote);}
       if(getRanges(r.suggestions??[]).some(a=>a.id===id)){const go=el('button',tr('Ir al texto'));go.onclick=()=>{const target=onNavigate(id);openNote(id,target,'card');};row.append(go);}else row.append(el('small',tr('Comprueba la cita en el informe; no hay un único fragmento al que enlazar.')));
       const requiresConfirmation=s.replacement===null&&s.guarded===true&&s.kind!=='contradiction';
       const replacement=requiresConfirmation?s.proposedReplacement:s.replacement;

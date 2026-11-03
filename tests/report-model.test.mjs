@@ -62,3 +62,13 @@ test('dictado antes de título separa párrafos y conserva cancelación, revisi�
 test('inserción media separa palabras sin agregar espacio antes de puntuación ni duplicar saltos',()=>{
  for(const [base,at,text,expected] of [['uno dos',4,'tres','uno tres dos'],['Hallazgo.',8,' leve','Hallazgo leve.'],['RX DE TÓRAX',0,'Prueba.\n','Prueba.\nRX DE TÓRAX']]){const m=new ReportModel(base);m.begin('a',at,at);m.finish('a',text);assert.equal(m.text,expected);}
 });
+
+test('contradicción enlaza ambos lados y acota contexto compartido sin alterar texto',async()=>{
+ const {reviewRanges,reviewEvidence}=await import('../apps/shared/report-model.js');
+ const a='Consolidación de 2 × 3 cm en el lóbulo inferior derecho.',b='Consolidación en el lóbulo inferior izquierdo compatible con neumonía.',text=a+'\n'+b;
+ const suggestion={kind:'contradiction',original:b,evidence:[a,b]};
+ assert.deepEqual(reviewEvidence(text,suggestion).map(e=>e.text),['lóbulo inferior derecho','lóbulo inferior izquierdo']);
+ const ranges=reviewRanges(text,[suggestion]);assert.equal(ranges.length,2);assert.deepEqual(ranges.map(r=>text.slice(r.start,r.end)),['lóbulo inferior derecho','lóbulo inferior izquierdo']);assert.ok(ranges.every(r=>r.id==='1'));
+ assert.equal(reviewEvidence(a+' '+a+' '+b,suggestion)[0].start,null);
+ const neg={kind:'contradiction',original:'sin derrame',evidence:['con derrame','sin derrame']};assert.deepEqual(reviewEvidence('con derrame; sin derrame',neg).map(e=>e.text),neg.evidence);
+});
