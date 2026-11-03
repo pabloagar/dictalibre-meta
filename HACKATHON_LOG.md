@@ -791,3 +791,5 @@ Activación verificada: deployment 7522044649 success 2026-11-03T14:53:35Z; /api
 
 2026-11-03 · Plantillas insertadas parten en 16 px por solicitud del responsable; ajuste existente puede bajar hasta 14 si no caben. Controles manuales conservados; borradores existentes sin cambios. Test con altura suficiente para 19 verifica inicio en16, y caso pequeño mantiene mínimo14. pnpm check y266/266 pruebas aprobadas. Instrumentación template-fit conserva tamaño final y geometría; comodidad humana no medida. Cero tomas activas en Render antes de publicar.
 Activación16 verificada: deployment7522282048 success2026-11-03T15:03:03Z; API confirma acd1b41ddd24736ef2b191f6af632a5e720c6e4c. Primera consulta durante transición401, repetida con sesión nueva correctamente. GitHub y Render activos; laboratorio privado sin reiniciar.
+
+2026-11-03 · Vista previa de plantillas ajustada a16px, alineada con tamaño inicial al insertar. Solo regla tipográfica, sin cambios de texto o flujo. pnpm check y266/266 pruebas aprobadas; cero tomas activas antes de publicar. Legibilidad humana pendiente, sin medición adicional por cambio CSS de bajo impacto.
