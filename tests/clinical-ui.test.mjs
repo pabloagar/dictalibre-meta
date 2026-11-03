@@ -148,6 +148,15 @@ for(const savedTheme of [null,'sala','sala-neutral','negatoscopio','contraste'])
  editable.textContent='Prueba sintética.';editable.dispatchEvent(new window.Event('input'));await new Promise(r=>setTimeout(r,0));assert.equal(document.querySelector('.ready-hint').hidden,true);
  document.querySelector('.report-undo').click();await new Promise(r=>setTimeout(r,0));assert.equal(editable.textContent,'');assert.equal(document.querySelector('.ready-hint').hidden,true);
  paired.hidden=true;editable.textContent='Prueba conservada.';editable.dispatchEvent(new window.Event('input'));await new Promise(r=>setTimeout(r,0));connection.querySelector('summary').click();assert.equal(connection.open,false);assert.equal(editable.textContent,'Prueba conservada.');assert.equal(document.querySelector('.scan-home').hidden,false);assert.equal(document.querySelector('.clinical-sheet').classList.contains('scan-first'),false);assert.equal(document.querySelector('.clinical-sheet').classList.contains('scan-inline'),true);document.querySelector('.write-without-phone').click();assert.equal(document.querySelector('.scan-home').hidden,true);assert.equal(editable.textContent,'Prueba conservada.');
+
+ for(const action of ['.report-undo','.report-redo','.report-new']){
+  templates.open=true;templates.dispatchEvent(new window.Event('toggle'));
+  assert.equal(document.querySelector('.template-sheet-preview').hidden,false);
+  const control=document.querySelector(action);control.disabled=false;control.click();
+  assert.equal(document.querySelector('.template-sheet-preview').hidden,true,action+' closes preview after toolbar relocation');
+  assert.equal(editable.classList.contains('template-preview-hidden'),false);
+ }
+ document.querySelector('.new-report-confirm button').click();
  await window.happyDOM.close();delete globalThis.__clinicalTest;
 });
 

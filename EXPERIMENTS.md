@@ -513,3 +513,6 @@ Inferencia completada: 2 referencias Qwen y 20 muestras Chatterbox con dos semil
 
 ## 2026-11-03 · Marco estable de Ajustes
 Hipótesis: fijar altura y scroll interno elimina desplazamiento al cambiar pestaña. Métrica: variación de x/y/ancho/alto en píxeles CSS entre Apariencia, Idioma, Dictado y Cómo usar, misma ventana. Criterio <=1 px. Chrome local /live?lang=es, viewport1600x777, una ronda de cuatro pestañas: todas x320,y48.75,w960,h680; variación0 px. DOM getBoundingClientRect, sin audio/IA; red localhost, dispositivo null, sobrecosto null. Reproducir abriendo Ajustes y midiendo el rectángulo .settings-body tras cada clic. pnpm check y 266/266 tests OK. No prueba física móvil.
+
+## 2026-11-03 · Acciones tras vista previa
+La barra live reubica los botones fuera de controls: el listener de cierre de preview no recibía sus clics. Se delega en document para conservar el cierre inmediato con Nuevo, Deshacer, Rehacer, Copiar y Revisar. Prueba reproducible clinical-ui abre preview y ejecuta undo/redo/new con barra reubicada; exige preview oculto y editor visible. Una ejecución Happy DOM, 266/266 y check OK. Audio/red/dispositivo: null; no validación física ni garantía de todas las combinaciones. Despliegue pendiente.
