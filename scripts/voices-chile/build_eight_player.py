@@ -14,6 +14,12 @@ def main():
     folder = Path(a.comparison)
     rows = json.loads((folder / 'manifest.json').read_text(encoding='utf-8'))
     protocol = json.loads(Path(a.protocol).read_text(encoding='utf-8'))
+    playback_path = folder / 'playback_manifest.json'
+    playback = {}
+    if playback_path.exists():
+        corrected = json.loads(playback_path.read_text(encoding='utf-8'))
+        assert corrected['source_manifest_sha256'] == hashlib.sha256((folder / 'manifest.json').read_bytes()).hexdigest()
+        playback = {r['id']: r['archivo'] for r in corrected['rows']}
     pairs = {}
     for row in rows:
         if row['condition'] in ('parent', 'candidate'):
@@ -31,14 +37,18 @@ def main():
             cards.append({
                 'key': '_'.join(key), 'voice': ref['label'], 'split': ref['split'],
                 'phrase': phrase['id'], 'text': phrase['text'],
-                'A': {'file': pair[order[0]]['archivo'], 'status': pair[order[0]]['status'],
+                'A': {'file': playback.get(pair[order[0]]['id'], pair[order[0]]['archivo']), 'status': pair[order[0]]['status'],
                       'condition': order[0]},
-                'B': {'file': pair[order[1]]['archivo'], 'status': pair[order[1]]['status'],
+                'B': {'file': playback.get(pair[order[1]]['id'], pair[order[1]]['archivo']), 'status': pair[order[1]]['status'],
                       'condition': order[1]},
             })
-    controls = {r['voice']: r['archivo'] for r in rows if r['condition'] == 'base_control'}
+    controls = {r['voice']: playback.get(r['id'], r['archivo']) for r in rows if r['condition'] == 'base_control'}
     assert len(controls) == 8
-    payload = json.dumps({'cards': cards, 'controls': controls}, ensure_ascii=False).replace('<', '\\u003c')
+    reference_files = {r['label']: 'references/' + r['reference_audio']
+                       for r in protocol['references']
+                       if (folder / 'references' / r['reference_audio']).is_file()}
+    payload = json.dumps({'cards': cards, 'controls': controls,
+                          'reference_files': reference_files}, ensure_ascii=False).replace('<', '\\u003c')
     html = '''<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Ocho voces · comparación ciega</title><style>
 :root{color-scheme:light;font:16px system-ui,sans-serif;background:#f6f8f5;color:#18342c}body{max-width:1100px;margin:auto;padding:24px}
@@ -52,7 +62,7 @@ textarea{box-sizing:border-box;width:100%;min-height:48px;border:1px solid #b2c4
 .small{font-size:.83rem}.bad{color:#a33}#control{margin-top:25px} @media(max-width:700px){.grid,.scores{grid-template-columns:1fr}}
 </style><body><h1>¿Cambió el acento chileno?</h1><p class="muted">Ocho referencias, cinco frases iguales y dos checkpoints por frase. Escucha cada audio completo antes de puntuar. A/B están ocultos hasta exportar las 80 evaluaciones.</p>
 <p class="small">Cinco hablantes no aparecen en el entrenamiento y tres sí. Los perfiles de edad, ritmo y rasgos fonéticos siguen sin verificar. Investigación privada; ninguna muestra tiene autorización comercial confirmada.</p>
-<div class="bar" id="voices"></div><p id="progress"></p><main id="cards"></main>
+<div class="bar" id="voices"></div><details id="refdetail"><summary>Escuchar referencia original de esta voz</summary><p class="small muted">Usa este audio para comprobar el perfil propuesto. Edad, ritmo y fonética aún no están certificados.</p><audio controls preload="none"></audio></details><p id="progress"></p><main id="cards"></main>
 <div class="bar"><button id="export">Exportar evaluación JSON</button><button id="reveal" disabled>Revelar A/B tras completar</button></div><p id="message" class="muted"></p>
 <details id="control"><summary>Control del modelo base · una frase por voz</summary><div id="controls"></div></details>
 <script>const DATA=__PAYLOAD__;const KEY='dictalibre-eight-20261103';let state=JSON.parse(localStorage.getItem(KEY)||'{}');let voice='F1',revealed=false;
@@ -60,7 +70,7 @@ const metrics=[['accent','Acento chileno'],['naturalness','Naturalidad'],['intel
 function save(){localStorage.setItem(KEY,JSON.stringify(state));progress()}
 function complete(){return DATA.cards.every(c=>['A','B'].every(side=>{let v=state[c.key+'_'+side];return v?.heard&&metrics.every(([k])=>Number.isInteger(Number(v[k]))&&Number(v[k])>=1&&Number(v[k])<=5)}))}
 function progress(){let n=DATA.cards.reduce((a,c)=>a+['A','B'].filter(s=>state[c.key+'_'+s]?.heard).length,0);document.getElementById('progress').textContent=`${n}/80 escuchados · ${DATA.cards.filter(c=>['A','B'].every(s=>{let v=state[c.key+'_'+s];return v?.heard&&metrics.every(([k])=>v[k])})).length}/40 pares puntuados`;document.getElementById('reveal').disabled=!complete()}
-function render(){document.getElementById('voices').innerHTML=['F1','F2','F3','F4','M1','M2','M3','M4'].map(v=>`<button class="${v===voice?'active':''}" data-voice="${v}">${v}</button>`).join('');document.querySelectorAll('[data-voice]').forEach(b=>b.onclick=()=>{voice=b.dataset.voice;render()});
+function render(){document.getElementById('voices').innerHTML=['F1','F2','F3','F4','M1','M2','M3','M4'].map(v=>`<button class="${v===voice?'active':''}" data-voice="${v}">${v}</button>`).join('');document.querySelectorAll('[data-voice]').forEach(b=>b.onclick=()=>{voice=b.dataset.voice;render()});const ref=DATA.reference_files[voice];document.querySelector('#refdetail audio').src=ref||'';document.getElementById('refdetail').hidden=!ref;
 const root=document.getElementById('cards');root.innerHTML='';for(const card of DATA.cards.filter(c=>c.voice===voice)){const el=document.createElement('section');el.className='card';el.innerHTML=`<h2>Frase ${card.phrase.slice(1)}</h2><p class="quote"></p><p class="small muted">Referencia ${card.split==='validation'?'no vista':'vista'} durante el ajuste</p><div class="grid"></div>`;el.querySelector('.quote').textContent=card.text;
 for(const side of ['A','B']){const sample=card[side],id=card.key+'_'+side,v=state[id]||{};const box=document.createElement('div');box.className='sample';box.innerHTML=`<h3>Muestra ${side}</h3><audio controls preload="none"></audio><p class="small"></p><label class="small"><input type="checkbox" class="heard"> Escuché el audio completo</label><div class="scores"></div><textarea placeholder="Errores de contenido, cortes, repeticiones u observaciones"></textarea>`;box.querySelector('audio').src=sample.file||'';box.querySelector('p').textContent=(sample.status==='ok'?'Archivo legible':`Estado técnico: ${sample.status}`)+(revealed?' · '+sample.condition:'');box.querySelector('.heard').checked=!!v.heard;box.querySelector('.heard').onchange=e=>{(state[id]??={}).heard=e.target.checked;save()};
 for(const [key,label] of metrics){const wrap=document.createElement('label');wrap.textContent=label;const select=document.createElement('select');select.innerHTML='<option value="">Sin evaluar</option>'+[1,2,3,4,5].map(n=>`<option value="${n}">${n}/5</option>`).join('');select.value=v[key]||'';select.onchange=e=>{(state[id]??={})[key]=e.target.value;save()};wrap.append(select);box.querySelector('.scores').append(wrap)}box.querySelector('textarea').value=v.notes||'';box.querySelector('textarea').onchange=e=>{(state[id]??={}).notes=e.target.value;save()};el.querySelector('.grid').append(box)}root.append(el)}progress()}
