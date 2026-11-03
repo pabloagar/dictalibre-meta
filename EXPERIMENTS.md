@@ -574,3 +574,6 @@ Validación: pnpm check y pnpm test 267/267 aprobados; Python 21 pruebas, 19 apr
 
 ## 2026-11-03 · Localización de contradicciones
 Prueba reproducible report-model: citas completas del ejemplo devuelven dos rangos lóbulo inferior derecho/izquierdo, mismo ID; cita repetida no enlazada; negaciones conservan evidencia completa. clinical-ui conserva anotaciones, copia y deshacer con ambos rangos. Una suite268/268. Audio/red/dispositivo:null, comprensión:null pendiente usuario; no mide precisión de IA.
+
+## 2026-11-03 · Medidas y negaciones
+Criterio previo fijado en tests: ambas citas enlazadas, cambios visibles en tarjeta y texto del modelo intacto. Seis casos deterministas (número,unidad,decimal,sin/con,no/presencia e inglés) y dos pruebas UI con apertura del mismo aviso desde ambos rangos. Suite276/276. Dos inferencias reales del backend actual, una por caso:5mm/18mm y no/se observa derrame; ambos completed con una contradicción. Helpers locales aplicados a evidencia real:2rangos por caso; resaltan5/18 y No/frase afirmativa. No se compara precisión entre modelos ni se mide sensibilidad. Campos no observados:null; build consultado después de inferencias, no atribución garantizada de ejecución. Resultado JSON sintético sin IDs de sesión. UI física de esta mejora aún pendiente y Render no actualizado por dictado activo comunicado por el usuario.

@@ -460,3 +460,17 @@ test('encabezados: idempotencia, contenido y líneas vacías conservados; inform
  const normalized=formatTemplateSections(original);assert.ok(normalized.includes('ANTECEDENTES:\n\n\nTÉCNICA:'));assert.equal(formatTemplateSections(normalized),normalized);assert.equal(formatTemplateSections(''),'');assert.equal(formatTemplateSections('TECHNIQUE\nSynthetic.','en'),'CLINICAL HISTORY:\n\nTECHNIQUE:\nSynthetic.');
  const catalogue=JSON.parse(fs.readFileSync('data/demo/plantillas-sinteticas.json','utf8'));for(const t of catalogue.templates){const text=formatTemplateSections(t.text);assert.match(text,/^ANTECEDENTES:/m);assert.equal(formatTemplateSections(text),text);}
 });
+
+for(const [name,a,b,changedWords]of [
+ ['medidas','Nódulo de 5 mm.','Nódulo de 8 mm.',['5','8']],
+ ['negación','Sin derrame pleural.','Con derrame pleural.',['Sin','Con']],
+])test('UI de contradicción '+name+': dos subrayados y diferencia en tarjeta, copia intacta',async()=>{
+ const {window,editor,button}=setup({globalReview:true});const text=a+'\n'+b;
+ editor.element.textContent=text;editor.element.dispatchEvent(new window.Event('input'));
+ globalThis.fetch=async()=>({ok:true,json:async()=>({id:'comparison-'+name,status:'completed',suggestions:[{kind:'contradiction',original:a,replacement:null,reason:'Ejemplo sintético.',evidence:[a,b]}]})});
+ await button('Revisar con IA').onclick();if(document.querySelector('.sex-question'))await button('No indicar y revisar').onclick();
+ assert.equal(editor.element.querySelectorAll('.report-annotation').length,2);assert.equal(editor.element.textContent,text);
+ assert.deepEqual([...document.querySelectorAll('.review-warnings mark')].map(n=>n.textContent),changedWords);
+ button('Ir al texto').click();assert.equal(editor.element.querySelectorAll('.report-annotation.is-active').length,2);
+ assert.equal(editor.model.text,text);await window.happyDOM.close();
+});

@@ -1,0 +1,96 @@
+{
+  "date": "2026-11-03",
+  "source": "Synthetic manual text submitted to public report review API; local rendering helpers evaluated against returned evidence",
+  "buildObservedAfterRequests": "eb0b37cb17927e8c56ac164c03794bc1d6bf11fc",
+  "model": null,
+  "reasoningEffort": null,
+  "device": null,
+  "browser": null,
+  "network": null,
+  "audioSource": null,
+  "repetitionsPerCase": 1,
+  "records": [
+    {
+      "case": "medidas",
+      "input": "TC DE TÓRAX\nHALLAZGOS:\nNódulo sólido único de 5 mm en el lóbulo superior derecho.\nCONCLUSIÓN:\nNódulo sólido único de 18 mm en el lóbulo superior derecho.",
+      "status": "completed",
+      "suggestions": [
+        {
+          "kind": "contradiction",
+          "original": "Nódulo sólido único de 5 mm en el lóbulo superior derecho.",
+          "replacement": null,
+          "reason": "Hallazgos indica 5 mm y conclusión indica 18 mm para el mismo nódulo único en el lóbulo superior derecho; medidas incompatibles para la misma lesión.",
+          "evidence": [
+            "Nódulo sólido único de 5 mm en el lóbulo superior derecho.",
+            "Nódulo sólido único de 18 mm en el lóbulo superior derecho."
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "linkedRanges": [
+            {
+              "id": "1",
+              "start": 23,
+              "end": 81
+            },
+            {
+              "id": "1",
+              "start": 94,
+              "end": 153
+            }
+          ],
+          "highlights": [
+            [
+              "5"
+            ],
+            [
+              "18"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "case": "negacion",
+      "input": "TC DE TÓRAX\nHALLAZGOS:\nNo se observa derrame pleural.\nCONCLUSIÓN:\nSe observa derrame pleural.",
+      "status": "completed",
+      "suggestions": [
+        {
+          "kind": "contradiction",
+          "original": "Se observa derrame pleural.",
+          "replacement": null,
+          "reason": "Hallazgos niega derrame pleural y conclusión afirma derrame pleural para la misma estructura; ambas afirmaciones son incompatibles.",
+          "evidence": [
+            "No se observa derrame pleural.",
+            "Se observa derrame pleural."
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "linkedRanges": [
+            {
+              "id": "1",
+              "start": 23,
+              "end": 53
+            },
+            {
+              "id": "1",
+              "start": 66,
+              "end": 93
+            }
+          ],
+          "highlights": [
+            [
+              "No"
+            ],
+            [
+              "Se observa derrame pleural"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

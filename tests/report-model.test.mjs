@@ -72,3 +72,17 @@ test('contradicción enlaza ambos lados y acota contexto compartido sin alterar 
  assert.equal(reviewEvidence(a+' '+a+' '+b,suggestion)[0].start,null);
  const neg={kind:'contradiction',original:'sin derrame',evidence:['con derrame','sin derrame']};assert.deepEqual(reviewEvidence('con derrame; sin derrame',neg).map(e=>e.text),neg.evidence);
 });
+
+for(const [name,a,b,expected]of [
+ ['medida','Nódulo de 5 mm.','Nódulo de 8 mm.',['5','8']],
+ ['unidad','Lesión de 2 mm.','Lesión de 2 cm.',['mm','cm']],
+ ['decimal','Lesión de 1,8 cm.','Lesión de 2,8 cm.',['1,8','2,8']],
+ ['negación','Sin derrame pleural.','Con derrame pleural.',['Sin','Con']],
+ ['ausencia de no','No se observa neumotórax.','Se observa neumotórax.',['No','Se observa neumotórax']],
+ ['inglés','No pleural effusion.','Pleural effusion present.',['No','present']],
+])test('contradicción '+name+': dos enlaces y diferencia visible sin cambiar el informe',async()=>{
+ const {reviewRanges,reviewEvidence,reviewDifferences}=await import('../apps/shared/report-model.js');const text=a+'\n'+b,s={kind:'contradiction',original:a,evidence:[a,b]};
+ const excerpts=reviewEvidence(text,s);const ranges=reviewRanges(text,[s]);assert.equal(ranges.length,2);assert.deepEqual(ranges.map(r=>text.slice(r.start,r.end)),[a,b]);
+ const highlights=reviewDifferences(excerpts.map(e=>e.text));assert.deepEqual(highlights.map((rs,k)=>rs.map(r=>excerpts[k].text.slice(r.start,r.end)).join(' ')),expected);
+ assert.ok(ranges.every(r=>r.id==='1'));assert.equal(text,a+'\n'+b);
+});

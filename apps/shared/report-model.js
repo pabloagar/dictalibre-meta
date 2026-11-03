@@ -35,6 +35,19 @@ export function reviewEvidence(text,s){
   return {text:quote.slice(from,to),start:unique?at+from:null,end:unique?at+to:null};
  });
 }
+// Visual comparison only: mark differing tokens in two evidence excerpts.
+// The report and the model's interpretation remain untouched.
+export function reviewDifferences(passages){
+ const tokens=passages.map(text=>[...text.matchAll(/\d+(?:[.,]\d+)*|[\p{L}]+/gu)]);
+ if(tokens.length!==2||tokens.some(t=>t.length>200))return passages.map(()=>[]);
+ const [a,b]=tokens,grid=Array.from({length:a.length+1},()=>new Uint16Array(b.length+1));
+ const same=(x,y)=>x[0].toLocaleLowerCase()===y[0].toLocaleLowerCase();
+ for(let i=a.length-1;i>=0;i--)for(let j=b.length-1;j>=0;j--)grid[i][j]=same(a[i],b[j])?1+grid[i+1][j+1]:Math.max(grid[i+1][j],grid[i][j+1]);
+ const matched=[new Set(),new Set()];let i=0,j=0;
+ while(i<a.length&&j<b.length){if(same(a[i],b[j])){matched[0].add(i++);matched[1].add(j++);}else if(grid[i+1][j]>=grid[i][j+1])i++;else j++;}
+ return tokens.map((list,k)=>{const different=list.filter((_,n)=>!matched[k].has(n));const selected=different.length?different:list;
+  const ranges=[];for(const t of selected){const end=t.index+t[0].length,last=ranges.at(-1);if(last&&/^\s*$/.test(passages[k].slice(last.end,t.index)))last.end=end;else ranges.push({start:t.index,end});}return ranges;});
+}
 export function reviewRanges(text,suggestions){const ranges=[];for(const [index,s] of suggestions.entries()){
  const evidence=s.kind==='contradiction'?reviewEvidence(text,s).filter(e=>e.start!==null):[];
  const candidates=evidence.length?evidence:[{start:s.original?text.indexOf(s.original):-1,end:(s.original?text.indexOf(s.original):-1)+(s.original?.length??0)}];

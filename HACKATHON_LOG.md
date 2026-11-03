@@ -882,3 +882,6 @@ Validación: pnpm check y pnpm test 267/267 aprobados; Python 21 pruebas, 19 apr
 Avisos enlazan evidencia de ambos fragmentos. Lateralidad explícita opuesta acota a lado y dos palabras de contexto compartidas; tarjeta destaca lado. Sin cambios de texto/IA. Evidencia no única no se enlaza; contradicciones genéricas conservan citas completas. check OK y268/268.
 
 Render verificado por API y recurso público: eb0b37cb17927e8c56ac164c03794bc1d6bf11fc, deployment7529782620. reviewEvidence presente en /shared/report-model.js; active=0 antes del push.
+
+## 2026-11-03 · Medidas y negaciones en contradicciones (LOCAL)
+Dos solicitudes sintéticas reales completadas en Render: medidas5/18mm y ausencia/presencia de derrame. Ambas detectadas con evidencia de dos citas. Se añade comparación visual de tokens para resaltar cifras/unidades/negaciones sin cambiar informe ni decisiones del revisor. Pruebas de interfaz y modelo:276/276, check OK. Evidencia sanitizada en experiments/results/2026-11-03-review-measures-negation/results.json. Responsable responde que sigue dictando: NO push ni despliegue; corrección preparada localmente.
