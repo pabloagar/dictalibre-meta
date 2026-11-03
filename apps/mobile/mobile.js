@@ -52,7 +52,7 @@ $('test-haptics').onclick = () => {
 function captureStarted(r, confirmation = 'worklet-start') {
   if (r.state !== 'starting') return;
   r.state = 'recording'; lifecycleEvent('capture-started', { confirmation }); haptic(r, 'start');
-  status(tr('Grabando y enviando al computador.'));
+  status(tr('Grabando. Puedes hablar.'));
 }
 $('export-lifecycle').onclick=()=>{const blob=new Blob([JSON.stringify({schema:'mobile-lifecycle.v1',captureFeedbackVersion:CAPTURE_FEEDBACK_VERSION,clock:'performance.now; ms desde navegación',browser:navigator.userAgent,network:null,events:lifecycle},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='dicta-interrupciones.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 $('restart').onclick=()=>{forgetResume();lifecycleEvent('reset');if(recording)abort(tr('Sesión reiniciada.'));releaseMicrophone();client?.send({type:'close'});client?.close();qrToken=null;$('join-code').value='';$('duration').textContent='00:00';$('received').textContent='0';$('verified').textContent='';$('capture-info').textContent=tr('Micrófono liberado.');status(tr('Crea una sesión nueva en el PC y escanea el nuevo QR.'));};
@@ -64,6 +64,7 @@ history.replaceState(null, '', location.pathname+'?lang='+language());
 function refresh() {
   $('join').disabled = !!client;
   $('scan-qr').disabled = !!client;
+  $('prepare-note').hidden = microphoneInitialized || prepared;
   $('prepare').hidden = microphoneInitialized || prepared; $('prepare').disabled = preparing;
   $('record').disabled = document.hidden || !paired || (!prepared&&!microphoneInitialized) || !!(recording && !['starting', 'recording'].includes(recording.state));
   $('test-signal').hidden = prepared; $('test-signal').disabled = preparing;
@@ -152,7 +153,7 @@ async function prepare(useSynthetic = false) {
     const settings = stream?.getAudioTracks()[0].getSettings() ?? {};
     const flag = value => value === undefined ? tr('no informado') : value ? tr('sí') : 'no';
     $('capture-info').textContent = synthetic ? tr`TONO SINTÉTICO 440 Hz · sin micrófono · ${context.sampleRate / 1000} kHz` : tr`${context.sampleRate / 1000} kHz · PCM 16 bits · mono · máx. 3 min. Procesado del navegador: eco ${flag(settings.echoCancellation)}, ruido ${flag(settings.noiseSuppression)}, ganancia automática ${flag(settings.autoGainControl)}.`;
-    status(synthetic ? tr('Tono sintético preparado. Usa los controles para probar el envío.') : tr('Micrófono preparado. Fuera de cada toma, el audio se descarta.'), 'success'); refresh();
+    status(synthetic ? tr('Tono sintético preparado. Usa los controles para probar el envío.') : tr('Micrófono listo. Espera «Grabando» antes de hablar.'), 'success'); refresh();
     try { wakeLock = await navigator.wakeLock?.request('screen'); } catch { /* screen must remain on manually */ }
   } catch (error) {
     obtained?.getTracks().forEach(t => t.stop());
@@ -197,7 +198,7 @@ function onMessage(m) {
       if (recording.stopAt != null) report(recording, { stopToVerifiedMs: performance.now() - recording.stopAt });
       recording = null; $('level').value = 0; refresh();
       $('verified').textContent = m.samples ? tr('✓ El PC recibió exactamente el mismo audio. Puedes escucharlo allí.') : tr('La toma quedó vacía. Prueba de nuevo.');
-      status(synthetic ? tr('Tono sintético preparado para otra toma.') : tr('Micrófono preparado para otra toma.'), 'success'); break;
+      status(synthetic ? tr('Tono sintético preparado para otra toma.') : tr('Listo para otra toma. El texto aparecerá en el computador.'), 'success'); break;
     case 'aborted': if (recording && m.id !== recording.id) break; abort(m.reason, false); break;
     case 'error': if(!paired)forgetResume();status(m.message, 'error'); if (!paired) client?.close(); break;
     case 'closed': forgetResume();paired=false;abort(m.reason, false); releaseMicrophone();client?.close();break;

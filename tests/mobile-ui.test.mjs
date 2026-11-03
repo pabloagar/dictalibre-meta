@@ -19,4 +19,4 @@ test('el control de grabar queda en la vista principal y lo técnico en Más opc
   assert.match(html.slice(html.indexOf('</details>')), /sin validación clínica/);
 });
 
- test('preparación inicial disponible con ayuda que distingue retorno',()=>{assert.match(html,/id="prepare"/);assert.match(html,/Al volver a esta pestaña/);});
+ test('preparación inicial con ayuda breve; la guía de retorno permanece en el flujo',()=>{assert.match(html,/id="prepare"/);assert.match(html,/id="prepare-note"/);assert.match(html,/Tú decides cuándo grabar/);assert.match(js,/Volviste a la pantalla/);});

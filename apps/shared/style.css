@@ -863,3 +863,9 @@ body.clinical-workspace[data-theme=penumbra]{--dl-bg:#131416;--dl-sheet:#1c1f24;
 .clinical-workspace .clinical-topbar .primary-actions>.report-review-button:hover:not(:disabled){background:var(--review-cta);filter:brightness(1.12)}
 .clinical-workspace .clinical-topbar .primary-actions>.report-copy{background:transparent;color:var(--dl-ink);border:1px solid var(--dl-line);font-weight:500;box-shadow:none}
 .clinical-workspace .clinical-topbar .primary-actions>.report-copy:hover:not(:disabled){background:var(--dl-soft);filter:none}
+
+/* One contextual instruction, in the existing empty-sheet space. */
+.clinical-workspace .scan-home .scan-subhint{display:block;margin-top:4px;font-size:12px;color:var(--dl-muted)}
+.clinical-workspace .ready-hint{color:var(--dl-muted);font:400 15px/1.6 var(--dl-font-ui);text-align:center;margin:70px 0 30px}
+.clinical-workspace .ready-to-dictate .report-editor[data-empty=true]::before{content:none}
+.clinical-workspace .ready-to-dictate .empty-guide>p:not(.quick-template-label){display:none}

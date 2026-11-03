@@ -253,21 +253,29 @@ window.dispatchEvent(new window.Event('dicta-ready'));
 const scanHome=make('section','scan-home');
 scanHome.setAttribute('aria-label','Conectar teléfono');
 const scanTitle=make('h2','scan-title',tr('Escanea para dictar'));
-const scanHint=make('p','scan-hint',tr('Tu teléfono funciona como micrófono.'));
+const scanHint=make('p','scan-hint',tr('Escanea con la cámara de tu teléfono.'));
+scanHint.append(make('span','scan-subhint',tr('Tu teléfono funciona como micrófono.')));
 const writeInstead=make('button','write-without-phone',tr('Informe libre'));
 writeInstead.type='button';
 pairing.querySelector('#code').before(scanTitle,scanHint);scanHome.append(writeInstead);sheetHead.after(scanHome);
-let writeMode=false;
+const readyHint=make('p','ready-hint',tr('Todo listo. Empieza a grabar desde tu teléfono.'));readyHint.setAttribute('role','status');readyHint.setAttribute('aria-live','polite');readyHint.hidden=true;reportEditor.element.before(readyHint);
+let writeMode=false,startedThisReport=false,lastGuidanceState=null;
 writeInstead.onclick=()=>{writeMode=true;syncScanHome();reportEditor.element.focus();};
 const syncScanHome=()=>{
- const visible=reportEditor.element.dataset.empty==='true'&&document.querySelector('#paired').hidden&&!writeMode;
+ const empty=reportEditor.element.dataset.empty==='true',pairedState=document.querySelector('#paired');
+ const visible=empty&&pairedState.hidden&&!writeMode&&!startedThisReport;
+ const ready=empty&&!pairedState.hidden&&pairedState.dataset.paused!=='true'&&!writeMode&&!startedThisReport&&!reportEditor.model.pending;
+ readyHint.hidden=!ready;sheet.classList.toggle('ready-to-dictate',ready);
+ const guidanceState=visible?'scan':ready?'ready':'none';if(guidanceState!==lastGuidanceState){track('guidance-state',{state:guidanceState});lastGuidanceState=guidanceState;}
  scanHome.hidden=!visible;sheet.classList.toggle('scan-first',visible);
  if(visible&&pairing.parentElement!==scanHome){pairing.removeAttribute('style');scanHome.prepend(pairing);connection.open=false;}
  else if(!visible&&pairing.parentElement===scanHome){connection.append(pairing);}
 };
 new MutationObserver(syncScanHome).observe(reportEditor.element,{attributes:true,attributeFilter:['data-empty']});
-new MutationObserver(syncScanHome).observe(document.querySelector('#paired'),{attributes:true,attributeFilter:['hidden']});
-reportEditor.element.addEventListener('report-new',()=>{writeMode=false;syncScanHome();});
+new MutationObserver(syncScanHome).observe(document.querySelector('#paired'),{attributes:true,attributeFilter:['hidden','data-paused']});
+window.addEventListener('dicta-recording-start',()=>{startedThisReport=true;syncScanHome();});
+reportEditor.element.addEventListener('input',()=>{startedThisReport=true;syncScanHome();});
+reportEditor.element.addEventListener('report-new',()=>{writeMode=false;startedThisReport=false;syncScanHome();});
 connection.querySelector('summary').addEventListener('click',e=>{if(!scanHome.hidden){e.preventDefault();scanHome.scrollIntoView({block:'center',behavior:'smooth'});if(!connectButton.disabled)connectButton.click();}});
 syncScanHome();
 // Compact actions retain accessible names and keyboard behavior.

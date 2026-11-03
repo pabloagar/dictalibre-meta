@@ -109,7 +109,7 @@ for(const savedTheme of [null,'sala'])test('montaje completo, controles y tema g
  assert.ok(document.querySelector('.clinical-notes .report-global-review'));
  const connection=document.querySelector('.connection-panel'),pairing=document.querySelector('.pairing');
  assert.equal(document.querySelector('.scan-home').hidden,false);assert.ok(document.querySelector('.scan-home').contains(pairing));assert.equal(document.querySelectorAll('#qr').length,1);
- const paired=document.querySelector('#paired');paired.hidden=false;paired.dataset.paused='true';await new Promise(r=>setTimeout(r,0));assert.equal(connection.querySelector('summary').textContent,'Teléfono en pausa');paired.dataset.paused='false';await new Promise(r=>setTimeout(r,0));assert.equal(connection.querySelector('summary').textContent,'Teléfono conectado');assert.equal(document.querySelector('.scan-home').hidden,true);assert.ok(connection.contains(pairing));assert.equal(document.querySelector('.report-editor').textContent,'');paired.hidden=true;
+ const paired=document.querySelector('#paired');paired.hidden=false;paired.dataset.paused='true';await new Promise(r=>setTimeout(r,0));assert.equal(connection.querySelector('summary').textContent,'Teléfono en pausa');assert.equal(document.querySelector('.ready-hint').hidden,true);paired.dataset.paused='false';await new Promise(r=>setTimeout(r,0));assert.equal(connection.querySelector('summary').textContent,'Teléfono conectado');assert.equal(document.querySelector('.ready-hint').hidden,false);assert.equal(document.querySelector('.scan-home').hidden,true);assert.ok(connection.contains(pairing));assert.equal(document.querySelector('.report-editor').textContent,'');paired.hidden=true;
  document.querySelector('.write-without-phone').click();assert.equal(document.querySelector('.scan-home').hidden,true);assert.ok(connection.contains(pairing));
  let sessionRequests=0;const create=document.querySelector('#create');create.onclick=()=>{sessionRequests++;create.disabled=true;};
  connection.querySelector('summary').getBoundingClientRect=()=>({left:240,bottom:60});
@@ -140,6 +140,10 @@ for(const savedTheme of [null,'sala'])test('montaje completo, controles y tema g
  document.querySelector('[data-page="ayuda"]').click();assert.equal(document.querySelectorAll('.howto-panel .help-step').length,4);document.querySelector('.settings-close').click();assert.equal(settings.open,false);
  const level=document.querySelector('#level');level.value=.8;await new Promise(r=>setTimeout(r,0));assert.ok(document.querySelectorAll('.audio-bars .lit').length>0);
  level.value=0;await new Promise(r=>setTimeout(r,0));assert.equal(document.querySelectorAll('.audio-bars .lit').length,0);
+ const editable=document.querySelector('.report-editor');paired.hidden=false;paired.dataset.paused='false';editable.dispatchEvent(new window.CustomEvent('report-new'));await new Promise(r=>setTimeout(r,0));
+ assert.equal(document.querySelector('.ready-hint').hidden,false);
+ editable.textContent='Prueba sintética.';editable.dispatchEvent(new window.Event('input'));await new Promise(r=>setTimeout(r,0));assert.equal(document.querySelector('.ready-hint').hidden,true);
+ document.querySelector('.report-undo').click();await new Promise(r=>setTimeout(r,0));assert.equal(editable.textContent,'');assert.equal(document.querySelector('.ready-hint').hidden,true);
  await window.happyDOM.close();delete globalThis.__clinicalTest;
 });
 

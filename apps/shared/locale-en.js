@@ -1,5 +1,11 @@
 // English UI catalogue. Keys are application-owned Spanish literals; never report text.
 export const EN = {
+  "Escanea con la cámara de tu teléfono.": "Scan with your phone’s camera.",
+  "Todo listo. Empieza a grabar desde tu teléfono.": "All set. Start recording on your phone.",
+  "Permite el acceso al micrófono para empezar. Tú decides cuándo grabar.": "Allow microphone access to get started. You decide when to record.",
+  "Grabando. Puedes hablar.": "Recording. You can speak now.",
+  "Micrófono listo. Espera «Grabando» antes de hablar.": "Microphone ready. Wait for “Recording” before speaking.",
+  "Listo para otra toma. El texto aparecerá en el computador.": "Ready for another take. Your text will appear on the computer.",
   "Copiar al portapapeles": "Copy to clipboard",
   "Informe libre": "Free report",
   "Escanea para dictar": "Scan to dictate",

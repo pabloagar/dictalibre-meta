@@ -8,8 +8,10 @@ test('ocultar interrumpe captura, volver exige gesto y reset no reutiliza token'
  const document={hidden:false,querySelectorAll:()=>[],addEventListener:(name,fn)=>listeners[name]=fn};
  const box={$,document,window:{addEventListener(){}},location:{hash:'',pathname:'/mobile'},history:{replaceState(){}},performance:{now:()=>100},status:t=>lastStatus=t,console,setTimeout,clearTimeout};
  vm.createContext(box);vm.runInContext(("const tr=(s,...v)=>Array.isArray(s)?s.reduce((a,b,i)=>a+(i?v[i-1]:'')+b,''):s;const language=()=> 'es';const initializeLanguage=()=>{};const mountLanguageSwitch=()=>({});\n"+fs.readFileSync('apps/mobile/mobile.js','utf8').replace(/^import .*;\r?\n/gm,'')).replace(/^import .*;\r?\n/gm,''),box);
+ vm.runInContext('refresh()',box);assert.equal($('prepare-note').hidden,false);
  box.fakeClient={send:m=>sent.push(m),close:()=>closed++};box.fakeStream={getTracks:()=>[{stop:()=>stopped++}]};
  vm.runInContext("paired=true;prepared=true;microphoneInitialized=true;client=fakeClient;stream=fakeStream;recording={id:7,state:'recording'};",box);
+ vm.runInContext('refresh()',box);assert.equal($('prepare-note').hidden,true);
  document.hidden=true;listeners.visibilitychange();assert.equal(sent[0].type,'abort');assert.equal(stopped,1);assert.equal($('record').disabled,true);
  document.hidden=false;listeners.visibilitychange();assert.match(lastStatus,/botón de dictado/);assert.equal($('record').disabled,false);
  $('restart').onclick();assert.equal(sent.at(-1).type,'close');assert.equal(closed,1);assert.equal($('join-code').value,'');assert.equal($('duration').textContent,'00:00');
