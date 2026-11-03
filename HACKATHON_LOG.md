@@ -736,3 +736,5 @@ Activación inicio estable: Render deployment 7518481069 success 2026-11-03T12:1
 
 ## 03-11-2026 · opción 1 de conexión aprobada
 El responsable elige halo suave. Conectar sin teléfono evita el menú y destaca el QR existente; al escribir muestra el bloque en la hoja sin ocultar el editor ni borrar texto. Usar teclado retira ese bloque. Conectado mantiene acceso a controles de sesión. pnpm check y 242 pruebas aprobadas, incluidos invariantes de QR, menú cerrado y texto conservado. Despliegue pendiente de verificar.
+
+Render verificado: deployment 7518615417 success 2026-11-03T12:25:06Z (09:25:06 Chile), commit 0bfdbc14a13258bf30d3b5ebbcced777aa254448. live.js y style.css idénticos al checkout normalizando CRLF/LF, health ok. Chrome local confirmó clic con details cerrado y clase qr-attention en el nodo existente. GitHub y web actualizados; maquetas de opciones locales permanecen separadas.
