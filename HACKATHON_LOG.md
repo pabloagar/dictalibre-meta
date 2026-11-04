@@ -979,3 +979,6 @@ Publicación verificada: commit `debb894` subido a `origin/codex/capture-transpo
 
 ## 2026-11-04 — Publicación autorizada de la hoja centrada
 Responsable aprobó la proporción y confirmó fin de dictado. Hoja/barra al 72%, máximo 980 px y mínimo 760 px en escritorio; móvil mantiene ancho disponible. Escritura con altura mínima 400 px y crecimiento según contenido. Plantillas y Ajustes conservan geometría compartida y controles inmóviles. Cambio de aplicación exclusivamente CSS. pnpm check aprobado y 282/282 pruebas. Comprobación visual local: viewport 1280 CSS px, hoja 910.552 px centrada; desplazamiento de los tres botones 0 px al alternar paneles. Render pendiente de verificación tras push.
+
+
+2026-11-04 · Hoja centrada activa y verificada en Render: build 530de406435b8e8adf7230672802b3a4f99d082c, deployment 7537624972 success 04:07:08 UTC. API confirma build y cero tomas activas; /style.css HTTP 200 coincide exactamente con la variante aprobada normalizando CRLF. GitHub actualizado. pnpm check y 282/282 pruebas aprobadas; cambio de aplicación CSS, sin modificar dictado/revisión. Registro posterior [skip render] evita otro reinicio.
