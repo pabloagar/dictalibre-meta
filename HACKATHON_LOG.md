@@ -1031,3 +1031,14 @@ Publicación confirmada: c7422a4 en origin/codex/capture-transport. Comparador p
 Corrección CSS: panel lateral de 300 px fuera de la fila flex de la barra; solo la hoja cede espacio. Encabezado, carga, botones y evidencias adaptados, scroll interno y apilado en pantalla estrecha. Comprobación local Chrome: barra x=177.0521 px, ancho=910.5521 px antes/después de abrir (delta 0 px). Demo local sin proveedor: estado no disponible comprobado visualmente; estados funcionales cubiertos por suite existente. pnpm check y 287/287 pruebas aprobadas. Usuario autoriza publicar fuera de dictado.
 
 Verificación de publicación: Render deployment 7539746491 success; /api/state confirma build 8d34e05fc21a0134a7008d1f8fba7dc95236d970, 0 tomas activas. Navegador en Render confirma panel de 300 px en tema Día e inglés. Captura local: Downloads/dicta-meta-compacto.png.
+
+
+## 2026-11-04 · Generador Bilateral listo para integración comercial
+
+Implementado apps/bilateral: tono suave, campana, madera, clic suave, ruido rosa aproximado y marrón. Síntesis original procedural sin referencias, corpus, modelos ni dependencias de ejecución; seis opciones, intervalo, volumen, separación, duración, altura, semilla, lado inicial, prueba I/D, pausa/continuación/detención, presets locales, JSON importable y WAV estéreo con ficha/hashes. Trabajo en Worker; sin inicio automático y con pausa al ocultar pestaña. No introduce backend, datos de pacientes ni analítica externa.
+
+Por instrucción del responsable, solo el módulo nuevo tiene MIT y permiso separado de audios para uso/distribución comercial sin regalías ni atribución obligatoria del audio. LICENSING.md y THIRD_PARTY.md registran la excepción; la licencia raíz PolyForm sigue intacta. No se promete exclusividad de tonos ni validación clínica ni permisos de voces SLR71.
+
+Activo privado http://127.0.0.1:8805/bilateral/ servido desde la carpeta comparison_valid/bilateral del laboratorio. Nueve archivos copiados y cotejados byte por byte con fuente; página recargada, seis opciones y permisos visibles. Motor bilateral-synth-1.0.0 SHA-256 b088e6a4d8098976cddb1e75398949a946f1d556bdea1b918e50dc3c54d993be. Reproductor Qwen conservado en otra pestaña. No se reiniciaron dictado ni servidores. Captura generador.png y ZIP bilateral-comercial-20261104-v1.zip privados en Downloads; no subidos a GitHub.
+
+Verificación final: pnpm check; pnpm test --test-concurrency=1 --test-timeout=60000, 292/292. Cinco pruebas del módulo más reproducción/pausa/continuación/detención y exportación real en IAB, WAV y SHA verificados. Medidas y límites en EXPERIMENTS.md; no gasto GPU/API. Publicación de código/documentación/pruebas preparada en codex/capture-transport; commit se registrará tras push.

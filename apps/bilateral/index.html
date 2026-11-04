@@ -1,0 +1,44 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: MIT -->
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; worker-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Bilateral · sonidos</title><link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./style.css"><script type="module" src="./app.js"></script>
+</head>
+<body>
+<main>
+  <header><a class="brand" href="./">bilateral<span>SONIDOS</span></a><a href="./README.md">Uso comercial ↗</a></header>
+  <section aria-labelledby="title">
+    <div class="heading"><div><p class="eyebrow">HECHO CON SÍNTESIS</p><h1 id="title">Un sonido. De un lado al otro.</h1></div><span class="badge">6 sonidos</span></div>
+    <div id="sounds" class="sounds" role="group" aria-label="Sonido"></div>
+    <div class="transport">
+      <span id="left" class="ear" aria-label="Canal izquierdo">I</span>
+      <div class="time"><output id="clock">00:00</output><span id="duration-label">/ 00:30</span><progress id="progress" value="0" max="30" aria-label="Tiempo transcurrido"></progress></div>
+      <span id="right" class="ear" aria-label="Canal derecho">D</span>
+    </div>
+    <div class="controls">
+      <label>Cambio de lado <output id="interval-label">0,65 s</output><input id="interval" aria-label="Cambio de lado" type="range" min="0.2" max="2" step="0.05" value="0.65"></label>
+      <label>Volumen <output id="volume-label">24 %</output><input id="volume" aria-label="Volumen" type="range" min="0" max="100" step="1" value="24"></label>
+      <label>Separación <output id="separation-label">100 %</output><input id="separation" aria-label="Separación" type="range" min="0" max="100" step="5" value="100"></label>
+    </div>
+    <div class="actions"><button id="play" class="primary">Escuchar</button><button id="stop" disabled>Detener</button><button id="test">Probar I / D</button></div>
+    <p id="status" role="status" aria-live="polite">Usa auriculares estéreo y comienza con volumen bajo.</p>
+    <details><summary>Ajustes y presets</summary>
+      <div class="settings">
+        <label>Duración<select id="duration" aria-label="Duración"><option value="5">5 segundos</option><option value="15">15 segundos</option><option value="30" selected>30 segundos</option><option value="60">1 minuto</option><option value="120">2 minutos</option></select></label>
+        <label>Altura del tono <output id="frequency-label">440 Hz</output><input id="frequency" aria-label="Altura del tono" type="range" min="120" max="1200" step="10" value="440"></label>
+        <label>Comenzar por<select id="first-side" aria-label="Comenzar por"><option value="left">Izquierda</option><option value="right">Derecha</option></select></label>
+        <label>Semilla<input id="seed" type="number" min="0" max="4294967295" step="1" value="20261104"></label>
+      </div>
+      <p class="small">La separación al 0 % centra el sonido. La altura se aplica a tono, campana y madera. La semilla varía las texturas de ruido.</p>
+      <div class="presets"><label class="sr-only" for="preset-name">Nombre del preset</label><input id="preset-name" maxlength="48" placeholder="Nombre del preset"><button id="save">Guardar ajuste</button><label class="sr-only" for="presets">Presets guardados</label><select id="presets"><option value="">Mis presets</option></select><button id="import">Importar JSON</button><input type="file" id="import-file" accept="application/json,.json" hidden></div>
+    </details>
+    <div class="exports"><span>Para tu app</span><button id="wav">Descargar WAV</button><button id="json">Configuración JSON</button></div>
+    <p id="export-result" class="small" role="status"></p>
+  </section>
+  <footer><div><strong>Uso comercial permitido</strong><span>Sin grabaciones, voces ni modelos. <a href="./LICENSE">Código MIT</a> · <a href="./OUTPUT-LICENSE.txt">Permiso de audios</a></span></div><p>Herramienta de audio. Los ajustes clínicos corresponden al profesional; no constituye un tratamiento EMDR por sí sola.</p></footer>
+</main>
+</body></html>

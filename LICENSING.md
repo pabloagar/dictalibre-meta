@@ -12,6 +12,13 @@ La licencia no garantiza ingresos, exclusividad comercial ni la imposibilidad t�
 
 ## Alcance y terceros
 
+Excepción del 04-11-2026, solicitada por el responsable para uso en su app:
+el módulo nuevo e independiente [apps/bilateral](apps/bilateral/README.md)
+tiene licencia [MIT propia](apps/bilateral/LICENSE), apta para integración comercial,
+y sus audios procedurales un [permiso de uso separado](apps/bilateral/OUTPUT-LICENSE.txt).
+Esta excepción se limita a esa carpeta; no cambia la licencia del resto del
+repositorio ni incluye corpus, voces o pesos del laboratorio.
+
 La elección se aplica al código original del proyecto sobre el que el titular puede conceder permisos. Bibliotecas, modelos, APIs y otros materiales de terceros conservan sus condiciones y avisos; véase [THIRD_PARTY.md](THIRD_PARTY.md). No se otorgan permisos sobre plantillas privadas, audios, datos clínicos ni pesos de modelos excluidos del repositorio. La licencia no acredita validación clínica.
 
 ## Concurso: compatibilidad revisada y límites

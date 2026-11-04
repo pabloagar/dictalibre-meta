@@ -1,5 +1,16 @@
 # Modelos, dependencias y licencias
 
+## Módulo Bilateral · 04-11-2026
+
+[apps/bilateral](apps/bilateral/README.md) es un módulo nuevo e independiente,
+con licencia MIT propia por solicitud del responsable; excepción documentada
+en LICENSING.md. Usa síntesis procedural escrita para esta función y APIs
+nativas Web Audio/Worker/Blob/crypto del navegador; sin código copiado de
+terceros, muestras, corpus, modelos, fuentes web ni librerías de ejecución.
+Los audios tienen permiso comercial separado en OUTPUT-LICENSE.txt. No se
+extiende a audios de Qwen, Chatterbox o SLR71. Pruebas usan happy-dom ya instalado,
+que no se distribuye ni importa en este módulo de ejecución.
+
 Estado de modelos al 1 de noviembre: Muse Voice Transcribe (por toma y streaming), Muse Spark 1.3 y Whisper large-v3/OpenVINO han sido ejecutados. Los inventarios de versiones efectivas aparecen en las actualizaciones del laboratorio y Revisor al final de este documento. Actualización de licencia del 02-11-2026: código propio bajo PolyForm Noncommercial 1.0.0; véanse LICENSE y LICENSING.md. Esta elección no cambia los permisos de terceros. Las secciones preliminares siguientes conservan decisiones históricas del 28 de octubre y no describen el estado actual.
 
 ## Componentes usados en fases 1 y 2

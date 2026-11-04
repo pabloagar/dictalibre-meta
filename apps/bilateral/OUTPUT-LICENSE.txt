@@ -1,0 +1,20 @@
+Permiso de uso de los audios del generador Bilateral — 04-11-2026
+
+Ámbito: exclusivamente los audios producidos por el código de esta carpeta,
+sin incorporar grabaciones, música, voces, modelos ni otros materiales externos.
+
+En la medida en que el titular de este módulo tenga derechos sobre esos audios,
+permite usarlos, copiarlos, modificarlos, publicarlos, distribuirlos, venderlos
+e incorporarlos a aplicaciones y servicios comerciales, mundialmente, sin
+regalías, sin obligación de atribución de los audios ni de publicar la app.
+Este permiso sobre los audios es gratuito e irrevocable respecto de los
+derechos concedidos. La redistribución del código sigue su licencia MIT.
+
+No se reclama exclusividad sobre tonos, ruido, métodos de síntesis ni resultados
+que pudieran no estar protegidos por derecho de autor. No se garantiza que
+cada salida sea susceptible de propiedad exclusiva. No se otorgan derechos
+sobre materiales externos que un integrador añada, marcas o patentes ajenas.
+
+Se entrega sin garantías de aptitud clínica ni de resultados terapéuticos.
+Este permiso no incluye audios, corpus ni pesos del laboratorio de voces de
+Dicta Libre, que tienen una procedencia y condiciones independientes.
