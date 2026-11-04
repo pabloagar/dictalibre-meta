@@ -474,3 +474,13 @@ for(const [name,a,b,changedWords]of [
  button('Ir al texto').click();assert.equal(editor.element.querySelectorAll('.report-annotation.is-active').length,2);
  assert.equal(editor.model.text,text);await window.happyDOM.close();
 });
+
+test('abrir plantillas previsualiza general; un clic conserva nodos y doble clic inserta',async()=>{
+ const {window,editor,button}=setup();
+ const panel=document.querySelector('.template-library-panel');panel.open=true;panel.dispatchEvent(new window.Event('toggle'));
+ const general=button('Informe general');assert.ok(general);assert.equal(general.getAttribute('aria-pressed'),'true');
+ assert.equal(editor.model.text,'');assert.match(editor.templatePreview.textContent,/TÉCNICA:/);
+ general.click();assert.equal(general.isConnected,true);assert.equal(editor.model.text,'');
+ general.dispatchEvent(new window.MouseEvent('dblclick',{bubbles:true}));assert.match(editor.model.text,/TÉCNICA:/);assert.equal(panel.open,false);
+ button('Deshacer').click();assert.equal(editor.model.text,'');await window.happyDOM.close();
+});

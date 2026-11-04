@@ -1008,3 +1008,6 @@ Publicación verificada: `18d2717` subido a `origin/codex/capture-transport` el 
 
 
 2026-11-04 · Permiso móvil publicado con autorización y fin de dictado confirmado. Render build 447328be4d7195d580380d15f2dd4bf66c4ecec1, deployment7539330328 success. /api/state confirma build y active=0; /mobile, mobile.js, mobile-look.css, desktop.js, style.css y locale-en.js coinciden con commit normalizando CRLF. pnpm check y 286/286 pruebas aprobadas. Recuperación del diálogo nativo en teléfono pendiente de prueba del responsable. Registro [skip render] no vuelve a desplegar.
+
+
+2026-11-04 · Plantillas: apertura selecciona Informe general para vista previa; clic conserva informe y nodos de lista para admitir doble clic nativo; doble clic usa la misma inserción y confirmación/deshacer del botón. Check y suite286 aprobados, seguida de 42/42 pruebas clinical-ui incluyendo nueva regresión de selección/doble clic. Local y GitHub, Render pendiente para no interrumpir pruebas de permiso.
