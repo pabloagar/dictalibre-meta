@@ -964,3 +964,5 @@ Responsable terminó dictado y aprobó la vista local. Selector compacto Día/Pe
 
 ## 2026-11-04 · Publicación autorizada de Plantillas y Ajustes
 Usuario aprueba stationary-toolbar-v6 y confirma fin de dictado; API active=0 antes de publicar. Barra completa fija, hoja amplia cerrada y espacio324px para panel abierto, paneles alineados debajo de barra; todas las secciones de Ajustes laterales con dimensiones estables. Dictado demo conserva vocabulario y comandos, oculta detalles técnicos sin alterar motor/transporte. pnpm check y 282/282 pruebas en workspace; incluye una prueba adicional de voces de trabajo paralelo no incluida en este commit. Cambios de aplicación limitados a live.js, style.css, locale-en.js y prueba clinical-ui. Activación pendiente de verificar.
+
+2026-11-04 · Render activo y verificado: f048cd65ac72765c83d8ee04951f96226f402967, deployment7537406155 success03:51:26UTC. API confirma build/active0; live.js, style.css y locale-en.js HTTP200 y contenido idéntico al checkout normalizando saltos de línea. GitHub y demo actualizados; laboratorio privado no reiniciado. Verificación humana de disposición en dispositivo del responsable pendiente.
