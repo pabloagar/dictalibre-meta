@@ -1044,3 +1044,7 @@ Activo privado http://127.0.0.1:8805/bilateral/ servido desde la carpeta compari
 Verificación final: pnpm check; pnpm test --test-concurrency=1 --test-timeout=60000, 292/292. Cinco pruebas del módulo más reproducción/pausa/continuación/detención y exportación real en IAB, WAV y SHA verificados. Medidas y límites en EXPERIMENTS.md; no gasto GPU/API. Publicación de código/documentación/pruebas preparada en codex/capture-transport; commit se registrará tras push.
 
 Publicación confirmada: 1b222d4 en origin/codex/capture-transport. Código/documentación/pruebas en GitHub, generador activo en http://127.0.0.1:8805/bilateral/ con archivos cotejados; exportaciones, evidencia y ZIP permanecen locales. Sin despliegue de dictado ni reinicio de Render (skip render).
+
+
+## 2026-11-04 — Ajustes sin Cómo usar
+Retirada pestaña y contenido de ayuda; Apariencia/Idioma/Dictado quedan en una fila. Separación título/opciones 12 px medida en Chrome local. Panel conserva 300 px de ancho. Se verificaron las tres pestañas; check y 294 pruebas aprobadas (incluye pruebas de trabajo paralelo).

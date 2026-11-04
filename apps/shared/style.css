@@ -1181,3 +1181,9 @@ body.clinical-workspace .report-global-review article{padding:10px}
  body.clinical-workspace .clinical-desk:has(.clinical-notes>:not([hidden])){flex-direction:column}
  body.clinical-workspace .clinical-desk:has(.clinical-notes>:not([hidden])) .clinical-sheet{width:100%}
 }
+/* Three settings tabs on one row, with a compact title-to-content gap. */
+body.clinical-workspace .appearance-drawer .settings-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;flex-wrap:nowrap}
+body.clinical-workspace .appearance-drawer .settings-nav button{min-width:0;padding:7px 4px;font-size:12px;white-space:nowrap}
+body.clinical-workspace .appearance-drawer .settings-main{padding-top:60px}
+body.clinical-workspace .appearance-drawer .settings-main>section{margin-top:0;padding-top:0}
+body.clinical-workspace .appearance-drawer .theme-cards{margin-top:0}
