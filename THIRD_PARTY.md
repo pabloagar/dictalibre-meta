@@ -11,7 +11,7 @@ Los audios tienen permiso comercial separado en OUTPUT-LICENSE.txt. No se
 extiende a audios de Qwen, Chatterbox o SLR71. Pruebas usan happy-dom ya instalado,
 que no se distribuye ni importa en este módulo de ejecución.
 
-Estado de modelos al 1 de noviembre: Muse Voice Transcribe (por toma y streaming), Muse Spark 1.3 y Whisper large-v3/OpenVINO han sido ejecutados. Los inventarios de versiones efectivas aparecen en las actualizaciones del laboratorio y Revisor al final de este documento. Actualización de licencia del 02-11-2026: código propio bajo PolyForm Noncommercial 1.0.0; véanse LICENSE y LICENSING.md. Esta elección no cambia los permisos de terceros. Las secciones preliminares siguientes conservan decisiones históricas del 28 de octubre y no describen el estado actual.
+Estado de modelos al 1 de noviembre: Muse Voice Transcribe (por toma y streaming), Muse Spark 1.3 y Whisper large-v3/OpenVINO han sido ejecutados. Los inventarios de versiones efectivas aparecen en las actualizaciones del laboratorio y Revisor al final de este documento. Actualización de licencia del 04-11-2026: código propio bajo Apache 2.0, salvo componentes con licencia independiente como Bilateral (MIT); véanse LICENSE y LICENSING.md. Esta elección no cambia los permisos de terceros, grabaciones, corpus ni pesos. Las secciones preliminares siguientes conservan decisiones históricas del 28 de octubre y no describen el estado actual.
 
 ## Componentes usados en fases 1 y 2
 
@@ -62,7 +62,7 @@ Nombre; función; versión/commit/hash; fuente oficial; licencia y copia de avis
 
 ## Pendientes de publicación
 
-Licencia del código propio elegida el 02-11-2026: PolyForm Noncommercial 1.0.0. Mantener el lockfile y revisar avisos de distribución de los componentes realmente usados. Revisión de bases públicas y límites en LICENSING.md; instrucciones autenticadas de entrega pendientes. No se atribuye al proyecto autoría de modelos o bibliotecas externos.
+Licencia vigente del código propio desde el 04-11-2026: Apache 2.0; Bilateral conserva MIT. Mantener el lockfile y revisar avisos de distribución de los componentes realmente usados. Requisito open source comunicado por el responsable y límites en LICENSING.md; demás instrucciones autenticadas de entrega pendientes. No se atribuye al proyecto autoría de modelos o bibliotecas externos.
 
 ## Actualización de candidatos de transcripción
 La investigación del 28-10-2026 en TRANSCRIPTION_PLAN.md confirma en documentación oficial español y modo de dictado de Muse Voice Transcribe; el acceso de cuenta aún no se ha probado. La propuesta de prueba ASR y contratos allí descritos sustituye la prioridad preliminar de corrector en «F1» de este documento: fases 1/2 son captura/transporte y no se integra corrector aún. Muse, Whisper, Speechmatics y Scribe son candidatos, no nuevas dependencias instaladas. Términos efectivos de APIs, cuotas y coste del piloto siguen pendientes de confirmar.

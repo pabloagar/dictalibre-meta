@@ -176,8 +176,14 @@ Esta entrada actualiza el estado pendiente de la sección anterior; las pruebas 
 
 WER/CER de ediciones se calculan contra referencia oral congelada; no equivalen a evaluación clínica del informe. La aceptación de propuestas no se usa como referencia. Entorno declarado etiquetado; tiempos de UI son mediciones del cliente, no inferencia pura. Precisión efectiva, sobrecosto de persistencia/DOM, anotadores clínicos y validación física no medidos: null. Eventos/snapshots aumentan tamaño del catálogo, sin nueva analítica externa.
 
-## 2026-11-02 · Cambio de licencia
+## 2026-11-02 · Cambio de licencia (histórico; sustituido el 04-11-2026)
 LICENSE/LICENSING.md y metadatos documentan la elección de PolyForm Noncommercial 1.0.0. No cambia comportamiento, captura, envío de datos ni tiempos de ejecución; no corresponde experimento de rendimiento. Validación pertinente: integridad SHA-256 contra descarga oficial, identificador SPDX en package.json y consistencia documental. No se afirma medición de efecto comercial o jurídico ni elegibilidad; las instrucciones autenticadas de entrega siguen pendientes según LICENSING.md.
+
+## 2026-11-04 · Publicación open source Apache 2.0
+
+Cambio de licencia y documentación, sin modificación del comportamiento de la aplicación. Criterios de aceptación antes de publicar: LICENSE idéntico por SHA-256 al texto oficial de Apache; package.json con SPDX Apache-2.0; documentación vigente coherente y MIT de Bilateral intacta; instalación con lockfile, pnpm check y pnpm test aprobados en una copia limpia del árbol candidato. Después de publicar: rama remota coincide con commit y API de GitHub identifica repositorio público con Apache-2.0. Resultados, árbol y entorno se registran en HACKATHON_LOG.md.
+
+Comprobaciones puntuales por comandos locales y HTTPS, sin instrumentación permanente ni analítica externa. No hay comparación de rendimiento ni nuevas inferencias. Audio: ninguno; dispositivo/navegador físicos, red caracterizada, latencia de dictado, precisión temporal y sobrecosto de ejecución: null. Una instalación limpia y una ejecución de cada comprobación bastan si pasan; fallos y repeticiones se registrarán. El estado de la demo se comprueba por separado, sin reiniciarla por un cambio documental.
 
 ## Hoja clínica v4 · 02-11-2026
 

@@ -6,7 +6,7 @@ servicios de audio ni dependencias de ejecución. No solicita micrófono.
 
 ## Uso comercial
 
-Esta carpeta es una excepción explícita a la licencia PolyForm Noncommercial
+Esta carpeta conserva su licencia independiente de la licencia Apache 2.0
 del resto de Dicta Libre: su código y documentación se publican bajo
 [MIT](LICENSE), por solicitud del responsable. Puedes copiar la carpeta completa
 a tu app comercial; conserva el aviso MIT al distribuir código o porciones

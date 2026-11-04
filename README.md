@@ -2,9 +2,9 @@
 
 Repositorio público: [pabloagar/dictalibre-meta](https://github.com/pabloagar/dictalibre-meta).
 
-**Licencia del código propio:** [PolyForm Noncommercial 1.0.0](LICENSE). Los usos comerciales fuera de sus fines permitidos requieren autorización previa y expresa por escrito del titular. Se conservan las excepciones de la licencia y los derechos contractuales del concurso. Alcance y solicitud de permisos en [LICENSING.md](LICENSING.md). Código disponible con restricciones; no se presenta como open source.
+**Open source · Apache-2.0:** el código propio se publica bajo [Apache License 2.0](LICENSE), que permite uso, modificación y redistribución comercial cumpliendo sus condiciones. Avisos en [NOTICE](NOTICE); alcance y licencias independientes en [LICENSING.md](LICENSING.md). El módulo Bilateral conserva MIT. Audios, datasets, pesos y materiales ajenos no reciben automáticamente esta licencia.
 
-**Estado funcional al 1 de noviembre de 2026:** captura y transporte, Muse-Normal/Muse-streaming, Whisper local con OpenVINO, laboratorio comparativo, segmentación opcional, números/comandos, glosario, Revisor Meta experimental y editor con plantillas implementados en piloto. 285 plantillas importadas localmente; contenido excluido del repositorio por permisos de redistribución pendientes. Validación física/clínica y entrega aún abiertas. Código preparado para publicación pública; datos privados excluidos. Alcance, auditoría y actualización de licencia del 02-11-2026 en [PUBLICATION.md](PUBLICATION.md).
+**Estado funcional al 1 de noviembre de 2026:** captura y transporte, Muse-Normal/Muse-streaming, Whisper local con OpenVINO, laboratorio comparativo, segmentación opcional, números/comandos, glosario, Revisor Meta experimental y editor con plantillas implementados en piloto. 285 plantillas importadas localmente; contenido excluido del repositorio por permisos de redistribución pendientes. Validación física/clínica y entrega aún abiertas. Código preparado para publicación pública; datos privados excluidos. Alcance, auditoría y licencia vigente al 04-11-2026 en [PUBLICATION.md](PUBLICATION.md).
 
 dicta (antes Dicta Libre) es un proyecto de dictado médico cuya idea y exploración conceptual precedieron al Meta AI Developer Hackathon 2026. La implementación presentada para el concurso comenzó desde cero el 28 de octubre de 2026, dentro del período oficial del evento.
 
@@ -73,9 +73,9 @@ No incorporar información identificable de pacientes. Usar datos sintéticos o 
 
 La [página oficial](https://dev.meta.ai/events/global-hackathon), consultada nuevamente el 01-11-2026, publica inicio el 26 de octubre y cierre el 4 de noviembre a las 21:00 ET. Objetivo interno: 4 de noviembre a las 18:00, America/Santiago; reconfirmar en el portal antes de enviar.
 
-Las [bases oficiales](https://cerebralvalley.ai/e/meta-ai-developer-hackathon/waiver) se leyeron completas en navegador el 02-11-2026. No se encontró obligación de licencia pública específica ni conflicto entre PolyForm para el público y los permisos separados exigidos por el concurso. Estos permisos son amplios y la licencia pública no los revoca. La comprobación no equivale a aprobación del organizador; el formulario de entrega no fue visible sin autenticar. Detalle en [LICENSING.md](LICENSING.md).
+El 04-11-2026 el responsable comunicó la instrucción de Cerebral Valley de que el repositorio debe ser open source. Se adopta Apache 2.0 para atender ese requisito de licencia. La conclusión de la revisión del 02-11-2026 sobre PolyForm queda superada; los permisos contractuales independientes del concurso se conservan. Este cambio no garantiza por sí solo la aceptación de la entrega. Detalle y procedencia en [LICENSING.md](LICENSING.md).
 
-Pendiente: inscripción/elegibilidad, categoría, modelos admitidos, condiciones sobre ideación previa e instrucciones autenticadas de entrega y posibles actualizaciones. La URL de demo no equivale al repositorio de código. Licencia pública elegida: PolyForm Noncommercial 1.0.0; ver PUBLICATION.md.
+Pendiente: inscripción/elegibilidad, categoría, modelos admitidos, condiciones sobre ideación previa e instrucciones autenticadas de entrega y posibles actualizaciones. La URL de demo no equivale al repositorio de código. Licencia pública vigente del código propio: Apache 2.0; ver [PUBLICATION.md](PUBLICATION.md).
 
 ## Revisor Meta experimental
 Fase 8 disponible en laboratorio y dictado: Meta Spark revisa la toma final y ofrece propuestas que requieren aprobación. Original conservado, edición/deshacer y métricas guardadas. Uso, límites y pruebas en [META_REVIEW.md](META_REVIEW.md). No es validación clínica.
