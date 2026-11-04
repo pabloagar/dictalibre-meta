@@ -87,7 +87,7 @@ async function complete(m) {
   const receivedEnd=performance.now();
   const recording = current, epoch = sessionEpoch;
   if (!recording || recording.id !== m.id) return;
-  $('record-state').textContent = 'VERIFICANDO';
+  $('record-state').textContent = tr('VERIFICANDO');
   try {
     const hashStart = performance.now();
     const hash = await sha256(recording.parts);
@@ -156,7 +156,7 @@ function onMessage(m) {
       while (traces.size > 5) traces.delete(traces.keys().next().value);
       previousArrival = null; pendingTiming = null; renderMetrics();
       current = { receivedStart, id: m.id, rate: m.rate, mode: m.mode, source: m.source, parts: [], samples: 0, frames: 0 };
-      document.body.classList.add('receiving'); $('record-state').textContent = 'RECIBIENDO'; $('record-state').classList.add('active');
+      document.body.classList.add('receiving'); $('record-state').textContent = tr('RECIBIENDO'); $('record-state').classList.add('active');
       $('duration').textContent = '00:00'; $('frames').textContent = '0'; $('format').textContent = `${m.rate / 1000} kHz · mono`;
       $('record-help').textContent = tr('Recibiendo audio mientras dictas. Reproducción disponible al detener.'); status(tr('Grabación en curso.')); break;
     case 'end': void complete(m); break;

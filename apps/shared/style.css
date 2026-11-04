@@ -1047,3 +1047,38 @@ body.clinical-workspace:has(.clinical-settings[open]){overflow:hidden}
 .clinical-workspace .report-global-review .review-explanation summary,.clinical-workspace .report-global-review .review-foot summary{font:400 12px/1.5 var(--dl-font-ui);color:var(--dl-muted);padding:4px 0;cursor:pointer}
 
 .clinical-workspace .review-warnings blockquote mark{background:var(--dl-accent-bg);color:var(--dl-ink);font-weight:600;text-decoration:underline;text-underline-offset:3px;padding:0 2px}
+/* Local preview: appearance choices reveal the real report, without a dimmed backdrop. */
+body.clinical-workspace.appearance-preview{overflow:auto}
+.clinical-workspace .clinical-settings.appearance-drawer>.settings-backdrop{display:none!important}
+.clinical-workspace .clinical-settings.appearance-drawer[open]>.settings-body{position:fixed;inset:86px 20px auto auto;transform:none;width:300px;max-width:calc(100vw - 32px);height:auto;max-height:calc(100dvh - 110px);display:flex;flex-direction:column;border-radius:14px;box-shadow:0 12px 32px #0002;overflow:auto}
+.clinical-workspace .appearance-drawer .settings-nav{width:auto;flex:auto;padding:14px 14px 0;display:flex;gap:3px;flex-wrap:wrap;border:0;background:transparent;overflow:visible}
+.clinical-workspace .appearance-drawer .settings-nav h2{display:none}
+.clinical-workspace .appearance-drawer .settings-nav button{padding:6px;min-height:30px;font-size:11px;flex:1;text-align:center;margin:0;white-space:nowrap}
+.clinical-workspace .appearance-drawer .settings-main{padding:18px;overflow:visible;scrollbar-gutter:auto}
+.clinical-workspace .appearance-drawer .settings-close{position:absolute;right:16px;top:62px;padding:4px 8px;min-height:28px;font-size:11px}
+.clinical-workspace .appearance-drawer h3{font-size:18px;margin:0 0 20px}
+.clinical-workspace .appearance-drawer .theme-cards{grid-template-columns:1fr;gap:10px}
+.clinical-workspace .appearance-drawer .theme-card{display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:12px;padding:10px;border-radius:9px;min-height:96px}
+.clinical-workspace .appearance-drawer .theme-card strong{font-size:13px;font-weight:500}
+.clinical-workspace .appearance-drawer .theme-card:hover{border-color:var(--dl-muted)}
+.clinical-workspace .appearance-drawer .theme-sample{width:112px;flex:0 0 112px;padding:8px;border-radius:5px;pointer-events:none}
+.clinical-workspace .appearance-drawer .sample-sheet{padding:6px;font-size:10px;line-height:1.4;min-height:0}
+.clinical-workspace .appearance-drawer .sample-muted{font-size:8px}
+body.clinical-workspace.appearance-preview .clinical-desk{width:calc(100% - 368px);max-width:1440px;margin:12px 344px 0 24px}
+body.clinical-workspace,body.clinical-workspace .clinical-sheet,body.clinical-workspace .clinical-editbar,body.clinical-workspace .clinical-topbar,body.clinical-workspace .settings-body,body.clinical-workspace .theme-card,body.clinical-workspace .report-editor{transition:background-color 200ms ease,color 200ms ease,border-color 200ms ease}
+@media(prefers-reduced-motion:reduce){body.clinical-workspace,body.clinical-workspace *{transition:none!important}}
+@media(max-width:800px){
+ .clinical-workspace .clinical-settings.appearance-drawer[open]>.settings-body{inset:auto 12px 12px;width:calc(100% - 24px);max-width:none;max-height:45dvh}
+ .clinical-workspace .appearance-drawer .theme-cards{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .clinical-workspace .appearance-drawer .theme-card{flex-direction:column;gap:8px;padding:8px;min-height:0}
+ .clinical-workspace .appearance-drawer .theme-sample{width:100%;flex:auto;box-sizing:border-box}
+ body.clinical-workspace.appearance-preview .clinical-desk{width:calc(100% - 24px);margin:12px 12px 310px}
+}
+.clinical-workspace .appearance-drawer .settings-nav{flex-direction:row}
+.clinical-workspace .appearance-drawer .settings-nav button{width:auto}
+.clinical-workspace .appearance-drawer .settings-main{position:relative}
+.clinical-workspace .appearance-drawer .settings-close{top:14px;right:16px}
+
+/* Keep recording labels intact in both interface languages. */
+.clinical-workspace .clinical-topbar .clinical-record{width:max-content;flex-shrink:0;overflow:visible}
+.clinical-workspace .clinical-record #record-state{flex:0 0 auto;min-width:12ch;max-width:none;white-space:nowrap;line-height:1.5;text-align:center;overflow:visible}

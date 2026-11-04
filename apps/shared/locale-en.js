@@ -330,6 +330,8 @@ export const EN = {
   "Resolución orientativa parada → texto": "Estimated stop → text resolution",
   "{} bloques · {} bytes de audio y cabecera · cola máxima {} bytes · duplicados {} · errores de secuencia {} · sin estimación {}": "{} blocks · {} audio and header bytes · peak queue {} bytes · duplicates {} · sequence errors {} · without estimate {}",
   "EN ESPERA": "IDLE",
+  "RECIBIENDO": "RECEIVING",
+  "VERIFICANDO": "VERIFYING",
   "GRABANDO": "RECORDING",
   "Grabando": "Recording",
   "Toma {} · {} · {}{}": "Take {} · {} · {}{}",

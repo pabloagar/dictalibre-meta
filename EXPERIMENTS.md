@@ -649,3 +649,6 @@ Hipótesis: menos texto y menor separación reducen desplazamiento. Compactados 
 
 
 2026-11-04 · Escala 0–5 solicitada por responsable; cero válido y vacío pendiente. Exportación identifica límites. Prueba reproducible verifica seis opciones y persistencia de cero; 280/280 pruebas y pnpm check. Ancho máximo 960→1440 px, texto y controles mayores; inspección visual en navegador integrado. Tiempo de revisión y sobrecosto null, pendiente medición humana. Notas previas 1–5 conservadas sin reinterpretar.
+
+## 2026-11-04 · Selector de tres temas aprobado
+Hipótesis de uso: selector compacto permite observar el informe al cambiar apariencia. Criterios: tres opciones, texto intacto, panel separado de hoja. Chrome local: panel x1280 ancho300; hoja termina x1240 en viewport1600; texto sintético conservado. Transición CSS configurada 200 ms, evento theme registra duración configurada; latencia percibida y sobrecosto null. settingsVersion appearance-drawer-v3. Migración de temas y traducción probadas; pnpm check y 281/281 aprobados. Usuario aprueba publicación; sin datos clínicos.

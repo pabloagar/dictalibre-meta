@@ -950,3 +950,6 @@ Cierre del revisor minimalista, 2026-11-03: código publicado en GitHub `cb520d8
 
 
 2026-11-04 · Corrección del cierre de escala cero: la primera prueba falló por asignar textContent numérico 0; convertido explícitamente a String(i). Validación final real: pnpm check OK y 281/281 pruebas (suite concurrentemente ampliada). El registro previo de 280/280 era prematuro y queda corregido aquí. HTML privado regenerado.
+
+## 2026-11-04 · Publicación autorizada: tres temas y chip bilingüe
+Responsable terminó dictado y aprobó la vista local. Selector compacto Día/Penumbra/Negatoscopio, informe visible y transición 200 ms (sin movimiento si se solicita reducido). Estados PC traducidos RECEIVING/VERIFYING, ancho de etiqueta protegido. pnpm check y 281/281 pruebas aprobados antes de publicar. Verificación de Render pendiente.

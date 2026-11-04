@@ -28,6 +28,16 @@ test('English catalogue placeholders preserve count and all fifteen templates ha
  assert.equal(c.templates.length,15);assert.equal(c.templates.filter(t=>t.defaultFavorite).length,5);
  for(const t of c.templates){const en=t.locales.en;assert.ok(en.name&&en.category);for(const title of ['CLINICAL HISTORY','TECHNIQUE','FINDINGS','IMPRESSION'])assert.ok(en.text.includes('\n'+title+'\n'));assert.ok(en.text.includes('CLINICAL HISTORY\n\n\n'));assert.doesNotMatch(en.text,/Enter clinical history/);assert.doesNotMatch(en.text,/\d|\b(?:mm|cm)\b/);assert.ok(en.text.split(/\s+/).length<100);}
 });
+
+test('PC recording states use the active interface language',async()=>{
+ const w=browser('http://localhost/live?lang=en');initializeLanguage();
+ for(const [es,en] of [['EN ESPERA','IDLE'],['RECIBIENDO','RECEIVING'],['VERIFICANDO','VERIFYING']])assert.equal(t(es),en);
+ location.href='http://localhost/live?lang=es';initializeLanguage();
+ for(const es of ['EN ESPERA','RECIBIENDO','VERIFICANDO'])assert.equal(t(es),es);
+ const source=fs.readFileSync('apps/desktop/desktop.js','utf8');
+ for(const state of ['RECIBIENDO','VERIFICANDO'])assert.ok(source.includes("textContent = tr('"+state+"')"));
+ await w.happyDOM.close();delete globalThis.document;
+});
 test('English commands avoid anatomical colon and clinical period; Spanish format stays separate',()=>{
  assert.equal(formatEnglishDictation('findings colon no effusion full stop new paragraph impression colon no acute findings full stop').text,'Findings: no effusion.\n\nImpression: no acute findings.');
  for(const text of ['The ascending colon is normal.','Last menstrual period unknown.','The nodule measures 2.5 mm.','A new line of treatment.'])assert.equal(formatEnglishDictation(text).text,text);
