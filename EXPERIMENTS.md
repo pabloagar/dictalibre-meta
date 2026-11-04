@@ -646,3 +646,6 @@ Adaptado el ZIP del responsable al generador de ocho voces: tema oscuro, texto e
 
 ## 2026-11-04 · Revisor compacto
 Hipótesis: menos texto y menor separación reducen desplazamiento. Compactados cabecera, catálogo en filas, puntajes en línea y notas plegables; explicación en Método y exportación en Resultados. Verificación funcional: pnpm check y 280/280 pruebas; inspección del navegador integrado muestra frase, par A/B, cuatro criterios y siguiente en una vista de escritorio. Tiempo de evaluación, reducción porcentual de scroll y sobrecosto null: pendiente ensayo con usuario y viewport fijo antes/después. Audios y puntuaciones conservados.
+
+
+2026-11-04 · Escala 0–5 solicitada por responsable; cero válido y vacío pendiente. Exportación identifica límites. Prueba reproducible verifica seis opciones y persistencia de cero; 280/280 pruebas y pnpm check. Ancho máximo 960→1440 px, texto y controles mayores; inspección visual en navegador integrado. Tiempo de revisión y sobrecosto null, pendiente medición humana. Notas previas 1–5 conservadas sin reinterpretar.

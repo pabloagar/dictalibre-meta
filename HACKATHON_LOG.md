@@ -944,3 +944,6 @@ Cierre del revisor minimalista, 2026-11-03: código publicado en GitHub `cb520d8
 
 
 2026-11-04 · Reproductor compacto activo en :8805/ESCUCHAR_OCHO.html?v=compact3; HTML SHA a8e68223912838bcb8d012293d61e9334d54b7afcc29efcbcfa8af342fd77b38. Menos texto, controles alineados, catálogo en filas y notas plegables. pnpm check y 280/280 pruebas aprobados. Captura privada bench-compacto.png. Código publicado con [skip render]; laboratorio local regenerado, demo pública sin cambios.
+
+
+2026-11-04 · Escala 0–5 y reproductor ampliado activos en :8805/ESCUCHAR_OCHO.html?v=scale0. Explicación visible: 4.020 vs 4.770 pasos, A/B aleatorio por pareja. HTML SHA aa505f1596f5a63dbd49aedf4e5be7b91ebf55eb1840e55d27c721f0f05c4c37. pnpm check y 280/280 pruebas. Captura privada bench-escala0.png. Código publicado; audios privados sin cambios; [skip render].
