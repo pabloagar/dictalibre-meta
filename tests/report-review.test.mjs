@@ -72,20 +72,18 @@ test('API global: origen, exportación, lectura aislada y validación de respues
  invalid=true;await post({text,context:{templateName:'otra'}});await wait(()=>lab.db.reviews[1].status==='error');assert.equal(lab.db.reviews[1].baseText,text);
  }finally{lab.close();fs.rmSync(dir,{recursive:true,force:true});}
 });
-test('UI: copiar ofrece revisar o continuar; edición invalida avisos y respuestas tardías no rehabilitan copia',async()=>{
+test('UI: copia directa sin revisión, durante Meta y tras editar; no altera ni cierra avisos',async()=>{
  const window=new Window();const elements=[];const el=tag=>{const n=window.document.createElement(tag);elements.push(n);return n;};
  let snapshot={text:'Texto original.',context:{templateName:'TC'},pending:false},copies=0,calls=0,resolveReview;
  const box={window,CustomEvent:window.CustomEvent,document:{createElement:el},setInterval,clearInterval,performance:{now:()=>100},setTimeout,clearTimeout,encodeURIComponent,fetch:async()=>{calls++;return {ok:true,json:()=>new Promise(r=>{resolveReview=r;})};}};
  vm.createContext(box);vm.runInContext(("const tr=(s,...v)=>Array.isArray(s)?s.reduce((a,b,i)=>a+(i?v[i-1]:'')+b,''):s;const language=()=> 'es';const initializeLanguage=()=>{};const mountLanguageSwitch=()=>({});\n"+fs.readFileSync('apps/desktop/report-review.js','utf8').replace(/^import .*;\r?\n/gm,'')).replace('export function','function'),box);
  box.args={controls:el('div'),section:el('section'),copyButton:el('button'),snapshot:()=>snapshot,onCopy:()=>copies++,event(){}};
  box.args.controls.append(box.args.copyButton);const ui=vm.runInContext('mountReportReview(args)',box);
- assert.equal(ui.beforeCopy(),false);assert.equal(calls,0);
- elements.find(n=>n.textContent==='Copiar sin revisar').onclick();assert.equal(copies,1);
- const pending=elements.find(n=>n.textContent==='Revisar de nuevo').onclick();await wait(()=>typeof resolveReview==='function');
+ assert.equal(ui.beforeCopy(),true);assert.equal(calls,0);assert.equal(ui.box.hidden,true);
+ const pending=elements.find(n=>n.textContent==='Revisar de nuevo').onclick();await wait(()=>typeof resolveReview==='function');assert.equal(ui.beforeCopy(),true);
  snapshot={...snapshot,text:'Texto modificado.'};ui.changed();resolveReview({id:'r',status:'completed',suggestions:[]});await pending;
- assert.equal(ui.beforeCopy(),false);assert.equal(copies,1);
- assert.ok(elements.some(n=>String(n.textContent).includes('Puedes revisar')));
- snapshot={...snapshot,pending:true};ui.changed();elements.find(n=>n.textContent==='Copiar sin revisar').onclick();assert.equal(copies,1);
+ assert.equal(ui.beforeCopy(),true);assert.equal(copies,0);
+ snapshot={...snapshot,pending:true};ui.changed();assert.equal(ui.beforeCopy(),false);
 });
 test('contexto v2: descarta texto de plantilla y acepta ficha y sección acotadas',()=>{
  const c=reviewContext({templateName:'TC tórax',templateOrigin:'importada',templateText:'PLANTILLA PRIVADA',sectionTitle:'HALLAZGOS',sectionText:'Sin derrame.'});

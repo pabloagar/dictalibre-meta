@@ -738,3 +738,7 @@ Incidencias conservadas: acceso gated requirió aceptación personal y secreto d
 Licencias externas independientes: MOSS declara Apache-2.0; Stable usa Community y condiciones Gemma, además de revisión de cada salida. Aceptar el acceso no demuestra cumplimiento comercial completo ni exclusividad. Los WAV quedan privados y el permiso de sonidos procedurales no se extiende a ellos. API de producción de generación por botón y uso en la app EMDR todavía pendientes de selección/revisión; este entregable es el piloto de inferencia y escucha.
 
 Validación final: `pnpm check` aprobado; `pnpm test --test-concurrency=1 --test-timeout=60000`, 294/294, 12.734,9183 ms; Python `scripts/sfx-ai/test_sfx.py`, 6/6. Prueban estados parciales, cero/sin puntuar, notas, almacenamiento, rechazo de rutas externas, integridad de originales y recuperación. Chrome reprodujo un WAV de cada motor con duración 5 s y sin error multimedia. No representan evaluación humana completa de los diez sonidos.
+
+
+## 2026-11-04 — Copia sin barrera de revisión
+Hipótesis: eliminar el ofrecimiento intermedio permite copiar en un clic independientemente del estado de Meta. Criterio: beforeCopy=true sin revisión, durante petición y tras editar; copia de informe con contradicción pendiente conserva texto exacto y avisos. Pruebas Node/happy-dom report-review y clinical-ui: aprobadas en suite 294/294. No se midió portapapeles físico ni tiempo humano; cobertura automatizada, sin audio clínico. Evento copy existente conserva elapsedMs/ok/método.
