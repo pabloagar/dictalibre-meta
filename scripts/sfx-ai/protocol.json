@@ -1,0 +1,22 @@
+{
+  "schema": "sfx-pilot-v1",
+  "hypothesis": "Both text-to-sound models can produce five distinguishable, clean source sounds from matched descriptions, suitable for later subjective review and bilateral playback in an existing app.",
+  "duration_seconds": 5,
+  "seed": 20261104,
+  "repetitions": 1,
+  "paid_services_allowed": false,
+  "training": false,
+  "technical_acceptance": {"finite": true, "non_silent": true, "duration_tolerance_seconds": 0.1},
+  "human_review": {"sound_match": [0, 5], "cleanliness": [0, 5], "listening_comfort": [0, 5], "therapeutic_efficacy": null},
+  "cases": [
+    {"id": "wood", "name": "Madera suave", "prompt": "A single soft wooden block tap with a rounded attack and a short dry decay, followed by silence. Close clean recording. No speech, no music, no other sounds."},
+    {"id": "bell", "name": "Campana delicada", "prompt": "A single gentle small bell chime, soft warm metallic resonance fading naturally into silence. No harsh ringing. Close clean recording. No speech, no music, no other sounds."},
+    {"id": "rain", "name": "Lluvia tranquila", "prompt": "Steady gentle rain falling on leaves, a soft even continuous natural texture. No thunder, no birds, no voices, no music, no sudden loud sounds."},
+    {"id": "water", "name": "Agua de arroyo", "prompt": "A small calm stream with gently flowing water and delicate soft bubbling, continuous and even. No birds, no voices, no music, no sudden loud splashes."},
+    {"id": "wind", "name": "Viento suave", "prompt": "A soft low airy breeze gently rustling foliage, continuous and even with no sharp gusts or whistling. No voices, no birds, no music, no sudden loud sounds."}
+  ],
+  "engines": {
+    "moss": {"space": "OpenMOSS-Team/MOSS-SoundEffect-v2.0", "space_revision": "a7a175f4830781cec876175f53318386cfc9c450", "model": "OpenMOSS-Team/MOSS-SoundEffect-v2.0", "model_head_at_preparation": "e35df4d82fbe87fcd5d14e5d100e349c0c3c076d", "served_model_revision": null, "endpoint": "/run_inference", "settings": {"steps": 50, "cfg_scale": 4.0, "sigma_shift": 5.0}, "license_declared": "Apache-2.0"},
+    "stable": {"space": "stabilityai/stable-audio-3", "space_revision": "a6d4a3300fb7d96b2f28ac409d868cba65eb6093", "model": "stabilityai/stable-audio-3-small-sfx", "model_head_at_preparation": "05ca3857881c94a2b84026b1111c537d78f5f9f0", "served_model_revision": null, "endpoint": "/infer", "settings": {"variant_key": "small-sfx", "steps": 8, "cfg_scale": 1.0, "sampler_type": "pingpong"}, "license_declared": "Stability AI Community License + Gemma terms"}
+  }
+}

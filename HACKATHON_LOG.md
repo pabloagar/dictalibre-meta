@@ -1050,3 +1050,16 @@ Publicación confirmada: 1b222d4 en origin/codex/capture-transport. Código/docu
 Retirada pestaña y contenido de ayuda; Apariencia/Idioma/Dictado quedan en una fila. Separación título/opciones 12 px medida en Chrome local. Panel conserva 300 px de ancho. Se verificaron las tres pestañas; check y 294 pruebas aprobadas (incluye pruebas de trabajo paralelo).
 
 Publicación verificada: deployment 7540684312 success; /api/state confirma 63753ae2bc63a26567ffc678f1b385345f172e3e en Render.
+
+
+## 2026-11-04 · Piloto MOSS / Stable terminado: diez sonidos privados
+
+Petición: cinco sonidos distintos por motor, Colab L4 obligatoria y tope nuevo US$3. Generados diez WAV de 5 s en L4: madera, campana, lluvia, arroyo y viento; manifiestos, originales, semillas, revisiones, hashes y entornos preservados fuera de Git. Ningún entrenamiento. Intentos gratuitos y ejecución fallida inicial conservados. Stable terminó en 0,527–1,176 s y MOSS en 14,544–18,648 s por muestra con recetas distintas; calidad humana pendiente.
+
+Activo en el servidor privado existente de 8805: `/bilateral/ai-compare.html`, cinco pares MOSS/Stable, originales descargables, copias de escucha ajustadas, evaluación opcional 0–5, notas persistentes y exportación parcial. Diez disponibles de diez; manifest_id `446ba1f0f1ba4d1f86c98857ccd4e8b6fc55333881d4b0dcef93f46bf57bf4b7`. Recursos de interfaz copiados desde `apps/bilateral/ai-compare.*`; sin reiniciar servidor de dictado ni desplegar audios a Render. Chrome confirmó reproducción real de una muestra por motor. Capturas privadas de interfaz y cierre de Colab guardadas. API para generar desde la app todavía no implementada.
+
+Sesión GPU finalizada: panel de Colab confirma cero sesiones y cero unidades/h. Delta de cuenta 1,66 unidades; estimación US$0,17 (conservadora US$0,25), factura `null`, incluye solapamiento inicial y redondeo. Dentro del tope autorizado US$3 bajo los supuestos documentados. Descarga final de Stable recuperada por exportación normal del notebook y verificación SHA-256; no se perdió ningún original. Autoguardado conflictivo de Colab no se forzó sobre otras versiones.
+
+Incidente privado de credencial: una excepción de formato incluyó HF_TOKEN en una traza del notebook. Se limpiaron resultados visibles y exportaciones locales; comprobación de patrón de token sin hallazgos en esas copias. Historial privado remoto no declarado limpio, se recomienda revocar/sustituir. No se publica notebook ni secreto; runner final evita registrar mensajes/tracebacks originales de excepciones. Licencia comercial de salidas externas y requisitos de Stable se revisan aparte del MIT del sintetizador procedural.
+
+Verificación final: `pnpm check` y 294/294 pruebas Node (12.734,9183 ms), 6/6 Python. Metodología y límites en EXPERIMENTS.md; mediciones numéricas públicas en `experiments/results/2026-11-04-sfx-ai-l4/metrics.json`. Publicación de código, documentación y pruebas en `codex/capture-transport`, sin WAV, pesos, ZIP, notebook, secretos ni exportaciones privadas. La ejecución GPU se identifica por hashes originales y no se atribuye retroactivamente al commit publicado. Confirmación de push se registra después de publicarlo.

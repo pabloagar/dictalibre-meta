@@ -1,0 +1,298 @@
+{
+  "schema": "sfx-pilot-measurements-v1",
+  "date": "2026-11-04",
+  "execution_commit": null,
+  "protocol": "scripts/sfx-ai/protocol.json",
+  "repetitions": 1,
+  "unit": "seconds",
+  "inference_only": true,
+  "human_review": null,
+  "therapeutic_efficacy": null,
+  "instrumentation_overhead_seconds": null,
+  "network": null,
+  "browser": "Chrome",
+  "budget": {
+    "authorized_cap_usd": 3,
+    "balance_before_units": 143.44,
+    "balance_after_units": 141.78,
+    "observed_account_delta_units": 1.66,
+    "usd_per_unit_estimate": 0.0999,
+    "estimated_account_delta_usd": 0.165834,
+    "conservative_usd_per_unit": 0.15,
+    "conservative_account_delta_usd": 0.249,
+    "invoice_usd": null,
+    "shutdown_verified_at": "2026-11-04T05:10:20.245081-03:00",
+    "actual_shutdown_epoch": null,
+    "active_sessions_after": 0,
+    "units_per_hour_after": 0,
+    "watchdog_seconds": 3600,
+    "scope": "Account balance delta includes initial overlapping idle session and rounded UI balances; not itemized billing."
+  },
+  "engines": {
+    "moss": {
+      "environment": {
+        "gpu": "NVIDIA L4",
+        "vram_bytes": 23659151360,
+        "python": "3.12.3",
+        "torch": "2.9.0+cu128",
+        "cuda": "12.8",
+        "driver": "580.82.07",
+        "network": null,
+        "browser": "Chrome"
+      },
+      "runner_sha256": "076df8b1bd19aebe9f690ba757a5886b78e7673c0ddddd43437cf3564c707102",
+      "protocol_sha256": "28cf2421763309313e17227c61faf1d7a945d49c283517310393ae6b3b93f120",
+      "download_seconds": 41.457430638999995,
+      "weights_hash_seconds": 37.10255253199989,
+      "load_seconds": 34.1190114850001,
+      "model": "OpenMOSS-Team/MOSS-SoundEffect-v2.0",
+      "model_revision": "e35df4d82fbe87fcd5d14e5d100e349c0c3c076d",
+      "code_revision": "934d6826b084c46a0d033402174d5f8ac4ed2519",
+      "settings": {
+        "steps": 50,
+        "cfg_scale": 4.0,
+        "sigma_shift": 5.0
+      },
+      "rows": [
+        {
+          "case": "wood",
+          "seed": 20261104,
+          "generation_seconds": 18.647727768000095,
+          "real_time_factor": 3.729545553600019,
+          "peak_allocated_bytes": 15573451776,
+          "status": "ok",
+          "audio": {
+            "sample_rate": 48000,
+            "channels": 1,
+            "frames": 240000,
+            "duration_seconds": 5.0,
+            "finite": true,
+            "silent": false,
+            "sample_peak": 0.07392086833715439,
+            "samples_at_full_scale": 0,
+            "rms": 0.0006389390865442625,
+            "technical_ok": true,
+            "human_approved": null
+          }
+        },
+        {
+          "case": "bell",
+          "seed": 20261105,
+          "generation_seconds": 14.544172869000022,
+          "real_time_factor": 2.9088345738000045,
+          "peak_allocated_bytes": 15581821952,
+          "status": "ok",
+          "audio": {
+            "sample_rate": 48000,
+            "channels": 1,
+            "frames": 240000,
+            "duration_seconds": 5.0,
+            "finite": true,
+            "silent": false,
+            "sample_peak": 0.305168479681015,
+            "samples_at_full_scale": 0,
+            "rms": 0.04460509141152222,
+            "technical_ok": true,
+            "human_approved": null
+          }
+        },
+        {
+          "case": "rain",
+          "seed": 20261106,
+          "generation_seconds": 14.686463473999993,
+          "real_time_factor": 2.9372926947999987,
+          "peak_allocated_bytes": 15581636608,
+          "status": "ok",
+          "audio": {
+            "sample_rate": 48000,
+            "channels": 1,
+            "frames": 240000,
+            "duration_seconds": 5.0,
+            "finite": true,
+            "silent": false,
+            "sample_peak": 0.16390396654605865,
+            "samples_at_full_scale": 0,
+            "rms": 0.02222237916983037,
+            "technical_ok": true,
+            "human_approved": null
+          }
+        },
+        {
+          "case": "water",
+          "seed": 20261107,
+          "generation_seconds": 14.963349706999907,
+          "real_time_factor": 2.9926699413999813,
+          "peak_allocated_bytes": 15580818432,
+          "status": "ok",
+          "audio": {
+            "sample_rate": 48000,
+            "channels": 1,
+            "frames": 240000,
+            "duration_seconds": 5.0,
+            "finite": true,
+            "silent": false,
+            "sample_peak": 0.42540061473846436,
+            "samples_at_full_scale": 0,
+            "rms": 0.019874206484138904,
+            "technical_ok": true,
+            "human_approved": null
+          }
+        },
+        {
+          "case": "wind",
+          "seed": 20261108,
+          "generation_seconds": 15.088047444999802,
+          "real_time_factor": 3.0176094889999603,
+          "peak_allocated_bytes": 15579910144,
+          "status": "ok",
+          "audio": {
+            "sample_rate": 48000,
+            "channels": 1,
+            "frames": 240000,
+            "duration_seconds": 5.0,
+            "finite": true,
+            "silent": false,
+            "sample_peak": 0.5756944417953491,
+            "samples_at_full_scale": 0,
+            "rms": 0.1553780601243493,
+            "technical_ok": true,
+            "human_approved": null
+          }
+        }
+      ]
+    },
+    "stable": {
+      "environment": {
+        "gpu": "NVIDIA L4",
+        "vram_bytes": 23659151360,
+        "python": "3.12.3",
+        "torch": "2.7.1+cu126",
+        "cuda": "12.6",
+        "driver": "580.82.07",
+        "network": null,
+        "browser": "Chrome"
+      },
+      "runner_sha256": "ae0ffa4bc4878b16b08490f7c501f96ee56a11641e88ffab4eb4590433185f70",
+      "protocol_sha256": "28cf2421763309313e17227c61faf1d7a945d49c283517310393ae6b3b93f120",
+      "download_seconds": 11.660705829000108,
+      "weights_hash_seconds": 11.595750860999942,
+      "load_seconds": 15.71895190000032,
+      "model": "stabilityai/stable-audio-3-small-sfx",
+      "model_revision": "05ca3857881c94a2b84026b1111c537d78f5f9f0",
+      "code_revision": "790793b89ddceea612be9ce42ff6830d18f6fa57",
+      "settings": {
+        "variant_key": "small-sfx",
+        "steps": 8,
+        "cfg_scale": 1.0,
+        "sampler_type": "pingpong"
+      },
+      "rows": [
+        {
+          "case": "wood",
+          "seed": 20261104,
+          "generation_seconds": 1.176413956000033,
+          "real_time_factor": 0.2352827912000066,
+          "peak_allocated_bytes": 1795614720,
+          "status": "ok",
+          "audio": {
+            "sample_rate": 44100,
+            "channels": 2,
+            "frames": 220500,
+            "duration_seconds": 5.0,
+            "finite": true,
+            "silent": false,
+            "sample_peak": 0.3251953125,
+            "samples_at_full_scale": 0,
+            "rms": 0.009617862078959923,
+            "technical_ok": true,
+            "human_approved": null
+          }
+        },
+        {
+          "case": "bell",
+          "seed": 20261105,
+          "generation_seconds": 0.5391108530002384,
+          "real_time_factor": 0.10782217060004769,
+          "peak_allocated_bytes": 1803726848,
+          "status": "ok",
+          "audio": {
+            "sample_rate": 44100,
+            "channels": 2,
+            "frames": 220500,
+            "duration_seconds": 5.0,
+            "finite": true,
+            "silent": false,
+            "sample_peak": 0.2359619140625,
+            "samples_at_full_scale": 0,
+            "rms": 0.010435707948188612,
+            "technical_ok": true,
+            "human_approved": null
+          }
+        },
+        {
+          "case": "rain",
+          "seed": 20261106,
+          "generation_seconds": 0.5613776130003316,
+          "real_time_factor": 0.11227552260006632,
+          "peak_allocated_bytes": 1802062848,
+          "status": "ok",
+          "audio": {
+            "sample_rate": 44100,
+            "channels": 2,
+            "frames": 220500,
+            "duration_seconds": 5.0,
+            "finite": true,
+            "silent": false,
+            "sample_peak": 0.280517578125,
+            "samples_at_full_scale": 0,
+            "rms": 0.01341441532871335,
+            "technical_ok": true,
+            "human_approved": null
+          }
+        },
+        {
+          "case": "water",
+          "seed": 20261107,
+          "generation_seconds": 0.5373772489997464,
+          "real_time_factor": 0.10747544979994927,
+          "peak_allocated_bytes": 1803766784,
+          "status": "ok",
+          "audio": {
+            "sample_rate": 44100,
+            "channels": 2,
+            "frames": 220500,
+            "duration_seconds": 5.0,
+            "finite": true,
+            "silent": false,
+            "sample_peak": 0.60546875,
+            "samples_at_full_scale": 0,
+            "rms": 0.027803564655124496,
+            "technical_ok": true,
+            "human_approved": null
+          }
+        },
+        {
+          "case": "wind",
+          "seed": 20261108,
+          "generation_seconds": 0.5266176410000298,
+          "real_time_factor": 0.10532352820000597,
+          "peak_allocated_bytes": 1801906176,
+          "status": "ok",
+          "audio": {
+            "sample_rate": 44100,
+            "channels": 2,
+            "frames": 220500,
+            "duration_seconds": 5.0,
+            "finite": true,
+            "silent": false,
+            "sample_peak": 0.09765625,
+            "samples_at_full_scale": 0,
+            "rms": 0.013697480201696711,
+            "technical_ok": true,
+            "human_approved": null
+          }
+        }
+      ]
+    }
+  }
+}

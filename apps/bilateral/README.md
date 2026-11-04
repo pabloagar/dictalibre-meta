@@ -93,6 +93,16 @@ determinista, parada/cancelación sin inicio tardío. Pruebas reproducibles en
 `tests/bilateral.test.mjs` desde la raíz (`node --test tests/bilateral.test.mjs`).
 No se afirma eficacia clínica por superar estas pruebas.
 
+## Comparación opcional de sonidos IA
+
+El visor opcional ai-compare.html compara un lote privado generado por MOSS y
+Stable Audio. Necesita ai-comparison.json y ai-audio/ preparados por
+scripts/sfx-ai/build_review.py; no incluye sonidos de muestra ni llama a APIs.
+Si faltan archivos lo indica. Su código de interfaz pertenece a este módulo MIT,
+pero los audios externos tienen condiciones independientes: OUTPUT-LICENSE.txt
+se aplica solo a la síntesis procedural de synth.js. Los sonidos IA no se
+publican automáticamente ni se presentan como autorizados por la licencia MIT.
+
 ## Alcance clínico
 
 Herramienta de sonido, no tratamiento autónomo ni protocolo validado de EMDR.
