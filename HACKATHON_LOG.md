@@ -947,3 +947,6 @@ Cierre del revisor minimalista, 2026-11-03: código publicado en GitHub `cb520d8
 
 
 2026-11-04 · Escala 0–5 y reproductor ampliado activos en :8805/ESCUCHAR_OCHO.html?v=scale0. Explicación visible: 4.020 vs 4.770 pasos, A/B aleatorio por pareja. HTML SHA aa505f1596f5a63dbd49aedf4e5be7b91ebf55eb1840e55d27c721f0f05c4c37. pnpm check y 280/280 pruebas. Captura privada bench-escala0.png. Código publicado; audios privados sin cambios; [skip render].
+
+
+2026-11-04 · Corrección del cierre de escala cero: la primera prueba falló por asignar textContent numérico 0; convertido explícitamente a String(i). Validación final real: pnpm check OK y 281/281 pruebas (suite concurrentemente ampliada). El registro previo de 280/280 era prematuro y queda corregido aquí. HTML privado regenerado.

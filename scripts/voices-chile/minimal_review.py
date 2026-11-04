@@ -17,7 +17,7 @@ function minimalEnhance(){
  const cards=[...document.querySelectorAll('#cards .card')];minimalIndex=Math.min(minimalIndex,Math.max(0,cards.length-1));cards.forEach((c,i)=>c.hidden=i!==minimalIndex);
  for(const select of document.querySelectorAll('.scores select')){
   select.hidden=true;const choices=document.createElement('div');choices.className='choices';
-  for(let i=0;i<=5;i++){const b=document.createElement('button');b.textContent=i;b.type='button';b.setAttribute('aria-pressed',String(select.value===String(i)));b.onclick=()=>{select.value=select.value===String(i)?'':String(i);select.dispatchEvent(new Event('change'));for(const x of choices.children)x.setAttribute('aria-pressed',String(x===b&&select.value===String(i)))};choices.append(b)}select.parentElement.append(choices)
+  for(let i=0;i<=5;i++){const b=document.createElement('button');b.textContent=String(i);b.type='button';b.setAttribute('aria-pressed',String(select.value===String(i)));b.onclick=()=>{select.value=select.value===String(i)?'':String(i);select.dispatchEvent(new Event('change'));for(const x of choices.children)x.setAttribute('aria-pressed',String(x===b&&select.value===String(i)))};choices.append(b)}select.parentElement.append(choices)
  }
  document.querySelectorAll('audio').forEach(a=>a.onplay=()=>document.querySelectorAll('audio').forEach(b=>{if(a!==b)b.pause()}));
  let nav=document.getElementById('minimal-nav');if(!nav){nav=document.createElement('div');nav.id='minimal-nav';document.getElementById('cards').after(nav)}nav.replaceChildren();
@@ -30,3 +30,4 @@ minimalEnhance();
 </script>'''
     shell = Path(__file__).with_name('bench_shell.html').read_text(encoding='utf-8-sig')
     return html.replace('</style>', css + '</style>', 1).replace('</body>', script + shell + '</body>', 1)
+
