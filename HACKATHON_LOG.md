@@ -1081,3 +1081,5 @@ Demo pública comprobada por HTTPS antes del push: /live 200; /style.css 200; /a
 
 ## 2026-11-04 — Copia independiente de Meta
 El clic de Copiar ya no requiere revisión vigente ni una confirmación adicional: beforeCopy permite el paso con Meta en curso, sin revisión, con avisos y tras editar. Conserva protección durante toma de audio pendiente. No acepta ni descarta avisos. Check y 294 pruebas aprobadas; prueba de copia con contradicción pendiente e integración de texto limpio existentes aprobadas, regresión de revisión obsoleta/en curso actualizada. Render active=0 antes de publicar.
+
+Publicación comprobada: deployment7547447475 success, /api/state build40b62e67131da8b05628a9ecbfaa0ce4c2e39c39; report-review.js HTTP200 contiene copia directa.
