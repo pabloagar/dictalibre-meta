@@ -652,3 +652,6 @@ Hipótesis: menos texto y menor separación reducen desplazamiento. Compactados 
 
 ## 2026-11-04 · Selector de tres temas aprobado
 Hipótesis de uso: selector compacto permite observar el informe al cambiar apariencia. Criterios: tres opciones, texto intacto, panel separado de hoja. Chrome local: panel x1280 ancho300; hoja termina x1240 en viewport1600; texto sintético conservado. Transición CSS configurada 200 ms, evento theme registra duración configurada; latencia percibida y sobrecosto null. settingsVersion appearance-drawer-v3. Migración de temas y traducción probadas; pnpm check y 281/281 aprobados. Usuario aprueba publicación; sin datos clínicos.
+
+
+2026-11-04 · Notas subjetivas: entrada libre guardada al escribir, atajos fonéticos y marca mm:ss del tiempo actual. Acumulación por voz/frase/lado en Resultados, regreso a la frase y exportación mediante notes existente. Prueba sintética comprueba persistencia inmediata y listado sin revelar checkpoint; pnpm check y 281/281 aprobadas. Inspección visual del formulario integrado. Tiempo de anotación y sobrecosto null; pendiente ensayo humano. Las notas son impresiones, no validación automática.

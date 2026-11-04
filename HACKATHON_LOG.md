@@ -955,3 +955,6 @@ Cierre del revisor minimalista, 2026-11-03: código publicado en GitHub `cb520d8
 Responsable terminó dictado y aprobó la vista local. Selector compacto Día/Penumbra/Negatoscopio, informe visible y transición 200 ms (sin movimiento si se solicita reducido). Estados PC traducidos RECEIVING/VERIFYING, ancho de etiqueta protegido. pnpm check y 281/281 pruebas aprobados antes de publicar. Verificación de Render pendiente.
 
 2026-11-04 · Render verificado: build 5ce50a4797b42a8897f95a3437804ed001599c14, deployment 7536995018 success 03:22:45 UTC. API confirma versión y active=0. /live.js, /desktop.js, /style.css y /shared/locale-en.js coinciden con archivos publicados normalizando CRLF. Primer sondeo tras success aún devolvió build anterior; nueva sesión confirmó propagación. Selector y chip activos en demo; laboratorio privado no reiniciado. Pendiente comprobación humana del chip durante dictado físico.
+
+
+2026-11-04 · Observaciones subjetivas activas en :8805/ESCUCHAR_OCHO.html?v=notes1. Atajos Erre rara, Inflexión rara, Acento poco chileno, Pausa extraña y Marcar momento; resumen en Resultados y exportación JSON. HTML privado SHA f0601c23b7cb56604ef12a47952c157f15a7870c89c2c1f0693918fbe549e74a. pnpm check y 281/281 pruebas. Código publicado con [skip render]; audios privados sin cambios. Captura local bench-notas.png.
