@@ -302,6 +302,7 @@ export const EN = {
   "Revisión opcional del texto completo y ficha de plantilla. Envía texto a Meta.": "Optional review of the full text and template metadata. Sends text to Meta.",
   "La revisión con IA no está habilitada en esta demo pública.": "AI review is not enabled in this public demo.",
   "Cambiar idioma recarga la página. El borrador se conserva sin traducir.": "Changing language reloads the page. Your draft is kept without translation.",
+  "La sesión de acceso venció. Abre la demo de nuevo para ingresar.": "Access expired. Open the demo again to sign in.",
   "No se pudo preparar el dictado. Comprueba la conexión y recarga.": "Could not prepare dictation. Check your connection and reload.",
   "Emparejamiento {} · crear → conectado: {} · solicitud → autorización: {} · conexión desde celular: {}": "Pairing {} · create → connected: {} · request → authorization: {} · phone connection: {}",
   "QR directo": "direct QR",

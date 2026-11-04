@@ -291,7 +291,7 @@ test('demo abierta: entrada directa, sesión reutilizada, aislamiento y límite 
     assert.equal(a.status,200);assert.match(await a.text(),/id="create"/);
     const cookieA=a.headers.get('set-cookie').split(';')[0];
     assert.match(a.headers.get('set-cookie'),/HttpOnly; SameSite=Lax/);
-    assert.equal((await d.get('/live',cookieA)).headers.get('set-cookie'),null);
+    assert.equal((await d.get('/live',cookieA)).headers.get('set-cookie').split(';')[0],cookieA);
     const b=await d.get('/live'),cookieB=b.headers.get('set-cookie').split(';')[0];
     assert.notEqual(cookieA,cookieB);
     const take=await d.dictate(cookieA);await take.closed;
@@ -302,4 +302,21 @@ test('demo abierta: entrada directa, sesión reutilizada, aislamiento y límite 
     assert.equal((await fetch(d.origin+'/api/cancel',{method:'POST',headers:{Origin:'https://evil.invalid',Cookie:cookieA},body:'{}'})).status,403);
     assert.equal((await d.get('/api/export',cookieA)).status,404);
   }finally{await d.stop();}
+});
+
+
+test('demo: renovar entrada recupera visitante vencido sin navegación ni saltar acceso privado',async()=>{
+  let clock=1000;const d=await start({openAccess:true,visitorTtlMs:1000,now:()=>clock});
+  try {
+    const first=await d.get('/live');const cookie=first.headers.get('set-cookie').split(';')[0];
+    const valid=await d.get('/live',cookie);assert.equal(valid.headers.get('set-cookie').split(';')[0],cookie);
+    clock+=1001;
+    assert.equal((await d.get('/api/live-info',cookie)).status,401);
+    const renewed=await d.get('/live',cookie);const next=renewed.headers.get('set-cookie').split(';')[0];
+    assert.notEqual(next,cookie);assert.equal((await d.get('/api/live-info',next)).status,200);
+  } finally {await d.stop();}
+  const privateDemo=await start();try {
+    const entry=await privateDemo.get('/live');assert.equal(entry.headers.get('set-cookie'),null);
+    assert.equal((await privateDemo.get('/api/live-info')).status,401);
+  } finally {await privateDemo.stop();}
 });

@@ -1028,7 +1028,7 @@ body.clinical-workspace .template-picker [hidden]{display:none!important}
 .clinical-workspace .language-panel .language-buttons button[aria-pressed=true]{background:var(--dl-act);color:var(--dl-act-ink);text-decoration:none}
 
 /* Stable settings frame: tabs change content, never the dialog geometry. */
-body.clinical-workspace:has(.clinical-settings[open]){overflow:hidden}
+body.clinical-workspace:has(.clinical-settings[open]:not(.appearance-drawer)){overflow:hidden}
 .clinical-workspace .clinical-settings[open]>.settings-body{box-sizing:border-box;width:960px;height:min(680px,calc(100dvh - 48px));min-height:0;max-height:calc(100dvh - 48px);top:50%;left:50%;transform:translate(-50%,-50%);overflow:hidden}
 .clinical-workspace .settings-main{min-height:0;overflow-y:auto;scrollbar-gutter:stable;flex:1}
 .clinical-workspace .settings-nav{overflow-y:auto;min-height:0;flex-shrink:0}
@@ -1146,3 +1146,13 @@ body.clinical-workspace.templates-drawer-open .clinical-desk>.template-picker{ri
  body.clinical-workspace .clinical-settings.appearance-drawer[open]>.settings-body,
  body.clinical-workspace.templates-drawer-open .clinical-desk>.template-picker{right:12px}
 }
+
+/* Non-modal side settings must not trap scrolling of the report. */
+body.clinical-workspace .appearance-drawer .settings-main,
+body.clinical-workspace .appearance-drawer .settings-main>section{overscroll-behavior-y:auto}
+/* Compact help cards: fit the standard drawer, scroll only on short screens. */
+.clinical-workspace .appearance-drawer .howto-panel{scrollbar-gutter:auto}
+.clinical-workspace .appearance-drawer .howto-panel .help-steps{gap:6px;margin:0}
+.clinical-workspace .appearance-drawer .howto-panel .help-step{padding:8px 10px}
+.clinical-workspace .appearance-drawer .howto-panel .help-step h4{font-size:13px;line-height:1.3;margin:0 0 3px}
+.clinical-workspace .appearance-drawer .howto-panel .help-step p{font-size:12px;line-height:1.4;margin:0}

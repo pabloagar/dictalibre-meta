@@ -165,8 +165,16 @@ function onMessage(m) {
     case 'closed': interrupted(m.reason); break;
   }
 }
-$('create').onclick = () => {
-  if (client) return;
+$('create').onclick = async () => {
+  if (client || $('create').disabled) return;
+  $('create').disabled = true;
+  try {
+    // Refresh the visitor cookie through the existing entry route, without navigation.
+    const entry = await fetch('/live', {cache:'no-store', credentials:'same-origin'});
+    if (!entry.ok) throw Error(tr('No se pudo preparar el dictado. Comprueba la conexión y recarga.'));
+    const access = await fetch('/api/live-info', {cache:'no-store', credentials:'same-origin'});
+    if (!access.ok) throw Error(tr('La sesión de acceso venció. Abre la demo de nuevo para ingresar.'));
+  } catch (error) { $('create').disabled = false; status(error.message, 'error'); return; }
   window.dispatchEvent(new Event('dicta-new-session'));
   for (const clip of clipURLs.splice(0)) { clip.article.remove(); URL.revokeObjectURL(clip.url); }
   clipCount = 0; traces.clear(); latestTrace = null; $('metrics-export').disabled = true; pairingMetrics = null; $('pairing-export').disabled = true; $('pairing-times').textContent = tr('Emparejamiento pendiente.');

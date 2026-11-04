@@ -982,3 +982,7 @@ Responsable aprobó la proporción y confirmó fin de dictado. Hoja/barra al 72%
 
 
 2026-11-04 · Hoja centrada activa y verificada en Render: build 530de406435b8e8adf7230672802b3a4f99d082c, deployment 7537624972 success 04:07:08 UTC. API confirma build y cero tomas activas; /style.css HTTP 200 coincide exactamente con la variante aprobada normalizando CRLF. GitHub actualizado. pnpm check y 282/282 pruebas aprobadas; cambio de aplicación CSS, sin modificar dictado/revisión. Registro posterior [skip render] evita otro reinicio.
+
+
+## 2026-11-04 — Publicación QR, scroll y ayuda compacta
+Usuario confirmó fin de dictado; API active=0. Renovación de acceso con fetch /live antes de crear QR, sin navegación ni escritura en informe; cookie válida conserva identidad y renueva vigencia. Prueba con reloj inyectado verifica vencimiento/recuperación y protección privada. Scroll de Ajustes no bloquea body; Cómo usar compactado sin ocultar contenido. Chrome local: scrollY198.667 con panel abierto; ayuda clientHeight=scrollHeight405 en viewport1280x678. pnpm check y 283/283 pruebas aprobadas. Solo cambios de aplicación aprobados; despliegue pendiente de verificar.

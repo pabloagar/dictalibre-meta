@@ -88,6 +88,7 @@ export function createDemo({accessCode,openAccess=false,metaKey='',reviewProvide
       if(!visitor)return json({error:'La demo está ocupada. Intenta más tarde.'},503);
       res.setHeader('Set-Cookie',sessionCookie(visitor));
     }
+    if(p==='/live'&&req.method==='GET'&&visitor)res.setHeader('Set-Cookie',sessionCookie(visitor));
     if(STATIC[p]&&req.method==='GET')return sendFile(STATIC[p],p==='/live'?MIME.html:MIME.js);
     if(!p.startsWith('/api/'))return false;
     if(!visitor)return json({error:'Abre /live para iniciar tu sesión.'},401);
