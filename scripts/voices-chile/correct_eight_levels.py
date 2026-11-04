@@ -18,7 +18,7 @@ def peak4(x):
 def correct(folder):
     folder = Path(folder)
     rows = pilot.leer(folder / 'manifest.json')
-    assert len(rows) == 88
+    assert len(rows) in (88, 120)
     signals = []
     for row in rows:
         if not row.get('archivo') or not row.get('sha256'):
