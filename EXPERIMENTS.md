@@ -666,3 +666,15 @@ Hipótesis: ancho completo con barra independiente evita desplazar controles sin
 ## 2026-11-04 · Controles originales y comparación A/B/C
 
 Se completaron en L4 los 32 controles pendientes, sin ajustar pesos: 120 muestras (8 voces × 5 frases × 3 estados: 0/4020/4770). Hipótesis, condiciones, intervalos, criterio exploratorio y límites en docs/VOICE_ABC_COMPARISON.md. Generación 253,44 s para 289,20 s de audio, RTF 0,8763; descarga y carga 11,65/15,50 s. 24 originales bajo el pico y 8 excedidos; todos conservados. Ganancia común 0,7275195281 para las 120 copias; pico 4x máximo 0,79432822. No valida acento ni repara distorsión previa. Coste estimado de sesión unos USD 0,05, límite USD 5, L4 desconectada; precisión de factura y sobrecosto de instrumentación no medidos (null). Respaldo, entorno y dependencias efectivas privados; sin atribuir ejecución a commit posterior. Evaluación A/B/C independiente del borrador A/B, solo acento y naturalidad 0–5 y notas. Pruebas automatizadas y HTTP satisfactorias; revisión auditiva humana pendiente.
+
+
+### 2026-11-04 — Segunda variante compacta según capturas del responsable (solo local)
+- Sustituye la variante local de 1120 px: ancho 72% del área de escritorio, máximo 980 px, mínimo 760 px; móvil conserva ancho disponible. Hipótesis: recuperar los márgenes laterales de la referencia (aproximadamente 70% del área PC) sin mover los controles al alternar paneles.
+- Base 4c19b21 más CSS sin commit. Chrome, viewport 1280 CSS px, área útil 1264.667; una repetición QR → Ajustes → Plantillas → cerrar. Audio/red/hardware: null.
+- Medida DOM directa: ancho 910.552 px, margen izquierdo 177.052 px (centrado). Ambos paneles 300 × 530 px en x=787.615, y=124. Plantillas/Nuevo informe/Ajustes permanecen x=823.781/894.708/1012.521 e y=75/73/75: desplazamiento 0 px. Sin overflow horizontal observado. Aceptación geométrica satisfecha; valoración visual pendiente del responsable.
+- Mismo método de lectura puntual subpíxel de la variante anterior, sin instrumentación permanente. No se ejecutó dictado ni se desplegó.
+
+
+## 2026-11-04 · Controles originales y comparación A/B/C
+
+Se completaron en L4 los 32 controles pendientes, sin ajustar pesos: 120 muestras (8 voces × 5 frases × 3 estados: 0/4020/4770). Hipótesis, condiciones, intervalos, criterio exploratorio y límites en docs/VOICE_ABC_COMPARISON.md. Generación 253,44 s para 289,20 s de audio, RTF 0,8763; descarga y carga 11,65/15,50 s. 24 originales bajo el pico y 8 excedidos; todos conservados. Ganancia común 0,7275195281 para las 120 copias; pico 4x máximo 0,79432822. No valida acento ni repara distorsión previa. Coste estimado de sesión unos USD 0,05, límite USD 5, L4 desconectada; precisión de factura y sobrecosto de instrumentación no medidos (null). Respaldo, entorno y dependencias efectivas privados; sin atribuir ejecución a commit posterior. Evaluación A/B/C independiente del borrador A/B, solo acento y naturalidad 0–5 y notas. Pruebas automatizadas y HTTP satisfactorias; revisión auditiva humana pendiente.

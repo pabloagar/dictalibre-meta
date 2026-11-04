@@ -1128,3 +1128,21 @@ body.clinical-workspace.templates-drawer-open .clinical-desk>.template-picker{po
  body.clinical-workspace .clinical-settings.appearance-drawer[open]>.settings-body,
  body.clinical-workspace.templates-drawer-open .clinical-desk>.template-picker{inset:auto 12px 12px;width:calc(100% - 24px);height:45dvh;max-height:45dvh}
 }
+/* Local reference proportions: centered document occupies about 72% of desktop. */
+body.clinical-workspace .clinical-desk,
+body.clinical-workspace:is(.templates-drawer-open,.appearance-preview) .clinical-desk,
+body.clinical-workspace .clinical-desk:has(.clinical-notes>:not([hidden])){width:72%;min-width:760px;max-width:980px}
+body.clinical-workspace .clinical-sheet:not(.scan-first){min-height:400px;padding:28px 40px 20px}
+body.clinical-workspace .report-editor{min-height:220px;flex:0 0 auto}
+body.clinical-workspace .report-editor[data-empty=true]{min-height:72px}
+body.clinical-workspace .clinical-settings.appearance-drawer[open]>.settings-body,
+body.clinical-workspace.templates-drawer-open .clinical-desk>.template-picker{right:calc((100% - min(980px,max(760px,72%)))/2)}
+@media(max-width:800px){
+ body.clinical-workspace .clinical-desk,
+ body.clinical-workspace:is(.templates-drawer-open,.appearance-preview) .clinical-desk,
+ body.clinical-workspace .clinical-desk:has(.clinical-notes>:not([hidden])){width:calc(100% - 24px);min-width:0}
+ body.clinical-workspace .clinical-sheet:not(.scan-first){padding:24px;min-height:340px}
+ body.clinical-workspace:is(.templates-drawer-open,.appearance-preview) .clinical-sheet{padding-bottom:calc(45dvh + 24px)}
+ body.clinical-workspace .clinical-settings.appearance-drawer[open]>.settings-body,
+ body.clinical-workspace.templates-drawer-open .clinical-desk>.template-picker{right:12px}
+}
