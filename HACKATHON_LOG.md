@@ -1025,3 +1025,7 @@ Activo privado verificado en http://127.0.0.1:8805/qwen/QWEN_VS_CHATTERBOX.html?
 Permisos verificados en OpenSLR71 y CC BY-SA4.0: comercial permitido con condiciones; alcance sobre síntesis/pesos y posibles derechos adicionales pendientes. Ninguno de los 60 tiene aún uso comercial confirmado en el registro; no es prohibición comercial demostrada. Solo se publica código, documentación y pruebas; audios, referencias, pesos y evaluaciones permanecen privados. Commit de publicación se registrará después del push.
 
 Publicación confirmada: c7422a4 en origin/codex/capture-transport. Comparador privado activo con HTML 131b8bc479c4f7a3d04a8ce4b34b2ee0677354a7972432703e211ded2afeee7c; el servidor estático ya sirve el archivo regenerado. GitHub recibe solo código/documentación/pruebas. Audios, pesos, captura y evaluaciones permanecen locales.
+
+
+## 2026-11-04 — Revisión Meta compacta
+Corrección CSS: panel lateral de 300 px fuera de la fila flex de la barra; solo la hoja cede espacio. Encabezado, carga, botones y evidencias adaptados, scroll interno y apilado en pantalla estrecha. Comprobación local Chrome: barra x=177.0521 px, ancho=910.5521 px antes/después de abrir (delta 0 px). Demo local sin proveedor: estado no disponible comprobado visualmente; estados funcionales cubiertos por suite existente. pnpm check y 287/287 pruebas aprobadas. Usuario autoriza publicar fuera de dictado.

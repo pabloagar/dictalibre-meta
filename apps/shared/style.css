@@ -1159,3 +1159,25 @@ body.clinical-workspace .appearance-drawer .settings-main>section{overscroll-beh
 
 #microphone-permission-hint {margin:16px 24px;padding:12px 16px;border:1px solid currentColor;border-radius:10px;font:14px/1.5 system-ui;color:inherit;background:transparent;}
 #microphone-permission-hint[hidden] {display:none;}
+/* Review uses the same compact rail as Templates and Settings, never the toolbar flex row. */
+body.clinical-workspace .clinical-desk{position:relative}
+body.clinical-workspace .clinical-notes:has(>:not([hidden])){position:absolute;top:60px;right:0;width:300px;max-width:100%;flex:none;margin:0;padding:0;box-sizing:border-box;max-height:calc(100dvh - 160px);overflow:auto;overscroll-behavior:contain;border-radius:14px}
+body.clinical-workspace .clinical-desk:has(.clinical-notes>:not([hidden])) .clinical-sheet{width:calc(100% - 324px);flex-basis:auto}
+body.clinical-workspace .report-global-review{max-height:none;overflow:visible;padding:14px;font-size:12px;overflow-wrap:anywhere}
+body.clinical-workspace .report-global-review .review-head{padding:0 0 12px;display:flex;flex-wrap:wrap;gap:6px}
+body.clinical-workspace .report-global-review .review-head>strong{flex:1 0 100%;font-size:16px}
+body.clinical-workspace .report-global-review .review-head .review-close{margin-left:auto}
+body.clinical-workspace .report-global-review>p[role=status]{padding:0 0 12px;font-size:12px}
+body.clinical-workspace .report-global-review[data-busy=true]>p[role=status]{position:relative;margin:8px 0;padding:12px;min-height:0}
+body.clinical-workspace .report-global-review[data-busy=true]>p[role=status]::before{position:static}
+body.clinical-workspace .report-global-review .review-elapsed{position:static;display:block;text-align:right;font-size:11px}
+body.clinical-workspace .report-global-review :is(.review-warnings,.review-skeleton){padding:0}
+body.clinical-workspace .report-global-review :is(p,blockquote){font-size:12px;line-height:1.5}
+body.clinical-workspace .report-global-review .note-head .note-term{font-size:13px;min-width:0}
+body.clinical-workspace .report-global-review button{font-size:12px;min-height:30px;padding:5px 8px;max-width:100%}
+body.clinical-workspace .report-global-review article{padding:10px}
+@media(max-width:800px){
+ body.clinical-workspace .clinical-notes:has(>:not([hidden])){position:static;width:100%;max-height:55dvh;margin-top:12px}
+ body.clinical-workspace .clinical-desk:has(.clinical-notes>:not([hidden])){flex-direction:column}
+ body.clinical-workspace .clinical-desk:has(.clinical-notes>:not([hidden])) .clinical-sheet{width:100%}
+}
