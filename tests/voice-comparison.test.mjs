@@ -21,7 +21,7 @@ test('eight-voice builder retains blind ratings and shows one pair at a time',()
  fs.writeFileSync(path.join(dir,'manifest.json'),JSON.stringify(rows));fs.writeFileSync(path.join(dir,'protocol.json'),JSON.stringify({references,phrases}));
  execFileSync('python',['scripts/voices-chile/build_eight_player.py','--comparison',dir,'--protocol',path.join(dir,'protocol.json')]);
  const html=fs.readFileSync(path.join(dir,'ESCUCHAR_OCHO.html'),'utf8'),w=new Window({url:'http://localhost'});w.document.write(html);w.eval([...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m=>m[1]).join('\n'));const d=w.document;
- assert.equal([...d.querySelectorAll('.card')].filter(c=>!c.hidden).length,1);assert.equal(d.querySelector('.card').querySelectorAll('.choices').length,8);assert.equal(d.querySelector('#reveal').disabled,true);
+ assert.equal([...d.querySelectorAll('.card')].filter(c=>!c.hidden).length,1);assert.equal(d.querySelector('.card').querySelectorAll('.choices').length,4);assert.equal(d.querySelector('#reveal').disabled,true);assert.equal(d.querySelector('.card').textContent.includes('Inteligibilidad'),false);assert.equal(d.querySelector('.card').textContent.includes('Fidelidad al texto'),false);
  d.querySelector('#minimal-nav .primary').click();assert.match(d.querySelector('#message').textContent,/Completa/);
  for(const box of d.querySelector('.card').querySelectorAll('.sample')){box.querySelector('.heard').click();for(const choices of box.querySelectorAll('.choices'))choices.querySelector('button').click()}
  d.querySelector('#minimal-nav .primary').click();assert.equal([...d.querySelectorAll('.card')].findIndex(c=>!c.hidden),1);

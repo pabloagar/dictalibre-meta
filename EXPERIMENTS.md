@@ -655,3 +655,6 @@ Hipótesis de uso: selector compacto permite observar el informe al cambiar apar
 
 
 2026-11-04 · Notas subjetivas: entrada libre guardada al escribir, atajos fonéticos y marca mm:ss del tiempo actual. Acumulación por voz/frase/lado en Resultados, regreso a la frase y exportación mediante notes existente. Prueba sintética comprueba persistencia inmediata y listado sin revelar checkpoint; pnpm check y 281/281 aprobadas. Inspección visual del formulario integrado. Tiempo de anotación y sobrecosto null; pendiente ensayo humano. Las notas son impresiones, no validación automática.
+
+
+2026-11-04 · Por solicitud del responsable, evaluación v2 solo acento/naturalidad 0–5; inteligibilidad y fidelidad dejan de bloquear avance y de integrar medias. No se asume que estén garantizadas: errores se anotan cualitativamente. Exportación declara active_metrics y evaluation_version; notas y campos históricos se conservan. Prueba valida ausencia de criterios retirados y avance con dos criterios por muestra. pnpm check y 281/281 OK. Mejora subjetiva del diseño, tiempo y sobrecosto null; pendiente ensayo humano.

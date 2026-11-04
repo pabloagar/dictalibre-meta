@@ -958,3 +958,6 @@ Responsable terminó dictado y aprobó la vista local. Selector compacto Día/Pe
 
 
 2026-11-04 · Observaciones subjetivas activas en :8805/ESCUCHAR_OCHO.html?v=notes1. Atajos Erre rara, Inflexión rara, Acento poco chileno, Pausa extraña y Marcar momento; resumen en Resultados y exportación JSON. HTML privado SHA f0601c23b7cb56604ef12a47952c157f15a7870c89c2c1f0693918fbe549e74a. pnpm check y 281/281 pruebas. Código publicado con [skip render]; audios privados sin cambios. Captura local bench-notas.png.
+
+
+2026-11-04 · Revisor de dos criterios activo en :8805/ESCUCHAR_OCHO.html?v=two, HTML SHA c7558e3a0351cf169c255076559e77cc6238348e5a1870af68f602f48c2300ac. Estilo suave inspirado en captura aportada, escala 0–5, observaciones conservadas. Pruebas 281/281 y pnpm check OK. Código publicado con [skip render]; audios privados y demo pública sin cambios.
