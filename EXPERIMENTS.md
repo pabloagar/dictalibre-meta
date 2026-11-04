@@ -642,3 +642,7 @@ Hipótesis, selección, 5 frases comunes, semilla, pérdida y criterio humano pr
 
 ## 2026-11-03 · Dicta Bench, adaptación visual
 Adaptado el ZIP del responsable al generador de ocho voces: tema oscuro, texto editorial, catálogo de ocho perfiles pendientes, evaluación pareada, resultados por voz y método. Conserva puntuaciones independientes y cegamiento; medias por checkpoint solo tras completar y revelar. No se copiaron ondas ni puntajes ficticios del diseño. Sin dependencias CDN. Prueba reproducible ampliada en tests/voice-comparison.test.mjs: navegación, progreso real, ocultación de resultados y cambio de voz. Hipótesis de menor tiempo de revisión aún sin ensayo humano; tiempo, dispositivo de escucha, mejora y sobrecosto null. UI inspeccionada en navegador integrado Windows; audio/modelos no cambiaron.
+
+
+## 2026-11-04 · Revisor compacto
+Hipótesis: menos texto y menor separación reducen desplazamiento. Compactados cabecera, catálogo en filas, puntajes en línea y notas plegables; explicación en Método y exportación en Resultados. Verificación funcional: pnpm check y 280/280 pruebas; inspección del navegador integrado muestra frase, par A/B, cuatro criterios y siguiente en una vista de escritorio. Tiempo de evaluación, reducción porcentual de scroll y sobrecosto null: pendiente ensayo con usuario y viewport fijo antes/después. Audios y puntuaciones conservados.
