@@ -986,3 +986,6 @@ Responsable aprobó la proporción y confirmó fin de dictado. Hoja/barra al 72%
 
 ## 2026-11-04 — Publicación QR, scroll y ayuda compacta
 Usuario confirmó fin de dictado; API active=0. Renovación de acceso con fetch /live antes de crear QR, sin navegación ni escritura en informe; cookie válida conserva identidad y renueva vigencia. Prueba con reloj inyectado verifica vencimiento/recuperación y protección privada. Scroll de Ajustes no bloquea body; Cómo usar compactado sin ocultar contenido. Chrome local: scrollY198.667 con panel abierto; ayuda clientHeight=scrollHeight405 en viewport1280x678. pnpm check y 283/283 pruebas aprobadas. Solo cambios de aplicación aprobados; despliegue pendiente de verificar.
+
+
+2026-11-04 · Render verificado en a259bc25f3d781a0963390034a707cc7ec5d94ec, deployment7538615828. API build coincide; desktop.js, style.css y locale-en.js HTTP200 e idénticos al checkout normalizando CRLF. Código guardado en GitHub; QR/scroll/ayuda activos. Registro [skip render] evita reinicio adicional. Prueba física de renovación QR por responsable pendiente.
