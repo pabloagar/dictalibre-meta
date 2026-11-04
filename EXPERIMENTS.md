@@ -691,3 +691,10 @@ Cuarenta audios Qwen nuevos y cinco controles Chatterbox M5 nuevos; quince contr
 
 
 2026-11-04 · Selección inicial y doble clic de plantillas. Criterio: abrir/clic produce 0 cambios en informe; doble clic inserta y un deshacer recupera vacío; el nodo pulsado debe permanecer conectado entre clics. Prueba happy-dom en tests/clinical-ui.test.mjs, una ejecución, Windows/Node, sin red/audio; aprobada. Tiempo de interacción físico: null, pendiente; inserción usa evento template-loaded existente.
+
+
+## 2026-11-04 · Qwen/Chatterbox: comparación directa
+
+Hipótesis de interfaz: revelar modelos antes de completar 60 muestras permite comparar versiones sin modificar puntuaciones existentes. Condiciones: cuatro voces, cinco frases y tres versiones; mismo orden determinista y manifest_id. Criterio: botón habilitado con revisión incompleta, nombres correctos, puntuaciones intactas al revelar, persistencia de visibilidad y contexto de exposición al editar campos. Prueba reproducible: node --test tests/voice-comparison.test.mjs (5/5). La prueba registra exposición por campo y conserva historial desconocido como null; ocultar nombres no restaura el cegamiento. Exportación qwen-chatterbox-four-v2. No se mide todavía mejora perceptiva: puntuaciones humanas y duración de interacción null.
+
+Comprobación visual local: M5, frase 04, nombres visibles, borradores conservados, sin puntuar muestras. HTML SHA-256 131b8bc479c4f7a3d04a8ce4b34b2ee0677354a7972432703e211ded2afeee7c. Navegador IAB; versión exacta null; Windows, red localhost, sin repeticiones acústicas ni nuevas generaciones. Sobrecosto de instrumentación null. pnpm check aprobado; pnpm test --test-timeout=60000: 287/287 en 7.724 s. Primer intento normal falló en prueba intermitente ajena del reloj clínico (esperaba 00:01 y recibió 00:00), dejó un proceso abierto que se detuvo; otra ejecución normal reprodujo el bloqueo. Se conserva el resultado desfavorable; no se cambió el reloj ni esa prueba. No hubo GPU ni modificaciones de WAV.

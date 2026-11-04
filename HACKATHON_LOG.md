@@ -1014,3 +1014,12 @@ Publicación verificada: `18d2717` subido a `origin/codex/capture-transport` el 
 
 
 2026-11-04 · Publicación autorizada de Informe general inicial y doble clic. Usuario confirma fin de dictado. Render build2504a63e0ed322d762404b7283e2d3516699c4b9; deployment7539499190 success; /api/state confirma versión y active=0. report-editor.js servido coincide con commit normalizando CRLF. Regresión clinical-ui 42/42 aprobada. Confirmación de reemplazo y deshacer conservados. Registro posterior [skip render] evita otro reinicio.
+
+
+## 2026-11-04 · Revelar Qwen/Chatterbox sin completar puntuaciones
+
+Implementado Mostrar modelos/Ocultar modelos en el comparador de cuatro voces: Qwen original, Qwen ajustado 600 pasos y Chatterbox ajustado 4.020 pasos. Conserva orden, puntuaciones y observaciones; registra exposición de nombres y contexto por campo en exportación v2. La exposición anterior al registro queda null. No se generaron audios ni se consumió GPU.
+
+Activo privado verificado en http://127.0.0.1:8805/qwen/QWEN_VS_CHATTERBOX.html?v=qwen1, nombres visibles y posición M5/frase 04 restaurada. HTML SHA-256 131b8bc479c4f7a3d04a8ce4b34b2ee0677354a7972432703e211ded2afeee7c. Captura privada comparacion_directa.png conservada fuera del repositorio. Servidor estático sin reinicio del dictado. pnpm check y pnpm test --test-timeout=60000 aprobados (287/287); intentos sin límite reprodujeron un fallo intermitente ajeno en reloj clínico y bloqueo posterior, documentados en EXPERIMENTS.md.
+
+Permisos verificados en OpenSLR71 y CC BY-SA4.0: comercial permitido con condiciones; alcance sobre síntesis/pesos y posibles derechos adicionales pendientes. Ninguno de los 60 tiene aún uso comercial confirmado en el registro; no es prohibición comercial demostrada. Solo se publica código, documentación y pruebas; audios, referencias, pesos y evaluaciones permanecen privados. Commit de publicación se registrará después del push.
