@@ -1011,3 +1011,6 @@ Publicación verificada: `18d2717` subido a `origin/codex/capture-transport` el 
 
 
 2026-11-04 · Plantillas: apertura selecciona Informe general para vista previa; clic conserva informe y nodos de lista para admitir doble clic nativo; doble clic usa la misma inserción y confirmación/deshacer del botón. Check y suite286 aprobados, seguida de 42/42 pruebas clinical-ui incluyendo nueva regresión de selección/doble clic. Local y GitHub, Render pendiente para no interrumpir pruebas de permiso.
+
+
+2026-11-04 · Publicación autorizada de Informe general inicial y doble clic. Usuario confirma fin de dictado. Render build2504a63e0ed322d762404b7283e2d3516699c4b9; deployment7539499190 success; /api/state confirma versión y active=0. report-editor.js servido coincide con commit normalizando CRLF. Regresión clinical-ui 42/42 aprobada. Confirmación de reemplazo y deshacer conservados. Registro posterior [skip render] evita otro reinicio.
