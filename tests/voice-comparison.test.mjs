@@ -24,6 +24,10 @@ test('eight-voice builder retains blind ratings and shows one pair at a time',()
  assert.equal([...d.querySelectorAll('.card')].filter(c=>!c.hidden).length,1);assert.equal(d.querySelector('.card').querySelectorAll('.choices').length,8);assert.equal(d.querySelector('#reveal').disabled,true);
  d.querySelector('#minimal-nav .primary').click();assert.match(d.querySelector('#message').textContent,/Completa/);
  for(const box of d.querySelector('.card').querySelectorAll('.sample')){box.querySelector('.heard').click();for(const choices of box.querySelectorAll('.choices'))choices.querySelector('button').click()}
- d.querySelector('#minimal-nav .primary').click();assert.equal([...d.querySelectorAll('.card')].findIndex(c=>!c.hidden),1);w.happyDOM.abort();
+ d.querySelector('#minimal-nav .primary').click();assert.equal([...d.querySelectorAll('.card')].findIndex(c=>!c.hidden),1);
+ const tabs=[...d.querySelectorAll('.bench-header nav button')];assert.equal(tabs.length,4);
+ tabs[2].click();assert.match(d.querySelector('.bench-panel').textContent,/2\/10/);assert.equal(d.querySelector('.bench-panel').textContent.includes('4.020 pasos'),false);assert.equal(d.querySelector('#cards').hasAttribute('data-bench-hidden'),true);
+ tabs[0].click();assert.equal(d.querySelectorAll('.voice-tile').length,8);d.querySelectorAll('.voice-tile button')[4].click();assert.equal(d.querySelector('#cards').hasAttribute('data-bench-hidden'),false);assert.equal(d.querySelector('[data-voice=M1]').className,'active');assert.equal([...d.querySelectorAll('.card')].findIndex(c=>!c.hidden),0);
+ tabs[3].click();assert.match(d.querySelector('.bench-panel').textContent,/750 pasos/);w.happyDOM.abort();
  }finally{fs.rmSync(dir,{recursive:true,force:true})}
 });

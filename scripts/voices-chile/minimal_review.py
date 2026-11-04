@@ -28,4 +28,5 @@ function minimalEnhance(){
 }
 minimalEnhance();
 </script>'''
-    return html.replace('</style>', css + '</style>', 1).replace('</body>', script + '</body>', 1)
+    shell = Path(__file__).with_name('bench_shell.html').read_text(encoding='utf-8-sig')
+    return html.replace('</style>', css + '</style>', 1).replace('</body>', script + shell + '</body>', 1)
