@@ -658,3 +658,6 @@ Hipótesis de uso: selector compacto permite observar el informe al cambiar apar
 
 
 2026-11-04 · Por solicitud del responsable, evaluación v2 solo acento/naturalidad 0–5; inteligibilidad y fidelidad dejan de bloquear avance y de integrar medias. No se asume que estén garantizadas: errores se anotan cualitativamente. Exportación declara active_metrics y evaluation_version; notas y campos históricos se conservan. Prueba valida ausencia de criterios retirados y avance con dos criterios por muestra. pnpm check y 281/281 OK. Mejora subjetiva del diseño, tiempo y sobrecosto null; pendiente ensayo humano.
+
+## 2026-11-04 · stationary-toolbar-v6 aprobado para publicar
+Hipótesis: ancho completo con barra independiente evita desplazar controles sin desperdiciar pantalla. Criterio botones delta0px, documento recupera ancho al cerrar, paneles no solapados. Chrome local una secuencia cerrado/Plantillas/Ajustes/cerrado: cuatro controles iguales x/y/ancho; documento1216.667 cerrado y892.667 abierto, margen24px, panel300px y separación24px. Sin overflow horizontal. Vista previa ecografía y navegación por cuatro pestañas conserva informe sin insertar. Métrica settingsVersion identifica variante; precisión DOM subpixel, sobrecosto y tiempo de usuario null; fuente sintética, sin audio. pnpm check y 282/282 tests del workspace aprobados.

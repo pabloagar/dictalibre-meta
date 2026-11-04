@@ -961,3 +961,6 @@ Responsable terminó dictado y aprobó la vista local. Selector compacto Día/Pe
 
 
 2026-11-04 · Revisor de dos criterios activo en :8805/ESCUCHAR_OCHO.html?v=two, HTML SHA c7558e3a0351cf169c255076559e77cc6238348e5a1870af68f602f48c2300ac. Estilo suave inspirado en captura aportada, escala 0–5, observaciones conservadas. Pruebas 281/281 y pnpm check OK. Código publicado con [skip render]; audios privados y demo pública sin cambios.
+
+## 2026-11-04 · Publicación autorizada de Plantillas y Ajustes
+Usuario aprueba stationary-toolbar-v6 y confirma fin de dictado; API active=0 antes de publicar. Barra completa fija, hoja amplia cerrada y espacio324px para panel abierto, paneles alineados debajo de barra; todas las secciones de Ajustes laterales con dimensiones estables. Dictado demo conserva vocabulario y comandos, oculta detalles técnicos sin alterar motor/transporte. pnpm check y 282/282 pruebas en workspace; incluye una prueba adicional de voces de trabajo paralelo no incluida en este commit. Cambios de aplicación limitados a live.js, style.css, locale-en.js y prueba clinical-ui. Activación pendiente de verificar.

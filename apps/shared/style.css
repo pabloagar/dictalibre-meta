@@ -1082,3 +1082,49 @@ body.clinical-workspace,body.clinical-workspace .clinical-sheet,body.clinical-wo
 /* Keep recording labels intact in both interface languages. */
 .clinical-workspace .clinical-topbar .clinical-record{width:max-content;flex-shrink:0;overflow:visible}
 .clinical-workspace .clinical-record #record-state{flex:0 0 auto;min-width:12ch;max-width:none;white-space:nowrap;line-height:1.5;text-align:center;overflow:visible}
+/* Stable non-modal settings drawer for every tab. */
+.clinical-workspace .clinical-settings.appearance-drawer[open]>.settings-body{height:min(560px,calc(100dvh - 110px));overflow:hidden}
+.clinical-workspace .appearance-drawer .settings-nav{flex:0 0 auto}
+.clinical-workspace .appearance-drawer .settings-main{position:static;min-height:0;overflow-y:auto;overflow-x:hidden;scrollbar-gutter:stable;padding-top:62px}
+.clinical-workspace .appearance-drawer .settings-close{top:58px;right:18px;z-index:2}
+.clinical-workspace .appearance-drawer .settings-main h3{position:absolute;top:65px;left:18px;margin:0;font-size:18px}
+.clinical-workspace .appearance-drawer .settings-main .settings-intro{margin:0 0 14px}
+.clinical-workspace .appearance-drawer .dictation-section{padding:12px;margin:0 0 12px}
+.clinical-workspace .appearance-drawer .setting-field{display:block;margin:12px 0 0;padding-top:12px}
+.clinical-workspace .appearance-drawer .engine-setting{margin:0;padding:0}
+.clinical-workspace .appearance-drawer .setting-label{display:block;padding:0;margin-bottom:8px;font-size:12px}
+.clinical-workspace .appearance-drawer .settings-segments{display:flex;flex-wrap:wrap;gap:6px}
+.clinical-workspace .appearance-drawer .settings-segments button{min-width:0;flex:1;padding:7px;font-size:12px}
+.clinical-workspace .appearance-drawer .setting-field>.tiny{margin-top:8px}
+.clinical-workspace .appearance-drawer .setting-switch{gap:12px}
+.clinical-workspace .appearance-drawer .help-steps{grid-template-columns:1fr;gap:10px}
+.clinical-workspace .appearance-drawer .help-step{padding:12px}
+.clinical-workspace .appearance-drawer .help-step h4{font-size:13px;margin:0 0 6px}
+.clinical-workspace .appearance-drawer .help-step p{font-size:12px;margin:0}
+@media(max-width:800px){.clinical-workspace .clinical-settings.appearance-drawer[open]>.settings-body{height:45dvh}}
+.clinical-workspace .appearance-drawer .settings-main{overflow:hidden;scrollbar-gutter:auto;display:flex;flex-direction:column}
+.clinical-workspace .appearance-drawer .settings-main>section{min-height:0;overflow-y:auto;overflow-x:hidden;scrollbar-gutter:stable;flex:1}
+/* Wide canvas with a stationary toolbar and a separate panel lane below it. */
+html{scrollbar-gutter:stable}
+body.clinical-workspace .clinical-desk,
+body.clinical-workspace:is(.templates-drawer-open,.appearance-preview) .clinical-desk,
+body.clinical-workspace .clinical-desk:has(.clinical-notes>:not([hidden])){display:flex;flex-direction:row;gap:0;width:calc(100% - 48px);max-width:none;margin:12px auto 36px;padding:0;align-items:flex-start}
+body.clinical-workspace .dictation-canvas{width:100%;flex:1;min-width:0}
+body.clinical-workspace .clinical-editbar{width:100%;box-sizing:border-box}
+body.clinical-workspace .clinical-sheet{width:100%;box-sizing:border-box}
+body.clinical-workspace:is(.templates-drawer-open,.appearance-preview) .clinical-sheet{width:calc(100% - 324px)}
+body.clinical-workspace .clinical-settings.appearance-drawer[open]>.settings-body,
+body.clinical-workspace.templates-drawer-open .clinical-desk>.template-picker{position:fixed;inset:var(--side-panel-top,126px) 24px auto auto;transform:none;width:300px;height:min(560px,calc(100dvh - var(--side-panel-top,126px) - 24px));max-height:calc(100dvh - var(--side-panel-top,126px) - 24px);overflow:hidden;box-sizing:border-box;z-index:91}
+.clinical-workspace .template-picker .template-left{flex:1;min-height:0;display:flex;flex-direction:column}
+.clinical-workspace .template-picker .template-list{flex:1;min-height:0;max-height:none;overflow-y:auto}
+.clinical-workspace .demo-dictation .demo-fixed-setting{display:none!important}
+.clinical-workspace .demo-dictation .dictation-section{border:0;padding:0;margin:0 0 22px;background:transparent}
+.clinical-workspace .demo-dictation .setting-field{border:0;margin:0;padding:0}
+@media(max-width:800px){
+ body.clinical-workspace .clinical-desk,
+ body.clinical-workspace:is(.templates-drawer-open,.appearance-preview) .clinical-desk,
+ body.clinical-workspace .clinical-desk:has(.clinical-notes>:not([hidden])){width:calc(100% - 24px);margin:12px auto 24px}
+ body.clinical-workspace:is(.templates-drawer-open,.appearance-preview) .clinical-sheet{width:100%;padding-bottom:calc(45dvh + 24px)}
+ body.clinical-workspace .clinical-settings.appearance-drawer[open]>.settings-body,
+ body.clinical-workspace.templates-drawer-open .clinical-desk>.template-picker{inset:auto 12px 12px;width:calc(100% - 24px);height:45dvh;max-height:45dvh}
+}
