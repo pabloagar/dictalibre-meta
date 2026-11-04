@@ -44,3 +44,7 @@ La evaluación añade lateralidad y unidades a los errores de contenido. Revisio
 ## Entrenamiento de Chatterbox
 
 Objetivo confirmado: adaptar TTS de pesos abiertos → generar audio revisado → entrenar Whisper en una fase independiente. Receta, límites y reproducción en [TRAINING.md](TRAINING.md). El código experimental está preparado; no confundirlo con un modelo chileno ya entrenado. Preflight real bloqueado por permiso de adaptación pendiente, antes de GPU. Inventario SLR71 y pruebas del núcleo LoRA ejecutados localmente; datos/pesos privados fuera de GitHub.
+
+## Piloto Qwen compartido
+
+El responsable eligió un adaptador multivoz experimental de Qwen3-TTS Base 1.7B. Se completaron 600 pasos con cuatro hablantes; el reproductor privado compara 60 audios de Qwen original, ajustado y Chatterbox. Metodología, revisiones fijadas, resultados y limitaciones: [QWEN_SHARED_PILOT.md](../../docs/QWEN_SHARED_PILOT.md). No es la receta multivoz oficial de Qwen; se ajusta solo el codec principal con LoRA. Audios y pesos privados, evaluación auditiva pendiente.

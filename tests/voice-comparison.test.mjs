@@ -56,3 +56,26 @@ test('three-way builder isolates previous AB ratings and requires all three samp
  assert.equal(w.localStorage.getItem('dictalibre-eight-20261103'),JSON.stringify({legacy:{notes:'Preserve me'}}));tabs[3].click();assert.match(d.querySelector('.bench-panel').textContent,/750 pasos/);w.happyDOM.abort();
  }finally{fs.rmSync(dir,{recursive:true,force:true})}
 });
+
+test('Qwen comparison shows four voices and 60 distinct matched samples',()=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'voice-ui-'));
+ try{
+ const references=['F3','F4','M4','M5'].map(label=>({label,split:'validation'}));
+ const phrases=[1,2,3,4,5].map(i=>({id:'p'+i,text:'Synthetic test phrase'}));
+ const rows=references.flatMap(r=>phrases.flatMap(p=>['qwen_base','qwen_adjusted','chatterbox'].map(condition=>({voice:r.label,phrase:p.id,condition,archivo:r.label+p.id+condition+'.wav',status:'ok'}))));
+
+ fs.writeFileSync(path.join(dir,'manifest.json'),JSON.stringify(rows));fs.writeFileSync(path.join(dir,'protocol.json'),JSON.stringify({references,phrases,condition_steps:{qwen_base:0,qwen_adjusted:100,chatterbox:4020},condition_labels:{qwen_base:'Qwen original',qwen_adjusted:'Qwen ajustado',chatterbox:'Chatterbox ajustado'}}));
+ execFileSync('python',['scripts/voices-chile/build_eight_player.py','--cross-engine','--comparison',dir,'--protocol',path.join(dir,'protocol.json')]);
+ const html=fs.readFileSync(path.join(dir,'QWEN_VS_CHATTERBOX.html'),'utf8'),w=new Window({url:'http://localhost'});w.localStorage.setItem('dictalibre-eight-20261103',JSON.stringify({legacy:{notes:'Preserve me'}}));w.document.write(html);w.eval([...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m=>m[1]).join('\n'));const d=w.document;const payload=JSON.parse(html.match(/const DATA=(.*?);const SIDES=/s)[1]);assert.equal(payload.cards.length,20);assert.equal(new Set(payload.cards.flatMap(c=>payload.sides.map(side=>c[side].file))).size,60);for(const c of payload.cards)assert.deepEqual(payload.sides.map(side=>c[side].condition).sort(),['chatterbox','qwen_adjusted','qwen_base']);
+ assert.equal([...d.querySelectorAll('.card')].filter(c=>!c.hidden).length,1);assert.equal(d.querySelector('.card').querySelectorAll('.choices').length,6);assert.equal(d.querySelector('#reveal').disabled,true);assert.equal(d.querySelector('.card').textContent.includes('Inteligibilidad'),false);assert.equal(d.querySelector('.card').textContent.includes('Fidelidad al texto'),false);
+ d.querySelector('#minimal-nav .primary').click();assert.match(d.querySelector('#message').textContent,/Completa/);
+ for(const box of d.querySelector('.card').querySelectorAll('.sample')){box.querySelector('.heard').click();for(const choices of box.querySelectorAll('.choices'))choices.querySelector('button').click()}
+ d.querySelector('#minimal-nav .primary').click();assert.equal([...d.querySelectorAll('.card')].findIndex(c=>!c.hidden),1);
+ assert.equal(d.querySelector('.choices button').textContent,'0');assert.equal(d.querySelector('.choices').children.length,6);assert.equal(Object.values(JSON.parse(w.localStorage.getItem('dictalibre-qwen-four-v1-'+payload.manifest_id)))[0].accent,'0');
+ const note=d.querySelector('.card:not([hidden]) textarea');note.value='La erre suena rara';note.dispatchEvent(new w.Event('input'));assert.equal(Object.values(JSON.parse(w.localStorage.getItem('dictalibre-qwen-four-v1-'+payload.manifest_id))).some(v=>v.notes==='La erre suena rara'),true);
+ const tabs=[...d.querySelectorAll('.bench-header nav button')];assert.equal(tabs.length,4);
+ tabs[2].click();assert.match(d.querySelector('.subjective-note').textContent,/La erre suena rara/);assert.equal(d.querySelector('.subjective-note').textContent.includes('candidate'),false);assert.match(d.querySelector('.bench-panel').textContent,/3\/15/);assert.equal(d.querySelector('.bench-panel').textContent.includes('4.020 pasos'),false);assert.equal(d.querySelector('#cards').hasAttribute('data-bench-hidden'),true);
+ tabs[0].click();assert.equal(d.querySelectorAll('.voice-tile').length,4);d.querySelectorAll('.voice-tile button')[3].click();assert.equal(d.querySelector('#cards').hasAttribute('data-bench-hidden'),false);assert.equal(d.querySelector('[data-voice=M5]').className,'active');assert.equal([...d.querySelectorAll('.card')].findIndex(c=>!c.hidden),0);
+ assert.equal(w.localStorage.getItem('dictalibre-eight-20261103'),JSON.stringify({legacy:{notes:'Preserve me'}}));tabs[3].click();assert.match(d.querySelector('.bench-panel').textContent,/425 grabaciones/);w.happyDOM.abort();
+ }finally{fs.rmSync(dir,{recursive:true,force:true})}
+});

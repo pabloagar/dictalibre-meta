@@ -996,3 +996,10 @@ Usuario confirmó fin de dictado; API active=0. Renovación de acceso con fetch 
 - PC recibe estados de permiso solo del teléfono aprobado de su propia sesión; muestra guía breve, la oculta al estar listo o suspenderse. Textos ES/EN.
 - Verificado en servidor local aislado 8814 (sin clave Meta), Chrome con viewport 390×844 y escritorio. Capturas reales guardadas fuera del repo. Check correcto y 286/286 pruebas en árbol de trabajo, que incluye trabajo paralelo no incorporado en este commit.
 - Publicación de código con [skip render]; Render permanece en a259bc25. Pendiente prueba física Samsung/iPhone del diálogo nativo y coordinación para desplegar backend.
+
+
+## 2026-11-04 · Qwen multivoz completado y comparador de 60 audios
+
+Qwen Base 1.7B ajustado con un único adaptador experimental para cuatro hablantes chilenos: 600 pasos, mejor checkpoint en 600, pérdida de codec principal 9,43 → 2,48. Esto no acredita acento ni naturalidad. Metodología, costes y evidencia en docs/QWEN_SHARED_PILOT.md. Sesión L4 principal estimada USD 0,09352, watchdog 2 h y desconexión verificada tras recuperar respaldos. Audio, corpus y pesos permanecen privados.
+
+Activo privado: http://127.0.0.1:8805/qwen/QWEN_VS_CHATTERBOX.html?v=qwen1, HTML SHA-256 857a90e41fb0c664ec82438aa9f664880d675d6174c95d4117cfe07e01064318. Comparación de Qwen original/ajustado y Chatterbox 4.020 pasos: cuatro voces × cinco frases × tres estados, 60 archivos HTTP con hashes coincidentes y reproducción comprobada de una muestra ajustada. Una pestaña nueva del reproductor quedó abierta; la anterior ya no existía. Evaluaciones previas intactas; borrador distinto por manifiesto. 284 pruebas Node y pnpm check aprobados; además, prueba de partición local y dos regresiones CPU del adaptador en Colab. No se modificó ni reinició el servidor de dictado. Código y documentación se publican en codex/capture-transport; el commit remoto se verifica tras el push.
