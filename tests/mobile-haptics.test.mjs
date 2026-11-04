@@ -80,7 +80,7 @@ test('recuperación móvil vuelve emparejada pero sin preparar ni iniciar micró
  p.run('reconnect();');assert.equal(p.box.connections.length,1);assert.equal(p.box.connections[0].type,'resume');
  p.run("onMessage({type:'paired',resumed:true,resumeToken:'rotado'});");
  assert.equal(p.run('paired'),true);assert.equal(p.run('prepared'),false);assert.equal(p.run('recording'),null);assert.equal(p.$('record').disabled,false);
- assert.equal(p.run("lifecycle.at(-1).resumed"),true);assert.equal(p.run('resumeToken'),'rotado');
+ assert.equal(p.run("lifecycle.findLast(e=>e.type==='connection-ready').resumed"),true);assert.equal(p.run('resumeToken'),'rotado');
 });
 test('móvil no recupera oculto, vencido ni después de cierre explícito',()=>{
  const p=phone();p.run("client=null;resumeToken='temporal';resumeUntil=Date.now()-1;reconnect();");assert.equal(p.run('resumeToken'),null);
@@ -99,4 +99,17 @@ test('un gesto prepara e inicia; soltar antes de preparación evita inicio tard�
 test('primera preparación separada; al volver basta botón de dictado',()=>{
  const p=phone();p.run('microphoneInitialized=false;prepared=false;refresh();');assert.equal(p.$('prepare').hidden,false);assert.equal(p.$('record').disabled,true);
  p.run('microphoneInitialized=true;refresh();');assert.equal(p.$('prepare').hidden,true);assert.equal(p.$('record').disabled,false);
+});
+
+test('denegar permiso ofrece recuperación y reintentar no inicia una grabación',async()=>{
+ const p=phone();const sent=[];p.box.sent=sent;p.box.window.isSecureContext=true;
+ p.run('context=null;worklet=null;prepared=false;microphoneInitialized=false;client={send:m=>sent.push(m)};');
+ p.box.navigator.mediaDevices={getUserMedia:async()=>{throw Object.assign(Error('Denied'),{name:'NotAllowedError'});}};
+ await p.run('prepare(false)');
+ assert.equal(p.run('permissionState'),'blocked');assert.equal(p.run('recording'),null);
+ assert.equal(p.$('prepare').textContent,'Volver a comprobar');assert.equal(p.$('prepare').disabled,false);
+ assert.equal(p.$('record').disabled,true);assert.equal(sent.at(-1).state,'blocked');
+ assert.match(p.$('permission-description').textContent,/permisos de este sitio/);
+ await p.run('prepare(false)');assert.equal(p.run('recording'),null);
+ assert.deepEqual(sent.map(m=>m.state),['requesting','blocked','requesting','blocked']);
 });

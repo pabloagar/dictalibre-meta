@@ -11,6 +11,17 @@ if(location.pathname==='/live'){
 }
 
 let client, current, sessionEpoch = 0, pairingTimer, clipCount = 0;
+function microphoneHint(state) {
+  let hint = document.getElementById('microphone-permission-hint');
+  if (!hint) {
+    const sheet = document.querySelector('.clinical-sheet');
+    if (!sheet) return;
+    hint = document.createElement('p'); hint.id = 'microphone-permission-hint'; hint.setAttribute('role','status');
+    sheet.prepend(hint);
+  }
+  hint.hidden = !['permission-needed','requesting','blocked'].includes(state);
+  hint.textContent = tr(state === 'blocked' ? 'Micrófono bloqueado. Sigue las instrucciones de tu teléfono para permitir el acceso.' : 'En tu teléfono, pulsa Permitir micrófono y acepta el aviso del navegador.');
+}
 const clipURLs = [];
 const traces = new Map();
 let latestTrace, pendingTiming, previousArrival, pairingMetrics = null;
@@ -147,9 +158,11 @@ function onMessage(m) {
     }
     case 'pending': clearInterval(pairingTimer); $('pairing').hidden = true; $('confirm-panel').hidden = false; $('confirm-code').textContent = m.confirm; status(tr('Un teléfono solicita conexión. Comprueba el número antes de confirmar.')); break;
     case 'pairing_metrics': showPairing(m.pairing); break;
-    case 'mobile_suspended': $('paired').dataset.paused='true'; status(tr('Teléfono en pausa. Vuelve a Chrome antes de cinco minutos para reconectar.')); break;
-    case 'paired': $('paired').dataset.paused='false'; showPairing(m.pairing); clearInterval(pairingTimer); $('pairing').hidden = true; $('confirm-panel').hidden = true; $('paired').hidden = false; status(tr('Conectados. Usa el botón de dictado del teléfono para empezar.'), 'success'); break;
+    case 'mobile_suspended': microphoneHint('suspended'); $('paired').dataset.paused='true'; status(tr('Teléfono en pausa. Vuelve a Chrome antes de cinco minutos para reconectar.')); break;
+    case 'paired': microphoneHint('permission-needed'); $('paired').dataset.paused='false'; showPairing(m.pairing); clearInterval(pairingTimer); $('pairing').hidden = true; $('confirm-panel').hidden = true; $('paired').hidden = false; status(tr('Conectados. Usa el botón de dictado del teléfono para empezar.'), 'success'); break;
+    case 'microphone_state': microphoneHint(m.state); break;
     case 'start':
+      microphoneHint('ready');
       const receivedStart=performance.now();
       window.dispatchEvent(new CustomEvent('dicta-recording-start',{detail:m}));
       latestTrace = new RecordingMetrics(m.id, m.rate, m.source, m.mode); traces.set(m.id, latestTrace);
@@ -162,7 +175,7 @@ function onMessage(m) {
     case 'end': void complete(m); break;
     case 'aborted': if (latestTrace && m.id === latestTrace.id) Object.assign(latestTrace.counters, m.counters); interrupted(m.reason); break;
     case 'error': status(m.message, 'error'); break;
-    case 'closed': interrupted(m.reason); break;
+    case 'closed': microphoneHint('closed'); interrupted(m.reason); break;
   }
 }
 $('create').onclick = async () => {

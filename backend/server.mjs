@@ -195,6 +195,10 @@ export function createRelay({ publicOrigin = process.env.PUBLIC_ORIGIN, pairTTL 
           send(session.desktop, { type: 'pairing_metrics', pairing: session.pairing }); return;
         }
         if (!session.approved) throw new Error('Falta confirmación en el computador.');
+        if (m.type === 'microphone_state') {
+          if (ws.role !== 'mobile' || !['permission-needed','requesting','blocked','ready'].includes(m.state)) throw new Error('Estado de micrófono inválido.');
+          send(session.desktop, {type:'microphone_state', state:m.state}); return;
+        }
         if (m.type === 'abort') { abort(session, 'Grabación interrumpida. Inicia otra explícitamente.'); return; }
         if (m.type === 'start' && ws.role === 'mobile') {
           if (session.recording) throw new Error('La grabación anterior aún no terminó.');

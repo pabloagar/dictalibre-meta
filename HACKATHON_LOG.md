@@ -989,3 +989,10 @@ Usuario confirmó fin de dictado; API active=0. Renovación de acceso con fetch 
 
 
 2026-11-04 · Render verificado en a259bc25f3d781a0963390034a707cc7ec5d94ec, deployment7538615828. API build coincide; desktop.js, style.css y locale-en.js HTTP200 e idénticos al checkout normalizando CRLF. Código guardado en GitHub; QR/scroll/ayuda activos. Registro [skip render] evita reinicio adicional. Prueba física de renovación QR por responsable pendiente.
+
+
+## 2026-11-04 · Autorización móvil y guía en PC (local; sin Render)
+- Entrada móvil simplificada a escanear QR; sin acceso manual ni Ajustes antes de conectar, sin controles de simulación visibles. Tras conectar, autorización explícita y recuperación si se deniega. Autorizar no inicia una toma.
+- PC recibe estados de permiso solo del teléfono aprobado de su propia sesión; muestra guía breve, la oculta al estar listo o suspenderse. Textos ES/EN.
+- Verificado en servidor local aislado 8814 (sin clave Meta), Chrome con viewport 390×844 y escritorio. Capturas reales guardadas fuera del repo. Check correcto y 286/286 pruebas en árbol de trabajo, que incluye trabajo paralelo no incorporado en este commit.
+- Publicación de código con [skip render]; Render permanece en a259bc25. Pendiente prueba física Samsung/iPhone del diálogo nativo y coordinación para desplegar backend.

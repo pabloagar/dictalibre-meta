@@ -8,6 +8,26 @@ let resumeToken=null, resumeUntil=0, retryTimer=null;
 let client, stream, context, source, worklet, silent, wakeLock;
 let paired = false, prepared = false, preparing = false, epoch = 0, recording = null, counter = 0, heldPointer = null;
 let startIntent=0, microphoneInitialized=false;
+let permissionState = 'permission-needed';
+function permissionUI(next = permissionState) {
+  permissionState = next;
+  const blocked = next === 'blocked';
+  const guide = $('permission-guide');
+  if (guide) {
+    guide.hidden = microphoneInitialized || prepared;
+    $('permission-title').textContent = tr(blocked ? 'El micrófono está bloqueado' : 'Activa tu micrófono');
+    $('permission-description').textContent = tr(blocked ? 'Permite el acceso al micrófono en los permisos de este sitio. Después vuelve aquí.' : 'Para dictar, permite que dicta use el micrófono cuando el teléfono lo pregunte.');
+    $('permission-help').textContent = tr(blocked ? 'Abre el menú del navegador → permisos del sitio → micrófono → permitir. Si te pide recargar, vuelve al mismo enlace.' : 'Cuando aparezca el aviso, elige Permitir.');
+    $('prepare').textContent = tr(next === 'requesting' ? 'Esperando permiso…' : blocked ? 'Volver a comprobar' : 'Permitir micrófono');
+    $('prepare-note').textContent = tr('Dar permiso no inicia una grabación. Tú decides cuándo hablar.');
+    document.body?.toggleAttribute?.('data-permission-needed', paired && !microphoneInitialized && !prepared);
+  }
+}
+function reportPermission(next) {
+  permissionUI(next);
+  if (paired) client?.send({type:'microphone_state', state:next});
+  lifecycleEvent('microphone-permission-state', {state:next});
+}
 let mode = 'hold';
 let synthetic = false;
 mountLanguageSwitch(document.querySelector?.('header'),()=>!recording&&!preparing);
@@ -62,6 +82,7 @@ let qrToken = /^qr=[a-f0-9]{64}$/.test(initialCode) ? initialCode.slice(3) : nul
 if (/^[a-f0-9]{10}$/i.test(initialCode)) $('join-code').value = initialCode;
 history.replaceState(null, '', location.pathname+'?lang='+language());
 function refresh() {
+  permissionUI();
   $('join').disabled = !!client;
   $('scan-qr').disabled = !!client;
   $('prepare-note').hidden = microphoneInitialized || prepared;
@@ -112,7 +133,7 @@ async function prepare(useSynthetic = false) {
   const prepareStart = performance.now();
   if (preparing || prepared || !paired) return;
   if (!window.isSecureContext || !navigator.mediaDevices?.getUserMedia) { status(tr('Abre el enlace HTTPS del servidor para usar el micrófono.'), 'error'); return; }
-  preparing = true; synthetic = useSynthetic; const generation = ++epoch; refresh(); status(synthetic ? tr('Preparando tono sintético…') : tr('Solicitando acceso al micrófono…'));
+  preparing = true; synthetic = useSynthetic; if(!synthetic)reportPermission('requesting'); const generation = ++epoch; refresh(); status(synthetic ? tr('Preparando tono sintético…') : tr('Solicitando acceso al micrófono…'));
   let obtained;
   try {
     if (!synthetic) obtained = await navigator.mediaDevices.getUserMedia({ audio: { channelCount: { ideal: 1 }, echoCancellation: false, noiseSuppression: false, autoGainControl: false }, video: false });
@@ -149,6 +170,7 @@ async function prepare(useSynthetic = false) {
       if (prepared && context && context.state !== 'running') { abort(tr('La captura se suspendió. Usa el botón de dictado para volver a empezar.')); releaseMicrophone(); }
     };
     prepared = true; preparing = false;if(!synthetic)microphoneInitialized=true;lifecycleEvent('microphone-ready',{prepareMs:performance.now()-prepareStart});
+    reportPermission('ready');
     prepareMs = performance.now() - prepareStart;
     const settings = stream?.getAudioTracks()[0].getSettings() ?? {};
     const flag = value => value === undefined ? tr('no informado') : value ? tr('sí') : 'no';
@@ -158,7 +180,7 @@ async function prepare(useSynthetic = false) {
   } catch (error) {
     obtained?.getTracks().forEach(t => t.stop());
     if (generation !== epoch) return;
-    releaseMicrophone(); status(error.name === 'NotAllowedError' ? tr('Permiso denegado. Habilita el micrófono para este sitio y pulsa el botón de dictado.') : tr`No se pudo preparar el micrófono: ${error.message}`, 'error');
+    releaseMicrophone(); if(error.name === 'NotAllowedError'){microphoneInitialized=false;reportPermission('blocked');refresh();}else{reportPermission('permission-needed');refresh();} status(error.name === 'NotAllowedError' ? tr('El micrófono está bloqueado') : tr`No se pudo preparar el micrófono: ${error.message}`, 'error');
   }
 }
 async function requestStart(){
@@ -185,7 +207,7 @@ function stop() {
 function onMessage(m) {
   switch (m.type) {
     case 'pending': $('join-panel').hidden = true; $('confirm-panel').hidden = false; $('confirm-code').textContent = m.confirm; status(tr('Espera la confirmación en el computador.')); break;
-    case 'paired': if(m.resumeToken){resumeToken=m.resumeToken;resumeUntil=0;}lifecycleEvent('connection-ready',{resumed:!!m.resumed});client.send({ type: 'pairing_metrics', connectToPairedMs: performance.now() - connectStarted }); $('join-panel').hidden = true; paired = true; $('confirm-panel').hidden = true; $('controls').hidden = false; status(microphoneInitialized?tr('Conectado. Usa el botón de dictado; espera Grabando para hablar.'):tr('Conectado. Pulsa Preparar micrófono para autorizarlo antes de dictar.'), 'success'); refresh(); break;
+    case 'paired': if(m.resumeToken){resumeToken=m.resumeToken;resumeUntil=0;}lifecycleEvent('connection-ready',{resumed:!!m.resumed});client.send({ type: 'pairing_metrics', connectToPairedMs: performance.now() - connectStarted }); $('join-panel').hidden = true; paired = true; $('confirm-panel').hidden = true; $('controls').hidden = false; status(microphoneInitialized?tr('Conectado. Usa el botón de dictado; espera Grabando para hablar.'):tr('Conectado. Autoriza el micrófono para empezar.'), 'success'); reportPermission(microphoneInitialized?'ready':'permission-needed'); refresh(); break;
     case 'receipt':
       if (recording?.id === m.id) {
         $('received').textContent = m.sequence + 1;
@@ -262,5 +284,5 @@ $('scan-qr').onclick=async()=>{
   const {createQrScanner}=await import('/qr-scanner.js');
   qrReader??=createQrScanner({video:$('qr-video'),panel:$('qr-reader'),message:$('qr-message'),cancel:$('qr-cancel'),onEvent:(type,data)=>lifecycleEvent(type,data),onResult:token=>{forgetResume();qrToken=token;$('join').click();}});
   await qrReader.start();
- }catch{status(tr('No se pudo abrir el lector. Puedes usar el código manual.'),'error');}
+ }catch{status(tr('No se pudo abrir el lector. Escanea el QR con la cámara de tu teléfono.'),'error');}
 };

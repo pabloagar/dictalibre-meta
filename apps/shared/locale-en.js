@@ -1,5 +1,27 @@
 // English UI catalogue. Keys are application-owned Spanish literals; never report text.
 export const EN = {
+"No se pudo abrir el lector. Escanea el QR con la cámara de tu teléfono.":"Could not open the scanner. Scan the QR using your phone’s camera.",
+"No se detectó un QR. Pulsa Escanear QR para reintentar.":"No QR found. Tap Scan QR to try again.",
+"No se pudo leer la cámara. Escanea el QR con la cámara de tu teléfono.":"Could not read the camera. Scan the QR using your phone’s camera.",
+"Permiso de cámara denegado. Habilítalo para este sitio o escanea con la cámara de tu teléfono.":"Camera permission denied. Enable it for this site or scan using your phone’s camera.",
+"No se pudo abrir la cámara. Escanea el QR con la cámara de tu teléfono.":"Could not open the camera. Scan the QR using your phone’s camera.",
+
+"Tu teléfono, tu micrófono.":"Your phone, your microphone.",
+"Abre dicta en el computador y escanea su QR para conectar.":"Open dicta on your computer and scan its QR to connect.",
+"El micrófono está bloqueado":"Microphone access is blocked",
+"Activa tu micrófono":"Enable your microphone",
+"Permite el acceso al micrófono en los permisos de este sitio. Después vuelve aquí.":"Allow microphone access in this site’s permissions, then return here.",
+"Para dictar, permite que dicta use el micrófono cuando el teléfono lo pregunte.":"To dictate, allow dicta to use your microphone when your phone asks.",
+"Abre el menú del navegador → permisos del sitio → micrófono → permitir. Si te pide recargar, vuelve al mismo enlace.":"Open your browser’s site permissions and allow microphone access. If asked to reload, return to this same link.",
+"Cuando aparezca el aviso, elige Permitir.":"When the prompt appears, choose Allow.",
+"Esperando permiso…":"Waiting for permission…",
+"Volver a comprobar":"Check again",
+"Permitir micrófono":"Allow microphone",
+"Dar permiso no inicia una grabación. Tú decides cuándo hablar.":"Allowing access does not start recording. You decide when to speak.",
+"Conectado. Autoriza el micrófono para empezar.":"Connected. Allow microphone access to get started.",
+"Micrófono bloqueado. Sigue las instrucciones de tu teléfono para permitir el acceso.":"Microphone blocked. Follow the instructions on your phone to allow access.",
+"En tu teléfono, pulsa Permitir micrófono y acepta el aviso del navegador.":"On your phone, tap Allow microphone, then allow access in the browser prompt.",
+
  "{} {} para comprobar.":"{} {} to check.",
  "Acerca de esta revisión":"About this review",
  "Meta recibe el informe y su contexto. Tú decides los cambios.":"Meta receives the report and its context. You decide the changes.",

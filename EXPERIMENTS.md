@@ -673,3 +673,11 @@ Hipótesis: ancho completo con barra independiente evita desplazar controles sin
 ## 2026-11-04 · Controles originales y comparación A/B/C
 
 Se completaron en L4 los 32 controles pendientes, sin ajustar pesos: 120 muestras (8 voces × 5 frases × 3 estados: 0/4020/4770). Hipótesis, condiciones, intervalos, criterio exploratorio y límites en docs/VOICE_ABC_COMPARISON.md. Generación 253,44 s para 289,20 s de audio, RTF 0,8763; descarga y carga 11,65/15,50 s. 24 originales bajo el pico y 8 excedidos; todos conservados. Ganancia común 0,7275195281 para las 120 copias; pico 4x máximo 0,79432822. No valida acento ni repara distorsión previa. Coste estimado de sesión unos USD 0,05, límite USD 5, L4 desconectada; precisión de factura y sobrecosto de instrumentación no medidos (null). Respaldo, entorno y dependencias efectivas privados; sin atribuir ejecución a commit posterior. Evaluación A/B/C independiente del borrador A/B, solo acento y naturalidad 0–5 y notas. Pruebas automatizadas y HTTP satisfactorias; revisión auditiva humana pendiente.
+
+
+## 2026-11-04 · Flujo real de permiso móvil
+Hipótesis: tras emparejar, el permiso se explica antes de solicitarlo y el rechazo deja una acción recuperable, sin grabar automáticamente ni compartir estados con otras sesiones.
+Criterios: 0 inicios de grabación al pedir/denegar/reintentar; 0 mensajes de permiso en PC de otra sesión; botones de captura inhabilitados antes del primer permiso.
+Método: tests/mobile-haptics.test.mjs usa getUserMedia denegado (dos intentos); tests/relay.test.mjs usa dos pares WebSocket aislados y rechaza emisor desktop/estado inválido. Una ejecución local por caso. Fuente audio: ninguna. Dispositivo físico: null; red de integración: loopback Windows. Base aae49ed + diff de permiso; pruebas generales sobre árbol con trabajo paralelo.
+Resultado: casos aprobados; pnpm check correcto; pnpm test 286/286. Inspección Chrome 390×844 y escritorio: entrada y autorización reales, aviso en PC. Permiso nativo en teléfono y recuperación tras cambio de configuración: pendientes, no cubiertos por mocks.
+Instrumentación: lifecycle microphone-permission-state conserva estado y performance.now() local, sin audio/texto clínico; coste temporal: null, no medido. Tarea pendiente: medir tiempo usuario desde aviso a autorización en dispositivo físico; no se infiere de tiempos de test.

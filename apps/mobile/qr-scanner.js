@@ -23,16 +23,16 @@ export function createQrScanner({video,panel,message,cancel,onResult,onEvent=()=
    message.textContent=tr('Apunta al QR nuevo que muestra dicta en el computador.');
    const scan=()=>{
     if(generation!==epoch)return;
-    if(performance.now()-started>60000){stop('timeout');message.textContent=tr('No se detectó un QR. Pulsa Escanear QR para reintentar o usa el código.');panel.hidden=false;return;}
+    if(performance.now()-started>60000){stop('timeout');message.textContent=tr('No se detectó un QR. Pulsa Escanear QR para reintentar.');panel.hidden=false;return;}
     try{if(video.readyState>=2&&video.videoWidth){
      const scale=Math.min(1,640/video.videoWidth);canvas.width=Math.round(video.videoWidth*scale);canvas.height=Math.round(video.videoHeight*scale);
      context.drawImage(video,0,0,canvas.width,canvas.height);const pixels=context.getImageData(0,0,canvas.width,canvas.height);frames++;
      const result=window.jsQR(pixels.data,canvas.width,canvas.height,{inversionAttempts:'attemptBoth'});
      if(result){const token=qrTokenFromText(result.data,location.origin);if(token){stop('decoded');onResult(token);return;}message.textContent=tr('Este QR no corresponde a esta página de dicta. Escanea el QR del computador.');}
-    }}catch{stop('decode-error');message.textContent=tr('No se pudo leer la cámara. Reintenta o usa el código.');panel.hidden=false;return;}
+    }}catch{stop('decode-error');message.textContent=tr('No se pudo leer la cámara. Escanea el QR con la cámara de tu teléfono.');panel.hidden=false;return;}
     timer=setTimeout(scan,150);
    };scan();
-  }catch(error){if(generation!==epoch)return;stop('camera-error');panel.hidden=false;message.textContent=error.name==='NotAllowedError'?tr('Permiso de cámara denegado. Habilítalo para este sitio o usa el código manual.'):tr('No se pudo abrir la cámara. Reintenta o usa el código manual.');}
+  }catch(error){if(generation!==epoch)return;stop('camera-error');panel.hidden=false;message.textContent=error.name==='NotAllowedError'?tr('Permiso de cámara denegado. Habilítalo para este sitio o escanea con la cámara de tu teléfono.'):tr('No se pudo abrir la cámara. Escanea el QR con la cámara de tu teléfono.');}
  }
  return {start,stop};
 }

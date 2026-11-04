@@ -178,3 +178,13 @@ test('recuperación rechaza plazo vencido y cierre del PC',async t=>{
  pc.send({type:'close'});await pc.next('closed');assert.equal(relay.sessions.size,0);
  back.send({type:'resume',token});await back.next('error');
 });
+
+test('permiso del micrófono se informa solo a su PC y rechaza estados ajenos',async t=>{
+ const {pair}=await environment(t);const a=await pair(),b=await pair();
+ for(const state of ['permission-needed','requesting','blocked','ready']){
+ a.phone.send({type:'microphone_state',state});assert.equal((await a.pc.next('microphone_state')).state,state);
+ }
+ assert.equal(b.pc.messages.some(m=>m.type==='microphone_state'),false);
+ a.pc.send({type:'microphone_state',state:'ready'});assert.match((await a.pc.next('error')).message,/Estado de micrófono/);
+ a.phone.send({type:'microphone_state',state:'unknown'});assert.match((await a.phone.next('error')).message,/Estado de micrófono/);
+});
