@@ -1048,3 +1048,5 @@ Publicación confirmada: 1b222d4 en origin/codex/capture-transport. Código/docu
 
 ## 2026-11-04 — Ajustes sin Cómo usar
 Retirada pestaña y contenido de ayuda; Apariencia/Idioma/Dictado quedan en una fila. Separación título/opciones 12 px medida en Chrome local. Panel conserva 300 px de ancho. Se verificaron las tres pestañas; check y 294 pruebas aprobadas (incluye pruebas de trabajo paralelo).
+
+Publicación verificada: deployment 7540684312 success; /api/state confirma 63753ae2bc63a26567ffc678f1b385345f172e3e en Render.
